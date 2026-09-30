@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -8,6 +9,7 @@ import { randomUUID } from 'crypto';
 import { Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { Jurisdiction } from '../../../src/dtos/jurisdictions/jurisdiction.dto';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
 import { ApplicationService } from '../../../src/services/application.service';
 import {
@@ -28,6 +30,7 @@ import { PermissionService } from '../../../src/services/permission.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { SendGridService } from '../../../src/services/sendgrid.service';
 import { SmsService } from '../../../src/services/sms.service';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 import { TranslationService } from '../../../src/services/translation.service';
 import { UserService } from '../../../src/services/user.service';
 import {
@@ -35,7 +38,6 @@ import {
   hashPassword,
   passwordToHash,
 } from '../../../src/utilities/password-helpers';
-import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 jest.mock('@google-cloud/recaptcha-enterprise');
 const mockedRecaptcha =
@@ -78,6 +80,7 @@ describe('Testing auth service', () => {
         SendGridService,
         TranslationService,
         JurisdictionService,
+        { provide: HttpService, useValue: { get: jest.fn() } },
         {
           provide: SmsService,
           useValue: {
@@ -102,549 +105,11 @@ describe('Testing auth service', () => {
     jest.resetAllMocks();
   });
 
-  it('should return a signed string when generating a new accessToken', () => {
-    const id = randomUUID();
-    const token = authService.generateAccessToken(
-      {
-        passwordUpdatedAt: new Date(),
-        passwordValidForDays: 100,
-        email: 'example@exygy.com',
-        firstName: 'Exygy',
-        lastName: 'User',
-        jurisdictions: [
-          {
-            id: randomUUID(),
-          } as Jurisdiction,
-        ],
-        agreedToTermsOfService: false,
-        id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      false,
-    );
-    const decoded = verify(token, 'SOME-LONG-SECRET-KEY') as {
-      sub: string;
-      expiresIn: number;
-      iat?: number;
-    };
-    expect(decoded.sub).toBe(id);
-    expect(decoded.expiresIn).toBe(86400000 / 8);
-    expect(decoded).toHaveProperty('iat');
-    expect(typeof decoded.iat).toBe('number');
-  });
-
-  it('should return a signed string when generating a new refreshToken', () => {
-    const id = randomUUID();
-    const token = authService.generateAccessToken(
-      {
-        passwordUpdatedAt: new Date(),
-        passwordValidForDays: 100,
-        email: 'example@exygy.com',
-        firstName: 'Exygy',
-        lastName: 'User',
-        jurisdictions: [
-          {
-            id: randomUUID(),
-          } as Jurisdiction,
-        ],
-        agreedToTermsOfService: false,
-        id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      true,
-    );
-    const decoded = verify(token, 'SOME-LONG-SECRET-KEY') as {
-      sub: string;
-      expiresIn: number;
-      iat?: number;
-    };
-    expect(decoded.sub).toBe(id);
-    expect(decoded.expiresIn).toBe(86400000);
-    expect(decoded).toHaveProperty('iat');
-    expect(typeof decoded.iat).toBe('number');
-  });
-
-  it('should set credentials when no incoming refresh token', async () => {
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    await authService.setCredentials(response as unknown as Response, {
-      passwordUpdatedAt: new Date(),
-      passwordValidForDays: 100,
-      email: 'example@exygy.com',
-      firstName: 'Exygy',
-      lastName: 'User',
-      jurisdictions: [
+  describe('generateAccessToken', () => {
+    it('should return a signed string when generating a new accessToken', () => {
+      const id = randomUUID();
+      const token = authService.generateAccessToken(
         {
-          id: randomUUID(),
-        } as Jurisdiction,
-      ],
-      agreedToTermsOfService: false,
-      id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        activeAccessToken: expect.anything(),
-        activeRefreshToken: expect.anything(),
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      expect.anything(),
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      expect.anything(),
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      'True',
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-  });
-
-  it('should set credentials with incoming refresh token and user exists', async () => {
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
-
-    await authService.setCredentials(
-      response as unknown as Response,
-      {
-        passwordUpdatedAt: new Date(),
-        passwordValidForDays: 100,
-        email: 'example@exygy.com',
-        firstName: 'Exygy',
-        lastName: 'User',
-        jurisdictions: [
-          {
-            id: randomUUID(),
-          } as Jurisdiction,
-        ],
-        agreedToTermsOfService: false,
-        id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      'refreshToken',
-    );
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        activeAccessToken: expect.anything(),
-        activeRefreshToken: expect.anything(),
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(prisma.userAccounts.count).toHaveBeenCalledWith({
-      where: {
-        id,
-        activeRefreshToken: 'refreshToken',
-      },
-    });
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      expect.anything(),
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      expect.anything(),
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      'True',
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-  });
-
-  it('should error when trying to set credentials with incoming refresh token and user does not exist', async () => {
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.count = jest.fn().mockResolvedValue(0);
-
-    await expect(
-      async () =>
-        await authService.setCredentials(
-          response as unknown as Response,
-          {
-            passwordUpdatedAt: new Date(),
-            passwordValidForDays: 100,
-            email: 'example@exygy.com',
-            firstName: 'Exygy',
-            lastName: 'User',
-            jurisdictions: [
-              {
-                id: randomUUID(),
-              } as Jurisdiction,
-            ],
-            agreedToTermsOfService: false,
-            id,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-          'refreshToken',
-        ),
-    ).rejects.toThrowError(
-      `User ${id} was attempting to use outdated token refreshToken to generate new tokens`,
-    );
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        activeAccessToken: null,
-        activeRefreshToken: null,
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(prisma.userAccounts.count).toHaveBeenCalledWith({
-      where: {
-        id,
-        activeRefreshToken: 'refreshToken',
-      },
-    });
-
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-  });
-
-  it('should error when trying to set credentials,but user id not passed in', async () => {
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.count = jest.fn().mockResolvedValue(0);
-
-    await expect(
-      async () =>
-        await authService.setCredentials(
-          response as unknown as Response,
-          {
-            passwordUpdatedAt: new Date(),
-            passwordValidForDays: 100,
-            email: 'example@exygy.com',
-            firstName: 'Exygy',
-            lastName: 'User',
-            jurisdictions: [
-              {
-                id: randomUUID(),
-              } as Jurisdiction,
-            ],
-            agreedToTermsOfService: false,
-            id: null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-          'refreshToken',
-        ),
-    ).rejects.toThrowError(`no user found`);
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-
-    expect(prisma.userAccounts.count).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-  });
-
-  it('should error when trying to set credentials when recaptcha is enabled and recaptcha token is invalid', async () => {
-    mockedRecaptcha.mockImplementation(() => {
-      return {
-        projectPath: (val): string => {
-          return val;
-        },
-        createAssessment: () => {
-          return [
-            {
-              tokenProperties: {
-                valid: false,
-                action: 'login',
-                invalidReason: 'Example invalid reason',
-              },
-              riskAnalysis: {
-                reasons: ['reason1', 'reason2'],
-                score: 0.5,
-              },
-            },
-          ];
-        },
-        close: () => {
-          return null;
-        },
-      };
-    });
-
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
-
-    await expect(
-      async () =>
-        await authService.setCredentials(
-          response as unknown as Response,
-          {
-            passwordUpdatedAt: new Date(),
-            passwordValidForDays: 100,
-            email: 'example@exygy.com',
-            firstName: 'Exygy',
-            lastName: 'User',
-            jurisdictions: [
-              {
-                id: randomUUID(),
-              } as Jurisdiction,
-            ],
-            agreedToTermsOfService: false,
-            id,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-          'refreshToken',
-          'invalidReCaptchaToken',
-          true,
-          false,
-          true,
-        ),
-    ).rejects.toThrowError(
-      `The ReCaptcha CreateAssessment call failed because the token was: Example invalid reason`,
-    );
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-
-    expect(prisma.userAccounts.count).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-  });
-
-  it('should error when trying to set credentials when recaptcha is enabled and action does not match', async () => {
-    mockedRecaptcha.mockImplementation(() => {
-      return {
-        projectPath: (val): string => {
-          return val;
-        },
-        createAssessment: () => {
-          return [
-            {
-              tokenProperties: {
-                valid: true,
-                action: 'Invalid action',
-              },
-              riskAnalysis: {
-                reasons: ['reason1', 'reason2'],
-                score: 0.9,
-              },
-            },
-          ];
-        },
-        close: () => {
-          return null;
-        },
-      };
-    });
-
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
-
-    await expect(
-      async () =>
-        await authService.setCredentials(
-          response as unknown as Response,
-          {
-            passwordUpdatedAt: new Date(),
-            passwordValidForDays: 100,
-            email: 'example@exygy.com',
-            firstName: 'Exygy',
-            lastName: 'User',
-            jurisdictions: [
-              {
-                id: randomUUID(),
-              } as Jurisdiction,
-            ],
-            agreedToTermsOfService: false,
-            id,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
-          'refreshToken',
-          'invalidReCaptchaToken',
-          true,
-          false,
-          true,
-        ),
-    ).rejects.toThrowError(
-      `ReCaptcha failed because the action didn't match, action was: Invalid action`,
-    );
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-
-    expect(prisma.userAccounts.count).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-  });
-
-  it('should succeed when trying to set credentials when recaptcha is enabled and token/action are valid', async () => {
-    mockedRecaptcha.mockImplementation(() => {
-      return {
-        projectPath: (val): string => {
-          return val;
-        },
-        createAssessment: () => {
-          return [
-            {
-              tokenProperties: {
-                valid: true,
-                action: 'login',
-              },
-              riskAnalysis: {
-                reasons: ['reason1', 'reason2'],
-                score: 0.9,
-              },
-            },
-          ];
-        },
-        close: () => {
-          return null;
-        },
-      };
-    });
-
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
-
-    await authService.setCredentials(
-      response as unknown as Response,
-      {
-        passwordUpdatedAt: new Date(),
-        passwordValidForDays: 100,
-        email: 'example@exygy.com',
-        firstName: 'Exygy',
-        lastName: 'User',
-        jurisdictions: [
-          {
-            id: randomUUID(),
-          } as Jurisdiction,
-        ],
-        agreedToTermsOfService: false,
-        id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      'refreshToken',
-      'validToken',
-      true,
-      false,
-      true,
-    );
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        activeAccessToken: expect.anything(),
-        activeRefreshToken: expect.anything(),
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(prisma.userAccounts.count).toHaveBeenCalledWith({
-      where: {
-        id,
-        activeRefreshToken: 'refreshToken',
-      },
-    });
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      expect.anything(),
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      expect.anything(),
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      'True',
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-  });
-
-  it('should error when trying to clear credentials,but user id not passed in', async () => {
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    await expect(
-      async () =>
-        await authService.clearCredentials(response as unknown as Response, {
           passwordUpdatedAt: new Date(),
           passwordValidForDays: 100,
           email: 'example@exygy.com',
@@ -656,548 +121,1235 @@ describe('Testing auth service', () => {
             } as Jurisdiction,
           ],
           agreedToTermsOfService: false,
-          id: null,
+          id,
           createdAt: new Date(),
           updatedAt: new Date(),
-        }),
-    ).rejects.toThrowError(`no user found`);
+        },
+        false,
+      );
+      const decoded = verify(token, 'SOME-LONG-SECRET-KEY') as {
+        sub: string;
+        expiresIn: number;
+        iat?: number;
+      };
+      expect(decoded.sub).toBe(id);
+      expect(decoded.expiresIn).toBe(86400000 / 8);
+      expect(decoded).toHaveProperty('iat');
+      expect(typeof decoded.iat).toBe('number');
+    });
 
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-
-    expect(response.clearCookie).not.toHaveBeenCalled();
-  });
-
-  it('should clear credentials when user exists', async () => {
-    const id = randomUUID();
-    const response = {
-      cookie: jest.fn(),
-      clearCookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    await authService.clearCredentials(response as unknown as Response, {
-      passwordUpdatedAt: new Date(),
-      passwordValidForDays: 100,
-      email: 'example@exygy.com',
-      firstName: 'Exygy',
-      lastName: 'User',
-      jurisdictions: [
+    it('should return a signed string when generating a new refreshToken', () => {
+      const id = randomUUID();
+      const token = authService.generateAccessToken(
         {
-          id: randomUUID(),
-        } as Jurisdiction,
-      ],
-      agreedToTermsOfService: false,
-      id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        activeAccessToken: null,
-        activeRefreshToken: null,
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-  });
-
-  it('should send new mfa code through email when previous code is outdated', async () => {
-    const id = randomUUID();
-    emailService.sendMfaCode = jest.fn();
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
-      id: id,
-      mfaEnabled: true,
-      passwordHash: await passwordToHash('Abcdef12345!'),
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-      singleUseCode: '00000',
-      singleUseCodeUpdatedAt: new Date(
-        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
-      ),
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id,
-    });
-
-    const res = await authService.requestMfaCode({
-      email: 'example@exygy.com',
-      password: 'Abcdef12345!',
-      mfaType: MfaType.email,
-    });
-
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      include: expect.objectContaining({
-        listings: true,
-        jurisdictions: true,
-        userRoles: true,
-      }),
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        singleUseCode: expect.not.stringMatching('00000'),
-        singleUseCodeUpdatedAt: expect.anything(),
-      },
-      where: {
-        id,
-      },
-    });
-    expect(emailService.sendMfaCode).toHaveBeenCalled();
-    expect(res).toEqual({
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-    });
-  });
-
-  it('should send the same mfa code through email when requested again within valid window', async () => {
-    const id = randomUUID();
-    emailService.sendMfaCode = jest.fn();
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
-      id: id,
-      mfaEnabled: true,
-      passwordHash: await passwordToHash('Abcdef12345!'),
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-      singleUseCode: '00000',
-      singleUseCodeUpdatedAt: new Date(),
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id,
-    });
-
-    const res = await authService.requestMfaCode({
-      email: 'example@exygy.com',
-      password: 'Abcdef12345!',
-      mfaType: MfaType.email,
-    });
-
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      include: expect.objectContaining({
-        listings: true,
-        jurisdictions: true,
-        userRoles: true,
-      }),
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        singleUseCode: '00000',
-        singleUseCodeUpdatedAt: expect.anything(),
-      },
-      where: {
-        id,
-      },
-    });
-    expect(emailService.sendMfaCode).toHaveBeenCalled();
-    expect(res).toEqual({
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-    });
-  });
-
-  it('should send new mfa code through sms when previous code is outdated', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
-      id: id,
-      mfaEnabled: true,
-      passwordHash: await passwordToHash('Abcdef12345!'),
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-      phoneNumber: '520-781-8711',
-      singleUseCode: '00000',
-      singleUseCodeUpdatedAt: new Date(
-        new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
-      ),
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id,
-    });
-    smsService.client.messages.create = jest
-      .fn()
-      .mockResolvedValue({ success: true });
-
-    const res = await authService.requestMfaCode({
-      email: 'example@exygy.com',
-      password: 'Abcdef12345!',
-      mfaType: MfaType.sms,
-    });
-
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      include: expect.objectContaining({
-        listings: true,
-        jurisdictions: true,
-        userRoles: true,
-      }),
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        singleUseCode: expect.not.stringMatching('00000'),
-        singleUseCodeUpdatedAt: expect.anything(),
-        phoneNumber: '520-781-8711',
-      },
-      where: {
-        id,
-      },
-    });
-    expect(sendMfaCodeMock).not.toHaveBeenCalled();
-    expect(smsService.client.messages.create).toHaveBeenCalledWith({
-      body: expect.anything(),
-      from: expect.anything(),
-      to: '520-781-8711',
-    });
-    expect(res).toEqual({
-      phoneNumber: '520-781-8711',
-      phoneNumberVerified: false,
-    });
-  });
-
-  it('should send the same mfa code through sms when requested again within valid window', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
-      id: id,
-      mfaEnabled: true,
-      passwordHash: await passwordToHash('Abcdef12345!'),
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-      phoneNumber: '520-781-8711',
-      singleUseCode: '00000',
-      singleUseCodeUpdatedAt: new Date(),
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id,
-    });
-    smsService.client.messages.create = jest
-      .fn()
-      .mockResolvedValue({ success: true });
-
-    const res = await authService.requestMfaCode({
-      email: 'example@exygy.com',
-      password: 'Abcdef12345!',
-      mfaType: MfaType.sms,
-    });
-
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      include: expect.objectContaining({
-        listings: true,
-        jurisdictions: true,
-        userRoles: true,
-      }),
-      where: {
-        email: 'example@exygy.com',
-      },
-    });
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        singleUseCode: '00000',
-        singleUseCodeUpdatedAt: expect.anything(),
-        phoneNumber: '520-781-8711',
-      },
-      where: {
-        id,
-      },
-    });
-    expect(sendMfaCodeMock).not.toHaveBeenCalled();
-    expect(smsService.client.messages.create).toHaveBeenCalledWith({
-      body: 'Your Partners Portal account access token: 00000',
-      from: '5555555555',
-      to: '520-781-8711',
-    });
-    expect(res).toEqual({
-      phoneNumber: '520-781-8711',
-      phoneNumberVerified: false,
-    });
-  });
-
-  it('should error when trying to request mfa code, but incorrect password', async () => {
-    const id = randomUUID();
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
-      id: id,
-      mfaEnabled: true,
-      passwordHash: await hashPassword('Abcdef12345!', generateSalt()),
-      email: 'example@exygy.com',
-      phoneNumberVerified: false,
-      phoneNumber: '520-781-8711',
-    });
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({
-      id: id,
-    });
-
-    await expect(
-      async () =>
-        await authService.requestMfaCode({
+          passwordUpdatedAt: new Date(),
+          passwordValidForDays: 100,
           email: 'example@exygy.com',
-          password: 'abcdef123',
-          mfaType: MfaType.sms,
-        }),
-    ).rejects.toThrowError(
-      'user example@exygy.com requested an mfa code, but provided incorrect password',
-    );
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-  });
-
-  it('should update password when correct token passed in', async () => {
-    const id = randomUUID();
-    const token = sign(
-      {
-        id,
-      },
-      'SOME-LONG-SECRET-KEY',
-    );
-    const response = {
-      cookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({ id });
-    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({ id });
-    prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
-
-    await authService.updatePassword(
-      {
-        password: 'Abcdef12345!',
-        token,
-      },
-      response as unknown as Response,
-    );
-
-    expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
-      where: {
-        resetToken: token,
-      },
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        passwordHash: expect.anything(),
-        passwordUpdatedAt: expect.anything(),
-        resetToken: null,
-        confirmedAt: expect.anything(),
-        confirmationToken: null,
-        lastLoginAt: expect.anything(),
-        wasWarnedOfDeletion: false,
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      expect.anything(),
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      expect.anything(),
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      'True',
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-
-    expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
-      data: {
-        originalId: id,
-      },
+          firstName: 'Exygy',
+          lastName: 'User',
+          jurisdictions: [
+            {
+              id: randomUUID(),
+            } as Jurisdiction,
+          ],
+          agreedToTermsOfService: false,
+          id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        true,
+      );
+      const decoded = verify(token, 'SOME-LONG-SECRET-KEY') as {
+        sub: string;
+        expiresIn: number;
+        iat?: number;
+      };
+      expect(decoded.sub).toBe(id);
+      expect(decoded.expiresIn).toBe(86400000);
+      expect(decoded).toHaveProperty('iat');
+      expect(typeof decoded.iat).toBe('number');
     });
   });
 
-  it('should error when trying to update password, but there is an id mismatch', async () => {
-    const id = randomUUID();
-    const token = sign(
-      {
-        id,
-      },
-      'SOME-LONG-SECRET-KEY',
-    );
-    const secondId = randomUUID();
-    const secondToken = sign(
-      {
-        id: secondId,
-      },
-      'SOME-LONG-SECRET-KEY',
-    );
+  describe('setCredentials', () => {
+    it('should set credentials when no incoming refresh token', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+      };
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePublicTermsOfUse, active: false },
+        ],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
 
-    const response = {
-      cookie: jest.fn(),
-    };
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id: secondId });
-    prisma.userAccounts.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: secondId, resetToken: secondToken });
-
-    await expect(
-      async () =>
-        await authService.updatePassword(
+      await authService.setCredentials(response as unknown as Response, {
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 100,
+        email: 'example@exygy.com',
+        firstName: 'Exygy',
+        lastName: 'User',
+        jurisdictions: [
           {
-            password: 'Abcdef12345!',
-            token,
+            id: randomUUID(),
+          } as Jurisdiction,
+        ],
+        agreedToTermsOfService: true,
+        id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          activeAccessToken: expect.anything(),
+          activeRefreshToken: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+
+    it('should set credentials with incoming refresh token and user exists', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+      };
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePublicTermsOfUse, active: false },
+        ],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+      await authService.setCredentials(
+        response as unknown as Response,
+        {
+          passwordUpdatedAt: new Date(),
+          passwordValidForDays: 100,
+          email: 'example@exygy.com',
+          firstName: 'Exygy',
+          lastName: 'User',
+          jurisdictions: [
+            {
+              id: randomUUID(),
+            } as Jurisdiction,
+          ],
+          agreedToTermsOfService: true,
+          id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        'refreshToken',
+      );
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          activeAccessToken: expect.anything(),
+          activeRefreshToken: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+        where: {
+          id,
+          activeRefreshToken: 'refreshToken',
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+
+    it('should set credentials with incoming agreedToTermsOfService is true and user has not previously agreed to terms of service', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+      };
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePublicTermsOfUse, active: true },
+        ],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+      await authService.setCredentials(
+        response as unknown as Response,
+        {
+          passwordUpdatedAt: new Date(),
+          passwordValidForDays: 100,
+          email: 'example@exygy.com',
+          firstName: 'Exygy',
+          lastName: 'User',
+          jurisdictions: [
+            {
+              id: randomUUID(),
+            } as Jurisdiction,
+          ],
+          agreedToTermsOfService: true,
+          id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        'refreshToken',
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
+      );
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          activeAccessToken: expect.anything(),
+          activeRefreshToken: expect.anything(),
+          agreedToTermsOfService: true,
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+        where: {
+          id,
+          activeRefreshToken: 'refreshToken',
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+
+    it('should error when trying to set credentials with incoming refresh token and user does not exist', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(0);
+
+      await expect(
+        async () =>
+          await authService.setCredentials(
+            response as unknown as Response,
+            {
+              passwordUpdatedAt: new Date(),
+              passwordValidForDays: 100,
+              email: 'example@exygy.com',
+              firstName: 'Exygy',
+              lastName: 'User',
+              jurisdictions: [
+                {
+                  id: randomUUID(),
+                } as Jurisdiction,
+              ],
+              agreedToTermsOfService: true,
+              id,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            'refreshToken',
+          ),
+      ).rejects.toThrowError(
+        `User ${id} was attempting to use outdated token refreshToken to generate new tokens`,
+      );
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          activeAccessToken: null,
+          activeRefreshToken: null,
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+        where: {
+          id,
+          activeRefreshToken: 'refreshToken',
+        },
+      });
+
+      expect(response.clearCookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.clearCookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.clearCookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+
+    it('should error when trying to set credentials but user id not passed in', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(0);
+
+      await expect(
+        async () =>
+          await authService.setCredentials(
+            response as unknown as Response,
+            {
+              passwordUpdatedAt: new Date(),
+              passwordValidForDays: 100,
+              email: 'example@exygy.com',
+              firstName: 'Exygy',
+              lastName: 'User',
+              jurisdictions: [
+                {
+                  id: randomUUID(),
+                } as Jurisdiction,
+              ],
+              agreedToTermsOfService: true,
+              id: null,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            'refreshToken',
+          ),
+      ).rejects.toThrowError(`no user found`);
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+      expect(prisma.userAccounts.count).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+    });
+
+    it('should error when trying to set credentials when recaptcha is enabled and recaptcha token is invalid', async () => {
+      mockedRecaptcha.mockImplementation(() => {
+        return {
+          projectPath: (val): string => {
+            return val;
           },
-          response as unknown as Response,
+          createAssessment: () => {
+            return [
+              {
+                tokenProperties: {
+                  valid: false,
+                  action: 'login',
+                  invalidReason: 'Example invalid reason',
+                },
+                riskAnalysis: {
+                  reasons: ['reason1', 'reason2'],
+                  score: 0.5,
+                },
+              },
+            ];
+          },
+          close: () => {
+            return null;
+          },
+        };
+      });
+
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+      await expect(
+        async () =>
+          await authService.setCredentials(
+            response as unknown as Response,
+            {
+              passwordUpdatedAt: new Date(),
+              passwordValidForDays: 100,
+              email: 'example@exygy.com',
+              firstName: 'Exygy',
+              lastName: 'User',
+              jurisdictions: [
+                {
+                  id: randomUUID(),
+                } as Jurisdiction,
+              ],
+              agreedToTermsOfService: true,
+              id,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            'refreshToken',
+            'invalidReCaptchaToken',
+            true,
+            false,
+            true,
+          ),
+      ).rejects.toThrowError(
+        `The ReCaptcha CreateAssessment call failed because the token was: Example invalid reason`,
+      );
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+      expect(prisma.userAccounts.count).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+    });
+
+    it('should error when trying to set credentials when recaptcha is enabled and action does not match', async () => {
+      mockedRecaptcha.mockImplementation(() => {
+        return {
+          projectPath: (val): string => {
+            return val;
+          },
+          createAssessment: () => {
+            return [
+              {
+                tokenProperties: {
+                  valid: true,
+                  action: 'Invalid action',
+                },
+                riskAnalysis: {
+                  reasons: ['reason1', 'reason2'],
+                  score: 0.9,
+                },
+              },
+            ];
+          },
+          close: () => {
+            return null;
+          },
+        };
+      });
+
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+      await expect(
+        async () =>
+          await authService.setCredentials(
+            response as unknown as Response,
+            {
+              passwordUpdatedAt: new Date(),
+              passwordValidForDays: 100,
+              email: 'example@exygy.com',
+              firstName: 'Exygy',
+              lastName: 'User',
+              jurisdictions: [
+                {
+                  id: randomUUID(),
+                } as Jurisdiction,
+              ],
+              agreedToTermsOfService: true,
+              id,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            'refreshToken',
+            'invalidReCaptchaToken',
+            true,
+            false,
+            true,
+          ),
+      ).rejects.toThrowError(
+        `ReCaptcha failed because the action didn't match, action was: Invalid action`,
+      );
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+      expect(prisma.userAccounts.count).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+    });
+
+    it('should error when trying to set credentials and user has not agreed to terms of service', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePublicTermsOfUse, active: true },
+        ],
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+      await expect(
+        async () =>
+          await authService.setCredentials(
+            response as unknown as Response,
+            {
+              passwordUpdatedAt: new Date(),
+              passwordValidForDays: 100,
+              email: 'example@exygy.com',
+              firstName: 'Exygy',
+              lastName: 'User',
+              jurisdictions: [
+                {
+                  id: randomUUID(),
+                } as Jurisdiction,
+              ],
+              agreedToTermsOfService: false,
+              id,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            'refreshToken',
+          ),
+      ).rejects.toThrowError(
+        `User ${id} has not accepted the terms of service`,
+      );
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+    });
+
+    it('should succeed when trying to set credentials when recaptcha is enabled and token/action are valid', async () => {
+      mockedRecaptcha.mockImplementation(() => {
+        return {
+          projectPath: (val): string => {
+            return val;
+          },
+          createAssessment: () => {
+            return [
+              {
+                tokenProperties: {
+                  valid: true,
+                  action: 'login',
+                },
+                riskAnalysis: {
+                  reasons: ['reason1', 'reason2'],
+                  score: 0.9,
+                },
+              },
+            ];
+          },
+          close: () => {
+            return null;
+          },
+        };
+      });
+
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.count = jest.fn().mockResolvedValue(1);
+
+      await authService.setCredentials(
+        response as unknown as Response,
+        {
+          passwordUpdatedAt: new Date(),
+          passwordValidForDays: 100,
+          email: 'example@exygy.com',
+          firstName: 'Exygy',
+          lastName: 'User',
+          jurisdictions: [
+            {
+              id: randomUUID(),
+            } as Jurisdiction,
+          ],
+          agreedToTermsOfService: true,
+          id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        'refreshToken',
+        'validToken',
+        true,
+        false,
+        true,
+      );
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          activeAccessToken: expect.anything(),
+          activeRefreshToken: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(prisma.userAccounts.count).toHaveBeenCalledWith({
+        where: {
+          id,
+          activeRefreshToken: 'refreshToken',
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+  });
+
+  describe('clearCredentials', () => {
+    it('should error when trying to clear credentials but user id not passed in', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+      await expect(
+        async () =>
+          await authService.clearCredentials(response as unknown as Response, {
+            passwordUpdatedAt: new Date(),
+            passwordValidForDays: 100,
+            email: 'example@exygy.com',
+            firstName: 'Exygy',
+            lastName: 'User',
+            jurisdictions: [
+              {
+                id: randomUUID(),
+              } as Jurisdiction,
+            ],
+            agreedToTermsOfService: true,
+            id: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          }),
+      ).rejects.toThrowError(`no user found`);
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+
+      expect(response.clearCookie).not.toHaveBeenCalled();
+    });
+
+    it('should clear credentials when user exists', async () => {
+      const id = randomUUID();
+      const response = {
+        cookie: jest.fn(),
+        clearCookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+      await authService.clearCredentials(response as unknown as Response, {
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 100,
+        email: 'example@exygy.com',
+        firstName: 'Exygy',
+        lastName: 'User',
+        jurisdictions: [
+          {
+            id: randomUUID(),
+          } as Jurisdiction,
+        ],
+        agreedToTermsOfService: true,
+        id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          activeAccessToken: null,
+          activeRefreshToken: null,
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(response.clearCookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.clearCookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.clearCookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+  });
+
+  describe('requestMfaCode', () => {
+    it('should send new mfa code through email when previous code is outdated', async () => {
+      const id = randomUUID();
+      emailService.sendMfaCode = jest.fn();
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id: id,
+        mfaEnabled: true,
+        passwordHash: await passwordToHash('Abcdef12345!'),
+        email: 'example@exygy.com',
+        phoneNumberVerified: false,
+        singleUseCode: '00000',
+        singleUseCodeUpdatedAt: new Date(
+          new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
         ),
-    ).rejects.toThrowError(
-      `resetToken ${token} does not match user ${secondId}'s reset token (${secondToken})`,
-    );
-
-    expect(prisma.userAccounts.update).not.toHaveBeenCalled();
-  });
-
-  it('should confirm user no email no password', async () => {
-    const id = randomUUID();
-    const token = sign(
-      {
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
         id,
-      },
-      'SOME-LONG-SECRET-KEY',
-    );
-    prisma.userAccounts.findUnique = jest
-      .fn()
-      .mockResolvedValue({ id, confirmationToken: token });
+      });
 
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    const response = {
-      cookie: jest.fn(),
-    } as unknown as Response;
-
-    await authService.confirmUser(
-      {
-        token,
-      },
-      response,
-    );
-
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      where: {
-        id,
-      },
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        confirmedAt: expect.anything(),
-        confirmationToken: null,
-      },
-      where: {
-        id,
-      },
-    });
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      expect.anything(),
-      AUTH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      expect.anything(),
-      REFRESH_COOKIE_OPTIONS,
-    );
-
-    expect(response.cookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      'True',
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
-  });
-
-  it('should confirm user with email and password', async () => {
-    const id = randomUUID();
-    const token = sign(
-      {
-        id,
+      const res = await authService.requestMfaCode({
         email: 'example@exygy.com',
-      },
-      'SOME-LONG-SECRET-KEY',
-    );
-    prisma.userAccounts.findUnique = jest
-      .fn()
-      .mockResolvedValue({ id, confirmationToken: token });
-
-    prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
-
-    prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
-
-    const response = {
-      cookie: jest.fn(),
-    } as unknown as Response;
-
-    await authService.confirmUser(
-      {
-        token,
         password: 'Abcdef12345!',
-      },
-      response,
-    );
+        mfaType: MfaType.email,
+      });
 
-    expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
-      where: {
-        id,
-      },
-    });
-
-    expect(prisma.userAccounts.update).toHaveBeenCalledWith({
-      data: {
-        confirmedAt: expect.anything(),
-        confirmationToken: null,
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: expect.objectContaining({
+          listings: true,
+          jurisdictions: true,
+          userRoles: true,
+        }),
+        where: {
+          email: 'example@exygy.com',
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          singleUseCode: expect.not.stringMatching('00000'),
+          singleUseCodeUpdatedAt: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
+      expect(emailService.sendMfaCode).toHaveBeenCalled();
+      expect(res).toEqual({
         email: 'example@exygy.com',
-        passwordHash: expect.anything(),
-        passwordUpdatedAt: expect.anything(),
-      },
-      where: {
-        id,
-      },
+        phoneNumberVerified: false,
+      });
     });
 
-    expect(response.cookie).toHaveBeenCalledWith(
-      TOKEN_COOKIE_NAME,
-      expect.anything(),
-      AUTH_COOKIE_OPTIONS,
-    );
+    it('should send the same mfa code through email when requested again within valid window', async () => {
+      const id = randomUUID();
+      emailService.sendMfaCode = jest.fn();
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id: id,
+        mfaEnabled: true,
+        passwordHash: await passwordToHash('Abcdef12345!'),
+        email: 'example@exygy.com',
+        phoneNumberVerified: false,
+        singleUseCode: '00000',
+        singleUseCodeUpdatedAt: new Date(),
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+      });
 
-    expect(response.cookie).toHaveBeenCalledWith(
-      REFRESH_COOKIE_NAME,
-      expect.anything(),
-      REFRESH_COOKIE_OPTIONS,
-    );
+      const res = await authService.requestMfaCode({
+        email: 'example@exygy.com',
+        password: 'Abcdef12345!',
+        mfaType: MfaType.email,
+      });
 
-    expect(response.cookie).toHaveBeenCalledWith(
-      ACCESS_TOKEN_AVAILABLE_NAME,
-      'True',
-      ACCESS_TOKEN_AVAILABLE_OPTIONS,
-    );
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: expect.objectContaining({
+          listings: true,
+          jurisdictions: true,
+          userRoles: true,
+        }),
+        where: {
+          email: 'example@exygy.com',
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          singleUseCode: '00000',
+          singleUseCodeUpdatedAt: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
+      expect(emailService.sendMfaCode).toHaveBeenCalled();
+      expect(res).toEqual({
+        email: 'example@exygy.com',
+        phoneNumberVerified: false,
+      });
+    });
+
+    it('should send new mfa code through sms when previous code is outdated', async () => {
+      const id = randomUUID();
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id: id,
+        mfaEnabled: true,
+        passwordHash: await passwordToHash('Abcdef12345!'),
+        email: 'example@exygy.com',
+        phoneNumberVerified: false,
+        phoneNumber: '520-781-8711',
+        singleUseCode: '00000',
+        singleUseCodeUpdatedAt: new Date(
+          new Date().getTime() - Number(process.env.MFA_CODE_VALUE) * 2,
+        ),
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+      });
+      smsService.client.messages.create = jest
+        .fn()
+        .mockResolvedValue({ success: true });
+
+      const res = await authService.requestMfaCode({
+        email: 'example@exygy.com',
+        password: 'Abcdef12345!',
+        mfaType: MfaType.sms,
+      });
+
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: expect.objectContaining({
+          listings: true,
+          jurisdictions: true,
+          userRoles: true,
+        }),
+        where: {
+          email: 'example@exygy.com',
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          singleUseCode: expect.not.stringMatching('00000'),
+          singleUseCodeUpdatedAt: expect.anything(),
+          phoneNumber: '520-781-8711',
+        },
+        where: {
+          id,
+        },
+      });
+      expect(sendMfaCodeMock).not.toHaveBeenCalled();
+      expect(smsService.client.messages.create).toHaveBeenCalledWith({
+        body: expect.anything(),
+        from: expect.anything(),
+        to: '520-781-8711',
+      });
+      expect(res).toEqual({
+        phoneNumber: '520-781-8711',
+        phoneNumberVerified: false,
+      });
+    });
+
+    it('should send the same mfa code through sms when requested again within valid window', async () => {
+      const id = randomUUID();
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id: id,
+        mfaEnabled: true,
+        passwordHash: await passwordToHash('Abcdef12345!'),
+        email: 'example@exygy.com',
+        phoneNumberVerified: false,
+        phoneNumber: '520-781-8711',
+        singleUseCode: '00000',
+        singleUseCodeUpdatedAt: new Date(),
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id,
+      });
+      smsService.client.messages.create = jest
+        .fn()
+        .mockResolvedValue({ success: true });
+
+      const res = await authService.requestMfaCode({
+        email: 'example@exygy.com',
+        password: 'Abcdef12345!',
+        mfaType: MfaType.sms,
+      });
+
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        include: expect.objectContaining({
+          listings: true,
+          jurisdictions: true,
+          userRoles: true,
+        }),
+        where: {
+          email: 'example@exygy.com',
+        },
+      });
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          singleUseCode: '00000',
+          singleUseCodeUpdatedAt: expect.anything(),
+          phoneNumber: '520-781-8711',
+        },
+        where: {
+          id,
+        },
+      });
+      expect(sendMfaCodeMock).not.toHaveBeenCalled();
+      expect(smsService.client.messages.create).toHaveBeenCalledWith({
+        body: 'Your Partners Portal account access token: 00000',
+        from: '5555555555',
+        to: '520-781-8711',
+      });
+      expect(res).toEqual({
+        phoneNumber: '520-781-8711',
+        phoneNumberVerified: false,
+      });
+    });
+
+    it('should error when trying to request mfa code but incorrect password', async () => {
+      const id = randomUUID();
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id: id,
+        mfaEnabled: true,
+        passwordHash: await hashPassword('Abcdef12345!', generateSalt()),
+        email: 'example@exygy.com',
+        phoneNumberVerified: false,
+        phoneNumber: '520-781-8711',
+      });
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({
+        id: id,
+      });
+
+      await expect(
+        async () =>
+          await authService.requestMfaCode({
+            email: 'example@exygy.com',
+            password: 'abcdef123',
+            mfaType: MfaType.sms,
+          }),
+      ).rejects.toThrowError(
+        'user example@exygy.com requested an mfa code, but provided incorrect password',
+      );
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updatePassword', () => {
+    it('should update password when correct token passed in', async () => {
+      const id = randomUUID();
+      const token = sign(
+        {
+          id,
+        },
+        'SOME-LONG-SECRET-KEY',
+      );
+      const response = {
+        cookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.findFirst = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({ id });
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
+      await authService.updatePassword(
+        {
+          password: 'Abcdef12345!',
+          token,
+        },
+        response as unknown as Response,
+      );
+
+      expect(prisma.userAccounts.findFirst).toHaveBeenCalledWith({
+        include: {
+          jurisdictions: { include: { featureFlags: true } },
+          userRoles: true,
+        },
+        where: {
+          resetToken: token,
+        },
+      });
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          passwordHash: expect.anything(),
+          passwordUpdatedAt: expect.anything(),
+          resetToken: null,
+          confirmedAt: expect.anything(),
+          confirmationToken: null,
+          lastLoginAt: expect.anything(),
+          wasWarnedOfDeletion: false,
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+
+      expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+        data: {
+          originalId: id,
+        },
+      });
+    });
+
+    it('should error when trying to update password but there is an id mismatch', async () => {
+      const id = randomUUID();
+      const token = sign(
+        {
+          id,
+        },
+        'SOME-LONG-SECRET-KEY',
+      );
+      const secondId = randomUUID();
+      const secondToken = sign(
+        {
+          id: secondId,
+        },
+        'SOME-LONG-SECRET-KEY',
+      );
+
+      const response = {
+        cookie: jest.fn(),
+      };
+      prisma.userAccounts.update = jest
+        .fn()
+        .mockResolvedValue({ id: secondId });
+      prisma.userAccounts.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: secondId, resetToken: secondToken });
+
+      await expect(
+        async () =>
+          await authService.updatePassword(
+            {
+              password: 'Abcdef12345!',
+              token,
+            },
+            response as unknown as Response,
+          ),
+      ).rejects.toThrowError(
+        `resetToken ${token} does not match user ${secondId}'s reset token (${secondToken})`,
+      );
+
+      expect(prisma.userAccounts.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('confirmUser', () => {
+    it('should confirm user no email no password', async () => {
+      const id = randomUUID();
+      const token = sign(
+        {
+          id,
+        },
+        'SOME-LONG-SECRET-KEY',
+      );
+      prisma.userAccounts.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id, confirmationToken: token });
+
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+      const response = {
+        cookie: jest.fn(),
+      } as unknown as Response;
+
+      await authService.confirmUser(
+        {
+          token,
+        },
+        response,
+      );
+
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        where: {
+          id,
+        },
+      });
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          confirmedAt: expect.anything(),
+          confirmationToken: null,
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
+
+    it('should confirm user with email and password', async () => {
+      const id = randomUUID();
+      const token = sign(
+        {
+          id,
+          email: 'example@exygy.com',
+        },
+        'SOME-LONG-SECRET-KEY',
+      );
+      prisma.userAccounts.findUnique = jest
+        .fn()
+        .mockResolvedValue({ id, confirmationToken: token });
+
+      prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
+
+      prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({ id });
+
+      const response = {
+        cookie: jest.fn(),
+      } as unknown as Response;
+
+      await authService.confirmUser(
+        {
+          token,
+          password: 'Abcdef12345!',
+        },
+        response,
+      );
+
+      expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+        where: {
+          id,
+        },
+      });
+
+      expect(prisma.userAccounts.update).toHaveBeenCalledWith({
+        data: {
+          confirmedAt: expect.anything(),
+          confirmationToken: null,
+          email: 'example@exygy.com',
+          passwordHash: expect.anything(),
+          passwordUpdatedAt: expect.anything(),
+        },
+        where: {
+          id,
+        },
+      });
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        TOKEN_COOKIE_NAME,
+        expect.anything(),
+        AUTH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        REFRESH_COOKIE_NAME,
+        expect.anything(),
+        REFRESH_COOKIE_OPTIONS,
+      );
+
+      expect(response.cookie).toHaveBeenCalledWith(
+        ACCESS_TOKEN_AVAILABLE_NAME,
+        'True',
+        ACCESS_TOKEN_AVAILABLE_OPTIONS,
+      );
+    });
   });
 });

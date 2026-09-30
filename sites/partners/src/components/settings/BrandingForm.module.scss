@@ -1,0 +1,34 @@
+.branding-form {
+  padding-bottom: var(--seeds-s6);
+}
+
+.asset-preview {
+  margin-top: var(--seeds-s4);
+  max-block-size: var(--seeds-s20);
+}
+
+.actions {
+  display: flex;
+  gap: var(--seeds-s3);
+  padding-top: var(--seeds-s4);
+}
+
+.asset {
+  display: flex;
+  align-items: center;
+  gap: var(--seeds-s3);
+}
+
+.shades-note {
+  color: var(--seeds-text-color-secondary);
+  font-size: var(--seeds-font-size-sm);
+  padding-block-end: var(--seeds-s2);
+}
+
+.shades-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--seeds-s2);
+}

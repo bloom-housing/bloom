@@ -35,7 +35,6 @@ import { SnapshotCreateService } from '../../../src/services/snapshot-create.ser
 import { TranslationService } from '../../../src/services/translation.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
-import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 
 const canOrThrowMock = jest.fn();

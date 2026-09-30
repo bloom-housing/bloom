@@ -60,6 +60,7 @@ afterEach(() => server.resetHandlers())
 
 afterAll(() => server.close())
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ToastProvider = (props: any) => {
   const { toastMessagesRef } = React.useContext(MessageContext)
   return (
