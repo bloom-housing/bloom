@@ -357,6 +357,7 @@ const SettingsContent = () => {
           language: activeLanguage,
           body: buildUpdate(toSave, languageRow?.updatedAt),
         })
+        await mutate(cacheKey)
         setConflict(false)
         setDraftState(null)
         setResetCount((count) => count + 1)
@@ -368,7 +369,6 @@ const SettingsContent = () => {
           addToast(t("errors.alert.badRequest"), { variant: "alert" })
           console.log(error)
         }
-      } finally {
         await mutate(cacheKey)
       }
     })

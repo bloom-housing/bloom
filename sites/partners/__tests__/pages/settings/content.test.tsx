@@ -540,6 +540,40 @@ describe("<SettingsContent>", () => {
         disclaimers: { privacyHtml: "<p>Privacy</p>" },
       })
 
+    // A rich text editor reads its content once, when it mounts, so it has to mount with the saved row.
+    it("shows the saved value in a rich text field after saving", async () => {
+      let stored = englishRow()
+      let saved = false
+      server.use(
+        // The reload after a save is slow, so the fields would remount before it arrives.
+        ...CONTENT_PATHS.map((path) =>
+          rest.get(path, (_req, res, ctx) => res(ctx.delay(saved ? 300 : 0), ctx.json([stored])))
+        ),
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            const body = await req.json()
+            saved = true
+            stored = row(LanguagesEnum.en, {
+              contact: body.contact,
+              disclaimers: body.disclaimers,
+              updatedAt: new Date("2026-02-02").toISOString(),
+            })
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await typeInEditor("disclaimers.privacyHtml", "Updated privacy")
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(toasts).toContain("test:alertSaved"))
+      await waitFor(() =>
+        expect(screen.getByTestId("disclaimers.privacyHtml")).toHaveTextContent("Updated privacy")
+      )
+    })
+
     it("sends every document for the language, not only the one on screen", async () => {
       const bodies: Record<string, unknown>[] = []
       respondWithRows([englishRow()])
