@@ -2,21 +2,52 @@ import * as React from "react"
 import { BloomCard, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import { LoadingOverlay, t } from "@bloom-housing/ui-components"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingFilterKeys,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getMapListings } from "../../../lib/helpers"
 import { Pagination } from "./Pagination"
 import { useListingsMapContext } from "./ListingsMapContext"
 import styles from "./ListingsCombined.module.scss"
+import { useRouter } from "next/router"
 
 type ListingsListProps = {
   loading?: boolean
 }
 
 const ListingsList = (props: ListingsListProps) => {
-  const { searchResults, onPageChange, isLoading, activeFeatureFlags, notificationsSignUpUrl } =
-    useListingsMapContext()
+  const router = useRouter()
+  const {
+    searchResults,
+    onPageChange,
+    isLoading,
+    activeFeatureFlags,
+    notificationsSignUpUrl,
+    listingStatus,
+  } = useListingsMapContext()
   const loading = props.loading ?? isLoading
   const moreMarkersOnMap = searchResults.markers.length > 0
+
+  const enableFilterByStatus = activeFeatureFlags?.includes(FeatureFlagEnum.enableFilterByStatus)
+  const enableCustomListingNotifications = activeFeatureFlags?.includes(
+    FeatureFlagEnum.enableCustomListingNotifications
+  )
+
+  const onSearchClick = React.useCallback(() => {
+    const newQuery = { ...router.query }
+    newQuery[ListingFilterKeys.status] =
+      listingStatus === ListingsStatusEnum.active
+        ? ListingsStatusEnum.closed
+        : ListingsStatusEnum.active
+
+    void router.push(`/listings`, {
+      query: {
+        ...router.query,
+      },
+    })
+  }, [listingStatus, router])
 
   const listingsDiv = (
     <div id="listingsList">
@@ -35,9 +66,29 @@ const ListingsList = (props: ListingsListProps) => {
             {moreMarkersOnMap ? (
               <>
                 <Heading priority={2} size={"xl"} className={"seeds-m-be-header"}>
-                  {t("t.noVisibleListings")}
+                  {enableFilterByStatus
+                    ? t("listingFilters.noMatchingListingsTitle")
+                    : t("t.noVisibleListings")}
                 </Heading>
-                <div>{t("t.tryChangingArea")}</div>
+                {enableFilterByStatus ? (
+                  <>
+                    <p className={styles["listings-subheader"]}>
+                      {t("listingFilters.noMatchingListingsDescription")}
+                    </p>
+                    <Button
+                      className={"mt-4"}
+                      variant="primary-outlined"
+                      onClick={onSearchClick}
+                      size="sm"
+                    >
+                      {listingStatus === ListingsStatusEnum.active
+                        ? t("listingFilters.searchForClosed")
+                        : t("listingFilters.searchForOpen")}
+                    </Button>
+                  </>
+                ) : (
+                  t("t.tryChangingArea")
+                )}
               </>
             ) : (
               <>
@@ -53,9 +104,6 @@ const ListingsList = (props: ListingsListProps) => {
     </div>
   )
 
-  const enableCustomListingNotifications = activeFeatureFlags?.includes(
-    FeatureFlagEnum.enableCustomListingNotifications
-  )
   const showNotificationsCard = enableCustomListingNotifications || !!notificationsSignUpUrl
 
   const otherCards = []

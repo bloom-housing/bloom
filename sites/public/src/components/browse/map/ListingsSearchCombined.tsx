@@ -140,6 +140,13 @@ function ListingsSearchCombined() {
     }
 
     const genericQb = new ListingQueryBuilder()
+    if (
+      listingStatus === ListingsStatusEnum.active ||
+      isDesktop ||
+      !props?.activeFeatureFlags?.includes(FeatureFlagEnum.enableFilterByStatus)
+    ) {
+      genericQb.whereEqual(ListingFilterKeys.status, ListingsStatusEnum.active)
+    }
     // Include external listings
     genericQb.whereEqual("includeExternal", true)
 
@@ -350,6 +357,7 @@ function ListingsSearchCombined() {
     regions: props.regions,
     listingFeaturesConfiguration: props.listingFeaturesConfiguration,
     searchResults,
+    listingStatus,
     listView,
     setListView,
     isDesktop,
