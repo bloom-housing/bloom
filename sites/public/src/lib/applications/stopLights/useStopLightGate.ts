@@ -2,13 +2,25 @@ import { useEffect, useState } from "react"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StopLightRule, stopLightRules } from "./stopLightRules"
 
+export interface StopLightsProps {
+  rule: StopLightRule | null
+  onEditRed: () => void
+  onCancelYellow: () => void
+  onAcknowledgeYellow: () => void
+}
+
+export interface StopLightGate {
+  guardSubmit: (pendingSave: Partial<Application>, proceed: () => void) => void
+  stopLights: StopLightsProps
+}
+
 export const useStopLightGate = (
   stepName: string,
   application: Application,
   listing: Listing,
   enabledRuleKeys: string[],
   deepLinkRuleKey?: string
-) => {
+): StopLightGate => {
   // a step has at most one rule
   const rule = stopLightRules.find(
     (candidate) => candidate.step === stepName && enabledRuleKeys.includes(candidate.key)
