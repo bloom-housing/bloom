@@ -1,7 +1,10 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { t } from "@bloom-housing/ui-components"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingsList } from "../../../../src/components/browse/map/ListingsList"
 import { useListingsMapContext } from "../../../../src/components/browse/map/ListingsMapContext"
 import { getMapListings } from "../../../../src/lib/helpers"
@@ -42,9 +45,9 @@ jest.mock("@bloom-housing/ui-components", () => {
 
   return {
     ...actual,
-    t: (key: string) => {
+    t: (key: string, options?: Record<string, unknown>) => {
       const result = tIfExistsMock(key)
-      return result !== null && result !== undefined ? result : actual.t(key)
+      return result !== null && result !== undefined ? result : actual.t(key, options)
     },
     LoadingOverlay: ({ isLoading, children }) => (
       <div data-testid="loading-overlay" data-loading={String(isLoading)}>
@@ -102,6 +105,55 @@ describe("ListingsList", () => {
 
     expect(screen.getByRole("heading", { name: t("t.noVisibleListings") })).toBeInTheDocument()
     expect(screen.getByText(t("t.tryChangingArea"))).toBeInTheDocument()
+  })
+
+  it("shows the closed status no-visible-listings state when the status filter is enabled", () => {
+    ;(useListingsMapContext as jest.Mock).mockReturnValue({
+      ...baseContext,
+      activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+      listingStatus: ListingsStatusEnum.closed,
+      searchResults: {
+        ...baseContext.searchResults,
+        listings: [],
+        markers: [{ id: "marker-1" }, { id: "marker-2" }],
+      },
+    })
+
+    render(<ListingsList />)
+
+    expect(
+      screen.getByRole("heading", { name: "No closed listings in this area" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        '2 matching listings are outside this area. Select "Recenter" on the map to see them.'
+      )
+    ).toBeInTheDocument()
+    expect(screen.queryByText(t("t.tryChangingArea"))).toBeNull()
+  })
+
+  it("shows the open status no-visible-listings state for a single marker outside the area", () => {
+    ;(useListingsMapContext as jest.Mock).mockReturnValue({
+      ...baseContext,
+      activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+      listingStatus: ListingsStatusEnum.active,
+      searchResults: {
+        ...baseContext.searchResults,
+        listings: [],
+        markers: [{ id: "marker-1" }],
+      },
+    })
+
+    render(<ListingsList />)
+
+    expect(
+      screen.getByRole("heading", { name: "No open listings in this area" })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        '1 matching listing is outside this area. Select "Recenter" on the map to see it.'
+      )
+    ).toBeInTheDocument()
   })
 
   it("shows no-matching-listings state when both list and markers are empty", () => {

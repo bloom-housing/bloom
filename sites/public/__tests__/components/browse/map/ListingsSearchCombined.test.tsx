@@ -382,6 +382,11 @@ describe("ListingsSearchCombined", () => {
     const hasKey = (filters: ListingFilterParams[], key: ListingFilterKeys) =>
       filters.some((filter) => filter[key] !== undefined)
 
+    const queryBuilderStatuses = (call: unknown[]) =>
+      ((call[0] as { whereEqual: jest.Mock }).whereEqual.mock.calls as [string, string][])
+        .filter(([field]) => field === ListingFilterKeys.status)
+        .map(([, value]) => value)
+
     it("passes the closed status filter to the marker search", async () => {
       renderComponent({}, { status: "closed" })
 
@@ -421,6 +426,9 @@ describe("ListingsSearchCombined", () => {
       markerFilterCalls().forEach((filters) => {
         expect(hasKey(filters, ListingFilterKeys.status)).toBe(false)
       })
+      mockSearchMapMarkers.mock.calls.forEach((call) => {
+        expect(queryBuilderStatuses(call)).toEqual(["active"])
+      })
     })
 
     it("ignores a non public status in the URL", async () => {
@@ -432,6 +440,32 @@ describe("ListingsSearchCombined", () => {
       markerFilterCalls().forEach((filters) => {
         expect(hasKey(filters, ListingFilterKeys.status)).toBe(false)
       })
+      mockSearchMapMarkers.mock.calls.forEach((call) => {
+        expect(queryBuilderStatuses(call)).toEqual(["active"])
+      })
+    })
+
+    it("restricts the marker search to active listings when no status is selected", async () => {
+      renderComponent()
+
+      await waitFor(() => {
+        expect(mockSearchMapMarkers).toHaveBeenCalled()
+      })
+      mockSearchMapMarkers.mock.calls.forEach((call) => {
+        expect(queryBuilderStatuses(call)).toEqual(["active"])
+      })
+    })
+
+    it("does not add the active status when the closed status filter is applied", async () => {
+      renderComponent({}, { status: "closed" })
+
+      await waitFor(() => {
+        expect(markerFilterCalls().some((filters) => filters.length > 0)).toBe(true)
+      })
+      const closedCall = mockSearchMapMarkers.mock.calls.find((call) =>
+        (call[3] as ListingFilterParams[]).some((filter) => filter.status === "closed")
+      )
+      expect(queryBuilderStatuses(closedCall)).toEqual([])
     })
 
     it("passes the closed status filter to the mobile listings search", async () => {
@@ -447,21 +481,16 @@ describe("ListingsSearchCombined", () => {
       })
     })
 
-    // TODO: known gap - on mobile the listings search only receives the drawer filters, which have
-    // no status entry when "Open" is selected, and POST /listings/list applies no default status.
-    // Non public statuses (pending, pendingReview, changesRequested, scheduled) can therefore reach
-    // the mobile list. Un-skip once a default active status is applied for the mobile list search.
-    it.skip("restricts the mobile listings search to active listings when no status is selected", async () => {
+    it("restricts the mobile listings search to active listings when no status is selected", async () => {
       Object.defineProperty(window, "innerWidth", { value: 600 })
       renderComponent()
 
       await waitFor(() => {
         expect(mockSearchListings).toHaveBeenCalled()
       })
-      const listingFilters = mockSearchListings.mock.calls[
-        mockSearchListings.mock.calls.length - 1
-      ][6] as ListingFilterParams[]
-      expect(listingFilters).toContainEqual(expect.objectContaining({ status: "active" }))
+      const lastCall = mockSearchListings.mock.calls[mockSearchListings.mock.calls.length - 1]
+      expect(queryBuilderStatuses(lastCall)).toEqual(["active"])
+      expect(hasKey(lastCall[6] as ListingFilterParams[], ListingFilterKeys.status)).toBe(false)
     })
 
     it("navigates to /listings?status=closed when submitting the drawer with 'Closed'", async () => {

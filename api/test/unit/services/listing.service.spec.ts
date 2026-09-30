@@ -8496,7 +8496,7 @@ describe('Testing listing service', () => {
   });
 
   describe('Test mapMarkers endpoint', () => {
-    it('should find all active listings', async () => {
+    it('should not add a status filter when none is requested', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'random id',
@@ -8522,13 +8522,6 @@ describe('Testing listing service', () => {
               externalListingId: {
                 equals: null,
               },
-            },
-            {
-              OR: [
-                {
-                  status: { equals: ListingsStatusEnum.active },
-                },
-              ],
             },
           ],
           buildingAddressId: {
@@ -8585,21 +8578,6 @@ describe('Testing listing service', () => {
             {
               $comparison: Compare['='],
               status: ListingsStatusEnum.active,
-            },
-          ],
-        });
-
-        expect(getStatusClauses()).toEqual([
-          { OR: [{ status: { equals: ListingsStatusEnum.active } }] },
-        ]);
-      });
-
-      it('should coerce a non public status to active', async () => {
-        await service.mapMarkers({
-          filter: [
-            {
-              $comparison: Compare['='],
-              status: ListingsStatusEnum.pendingReview,
             },
           ],
         });

@@ -3511,7 +3511,7 @@ describe('Listing Controller Tests', () => {
   });
 
   describe('mapMarkers endpoint', () => {
-    it('should find all active listings', async () => {
+    it('should find active listings when the active status is requested', async () => {
       const listingData = await listingFactory(jurisdictionAId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -3527,7 +3527,11 @@ describe('Listing Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/listings/mapMarkers')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({})
+        .send({
+          filter: [
+            { $comparison: Compare['='], status: ListingsStatusEnum.active },
+          ],
+        })
         .expect(201);
 
       expect(res.body.length).toBeGreaterThanOrEqual(1);
@@ -3599,11 +3603,11 @@ describe('Listing Controller Tests', () => {
         return res.body.map((marker) => marker.id);
       };
 
-      it('should return only active listings when no filter is sent', async () => {
-        const ids = await postMapMarkers({});
+      it('should return listings of every status when no status filter is sent', async () => {
+        const ids = await postMapMarkers({ filter: [jurisdictionFilter()] });
 
         expect(ids).toContain(activeListingId);
-        expect(ids).not.toContain(closedListingId);
+        expect(ids).toContain(closedListingId);
       });
 
       it('should return only closed listings when the closed status is requested', async () => {
@@ -3622,20 +3626,6 @@ describe('Listing Controller Tests', () => {
           filter: [
             jurisdictionFilter(),
             { $comparison: Compare['='], status: ListingsStatusEnum.active },
-          ],
-        });
-
-        expect(ids).toEqual([activeListingId]);
-      });
-
-      it('should coerce a non public status to active', async () => {
-        const ids = await postMapMarkers({
-          filter: [
-            jurisdictionFilter(),
-            {
-              $comparison: Compare['='],
-              status: ListingsStatusEnum.pendingReview,
-            },
           ],
         });
 
