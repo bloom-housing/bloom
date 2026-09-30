@@ -3850,23 +3850,6 @@ export class ListingService implements OnModuleInit {
   }
 
   async mapMarkers(params: ListingsQueryParams): Promise<ListingMapMarker[]> {
-    const statusFilter = params?.filter?.find(
-      (filter) => filter[ListingFilterKeys.status] !== undefined,
-    );
-    const status =
-      statusFilter?.[ListingFilterKeys.status] === ListingsStatusEnum.closed
-        ? ListingsStatusEnum.closed
-        : ListingsStatusEnum.active;
-    const filters: ListingFilterParams[] = [
-      ...(params?.filter || []).filter(
-        (filter) => filter[ListingFilterKeys.status] === undefined,
-      ),
-      {
-        $comparison: Compare['='],
-        status,
-      },
-    ];
-
     const mapMarkersRaw = await this.prisma.listings.findMany({
       select: {
         id: true,
@@ -3878,7 +3861,7 @@ export class ListingService implements OnModuleInit {
         },
       },
       where: {
-        ...this.buildWhereClause(filters, params?.search),
+        ...this.buildWhereClause(params?.filter, params?.search),
         buildingAddressId: {
           not: null,
         },

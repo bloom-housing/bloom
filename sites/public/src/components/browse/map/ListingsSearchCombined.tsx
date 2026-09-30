@@ -9,6 +9,7 @@ import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
 import {
   EnumListingFilterParamsComparison,
+  FeatureFlagEnum,
   ListingFilterKeys,
   ListingFilterParams,
   ListingsStatusEnum,
@@ -51,6 +52,11 @@ function ListingsSearchCombined() {
 
   const jurisdictionIds = props.jurisdictions.map((jurisdiction) => jurisdiction.id)
   const filterQuery = getFilterQueryFromURL(router.query)
+  const listingStatus = drawerFilters.some(
+    (filter) => filter[ListingFilterKeys.status] === ListingsStatusEnum.closed
+  )
+    ? ListingsStatusEnum.closed
+    : ListingsStatusEnum.active
 
   const [searchResults, setSearchResults] = useState({
     listings: [],
