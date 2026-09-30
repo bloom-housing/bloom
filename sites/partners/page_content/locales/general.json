@@ -216,6 +216,7 @@
   "content.footerTextSections": "Text sections",
   "content.languageOnly": "Only in this language",
   "content.linkHref": "Link address",
+  "content.linkHrefNote": "Starts with http:// or https:// for another site, or / for a page on this site",
   "content.linkText": "Link text",
   "content.logoAlt": "Logo alt text",
   "content.logoSrc": "Logo image",
