@@ -36,6 +36,7 @@ import { TranslationService } from '../../../src/services/translation.service';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 
 const canOrThrowMock = jest.fn();
 const lotteryReleasedMock = jest.fn();
