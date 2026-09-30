@@ -1,14 +1,10 @@
 import { t } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
 import ResourceCard from "../components/resources/ResourceCard"
 import { ResourceCards } from "../components/resources/Resources"
 
 export const getJurisdictionResourcesContent = (): ResourceCards | null => {
   return {
-    contactCard: {
-      description: "",
-      departmentTitle: "",
-      email: "",
-    },
     resourceSections: [
       {
         sectionTitle: t("resources.immediateHousingTitle"),
@@ -335,13 +331,22 @@ export const getJurisdictionResourcesContent = (): ResourceCards | null => {
       },
       {
         sectionTitle: t("resources.relatedHelp.title"),
-        sectionSubtitle: t("resources.relatedHelp.header"),
+        sectionSubtitle: (
+          <>
+            <Markdown>{t("resources.relatedHelp.header")}</Markdown>
+            <ul className="list-disc ml-5">
+              <li>{t("resources.relatedHelp.header1")}</li>
+              <li>{t("resources.relatedHelp.header2")}</li>
+              <li>{t("resources.relatedHelp.header3")}</li>
+            </ul>
+          </>
+        ),
         cards: [
           <ResourceCard
             title={t("resources.relatedHelp.211help")}
             href="https://www.211bayarea.org/"
             content={
-              <ul className="ml-5">
+              <ul className="list-disc ml-5">
                 <li>{t("resources.relatedHelp.211help1")}</li>
                 <li>{t("resources.relatedHelp.211help2")}</li>
                 <li>{t("resources.relatedHelp.211help3")}</li>
