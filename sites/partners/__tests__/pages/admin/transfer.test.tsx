@@ -13,7 +13,7 @@ import {
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import * as helpers from "../../../src/lib/helpers"
-import SettingsTransfer from "../../../src/pages/settings/transfer"
+import SettingsTransfer from "../../../src/pages/admin/transfer"
 
 jest.mock("../../../src/lib/helpers", () => ({
   ...jest.requireActual("../../../src/lib/helpers"),
@@ -148,7 +148,7 @@ afterAll(() => server.close())
 
 const adminProfile = {
   ...user,
-  userRoles: { isAdmin: true },
+  userRoles: { isAdmin: true, isSuperAdmin: true },
   jurisdictions: [
     {
       id: "jurisdiction1",
@@ -211,7 +211,7 @@ const cellsOf = (row: HTMLElement) =>
     .getAllByRole("cell")
     .map((cell) => cell.textContent)
 
-describe("settings/transfer", () => {
+describe("admin/transfer", () => {
   it("sends a non-admin to unauthorized", () => {
     renderPage({ userRoles: { isJurisdictionalAdmin: true } })
 

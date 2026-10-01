@@ -15,7 +15,7 @@ import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import { overrideTranslations } from "../../../src/lib/translations"
 import { publicOverrideTranslations } from "../../../src/lib/publicTranslations"
-import SettingsTranslations from "../../../src/pages/settings/translations"
+import SettingsTranslations from "../../../src/pages/admin/translations"
 
 const server = setupServer()
 
@@ -132,7 +132,7 @@ const jurisdiction = (
 
 const adminProfile = {
   ...user,
-  userRoles: { isAdmin: true },
+  userRoles: { isAdmin: true, isSuperAdmin: true },
   jurisdictions: [jurisdiction("jurisdiction1", "Bloomington")],
   listings: [],
 }
@@ -208,7 +208,7 @@ describe("<SettingsTranslations>", () => {
     it("renders the settings page with a translations tab", async () => {
       renderPage()
 
-      expect(await screen.findByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument()
+      expect(await screen.findByRole("heading", { level: 1, name: "Admin" })).toBeInTheDocument()
       // The settings tabs render as navigation links rather than ARIA tabs.
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
     })
@@ -216,7 +216,7 @@ describe("<SettingsTranslations>", () => {
     it("shows the content tab alongside it, since both ride the same flag", async () => {
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       expect(screen.getByRole("link", { name: "Content" })).toBeInTheDocument()
     })
 
@@ -241,7 +241,7 @@ describe("<SettingsTranslations>", () => {
     it("does not redirect an admin when the flag is on", async () => {
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       expect(pushMock).not.toHaveBeenCalled()
     })
   })

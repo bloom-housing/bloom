@@ -13,7 +13,7 @@ import {
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import * as helpers from "../../../src/lib/helpers"
-import SettingsBranding from "../../../src/pages/settings/branding"
+import SettingsBranding from "../../../src/pages/admin/branding"
 
 jest.mock("../../../src/lib/helpers", () => ({
   ...jest.requireActual("../../../src/lib/helpers"),
@@ -96,7 +96,7 @@ afterAll(() => server.close())
 
 const adminProfile = {
   ...user,
-  userRoles: { isAdmin: true },
+  userRoles: { isAdmin: true, isSuperAdmin: true },
   jurisdictions: [
     {
       id: "jurisdiction1",
@@ -131,7 +131,7 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
     </MessageContext.Provider>
   )
 
-describe("settings/branding", () => {
+describe("admin/branding", () => {
   it("sends a non-admin to unauthorized", () => {
     renderPage({ userRoles: { isJurisdictionalAdmin: true } })
 

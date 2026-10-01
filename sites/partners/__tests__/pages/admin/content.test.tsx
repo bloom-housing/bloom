@@ -12,7 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, mockTipTapEditor, render } from "../../testUtils"
-import SettingsContent from "../../../src/pages/settings/content"
+import SettingsContent from "../../../src/pages/admin/content"
 import * as helpers from "../../../src/lib/helpers"
 
 jest.mock("../../../src/lib/helpers", () => ({
@@ -113,7 +113,7 @@ afterAll(() => server.close())
 
 const adminProfile = {
   ...user,
-  userRoles: { isAdmin: true },
+  userRoles: { isAdmin: true, isSuperAdmin: true },
   jurisdictions: [
     {
       id: "jurisdiction1",
@@ -163,7 +163,7 @@ describe("<SettingsContent>", () => {
     it("renders the settings page with a content tab", async () => {
       renderPage()
 
-      expect(await screen.findByRole("heading", { level: 1, name: "Settings" })).toBeInTheDocument()
+      expect(await screen.findByRole("heading", { level: 1, name: "Admin" })).toBeInTheDocument()
       expect(screen.getByRole("link", { name: "Content" })).toBeInTheDocument()
     })
 
@@ -176,7 +176,7 @@ describe("<SettingsContent>", () => {
     it("shows the translations tab alongside it, since both ride the same flag", async () => {
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
     })
 
@@ -203,7 +203,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
       expect(await screen.findAllByText("test:usingEnglish")).toHaveLength(2)
@@ -220,7 +220,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
       expect(await screen.findByText("test:stale")).toBeInTheDocument()
@@ -242,7 +242,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
 
       expect(await screen.findByText("Applying")).toBeInTheDocument()
@@ -260,7 +260,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       expect(await screen.findByRole("button", { name: "Delete" })).toBeInTheDocument()
 
@@ -279,7 +279,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       expect(await screen.findByText("About")).toBeInTheDocument()
 
@@ -297,7 +297,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
@@ -313,7 +313,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
 
@@ -340,7 +340,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "resources")
       const editButtons = await screen.findAllByRole("button", { name: "Edit" })
       await userEvent.click(editButtons[editButtons.length - 1])
@@ -354,7 +354,7 @@ describe("<SettingsContent>", () => {
       respondWithRows([row(LanguagesEnum.en, { footer: { logo: { logoUrl: "/" } } })])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
 
       expect(await screen.findByLabelText("test:logoUrl")).toBeInTheDocument()
@@ -371,7 +371,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
@@ -406,7 +406,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
@@ -418,7 +418,7 @@ describe("<SettingsContent>", () => {
       respondWithRows([row(LanguagesEnum.en, { footer: { textSectionsHtml: ["<p>First</p>"] } })])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await screen.findByText("First")
 
@@ -439,7 +439,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
@@ -461,7 +461,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await screen.findByText("Added in English")
@@ -484,7 +484,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
@@ -495,7 +495,7 @@ describe("<SettingsContent>", () => {
       respondWithRows([row(LanguagesEnum.en)])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
 
       expect(await screen.findByText("test:contactPhone")).toBeInTheDocument()
@@ -510,7 +510,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
 
       // Building the editor empty and setting content afterwards left this at the full limit until
       // the first keystroke.
@@ -521,7 +521,7 @@ describe("<SettingsContent>", () => {
       respondWithRows([row(LanguagesEnum.en, { disclaimers: { privacyHtml: "<p>one</p>" } })])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       const host = await screen.findByTestId("disclaimers.privacyHtml")
       const editable = host.querySelector('[contenteditable="true"]')
       ;(editable as HTMLElement).focus()
@@ -564,7 +564,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await typeInEditor("disclaimers.privacyHtml", "Updated privacy")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
 
@@ -587,7 +587,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
@@ -617,7 +617,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
 
@@ -632,7 +632,7 @@ describe("<SettingsContent>", () => {
       respondWithRows([englishRow()])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       expect(screen.getByLabelText("test:contactPhone")).toHaveValue("555-01009")
@@ -654,7 +654,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
@@ -698,7 +698,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
@@ -738,7 +738,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.click(await screen.findByRole("button", { name: "test:addLink" }))
       await userEvent.click(await screen.findByRole("button", { name: "Close" }))
@@ -762,7 +762,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
@@ -781,7 +781,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       expect(await screen.findByText("test:alertLoadFailed")).toBeInTheDocument()
       expect(screen.queryByText("test:notSet")).toBeNull()
       expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
@@ -804,7 +804,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
 
@@ -834,7 +834,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
       await userEvent.click(await screen.findByRole("button", { name: "test:addCategory" }))
 
@@ -870,7 +870,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "faq")
       await userEvent.click(await screen.findByRole("button", { name: "test:addQuestion" }))
 
@@ -910,7 +910,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
@@ -938,7 +938,7 @@ describe("<SettingsContent>", () => {
       respondWithRows([englishRow()])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.type(await screen.findByLabelText("test:contactPhone"), "9")
       await userEvent.click(screen.getByRole("button", { name: "Save" }))
@@ -971,7 +971,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.click(await screen.findByRole("button", { name: "Edit" }))
@@ -996,7 +996,7 @@ describe("<SettingsContent>", () => {
       )
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "contact")
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.clear(await screen.findByLabelText("test:contactPhone"))
@@ -1026,7 +1026,7 @@ describe("<SettingsContent>", () => {
       )
 
     const openFooter = async () => {
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
     }
 
@@ -1098,7 +1098,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
 
@@ -1152,7 +1152,7 @@ describe("<SettingsContent>", () => {
       ])
       renderPage()
 
-      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
       await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
       await userEvent.upload(

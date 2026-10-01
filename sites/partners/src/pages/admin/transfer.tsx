@@ -15,7 +15,7 @@ import {
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useAdminTabs, AdminIndexEnum } from "../../components/admin/AdminViewHelpers"
 import { ContentTransferPreviewDialog } from "../../components/settings/ContentTransferPreviewDialog"
 import { fileUploader, FileUploadData } from "../../lib/helpers"
 
@@ -96,15 +96,13 @@ const errorMessage = (caught: unknown) => {
   return typeof message === "string" ? message : t("errors.alert.badRequest")
 }
 
-const SettingsTransfer = () => {
+const AdminTransfer = () => {
   const router = useRouter()
   const { addToast } = useContext(MessageContext)
   const { profile, contentTransferService } = useContext(AuthContext)
-  const { enableContent, enableBranding, hideTabs, tabs } = useSettingsTabs(
-    SettingsIndexEnum.transfer
-  )
+  const { enableContent, enableBranding, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.transfer)
 
-  const authorized = (enableContent || enableBranding) && !!profile?.userRoles?.isAdmin
+  const authorized = (enableContent || enableBranding) && !!profile?.userRoles?.isSuperAdmin
 
   const jurisdictions = useMemo(
     () =>
@@ -210,10 +208,10 @@ const SettingsTransfer = () => {
     <Layout>
       <Head>
         <title>
-          {`${t("t.settings")} - ${t("settings.transfer")} - ${t("nav.siteTitlePartners")}`}
+          {`${t("nav.admin")} - ${t("settings.transfer")} - ${t("nav.siteTitlePartners")}`}
         </title>
       </Head>
-      <NavigationHeader className="relative" title={t("t.settings")} />
+      <NavigationHeader className="relative" title={t("nav.admin")} />
       <TabView hideTabs={hideTabs} tabs={tabs}>
         <Card className="seeds-m-be-6">
           <Card.Header>
@@ -281,4 +279,4 @@ const SettingsTransfer = () => {
   )
 }
 
-export default SettingsTransfer
+export default AdminTransfer

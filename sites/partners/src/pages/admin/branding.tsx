@@ -9,21 +9,21 @@ import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useAdminTabs, AdminIndexEnum } from "../../components/admin/AdminViewHelpers"
 import BrandingForm, { BrandingSubmission } from "../../components/settings/BrandingForm"
 import { useJurisdiction } from "../../lib/hooks"
 import { brandErrorsFrom, brandToFormValues, brandUpdateFrom } from "../../lib/branding"
 import styles from "./branding.module.scss"
 
-const SettingsBranding = () => {
+const AdminBranding = () => {
   const router = useRouter()
   const { mutate } = useSWRConfig()
   const { addToast } = useContext(MessageContext)
   const { mutate: saveBrand, isLoading: isSaving } = useMutate()
   const { profile, jurisdictionsService } = useContext(AuthContext)
-  const { enableBranding, hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.branding)
+  const { enableBranding, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.branding)
 
-  const authorized = enableBranding && !!profile?.userRoles?.isAdmin
+  const authorized = enableBranding && !!profile?.userRoles?.isSuperAdmin
 
   const jurisdictions = useMemo(
     () =>
@@ -87,10 +87,10 @@ const SettingsBranding = () => {
     <Layout>
       <Head>
         <title>
-          {`${t("t.settings")} - ${t("settings.branding")} - ${t("nav.siteTitlePartners")}`}
+          {`${t("nav.admin")} - ${t("settings.branding")} - ${t("nav.siteTitlePartners")}`}
         </title>
       </Head>
-      <NavigationHeader className="relative" title={t("t.settings")} />
+      <NavigationHeader className="relative" title={t("nav.admin")} />
       <TabView hideTabs={hideTabs} tabs={tabs}>
         <div className={styles["toolbar"]}>
           <Select
@@ -128,4 +128,4 @@ const SettingsBranding = () => {
   )
 }
 
-export default SettingsBranding
+export default AdminBranding
