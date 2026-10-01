@@ -134,7 +134,7 @@ const withoutSourceHashes = (value: unknown, path: string): unknown => {
         isPlainObject(child) &&
         Object.entries(child).every(
           ([field, hash]) =>
-            value[field] != null &&
+            Object.prototype.hasOwnProperty.call(value, field) &&
             typeof hash === 'string' &&
             SOURCE_HASH.test(hash),
         );

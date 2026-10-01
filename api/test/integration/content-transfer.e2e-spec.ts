@@ -95,15 +95,23 @@ describe('Content Transfer Controller Tests', () => {
         {
           jurisdictionId: sourceId,
           language: LanguagesEnum.en,
-          disclaimers: { privacyHtml: '<p>Privacy</p>' },
+          disclaimers: {
+            privacyHtml: '<p>Privacy</p>',
+            disclaimerHtml: '<p>Disclaimer</p>',
+          },
           footer: { textSectionsHtml: ['<p>Footer</p>'] },
         },
         {
           jurisdictionId: sourceId,
           language: LanguagesEnum.es,
+          // The content editor stores an emptied html field as null and still stamps its hash.
           disclaimers: {
             privacyHtml: '<p>Privacidad</p>',
-            _sourceHashes: { privacyHtml: sourceHash('<p>Privacy</p>') },
+            disclaimerHtml: null,
+            _sourceHashes: {
+              privacyHtml: sourceHash('<p>Privacy</p>'),
+              disclaimerHtml: sourceHash('<p>Disclaimer</p>'),
+            },
           },
         },
       ],
@@ -169,6 +177,7 @@ describe('Content Transfer Controller Tests', () => {
       expect(file.translations).toHaveLength(2);
       expect(file.content[1].disclaimers._sourceHashes).toEqual({
         privacyHtml: sourceHash('<p>Privacy</p>'),
+        disclaimerHtml: sourceHash('<p>Disclaimer</p>'),
       });
     });
 
@@ -282,7 +291,11 @@ describe('Content Transfer Controller Tests', () => {
       ]);
       expect(content[1].disclaimers).toEqual({
         privacyHtml: '<p>Privacidad</p>',
-        _sourceHashes: { privacyHtml: sourceHash('<p>Privacy</p>') },
+        disclaimerHtml: null,
+        _sourceHashes: {
+          privacyHtml: sourceHash('<p>Privacy</p>'),
+          disclaimerHtml: sourceHash('<p>Disclaimer</p>'),
+        },
       });
       expect(content[1].faq).toBeNull();
 

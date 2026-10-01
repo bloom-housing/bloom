@@ -536,6 +536,29 @@ describe('Testing content transfer service', () => {
       expect(preview.content).toEqual([]);
     });
 
+    // The content editor stores an emptied html field as null and still stamps its hash.
+    it('accepts a source hash for a field stored as null', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({
+            content: [
+              {
+                language: LanguagesEnum.es,
+                disclaimers: {
+                  privacyHtml: '<p>Privacidad</p>',
+                  disclaimerHtml: null,
+                  _sourceHashes: { privacyHtml: hash, disclaimerHtml: hash },
+                },
+              },
+            ],
+          }),
+          adminUser,
+        ),
+      ).resolves.toBeDefined();
+    });
+
     it('refuses source hashes for a field the document does not have', async () => {
       mockTarget();
 
