@@ -1,5 +1,6 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
+import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import {
   FeatureFlagEnum,
@@ -11,8 +12,13 @@ import { getMapListings } from "../../../../src/lib/helpers"
 
 const paginationMock = jest.fn()
 const tIfExistsMock = jest.fn()
+const pushMock = jest.fn()
 
 // These mocks enable us to just test the branching logic in ListingsList without worrying about the internal implementation of the children, which are tested separately
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}))
+
 jest.mock("../../../../src/components/browse/map/ListingsMapContext", () => ({
   useListingsMapContext: jest.fn(),
 }))
@@ -79,6 +85,7 @@ describe("ListingsList", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({ query: {}, push: pushMock })
     delete process.env.notificationsSignUpUrl
     tIfExistsMock.mockReturnValue(null)
     ;(useListingsMapContext as jest.Mock).mockReturnValue(baseContext)
