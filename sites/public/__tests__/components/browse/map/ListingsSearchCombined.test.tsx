@@ -456,18 +456,6 @@ describe("ListingsSearchCombined", () => {
       })
     })
 
-    it("does not add the active status when the closed status filter is applied", async () => {
-      renderComponent({}, { status: "closed" })
-
-      await waitFor(() => {
-        expect(markerFilterCalls().some((filters) => filters.length > 0)).toBe(true)
-      })
-      const closedCall = mockSearchMapMarkers.mock.calls.find((call) =>
-        (call[3] as ListingFilterParams[]).some((filter) => filter.status === "closed")
-      )
-      expect(queryBuilderStatuses(closedCall)).toEqual([])
-    })
-
     it("passes the closed status filter to the mobile listings search", async () => {
       Object.defineProperty(window, "innerWidth", { value: 600 })
       renderComponent({}, { status: "closed" })

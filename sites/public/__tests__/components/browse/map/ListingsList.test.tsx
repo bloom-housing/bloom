@@ -114,7 +114,7 @@ describe("ListingsList", () => {
     expect(screen.getByText(t("t.tryChangingArea"))).toBeInTheDocument()
   })
 
-  it("shows the closed status no-visible-listings state when the status filter is enabled", () => {
+  it("shows the status filter no-matching-listings state with a search open button when viewing closed listings", () => {
     ;(useListingsMapContext as jest.Mock).mockReturnValue({
       ...baseContext,
       activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
@@ -129,17 +129,16 @@ describe("ListingsList", () => {
     render(<ListingsList />)
 
     expect(
-      screen.getByRole("heading", { name: "No closed listings in this area" })
+      screen.getByRole("heading", { name: t("listingFilters.noMatchingListingsTitle") })
     ).toBeInTheDocument()
+    expect(screen.getByText(t("listingFilters.noMatchingListingsDescription"))).toBeInTheDocument()
     expect(
-      screen.getByText(
-        '2 matching listings are outside this area. Select "Recenter" on the map to see them.'
-      )
+      screen.getByRole("button", { name: t("listingFilters.searchForOpen") })
     ).toBeInTheDocument()
     expect(screen.queryByText(t("t.tryChangingArea"))).toBeNull()
   })
 
-  it("shows the open status no-visible-listings state for a single marker outside the area", () => {
+  it("shows the status filter no-matching-listings state with a search closed button when viewing open listings", () => {
     ;(useListingsMapContext as jest.Mock).mockReturnValue({
       ...baseContext,
       activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
@@ -154,12 +153,11 @@ describe("ListingsList", () => {
     render(<ListingsList />)
 
     expect(
-      screen.getByRole("heading", { name: "No open listings in this area" })
+      screen.getByRole("heading", { name: t("listingFilters.noMatchingListingsTitle") })
     ).toBeInTheDocument()
+    expect(screen.getByText(t("listingFilters.noMatchingListingsDescription"))).toBeInTheDocument()
     expect(
-      screen.getByText(
-        '1 matching listing is outside this area. Select "Recenter" on the map to see it.'
-      )
+      screen.getByRole("button", { name: t("listingFilters.searchForClosed") })
     ).toBeInTheDocument()
   })
 
