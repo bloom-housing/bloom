@@ -5,7 +5,12 @@ import { ContentDraft, isStale } from "../../lib/contentEditor"
 import { ContentFieldCard, ContentFieldType } from "./ContentFieldCard"
 import styles from "./ContentItemDrawer.module.scss"
 
-export type ItemField = { name: string; labelKey: string; type: ContentFieldType }
+export type ItemField = {
+  name: string
+  labelKey: string
+  type: ContentFieldType
+  noteKey?: string
+}
 
 type ContentItemDrawerProps = {
   /** The item being edited, e.g. `faq.categories[applying].items[how]`, or null when closed. */
@@ -52,6 +57,7 @@ export const ContentItemDrawer = ({
               className={styles["field"]}
               path={path}
               labelKey={field.labelKey}
+              noteKey={field.noteKey}
               type={field.type}
               draft={draft}
               englishDraft={englishDraft}

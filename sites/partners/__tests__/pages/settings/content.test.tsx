@@ -33,6 +33,15 @@ const CONTENT_STRINGS = {
   "content.revertToEnglish": "test:revertToEnglish",
   "content.document": "test:document",
   "content.linkHref": "test:linkHref",
+  "content.linkHrefNote": "test:linkHrefNote",
+  "content.logoUrl": "test:logoUrl",
+  "content.cardLink": "test:cardLink",
+  "content.cardTitle": "test:cardTitle",
+  "content.resourceCard": "test:resourceCard",
+  "content.resourceCards": "test:resourceCards",
+  "content.sectionTitle": "test:sectionTitle",
+  "content.resourceSection": "test:resourceSection",
+  "content.resourceSections": "test:resourceSections",
   "content.linkText": "test:linkText",
   "content.contactPhone": "test:contactPhone",
   "content.contactHours": "test:contactHours",
@@ -301,6 +310,46 @@ describe("<SettingsContent>", () => {
 
       expect(await screen.findByText("test:footerLink")).toBeInTheDocument()
       expect(screen.getByLabelText("test:linkText")).toHaveValue("About")
+      // Without a scheme the link is routed internally, which is not obvious from the field alone.
+      expect(screen.getByText("test:linkHrefNote")).toBeInTheDocument()
+    })
+
+    // The same note is on three link fields; the footer link above is only one of them.
+    it("notes the link format on the resource card address", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          resources: {
+            resourceSections: [
+              {
+                id: "help",
+                sectionTitle: "Help",
+                cards: [{ id: "apply", title: "How to apply", href: "/apply" }],
+              },
+            ],
+          },
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "resources")
+      const editButtons = await screen.findAllByRole("button", { name: "Edit" })
+      await userEvent.click(editButtons[editButtons.length - 1])
+
+      expect(await screen.findByText("test:resourceCard")).toBeInTheDocument()
+      expect(screen.getByText("test:linkHrefNote")).toBeInTheDocument()
+    })
+
+    // A top-level field, which could not carry a note until FieldConfig allowed one.
+    it("notes the link format on the footer logo address", async () => {
+      respondWithRows([row(LanguagesEnum.en, { footer: { logo: { logoUrl: "/" } } })])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Settings" })
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+
+      expect(await screen.findByLabelText("test:logoUrl")).toBeInTheDocument()
+      expect(screen.getByText("test:linkHrefNote")).toBeInTheDocument()
     })
 
     it("marks footer text sections when the English ones changed", async () => {
