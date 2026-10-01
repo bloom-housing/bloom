@@ -82,4 +82,60 @@ describe("fetchJurisdictionByName", () => {
 
     expect(mockedGet).toHaveBeenCalledTimes(1)
   })
+
+  it("asks again once the revalidate window has passed", async () => {
+    process.env.cacheRevalidate = "30"
+    await fetchJurisdictionByName()
+
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 31000)
+    await fetchJurisdictionByName()
+    now.mockRestore()
+
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
+  it("holds one jurisdiction for the whole production build", async () => {
+    process.env.NEXT_PHASE = "phase-production-build"
+    await fetchJurisdictionByName()
+
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 31000)
+    await fetchJurisdictionByName()
+    now.mockRestore()
+    delete process.env.NEXT_PHASE
+
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+  })
+
+  it("holds a failed read briefly instead of retrying on every call", async () => {
+    mockedGet.mockRejectedValue(new Error("api down"))
+
+    expect(await fetchJurisdictionByName()).toBeNull()
+    expect(await fetchJurisdictionByName()).toBeNull()
+
+    expect(mockedGet).toHaveBeenCalledTimes(1)
+  })
+
+  it("retries once the failure window has passed", async () => {
+    mockedGet.mockRejectedValueOnce(new Error("api down"))
+    await fetchJurisdictionByName()
+
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 5001)
+    const result = await fetchJurisdictionByName()
+    now.mockRestore()
+
+    expect(result).toEqual({ id: "jurisdiction-id" })
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
+  it("serves the last good jurisdiction while the api is failing", async () => {
+    process.env.cacheRevalidate = "30"
+    await fetchJurisdictionByName()
+
+    mockedGet.mockRejectedValue(new Error("api down"))
+    const now = jest.spyOn(Date, "now").mockReturnValue(Date.now() + 31000)
+    const result = await fetchJurisdictionByName()
+    now.mockRestore()
+
+    expect(result).toEqual({ id: "jurisdiction-id" })
+  })
 })

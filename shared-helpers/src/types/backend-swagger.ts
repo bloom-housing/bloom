@@ -1437,6 +1437,31 @@ export class JurisdictionsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Update a jurisdiction's branding
+   */
+  updateBrand(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /** requestBody */
+      body?: JurisdictionBrandUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/{jurisdictionId}/brand"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ApplicationsService {
@@ -8415,6 +8440,54 @@ export interface RaceEthnicityConfiguration {
   options: RaceEthnicityOption[]
 }
 
+/** BrandRampDTO */
+export interface BrandRampDTO {
+  /**  */
+  base: string
+
+  /**  */
+  dark?: string
+
+  /**  */
+  darker?: string
+
+  /**  */
+  light?: string
+
+  /**  */
+  lighter?: string
+}
+
+/** BrandDTO */
+export interface BrandDTO {
+  /**  */
+  primary?: BrandRampDTO
+
+  /**  */
+  secondary?: BrandRampDTO
+
+  /**  */
+  fontFamily?: string
+
+  /**  */
+  headingFontFamily?: string
+
+  /**  */
+  fontUrl?: string
+
+  /**  */
+  serifFontFamily?: string
+
+  /**  */
+  buttonRadius?: BrandRadiusEnum
+
+  /**  */
+  logoUrl?: string
+
+  /**  */
+  faviconUrl?: string
+}
+
 /** JurisdictionCreate */
 export interface JurisdictionCreate {
   /**  */
@@ -8503,6 +8576,15 @@ export interface JurisdictionCreate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
 }
 
 /** JurisdictionUpdate */
@@ -8596,6 +8678,27 @@ export interface JurisdictionUpdate {
 
   /**  */
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
+}
+
+/** JurisdictionBrandUpdate */
+export interface JurisdictionBrandUpdate {
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  logoFileId?: string
+
+  /**  */
+  faviconFileId?: string
 }
 
 /** FeatureFlag */
@@ -8728,6 +8831,15 @@ export interface Jurisdiction {
 
   /**  */
   subJurisdictions?: IdDTO[]
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
 }
 
 /** AddressInput */
@@ -10582,6 +10694,9 @@ export interface Login {
 
   /**  */
   reCaptchaToken?: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 /** LoginViaSingleUseCode */
@@ -10591,6 +10706,9 @@ export interface LoginViaSingleUseCode {
 
   /**  */
   singleUseCode: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 /** RequestMfaCode */
@@ -10627,6 +10745,9 @@ export interface UpdatePassword {
 
   /**  */
   token: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
 /** Confirm */
@@ -11729,6 +11850,17 @@ export enum ApplicationAccessibilityFeatureEnum {
   "vision" = "vision",
 }
 
+export enum BrandRadiusEnum {
+  "sm" = "sm",
+  "base" = "base",
+  "md" = "md",
+  "lg" = "lg",
+  "xl" = "xl",
+  "2xl" = "2xl",
+  "3xl" = "3xl",
+  "full" = "full",
+}
+export type CombinedBrandTypes = BrandDTO
 export enum FeatureFlagEnum {
   "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
@@ -11751,6 +11883,7 @@ export enum FeatureFlagEnum {
   "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
   "enableCustomListingNotifications" = "enableCustomListingNotifications",
+  "enableDbDrivenBranding" = "enableDbDrivenBranding",
   "enableDbDrivenContent" = "enableDbDrivenContent",
   "enableDuplicatesDetailsInEmail" = "enableDuplicatesDetailsInEmail",
   "enableExportTerms" = "enableExportTerms",
@@ -11799,6 +11932,7 @@ export enum FeatureFlagEnum {
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",
   "enableProperties" = "enableProperties",
+  "enablePublicTermsOfUse" = "enablePublicTermsOfUse",
   "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",

@@ -23,14 +23,19 @@ class ListingPublishRequiredConstraint implements ValidatorConstraintInterface {
   /*
    * Check if the listing is being published.
    * A listing is considered "publishing" if its status is 'active', 'pending review', or 'scheduled'.
+   * 'closed' only counts when the caller has flagged the update as a publish (land use listings that go live as closed)
    * If status is undefined, null, or an empty string we have to assume that it is publishing in order to apply validation
    * so that strict validation will be applied
    */
-  static isPublishing(status?: ListingsStatusEnum | ''): boolean {
+  static isPublishing(
+    status?: ListingsStatusEnum | '',
+    publishesToClosed?: boolean,
+  ): boolean {
     return (
       status === ListingsStatusEnum.active ||
       status === ListingsStatusEnum.pendingReview ||
       status === ListingsStatusEnum.scheduled ||
+      (status === ListingsStatusEnum.closed && publishesToClosed === true) ||
       status === undefined ||
       status === null ||
       status === ''
@@ -57,7 +62,12 @@ class ListingPublishRequiredConstraint implements ValidatorConstraintInterface {
       return true; // Value exists, validation passes
     }
 
-    if (!ListingPublishRequiredConstraint.isPublishing(object['status'])) {
+    if (
+      !ListingPublishRequiredConstraint.isPublishing(
+        object['status'],
+        object['publishesToClosed'],
+      )
+    ) {
       return true; // Not publishing, validation passes
     }
 

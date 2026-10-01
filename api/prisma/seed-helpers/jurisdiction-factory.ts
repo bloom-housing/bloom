@@ -17,6 +17,7 @@ export const jurisdictionFactory = (
     .toString(16)
     .substring(2, 8)}`,
   optionalFields?: {
+    allowSingleUseCodeLogin?: boolean;
     listingApprovalPermissions?: UserRoleEnum[];
     duplicateListingPermissions?: UserRoleEnum[];
     featureFlags?: string[];
@@ -36,6 +37,7 @@ export const jurisdictionFactory = (
   },
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
+  allowSingleUseCodeLogin: optionalFields?.allowSingleUseCodeLogin || false,
   notificationsSignUpUrl: 'https://www.exygy.com',
   languages: optionalFields?.languages || [LanguagesEnum.en, LanguagesEnum.es],
   partnerTerms:

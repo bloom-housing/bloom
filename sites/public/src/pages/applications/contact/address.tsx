@@ -53,6 +53,7 @@ const ApplicationAddress = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors, trigger, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
     defaultValues: {
