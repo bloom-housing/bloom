@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -18,7 +19,14 @@ describe('Testing jurisdiction content service', () => {
   let prisma: PrismaService;
   let permissionServiceMock;
   let mockConsoleWarn;
-  const adminUser = { id: 'admin-user' } as User;
+  const adminUser = {
+    id: 'admin-user',
+    userRoles: { isAdmin: true, isSuperAdmin: true },
+  } as User;
+  const adminOnlyUser = {
+    id: 'admin-only-user',
+    userRoles: { isAdmin: true },
+  } as User;
 
   beforeEach(async () => {
     permissionServiceMock = { canOrThrow: jest.fn() };
@@ -755,6 +763,18 @@ describe('Testing jurisdiction content service', () => {
         ),
       ).rejects.toThrow(BadRequestException);
       expect(prisma.jurisdictionContent.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('superadmin access', () => {
+    it('refuses an admin who is not a superadmin', async () => {
+      prisma.jurisdictionContent.findFirst = jest.fn();
+
+      await expect(
+        service.getContent(randomUUID(), LanguagesEnum.en, adminOnlyUser),
+      ).rejects.toThrow(ForbiddenException);
+      expect(permissionServiceMock.canOrThrow).not.toHaveBeenCalled();
+      expect(prisma.jurisdictionContent.findFirst).not.toHaveBeenCalled();
     });
   });
 });

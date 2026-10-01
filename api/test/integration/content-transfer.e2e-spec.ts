@@ -19,6 +19,7 @@ describe('Content Transfer Controller Tests', () => {
   let targetName: string;
   let adminCookies = '';
   let jurisAdminCookies = '';
+  let adminOnlyCookies = '';
 
   const passkey = { passkey: process.env.API_PASS_KEY || '' };
 
@@ -134,12 +135,27 @@ describe('Content Transfer Controller Tests', () => {
 
     const admin = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isAdmin: true },
+        roles: { isAdmin: true, isSuperAdmin: true },
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
     });
     adminCookies = await login(admin.email);
+
+    const adminOnly = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    adminOnlyCookies = (
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminOnly.email, password: 'Abcdef12345!' } as Login)
+        .expect(201)
+    ).headers['set-cookie'];
 
     const jurisAdmin = await prisma.userAccounts.create({
       data: await userFactory({
@@ -179,6 +195,14 @@ describe('Content Transfer Controller Tests', () => {
         privacyHtml: sourceHash('<p>Privacy</p>'),
         disclaimerHtml: sourceHash('<p>Disclaimer</p>'),
       });
+    });
+
+    it('refuses an admin who is not a superadmin', async () => {
+      await request(app.getHttpServer())
+        .get(`/contentTransfer/jurisdictions/${sourceId}/export`)
+        .set(passkey)
+        .set('Cookie', adminOnlyCookies)
+        .expect(403);
     });
 
     it('refuses a request without a user', async () => {

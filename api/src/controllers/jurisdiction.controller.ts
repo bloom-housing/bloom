@@ -7,11 +7,13 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
   Header,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
 import {
   ApiExtraModels,
   ApiOkResponse,
@@ -31,6 +33,9 @@ import { OptionalAuthGuard } from '../guards/optional.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PUBLIC_CACHE_CONTROL } from '../utilities/cache-control';
+import { assertSuperAdmin } from '../utilities/assert-super-admin';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../dtos/users/user.dto';
 
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
@@ -108,7 +113,9 @@ export class JurisdictionController {
     @Param('jurisdictionId', new ParseUUIDPipe({ version: '4' }))
     jurisdictionId: string,
     @Body() brandUpdate: JurisdictionBrandUpdate,
+    @Request() req: ExpressRequest,
   ): Promise<Jurisdiction> {
+    assertSuperAdmin(mapTo(User, req['user']));
     return await this.jurisdictionService.updateBrand(
       jurisdictionId,
       brandUpdate,

@@ -23,6 +23,7 @@ describe('Jurisdiction Controller Tests', () => {
   let prisma: PrismaService;
   let cookies = '';
   let jurisAdminCookies = '';
+  let adminOnlyCookies = '';
 
   beforeAll(async () => {
     // The font check reads css from google; the responses are stubbed so the suite makes no
@@ -45,7 +46,7 @@ describe('Jurisdiction Controller Tests', () => {
     await app.init();
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isAdmin: true },
+        roles: { isAdmin: true, isSuperAdmin: true },
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
@@ -60,6 +61,21 @@ describe('Jurisdiction Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+
+    const adminOnly = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    adminOnlyCookies = (
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminOnly.email, password: 'Abcdef12345!' } as Login)
+        .expect(201)
+    ).headers['set-cookie'];
 
     const jurisAdmin = await prisma.userAccounts.create({
       data: await userFactory({
@@ -438,7 +454,7 @@ describe('Jurisdiction Controller Tests', () => {
         await putBrand(randomUUID(), { brand: null }).expect(404);
       });
 
-      // Editing a brand is limited to the admin role, matching the jurisdiction resource policy.
+      // Editing a brand is limited to superadmins.
       it('forbids a jurisdictional admin', async () => {
         const jurisdiction = await prisma.jurisdictions.create({
           data: jurisdictionFactory(),
@@ -448,6 +464,18 @@ describe('Jurisdiction Controller Tests', () => {
           jurisdiction.id,
           { brand: { primary: { base: '#773E98' } } },
           jurisAdminCookies,
+        ).expect(403);
+      });
+
+      it('forbids an admin who is not a superadmin', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await putBrand(
+          jurisdiction.id,
+          { brand: { primary: { base: '#773E98' } } },
+          adminOnlyCookies,
         ).expect(403);
       });
 

@@ -19,6 +19,7 @@ import {
 } from '../utilities/content-source-hash';
 import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { mapTo } from '../utilities/mapTo';
+import { assertSuperAdmin } from '../utilities/assert-super-admin';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 
@@ -309,6 +310,7 @@ export class JurisdictionContentService {
     jurisdictionId: string,
     action: permissionActions,
   ): Promise<void> {
+    assertSuperAdmin(user);
     await this.permissionService.canOrThrow(
       user,
       'jurisdictionContent',
