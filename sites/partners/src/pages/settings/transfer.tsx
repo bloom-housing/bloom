@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import dayjs from "dayjs"
@@ -26,6 +26,35 @@ const TRANSFER_FLAGS: string[] = [
   FeatureFlagEnum.enableDbDrivenBranding,
 ]
 
+const IMAGE_TYPES = ["image/png", "image/svg+xml", "image/webp"]
+
+class ImageError extends Error {}
+
+class UploadError extends Error {
+  constructor(readonly fileId: string) {
+    super(`${fileId} did not upload`)
+  }
+}
+
+const imagesToUpload = (file: ContentTransferFile): ContentTransferAsset[] => {
+  const keys = [
+    file.brand?.logoFileId,
+    file.brand?.faviconFileId,
+    ...(file.content ?? []).map(
+      (row) => (row.footer as { logo?: { logoFileId?: string } } | null)?.logo?.logoFileId
+    ),
+  ].filter((key): key is string => !!key)
+
+  return [...new Set(keys)].map((key) => {
+    const asset = (file.assets ?? []).find((candidate) => candidate.fileId === key)
+    if (!asset) throw new ImageError(t("transfer.missingImage", { fileId: key }))
+    if (!IMAGE_TYPES.includes(asset.contentType)) {
+      throw new ImageError(t("transfer.imageType", { fileId: key }))
+    }
+    return asset
+  })
+}
+
 const withoutAssets = (file: ContentTransferFile): ContentTransferImport => {
   const { assets, exportedAt, ...rest } = file
   void assets
@@ -50,16 +79,17 @@ const uploadAsset = (asset: ContentTransferAsset) =>
     fileUploader({
       file,
       setFileUploadData: ((data: FileUploadData) =>
-        data.fileId ? resolve(data.fileId) : reject(new Error("no file id"))) as never,
+        data.fileId ? resolve(data.fileId) : reject(new UploadError(asset.fileId))) as never,
       setProgressValue: ((value: number) => {
-        if (value === 0) reject(new Error(`${asset.fileId} did not upload`))
+        if (value === 0) reject(new UploadError(asset.fileId))
       }) as never,
       contentType: asset.contentType,
       contentDisposition: "inline",
-    }).catch(reject)
+    }).catch(() => reject(new UploadError(asset.fileId)))
   })
 
 const errorMessage = (caught: unknown) => {
+  if (caught instanceof UploadError) return t("transfer.uploadFailed", { fileId: caught.fileId })
   const message = (caught as { response?: { data?: { message?: unknown } } })?.response?.data
     ?.message
   if (Array.isArray(message)) return message.join(" ")
@@ -89,8 +119,12 @@ const SettingsTransfer = () => {
   const [pending, setPending] = useState<{
     file: ContentTransferFile
     preview: ContentTransferPreview
+    images: ContentTransferAsset[]
   } | null>(null)
   const [importing, setImporting] = useState(false)
+  const uploadedKeys = useRef<Record<string, string>>({})
+  const latestReview = useRef(0)
+  const importInProgress = useRef(false)
 
   const activeScope = scope || jurisdictions[0]?.id || GLOBAL_SCOPE
 
@@ -104,14 +138,18 @@ const SettingsTransfer = () => {
       const url = window.URL.createObjectURL(
         new Blob([JSON.stringify(file, null, 2)], { type: "application/json" })
       )
-      const name = (file.jurisdictionName ?? GLOBAL_SCOPE).toLowerCase().replace(/\W+/g, "-")
+      const name = (file.jurisdictionName ?? GLOBAL_SCOPE)
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, "-")
+        .replace(/^-+|-+$/g, "")
       const link = document.createElement("a")
       link.href = url
       link.setAttribute("download", `${name}-content-${dayjs().format("YYYY-MM-DD")}.json`)
       document.body.appendChild(link)
       link.click()
       link.remove()
-      window.URL.revokeObjectURL(url)
+      // Some browsers start the download after the click returns.
+      window.setTimeout(() => window.URL.revokeObjectURL(url), 1000)
     } catch (caught) {
       addToast(errorMessage(caught), { variant: "alert" })
     } finally {
@@ -120,6 +158,7 @@ const SettingsTransfer = () => {
   }
 
   const reviewFile = async (upload: File) => {
+    const review = ++latestReview.current
     let file: ContentTransferFile
     try {
       file = JSON.parse(await readText(upload)) as ContentTransferFile
@@ -128,28 +167,36 @@ const SettingsTransfer = () => {
       return
     }
     try {
+      const images = imagesToUpload(file)
       const preview = await contentTransferService.previewImport({ body: withoutAssets(file) })
-      setPending({ file, preview })
+      if (review !== latestReview.current) return
+      uploadedKeys.current = {}
+      setPending({ file, preview, images })
     } catch (caught) {
-      addToast(errorMessage(caught), { variant: "alert" })
+      addToast(caught instanceof ImageError ? caught.message : errorMessage(caught), {
+        variant: "alert",
+      })
     }
   }
 
   const runImport = async () => {
+    importInProgress.current = true
     setImporting(true)
     try {
-      const fileIds: Record<string, string> = {}
-      for (const asset of pending.file.assets ?? []) {
-        fileIds[asset.fileId] = await uploadAsset(asset)
+      for (const image of pending.images) {
+        if (!uploadedKeys.current[image.fileId]) {
+          uploadedKeys.current[image.fileId] = await uploadAsset(image)
+        }
       }
       await contentTransferService.applyImport({
-        body: { ...withoutAssets(pending.file), fileIds },
+        body: { ...withoutAssets(pending.file), fileIds: { ...uploadedKeys.current } },
       })
       setPending(null)
       addToast(t("transfer.imported"), { variant: "success" })
     } catch (caught) {
       addToast(errorMessage(caught), { variant: "alert" })
     } finally {
+      importInProgress.current = false
       setImporting(false)
     }
   }
@@ -222,8 +269,11 @@ const SettingsTransfer = () => {
 
         <ContentTransferPreviewDialog
           preview={pending?.preview ?? null}
+          imageCount={pending?.images.length ?? 0}
           isLoading={importing}
-          onClose={() => setPending(null)}
+          onClose={() => {
+            if (!importInProgress.current) setPending(null)
+          }}
           onConfirm={() => void runImport()}
         />
       </TabView>

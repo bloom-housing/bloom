@@ -14,6 +14,7 @@ const SITE_LABELS: Record<SiteEnum, string> = {
 
 type ContentTransferPreviewDialogProps = {
   preview: ContentTransferPreview | null
+  imageCount: number
   isLoading: boolean
   onClose: () => void
   onConfirm: () => void
@@ -21,6 +22,7 @@ type ContentTransferPreviewDialogProps = {
 
 export const ContentTransferPreviewDialog = ({
   preview,
+  imageCount,
   isLoading,
   onClose,
   onConfirm,
@@ -43,6 +45,7 @@ export const ContentTransferPreviewDialog = ({
               ? t("transfer.replacesJurisdiction", { jurisdiction: preview.jurisdictionName })
               : t("transfer.replacesGlobal")}
           </p>
+          {imageCount > 0 && <p>{t("transfer.imageCount", { smart_count: imageCount })}</p>}
 
           <Heading priority={3} size="lg">
             {t("transfer.strings")}
