@@ -12,7 +12,7 @@ import {
 import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useAdminTabs, AdminIndexEnum } from "../../components/admin/AdminViewHelpers"
 import { useJurisdictionContent, useUnsavedChangesWarning } from "../../lib/hooks"
 import {
   addListItem,
@@ -65,7 +65,6 @@ type DocumentConfig = {
   key: ContentDocument
   fields?: FieldConfig[]
   lists?: ListConfig[]
-  /** Positional rich text, which a language row replaces whole rather than merging by id. */
   textSections?: { path: string; labelKey: string; addLabelKey: string }
 }
 
@@ -231,21 +230,18 @@ const hidablePaths = (draft: ContentDraft, englishDraft: ContentDraft): string[]
   ])
 }
 
-// Positional sections are checked separately, since a deleted one leaves no value behind.
 const hiddenTextSections = (draft: ContentDraft, englishDraft: ContentDraft): string[] =>
   DOCUMENTS.flatMap((entry) =>
     entry.textSections ? textSectionsThatHide(draft, englishDraft, entry.textSections.path) : []
   )
 
-const SettingsContent = () => {
+const AdminContent = () => {
   const router = useRouter()
   const { mutate } = useSWRConfig()
   const { addToast } = useContext(MessageContext)
   const { mutate: saveContent, isLoading: isSaving } = useMutate()
   const { profile, jurisdictionContentService } = useContext(AuthContext)
-  const { enableContent, hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.content)
-
-  const authorized = enableContent && !!profile?.userRoles?.isAdmin
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.content)
 
   const jurisdictions = useMemo(
     () =>
@@ -319,7 +315,6 @@ const SettingsContent = () => {
     fields: ItemField[]
   } | null>(null)
 
-  // A new item lives in the drawer until Done, so closing the drawer adds nothing.
   const [pending, setPending] = useState<{ start: ContentDraft; draft: ContentDraft } | null>(null)
 
   const openPending = (
@@ -397,10 +392,10 @@ const SettingsContent = () => {
     <Layout>
       <Head>
         <title>
-          {`${t("t.settings")} - ${t("settings.content")} - ${t("nav.siteTitlePartners")}`}
+          {`${t("nav.admin")} - ${t("settings.content")} - ${t("nav.siteTitlePartners")}`}
         </title>
       </Head>
-      <NavigationHeader className="relative" title={t("t.settings")} />
+      <NavigationHeader className="relative" title={t("nav.admin")} />
       <TabView hideTabs={hideTabs} tabs={tabs}>
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
@@ -727,4 +722,4 @@ const SettingsContent = () => {
   )
 }
 
-export default SettingsContent
+export default AdminContent

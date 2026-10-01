@@ -1,5 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { BadGatewayException, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
@@ -24,7 +28,14 @@ describe('Testing content transfer service', () => {
   let prisma: PrismaService;
   let permissionServiceMock;
   let httpServiceMock;
-  const adminUser = { id: 'admin-user' } as User;
+  const adminUser = {
+    id: 'admin-user',
+    userRoles: { isAdmin: true, isSuperAdmin: true },
+  } as User;
+  const adminOnlyUser = {
+    id: 'admin-only-user',
+    userRoles: { isAdmin: true },
+  } as User;
 
   const translationRow = {
     site: SiteEnum.public,
@@ -926,6 +937,32 @@ describe('Testing content transfer service', () => {
       ],
     ])('refuses a translation with %s', async (_label, row, field) => {
       expect(await translationErrors(row)).toEqual([field]);
+    });
+  });
+
+  describe('superadmin access', () => {
+    it('refuses an admin who is not a superadmin', async () => {
+      prisma.jurisdictions.findFirst = jest.fn();
+
+      await expect(
+        service.exportJurisdiction(randomUUID(), adminOnlyUser),
+      ).rejects.toThrow(ForbiddenException);
+      await expect(service.exportGlobal(adminOnlyUser)).rejects.toThrow(
+        ForbiddenException,
+      );
+      await expect(
+        service.previewImport(
+          {
+            format: 'bloom-content-transfer',
+            version: 1,
+            jurisdictionName: 'Bloomington',
+            translations: [],
+          },
+          adminOnlyUser,
+        ),
+      ).rejects.toThrow(ForbiddenException);
+      expect(permissionServiceMock.canOrThrow).not.toHaveBeenCalled();
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
     });
   });
 });

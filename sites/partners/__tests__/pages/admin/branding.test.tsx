@@ -13,7 +13,7 @@ import {
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import * as helpers from "../../../src/lib/helpers"
-import SettingsBranding from "../../../src/pages/settings/branding"
+import AdminBranding from "../../../src/pages/admin/branding"
 
 jest.mock("../../../src/lib/helpers", () => ({
   ...jest.requireActual("../../../src/lib/helpers"),
@@ -96,7 +96,7 @@ afterAll(() => server.close())
 
 const adminProfile = {
   ...user,
-  userRoles: { isAdmin: true },
+  userRoles: { isAdmin: true, isSuperAdmin: true },
   jurisdictions: [
     {
       id: "jurisdiction1",
@@ -126,25 +126,31 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
             flagOn && featureFlag === FeatureFlagEnum.enableDbDrivenBranding,
         }}
       >
-        <SettingsBranding />
+        <AdminBranding />
       </AuthContext.Provider>
     </MessageContext.Provider>
   )
 
-describe("settings/branding", () => {
-  it("sends a non-admin to unauthorized", () => {
+describe("admin/branding", () => {
+  it("sends a jurisdictional admin to unauthorized", () => {
     renderPage({ userRoles: { isJurisdictionalAdmin: true } })
 
     expect(pushMock).toHaveBeenCalledWith("/unauthorized")
   })
 
-  it("sends an admin to unauthorized when the flag is off", () => {
+  it("sends an admin who is not a superadmin to unauthorized", () => {
+    renderPage({ userRoles: { isAdmin: true } })
+
+    expect(pushMock).toHaveBeenCalledWith("/unauthorized")
+  })
+
+  it("sends a superadmin to unauthorized when the flag is off", () => {
     renderPage({}, false)
 
     expect(pushMock).toHaveBeenCalledWith("/unauthorized")
   })
 
-  it("renders the colour and font fields for an admin", async () => {
+  it("renders the color and font fields for a superadmin", async () => {
     renderPage()
 
     expect(await screen.findByText("test:primary")).toBeInTheDocument()
@@ -253,7 +259,7 @@ describe("settings/branding", () => {
 
   it("defers the warning until typing settles", async () => {
     // HEX_COLOR accepts three digits, so typing #0070D0 passes through #07D, which fails AA.
-    // Warning on that would announce a colour the admin never chose.
+    // Warning on that would announce a color the admin never chose.
     respondWithBrand(null)
     renderPage()
 
