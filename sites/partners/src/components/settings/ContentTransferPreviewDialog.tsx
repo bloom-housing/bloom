@@ -1,10 +1,11 @@
 import React from "react"
-import { t } from "@bloom-housing/ui-components"
+import { MinimalTable, t } from "@bloom-housing/ui-components"
 import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
 import {
   ContentTransferPreview,
   SiteEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import styles from "./ContentTransferPreviewDialog.module.scss"
 
 const SITE_LABELS: Record<SiteEnum, string> = {
   [SiteEnum.public]: "translations.sitePublic",
@@ -32,6 +33,7 @@ export const ContentTransferPreviewDialog = ({
 
   return (
     <Dialog
+      className={styles["dialog"]}
       isOpen={!!preview}
       onClose={onClose}
       ariaLabelledBy="content-transfer-header"
@@ -51,28 +53,26 @@ export const ContentTransferPreviewDialog = ({
             {t("transfer.strings")}
           </Heading>
           {preview.translations.length ? (
-            <table data-testid="transfer-string-changes">
-              <thead>
-                <tr>
-                  <th>{t("transfer.site")}</th>
-                  <th>{t("transfer.language")}</th>
-                  <th>{t("transfer.added")}</th>
-                  <th>{t("transfer.changed")}</th>
-                  <th>{t("transfer.removed")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {preview.translations.map((row) => (
-                  <tr key={`${row.site}|${row.language}`}>
-                    <td>{row.site ? t(SITE_LABELS[row.site]) : ""}</td>
-                    <td>{t(`languages.${row.language}`)}</td>
-                    <td>{row.added}</td>
-                    <td>{row.changed}</td>
-                    <td>{row.removed}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div data-testid="transfer-string-changes">
+              <MinimalTable
+                headers={{
+                  site: "transfer.site",
+                  language: "transfer.language",
+                  added: "transfer.added",
+                  changed: "transfer.changed",
+                  removed: "transfer.removed",
+                }}
+                data={preview.translations.map((row) => ({
+                  site: { content: row.site ? t(SITE_LABELS[row.site]) : "" },
+                  language: { content: t(`languages.${row.language}`) },
+                  added: { content: row.added },
+                  changed: { content: row.changed },
+                  removed: { content: row.removed },
+                }))}
+                flushLeft
+                flushRight
+              />
+            </div>
           ) : (
             <p>{t("transfer.noStringChanges")}</p>
           )}
