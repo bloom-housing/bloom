@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -18,6 +19,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
@@ -27,12 +30,33 @@ const ApplicationLiveAlone = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors, trigger } = useForm()
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "liveAlone",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  // passing empty object as getValues because the form's householdSize is the radio string ("liveAlone"/"withOthers"),
+  // not the number;
+  // the radio's onChange already wrote the real householdSize onto application
+  const { onFieldBlur } = useStopLightBanners(
+    "liveAlone",
+    application,
+    listing,
+    enabledRuleKeys,
+    () => ({})
+  )
 
   const onSubmit = async () => {
     const validation = await trigger()
     if (!validation) return
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+    guardSubmit({}, () => {
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
 
   const onError = () => {
@@ -70,7 +94,7 @@ const ApplicationLiveAlone = () => {
         listing?.name
       }`}
     >
-      <Form className="mb-4" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form className="mb-4" onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.liveAlone.title")}
@@ -84,6 +108,7 @@ const ApplicationLiveAlone = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <div>

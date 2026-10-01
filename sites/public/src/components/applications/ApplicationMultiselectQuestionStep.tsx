@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -23,6 +24,7 @@ import {
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import {
+  Application,
   ApplicationSelectionCreate,
   MultiselectOption,
   MultiselectQuestionsApplicationSectionEnum,
@@ -34,6 +36,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../layouts/application-form"
+import { useStopLightGate } from "../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../lib/applications/stopLights/useStopLightBanners"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
 
 export interface ApplicationMultiselectQuestionStepProps {
@@ -107,6 +111,22 @@ const ApplicationMultiselectQuestionStep = ({
       ? mapApiToMultiselectForm(applicationQuestions, questions, applicationSection)
       : mapApiToMultiselectFormV1(applicationQuestions, questions, applicationSection),
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    applicationStep,
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    applicationStep,
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues as () => Partial<Application>
+  )
 
   const [exclusiveKeys, setExclusiveKeys] = useState(
     getExclusiveKeys(question, applicationSection, enableV2MSQ)
@@ -162,13 +182,28 @@ const ApplicationMultiselectQuestionStep = ({
     }
   }
 
-  const onSubmit = (data) => {
-    if (verifyAddressStep === 0) {
-      body.current = enableV2MSQ
-        ? mapCheckboxesToApi(data, question, applicationSection)
-        : mapCheckboxesToApiV1(data, question, applicationSection)
+  const buildPendingSave = () => {
+    if (enableV2MSQ) {
+      return {
+        applicationSelections: [
+          ...conductor.application.applicationSelections.filter(
+            (selection: ApplicationSelectionCreate) =>
+              selection.multiselectQuestion.id !== body.current.multiselectQuestion.id
+          ),
+          ...(body.current.selections.length > 0 ? [body.current] : []),
+        ],
+      }
     }
+    const otherQuestions =
+      questions.length > 1
+        ? (conductor.application[applicationSection] ?? []).filter(
+            (question) => question.key !== body.current.key
+          )
+        : []
+    return { [applicationSection]: [...otherQuestions, body.current] }
+  }
 
+  const continueSubmit = () => {
     // Verify address on preferences
     if (questionOptions.some((item) => item.shouldCollectAddress || item.collectAddress)) {
       const step: number = (body.current.selections || body.current.options).findIndex(
@@ -234,6 +269,18 @@ const ApplicationMultiselectQuestionStep = ({
     conductor.completeSection(applicationSectionNumber)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
+  }
+
+  const onSubmit = (data) => {
+    if (verifyAddressStep === 0) {
+      body.current = enableV2MSQ
+        ? mapCheckboxesToApi(data, question, applicationSection)
+        : mapCheckboxesToApiV1(data, question, applicationSection)
+      guardSubmit(buildPendingSave(), continueSubmit)
+      return
+    }
+
+    continueSubmit()
   }
 
   const onError = () => {
@@ -313,7 +360,7 @@ const ApplicationMultiselectQuestionStep = ({
         swapCommunityTypeWithPrograms
       )} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -346,6 +393,7 @@ const ApplicationMultiselectQuestionStep = ({
               : null
           }
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
 
