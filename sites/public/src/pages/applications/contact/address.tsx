@@ -33,6 +33,8 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { StopLightMessage } from "../../../components/applications/stopLights/StopLightMessage"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -78,7 +80,7 @@ const ApplicationAddress = () => {
     enabledRuleKeys,
     router.query.blockedRule as string | undefined
   )
-  const { onFieldBlur } = useStopLightBanners(
+  const { onFieldBlur, banner } = useStopLightBanners(
     "primaryApplicantAddress",
     application,
     listing,
@@ -205,6 +207,7 @@ const ApplicationAddress = () => {
           stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
+          <StopLightMessage rule={banner} className={styles["message-inside-card"]} />
           <div style={{ display: verifyAddress ? "none" : "block" }}>
             <CardSection divider={"inset"}>
               <fieldset>

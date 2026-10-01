@@ -23,6 +23,8 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { StopLightMessage } from "../../../components/applications/stopLights/StopLightMessage"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationAlternateContactName = () => {
   const { profile } = useContext(AuthContext)
@@ -46,7 +48,7 @@ const ApplicationAlternateContactName = () => {
     enabledRuleKeys,
     router.query.blockedRule as string | undefined
   )
-  const { onFieldBlur } = useStopLightBanners(
+  const { onFieldBlur, banner } = useStopLightBanners(
     "alternateContactName",
     application,
     listing,
@@ -124,6 +126,7 @@ const ApplicationAlternateContactName = () => {
           stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
+          <StopLightMessage rule={banner} className={styles["message-inside-card"]} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
