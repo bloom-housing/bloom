@@ -7,6 +7,8 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { LanguagesEnum, SiteEnum, TranslationOrigin } from '@prisma/client';
 import { randomUUID } from 'crypto';
+import { plainToClass } from 'class-transformer';
+import { validate } from 'class-validator';
 import { of, throwError } from 'rxjs';
 import { ContentTransferService } from '../../../src/services/content-transfer.service';
 import { PermissionService } from '../../../src/services/permission.service';
@@ -14,6 +16,7 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { User } from '../../../src/dtos/users/user.dto';
 import { ContentTransferImport } from '../../../src/dtos/content-transfer/content-transfer-file.dto';
 import { sourceHash } from '../../../src/utilities/translation-source-hash';
+import { ValidationsGroupsEnum } from '../../../src/enums/shared/validation-groups-enum';
 
 describe('Testing content transfer service', () => {
   let service: ContentTransferService;
@@ -248,14 +251,13 @@ describe('Testing content transfer service', () => {
         .mockImplementation(({ where }) =>
           Promise.resolve(
             where.name === 'Bloomington'
-              ? { id: 'target-id' }
-              : where.name
-              ? null
-              : {
+              ? {
+                  id: 'target-id',
                   brand: { primary: { base: '#000000' }, fontFamily: 'Inter' },
                   brandLogo: { fileId: 'old-logo' },
                   brandFavicon: { fileId: 'old-favicon' },
-                },
+                }
+              : null,
           ),
         );
       prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
@@ -356,21 +358,6 @@ describe('Testing content transfer service', () => {
           adminUser,
         ),
       ).rejects.toThrow('is not for the partners or email site');
-    });
-
-    it('refuses a translation with executable markup', async () => {
-      mockTarget();
-
-      await expect(
-        service.previewImport(
-          importFile({
-            translations: [
-              { ...translationRow, value: '<script>alert(1)</script>' },
-            ],
-          }),
-          adminUser,
-        ),
-      ).rejects.toThrow('contains executable markup');
     });
 
     it('refuses content the editor would store differently', async () => {
@@ -490,6 +477,146 @@ describe('Testing content transfer service', () => {
       });
     });
 
+    it('counts a string whose origin or source hash differs as changed', async () => {
+      mockTarget();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { ...translationRow, origin: TranslationOrigin.human },
+        ]);
+
+      const preview = await service.previewImport(
+        importFile({ translations: [translationRow] }),
+        adminUser,
+      );
+
+      expect(preview.translations).toEqual([
+        expect.objectContaining({ added: 0, changed: 1, removed: 0 }),
+      ]);
+    });
+
+    it('leaves a footer whose only difference is its logo key unchanged', async () => {
+      mockTarget();
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValue([
+        {
+          language: LanguagesEnum.en,
+          footer: { logo: { logoFileId: 'target-logo', logoAltText: 'Seal' } },
+          disclaimers: { privacyHtml: '<p>Privacy</p>' },
+        },
+      ]);
+
+      const preview = await service.previewImport(
+        importFile({ content: [importFile().content[0]] }),
+        adminUser,
+      );
+
+      expect(preview.content).toEqual([]);
+    });
+
+    it('refuses source hashes for a field the document does not have', async () => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(
+          importFile({
+            content: [
+              {
+                language: LanguagesEnum.es,
+                disclaimers: {
+                  privacyHtml: '<p>Privacidad</p>',
+                  _sourceHashes: { disclaimerHtml: hash },
+                },
+              },
+            ],
+          }),
+          adminUser,
+        ),
+      ).rejects.toThrow('has malformed source hashes');
+    });
+
+    it('refuses an uploaded key the footer logo editor would not accept', async () => {
+      mockTarget();
+      mockWrites();
+
+      await expect(
+        service.applyImport(
+          importFile({
+            fileIds: {
+              'brand-logo': 'new-brand-logo',
+              'footer-logo': 'k'.repeat(257),
+            },
+          }),
+          adminUser,
+        ),
+      ).rejects.toThrow('file footer-logo was not uploaded');
+    });
+
+    it('drops the image address a footer logo with an upload derives', async () => {
+      mockTarget();
+      mockWrites();
+      const file = importFile({
+        fileIds: {
+          'brand-logo': 'new-brand-logo',
+          'footer-logo': 'new-footer-logo',
+        },
+      });
+      file.content[0].footer = {
+        logo: {
+          logoFileId: 'footer-logo',
+          logoSrc: 'https://example.test/footer-logo.png',
+        },
+      };
+
+      await service.applyImport(file, adminUser);
+
+      const rows = (prisma.jurisdictionContent.createMany as jest.Mock).mock
+        .calls[0][0].data;
+      expect(rows[0].footer).toEqual({
+        logo: { logoFileId: 'new-footer-logo' },
+      });
+    });
+
+    it("keeps a translated logo current when the English logo's key changes", async () => {
+      mockTarget();
+      mockWrites();
+      const file = importFile({
+        fileIds: {
+          'brand-logo': 'new-brand-logo',
+          'footer-logo': 'new-footer-logo',
+          'spanish-logo': 'new-spanish-logo',
+          'older-logo': 'new-older-logo',
+        },
+      });
+      file.content[1].footer = {
+        logo: {
+          logoFileId: 'spanish-logo',
+          _sourceHashes: { logoFileId: sourceHash('footer-logo') },
+        },
+      };
+      file.content.push({
+        language: LanguagesEnum.vi,
+        footer: {
+          logo: {
+            logoFileId: 'older-logo',
+            _sourceHashes: { logoFileId: sourceHash('older-english-logo') },
+          },
+        },
+      });
+
+      await service.applyImport(file, adminUser);
+
+      const rows = (prisma.jurisdictionContent.createMany as jest.Mock).mock
+        .calls[0][0].data;
+      expect(rows[1].footer.logo).toEqual({
+        logoFileId: 'new-spanish-logo',
+        _sourceHashes: { logoFileId: sourceHash('new-footer-logo') },
+      });
+      // A translation that was already out of date stays out of date.
+      expect(rows[2].footer.logo._sourceHashes).toEqual({
+        logoFileId: sourceHash('older-english-logo'),
+      });
+    });
+
     it('replaces only the global partners and email strings for a global file', async () => {
       mockTarget();
       mockWrites();
@@ -510,6 +637,79 @@ describe('Testing content transfer service', () => {
       });
       expect(prisma.jurisdictionContent.deleteMany).not.toHaveBeenCalled();
       expect(prisma.jurisdictions.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('file validation', () => {
+    // The same options the controller's validation pipe uses.
+    const errorsFor = async (body: Record<string, unknown>) =>
+      validate(
+        plainToClass(ContentTransferImport, body, {
+          excludeExtraneousValues: true,
+        }),
+        {
+          groups: [ValidationsGroupsEnum.default],
+          forbidUnknownValues: true,
+          skipMissingProperties: true,
+        },
+      );
+
+    const validFile = {
+      format: 'bloom-content-transfer',
+      version: 1,
+      jurisdictionName: 'Bloomington',
+      translations: [translationRow],
+    };
+
+    const translationErrors = async (row: Record<string, unknown>) => {
+      const errors = await errorsFor({ ...validFile, translations: [row] });
+      return errors.flatMap((error) =>
+        (error.children ?? []).flatMap((child) =>
+          (child.children ?? []).map((field) => field.property),
+        ),
+      );
+    };
+
+    it('accepts an exported file', async () => {
+      expect(await errorsFor(validFile)).toEqual([]);
+    });
+
+    it('requires the format, version and translations', async () => {
+      const errors = await errorsFor({ jurisdictionName: 'Bloomington' });
+
+      expect(errors.map((error) => error.property).sort()).toEqual([
+        'format',
+        'translations',
+        'version',
+      ]);
+    });
+
+    it.each([
+      ['a missing value', { ...translationRow, value: null }, 'value'],
+      ['a missing key', { ...translationRow, key: undefined }, 'key'],
+      ['a missing language', { ...translationRow, language: null }, 'language'],
+      [
+        'an over-length key',
+        { ...translationRow, key: 'k'.repeat(256) },
+        'key',
+      ],
+      [
+        'an over-length value',
+        { ...translationRow, value: 'v'.repeat(5001) },
+        'value',
+      ],
+      [
+        'executable markup',
+        { ...translationRow, value: '<script>alert(1)</script>' },
+        'value',
+      ],
+      [
+        'a malformed source hash',
+        { ...translationRow, sourceHash: 'not-a-hash' },
+        'sourceHash',
+      ],
+    ])('refuses a translation with %s', async (_label, row, field) => {
+      expect(await translationErrors(row)).toEqual([field]);
     });
   });
 });

@@ -3,14 +3,22 @@ import { Expose, Type } from 'class-transformer';
 import { LanguagesEnum, SiteEnum, TranslationOrigin } from '@prisma/client';
 import {
   IsArray,
+  IsDefined,
   IsEnum,
   IsInt,
   IsObject,
   IsOptional,
   IsString,
+  Matches,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { NoExecutableMarkup } from '../../decorators/no-executable-markup.decorator';
+import {
+  MAX_KEY_LENGTH,
+  MAX_VALUE_LENGTH,
+} from '../translations/translation-key-edit.dto';
 
 export const CONTENT_TRANSFER_FORMAT = 'bloom-content-transfer';
 export const CONTENT_TRANSFER_VERSION = 1;
@@ -23,17 +31,23 @@ export class ContentTransferTranslation {
   site: SiteEnum | null;
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: LanguagesEnum, enumName: 'LanguagesEnum' })
   language: LanguagesEnum;
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(MAX_KEY_LENGTH, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   key: string;
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(MAX_VALUE_LENGTH, { groups: [ValidationsGroupsEnum.default] })
+  @NoExecutableMarkup({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   value: string;
 
@@ -50,6 +64,7 @@ export class ContentTransferTranslation {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(/^[0-9a-f]{64}$/, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ nullable: true })
   sourceHash: string | null;
 }
@@ -57,6 +72,7 @@ export class ContentTransferTranslation {
 // Documents are exported as stored, including the `_sourceHashes` that mark stale translations.
 export class ContentTransferContent {
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: LanguagesEnum, enumName: 'LanguagesEnum' })
   language: LanguagesEnum;
@@ -171,11 +187,13 @@ export class ContentTransferFile {
 // storage keys in `fileIds`, keyed by the source key.
 export class ContentTransferImport {
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ example: CONTENT_TRANSFER_FORMAT })
   format: string;
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsInt({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ example: CONTENT_TRANSFER_VERSION })
   version: number;
@@ -187,6 +205,7 @@ export class ContentTransferImport {
   jurisdictionName: string | null;
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ContentTransferTranslation)

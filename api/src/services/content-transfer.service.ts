@@ -11,15 +11,21 @@ import * as lodash from 'lodash';
 import { firstValueFrom } from 'rxjs';
 import { PrismaService } from './prisma.service';
 import { PermissionService } from './permission.service';
-import { brandAssetWrite, storableBrand } from './jurisdiction.service';
+import {
+  assertFileIdsAreUsable,
+  brandAssetWrite,
+  storableBrand,
+} from './jurisdiction.service';
+import {
+  CONTENT_FIELDS,
+  CONTENT_SELECT,
+  footerLogo,
+  withoutDerivedLogoSrc,
+} from './jurisdiction-content.service';
 import { User } from '../dtos/users/user.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { JurisdictionContentFields } from '../dtos/jurisdiction-content/jurisdiction-content-fields.dto';
 import { JurisdictionBrandUpdate } from '../dtos/jurisdictions/jurisdiction-brand-update.dto';
-import {
-  MAX_KEY_LENGTH,
-  MAX_VALUE_LENGTH,
-} from '../dtos/translations/translation-key-edit.dto';
 import {
   CONTENT_TRANSFER_FORMAT,
   CONTENT_TRANSFER_VERSION,
@@ -34,12 +40,12 @@ import {
   ContentTransferTranslation,
   ContentTransferTranslationChanges,
 } from '../dtos/content-transfer/content-transfer-file.dto';
-import { NoExecutableMarkupConstraint } from '../decorators/no-executable-markup.decorator';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { assertFontIsAvailable } from '../utilities/font-availability';
 import { mapTo } from '../utilities/mapTo';
+import { sourceHash } from '../utilities/translation-source-hash';
 
 const ASSET_TIMEOUT_MS = 10000;
 
@@ -60,13 +66,8 @@ const TRANSLATION_ORDER = [
   { key: 'asc' },
 ] as const;
 
-const CONTENT_FIELDS = [
-  'footer',
-  'faq',
-  'resources',
-  'disclaimers',
-  'contact',
-] as const;
+// The footer logo editor's limit, applied to the key an upload produced.
+const MAX_FILE_ID_LENGTH = 256;
 
 type ContentField = (typeof CONTENT_FIELDS)[number];
 
@@ -79,9 +80,17 @@ type ImportedBrand = {
   faviconFileId: string | null;
 };
 
+type TargetJurisdiction = {
+  id: string;
+  brand: Prisma.JsonValue;
+  brandLogo: { fileId: string } | null;
+  brandFavicon: { fileId: string } | null;
+};
+
 type PreparedImport = {
   jurisdictionId: string | null;
   jurisdictionName: string | null;
+  target?: TargetJurisdiction;
   translations: ContentTransferTranslation[];
   content?: ContentTransferContent[];
   brand?: ImportedBrand;
@@ -105,11 +114,11 @@ const withoutNulls = (value: unknown): unknown => {
 };
 
 const footerLogoFileId = (footer: unknown): string | undefined =>
-  (footer as { logo?: { logoFileId?: string } } | null)?.logo?.logoFileId;
+  footerLogo(footer)?.logoFileId;
 
 const invalid = (message: string) => new BadRequestException(message);
 
-// Removes `_sourceHashes` at every depth, after checking that each one maps fields to hashes.
+// Removes `_sourceHashes` at every depth, after checking that each one maps a field the object has to a hash.
 const withoutSourceHashes = (value: unknown, path: string): unknown => {
   if (Array.isArray(value)) {
     return value.map((item, index) =>
@@ -123,8 +132,11 @@ const withoutSourceHashes = (value: unknown, path: string): unknown => {
     if (key === SOURCE_HASHES) {
       const wellFormed =
         isPlainObject(child) &&
-        Object.values(child).every(
-          (hash) => typeof hash === 'string' && SOURCE_HASH.test(hash),
+        Object.entries(child).every(
+          ([field, hash]) =>
+            value[field] != null &&
+            typeof hash === 'string' &&
+            SOURCE_HASH.test(hash),
         );
       if (!wellFormed) throw invalid(`${path} has malformed source hashes`);
       continue;
@@ -132,6 +144,22 @@ const withoutSourceHashes = (value: unknown, path: string): unknown => {
     result[key] = withoutSourceHashes(child, `${path}.${key}`);
   }
   return result;
+};
+
+// Storage keys differ between environments, so a footer logo's key is left out of comparisons.
+const withoutLogoKey = (footer: unknown): unknown => {
+  if (!isPlainObject(footer) || !isPlainObject(footer.logo)) return footer;
+  const { logoFileId, [SOURCE_HASHES]: hashes, ...logo } = footer.logo;
+  void logoFileId;
+  const otherHashes = isPlainObject(hashes)
+    ? lodash.omit(hashes, 'logoFileId')
+    : {};
+  return {
+    ...footer,
+    logo: Object.keys(otherHashes).length
+      ? { ...logo, [SOURCE_HASHES]: otherHashes }
+      : logo,
+  };
 };
 
 const asJson = (value: unknown) =>
@@ -155,14 +183,13 @@ export class ContentTransferService {
     jurisdictionId: string,
     user: User,
   ): Promise<ContentTransferFile> {
-    for (const type of ['translation', 'jurisdictionContent']) {
-      await this.permissionService.canOrThrow(
-        user,
-        type,
-        permissionActions.read,
-        { jurisdictionId },
-      );
-    }
+    await Promise.all(
+      ['translation', 'jurisdictionContent'].map((type) =>
+        this.permissionService.canOrThrow(user, type, permissionActions.read, {
+          jurisdictionId,
+        }),
+      ),
+    );
 
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       where: { id: jurisdictionId },
@@ -187,14 +214,7 @@ export class ContentTransferService {
       }),
       this.prisma.jurisdictionContent.findMany({
         where: { jurisdictionId },
-        select: {
-          language: true,
-          footer: true,
-          faq: true,
-          resources: true,
-          disclaimers: true,
-          contact: true,
-        },
+        select: { language: true, ...CONTENT_SELECT },
         orderBy: { language: 'asc' },
       }),
     ]);
@@ -295,37 +315,47 @@ export class ContentTransferService {
       );
     }
 
-    let jurisdictionId: string | null = null;
+    let target: TargetJurisdiction | undefined;
     if (dto.jurisdictionName) {
-      const jurisdiction = await this.prisma.jurisdictions.findFirst({
+      target = await this.prisma.jurisdictions.findFirst({
         where: { name: dto.jurisdictionName },
-        select: { id: true },
+        select: {
+          id: true,
+          brand: true,
+          brandLogo: { select: { fileId: true } },
+          brandFavicon: { select: { fileId: true } },
+        },
       });
-      if (!jurisdiction) {
+      if (!target) {
         throw invalid(
           `jurisdiction ${dto.jurisdictionName} does not exist in this environment`,
         );
       }
-      jurisdictionId = jurisdiction.id;
     }
+    const jurisdictionId = target?.id ?? null;
 
     const types = jurisdictionId
       ? ['translation', 'jurisdictionContent', 'jurisdiction']
       : ['translation'];
-    for (const type of types) {
-      await this.permissionService.canOrThrow(
-        user,
-        type,
-        permissionActions.update,
-        { jurisdictionId: jurisdictionId ?? undefined },
-      );
-    }
+    await Promise.all(
+      types.map((type) =>
+        this.permissionService.canOrThrow(
+          user,
+          type,
+          permissionActions.update,
+          {
+            jurisdictionId: jurisdictionId ?? undefined,
+          },
+        ),
+      ),
+    );
 
     this.assertTranslations(dto.translations, jurisdictionId);
 
     return {
       jurisdictionId,
       jurisdictionName: dto.jurisdictionName ?? null,
+      target,
       translations: dto.translations,
       ...(jurisdictionId && dto.content
         ? { content: await this.checkedContent(dto.content) }
@@ -340,7 +370,6 @@ export class ContentTransferService {
     rows: ContentTransferTranslation[],
     jurisdictionId: string | null,
   ): void {
-    const markup = new NoExecutableMarkupConstraint();
     const seen = new Set<string>();
 
     for (const row of rows) {
@@ -352,18 +381,6 @@ export class ContentTransferService {
         throw invalid(
           `global translation ${name} is not for the partners or email site`,
         );
-      }
-      if (row.key.length > MAX_KEY_LENGTH) {
-        throw invalid(`translation key ${row.key} is too long`);
-      }
-      if (row.value.length > MAX_VALUE_LENGTH) {
-        throw invalid(`translation ${name} is too long`);
-      }
-      if (!markup.validate(row.value)) {
-        throw invalid(`translation ${name} contains executable markup`);
-      }
-      if (row.sourceHash && !SOURCE_HASH.test(row.sourceHash)) {
-        throw invalid(`translation ${name} has a malformed source hash`);
       }
     }
   }
@@ -403,12 +420,9 @@ export class ContentTransferService {
         }
       }
 
-      const logoFileId = footerLogoFileId(row.footer);
-      if (logoFileId && !isUsableFileId(logoFileId)) {
-        throw invalid(`file id ${logoFileId} is not a usable storage key`);
-      }
+      assertFileIdsAreUsable([footerLogoFileId(row.footer)]);
     }
-    return rows;
+    return rows.map((row) => withoutDerivedLogoSrc(row));
   }
 
   private async checkedBrand(
@@ -425,11 +439,7 @@ export class ContentTransferService {
     if (errors.length) throw invalid('the brand is not valid');
     await assertFontIsAvailable(this.httpService, update.brand);
 
-    for (const fileId of [incoming.logoFileId, incoming.faviconFileId]) {
-      if (fileId && !isUsableFileId(fileId)) {
-        throw invalid(`file id ${fileId} is not a usable storage key`);
-      }
-    }
+    assertFileIdsAreUsable([incoming.logoFileId, incoming.faviconFileId]);
     return {
       brand: storableBrand(update.brand) ?? Prisma.DbNull,
       logoFileId: incoming.logoFileId ?? null,
@@ -449,7 +459,11 @@ export class ContentTransferService {
 
     for (const sourceKey of referenced) {
       const key = fileIds[sourceKey];
-      if (typeof key !== 'string' || !isUsableFileId(key)) {
+      if (
+        typeof key !== 'string' ||
+        key.length > MAX_FILE_ID_LENGTH ||
+        !isUsableFileId(key)
+      ) {
         throw invalid(`file ${sourceKey} was not uploaded`);
       }
     }
@@ -487,13 +501,32 @@ export class ContentTransferService {
     ];
 
     if (jurisdictionId && content) {
+      const englishKey = footerLogoFileId(
+        content.find((row) => row.language === LanguagesEnum.en)?.footer,
+      );
       const withUploadedLogo = (footer: unknown) => {
         const sourceKey = footerLogoFileId(footer);
         if (!sourceKey) return footer;
         const typed = footer as { logo: Record<string, unknown> };
+        const hashes = typed.logo[SOURCE_HASHES] as
+          | Record<string, unknown>
+          | undefined;
+        const current =
+          !!englishKey && hashes?.logoFileId === sourceHash(englishKey);
         return {
           ...typed,
-          logo: { ...typed.logo, logoFileId: uploadedKey(sourceKey) },
+          logo: {
+            ...typed.logo,
+            logoFileId: uploadedKey(sourceKey),
+            ...(current
+              ? {
+                  [SOURCE_HASHES]: {
+                    ...hashes,
+                    logoFileId: sourceHash(uploadedKey(englishKey)),
+                  },
+                }
+              : {}),
+          },
         };
       };
       writes.push(
@@ -545,7 +578,7 @@ export class ContentTransferService {
   ): Promise<ContentTransferTranslationChanges[]> {
     const current = await this.prisma.translationStrings.findMany({
       where: this.translationScope(prepared.jurisdictionId),
-      select: { site: true, language: true, key: true, value: true },
+      select: TRANSLATION_SELECT,
     });
 
     const groups = new Map<string, ContentTransferTranslationChanges>();
@@ -573,7 +606,11 @@ export class ContentTransferService {
       incomingKeys.add(translationKey(row));
       const existing = currentByKey.get(translationKey(row));
       if (!existing) count(row, ContentTransferChange.added);
-      else if (existing.value !== row.value) {
+      else if (
+        existing.value !== row.value ||
+        (existing.origin ?? null) !== (row.origin ?? null) ||
+        (existing.sourceHash ?? null) !== (row.sourceHash ?? null)
+      ) {
         count(row, ContentTransferChange.changed);
       }
     }
@@ -597,15 +634,12 @@ export class ContentTransferService {
 
     const current = await this.prisma.jurisdictionContent.findMany({
       where: { jurisdictionId: prepared.jurisdictionId },
-      select: {
-        language: true,
-        footer: true,
-        faq: true,
-        resources: true,
-        disclaimers: true,
-        contact: true,
-      },
+      select: { language: true, ...CONTENT_SELECT },
     });
+    const comparable = (
+      row: Partial<Record<ContentField, unknown>>,
+      field: ContentField,
+    ) => plain(field === 'footer' ? withoutLogoKey(row[field]) : row[field]);
     const currentByLanguage = new Map(
       current.map((row) => [row.language, row]),
     );
@@ -623,7 +657,11 @@ export class ContentTransferService {
         });
       } else if (
         CONTENT_FIELDS.some(
-          (field) => !lodash.isEqual(plain(row[field]), plain(existing[field])),
+          (field) =>
+            !lodash.isEqual(
+              comparable(row, field),
+              comparable(existing, field),
+            ),
         )
       ) {
         changes.push({
@@ -646,20 +684,13 @@ export class ContentTransferService {
   private async brandChanges(
     prepared: PreparedImport,
   ): Promise<ContentTransferBrandChanges | undefined> {
-    if (!prepared.jurisdictionId || !prepared.brand) return undefined;
+    if (!prepared.target || !prepared.brand) return undefined;
 
-    const current = await this.prisma.jurisdictions.findFirst({
-      where: { id: prepared.jurisdictionId },
-      select: {
-        brand: true,
-        brandLogo: { select: { fileId: true } },
-        brandFavicon: { select: { fileId: true } },
-      },
-    });
+    const current = prepared.target;
     const incomingBrand = isPlainObject(prepared.brand.brand)
       ? prepared.brand.brand
       : {};
-    const currentBrand = isPlainObject(current?.brand) ? current.brand : {};
+    const currentBrand = isPlainObject(current.brand) ? current.brand : {};
     const fields = [
       ...new Set([...Object.keys(incomingBrand), ...Object.keys(currentBrand)]),
     ]
@@ -673,21 +704,19 @@ export class ContentTransferService {
       .sort();
 
     // Storage keys differ between environments, so a file present on both sides counts as changed.
-    const fileChange = (incoming: string | null, existing?: string | null) =>
-      incoming
-        ? existing
-          ? ContentTransferChange.changed
-          : ContentTransferChange.added
-        : existing
-        ? ContentTransferChange.removed
-        : null;
+    const fileChange = (incoming: string | null, existing?: string | null) => {
+      if (incoming && existing) return ContentTransferChange.changed;
+      if (incoming) return ContentTransferChange.added;
+      if (existing) return ContentTransferChange.removed;
+      return null;
+    };
 
     return {
       fields,
-      logo: fileChange(prepared.brand.logoFileId, current?.brandLogo?.fileId),
+      logo: fileChange(prepared.brand.logoFileId, current.brandLogo?.fileId),
       favicon: fileChange(
         prepared.brand.faviconFileId,
-        current?.brandFavicon?.fileId,
+        current.brandFavicon?.fileId,
       ),
     };
   }
@@ -695,8 +724,10 @@ export class ContentTransferService {
   // The target environment uses its own bucket, so the file itself goes in the export.
   private async readAsset(fileId: string): Promise<ContentTransferAsset> {
     const url = brandAssetUrl(fileId, 'original');
+    if (!url) {
+      throw new BadGatewayException(`file ${fileId} has no storage url`);
+    }
     try {
-      if (!url) throw new Error('no storage url');
       const response = await firstValueFrom(
         this.httpService.get<ArrayBuffer>(url, {
           responseType: 'arraybuffer',
