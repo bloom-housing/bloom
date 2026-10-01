@@ -642,6 +642,12 @@ describe('Jurisdiction Content Controller Tests', () => {
         .set(passkey)
         .send({ contact: { phone: '555-0000' } })
         .expect(403);
+
+      const stored = await prisma.jurisdictionContent.findFirst({
+        where: { jurisdictionId, language: LanguagesEnum.tl },
+        select: { contact: true },
+      });
+      expect(stored?.contact?.['phone']).not.toEqual('555-0000');
     });
 
     it('forbids an anonymous request', async () => {

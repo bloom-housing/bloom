@@ -37,6 +37,13 @@ import { assertSuperAdmin } from '../utilities/assert-super-admin';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 
+const hasBrandFields = (
+  jurisdiction: JurisdictionUpdate | JurisdictionCreate,
+) =>
+  jurisdiction.brand !== undefined ||
+  jurisdiction.brandLogoAssetId !== undefined ||
+  jurisdiction.brandFaviconAssetId !== undefined;
+
 @Controller('jurisdictions')
 @ApiTags('jurisdictions')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
@@ -98,7 +105,11 @@ export class JurisdictionController {
   @UseGuards(ApiKeyGuard)
   async create(
     @Body() jurisdiction: JurisdictionCreate,
+    @Request() req: ExpressRequest,
   ): Promise<Jurisdiction> {
+    if (hasBrandFields(jurisdiction)) {
+      assertSuperAdmin(mapTo(User, req['user']));
+    }
     return await this.jurisdictionService.create(jurisdiction);
   }
 
@@ -131,7 +142,11 @@ export class JurisdictionController {
   @UseGuards(ApiKeyGuard)
   async update(
     @Body() jurisdiction: JurisdictionUpdate,
+    @Request() req: ExpressRequest,
   ): Promise<Jurisdiction> {
+    if (hasBrandFields(jurisdiction)) {
+      assertSuperAdmin(mapTo(User, req['user']));
+    }
     return await this.jurisdictionService.update(jurisdiction);
   }
 

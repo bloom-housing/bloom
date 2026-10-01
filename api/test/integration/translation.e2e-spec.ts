@@ -663,6 +663,10 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .send({ edits: [{ key: 'admin.only', value: 'no' }] })
         .expect(403);
+
+      expect(
+        await prisma.translationStrings.count({ where: { key: 'admin.only' } }),
+      ).toEqual(0);
     });
   });
 
@@ -688,6 +692,29 @@ describe('Translation Controller Tests', () => {
         .set(passkey)
         .expect(200);
       expect(res.body.find((r) => r.key === 'temp.key')).toBeUndefined();
+    });
+
+    it('forbids an admin who is not a superadmin', async () => {
+      await request(app.getHttpServer())
+        .put(enScope())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ edits: [{ key: 'kept.key', value: 'Keep' }] })
+        .expect(200);
+      await request(app.getHttpServer())
+        .delete(
+          `/translations/jurisdictions/${jurisdictionId}/raw/public/en/kept.key`,
+        )
+        .set('Cookie', adminOnlyCookies)
+        .set(passkey)
+        .expect(403);
+
+      const res = await request(app.getHttpServer())
+        .get(enScope())
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(res.body.find((r) => r.key === 'kept.key').value).toEqual('Keep');
     });
   });
 
@@ -978,6 +1005,32 @@ describe('Translation Controller Tests', () => {
         .expect(200);
       expect(
         res.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}guarded`)
+          .value,
+      ).toEqual('Keep');
+    });
+
+    it('forbids an admin who is not a superadmin from deleting a global key', async () => {
+      await request(app.getHttpServer())
+        .put(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          edits: [{ key: `${GLOBAL_TEST_KEY_PREFIX}adminOnly`, value: 'Keep' }],
+        })
+        .expect(200);
+      await request(app.getHttpServer())
+        .delete(`${globalScope}/${GLOBAL_TEST_KEY_PREFIX}adminOnly`)
+        .set('Cookie', adminOnlyCookies)
+        .set(passkey)
+        .expect(403);
+
+      const res = await request(app.getHttpServer())
+        .get(globalScope)
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(
+        res.body.find((r) => r.key === `${GLOBAL_TEST_KEY_PREFIX}adminOnly`)
           .value,
       ).toEqual('Keep');
     });

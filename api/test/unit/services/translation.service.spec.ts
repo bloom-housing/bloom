@@ -1374,6 +1374,8 @@ describe('Testing translations service', () => {
     ])(
       'refuses an admin who is not a superadmin for %s',
       async (_label, jurisdictionId) => {
+        prisma.translationStrings.findMany = jest.fn();
+
         await expect(
           service.getRawOverrides(
             jurisdictionId,
@@ -1383,6 +1385,7 @@ describe('Testing translations service', () => {
           ),
         ).rejects.toThrow(ForbiddenException);
         expect(permissionServiceMock.canOrThrow).not.toHaveBeenCalled();
+        expect(prisma.translationStrings.findMany).not.toHaveBeenCalled();
       },
     );
   });
