@@ -1,11 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import {
-  BadGatewayException,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadGatewayException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { LanguagesEnum, SiteEnum, TranslationOrigin } from '@prisma/client';
+import {
+  LanguagesEnum,
+  Prisma,
+  SiteEnum,
+  TranslationOrigin,
+} from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -172,12 +173,14 @@ describe('Testing content transfer service', () => {
       await expect(
         service.exportJurisdiction(jurisdictionId, adminUser),
       ).rejects.toThrow('nope');
-      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
-        adminUser,
-        'translation',
-        'read',
-        { jurisdictionId },
-      );
+      for (const type of ['translation', 'jurisdictionContent']) {
+        expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+          adminUser,
+          type,
+          'read',
+          { jurisdictionId },
+        );
+      }
       expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
     });
   });
@@ -198,6 +201,12 @@ describe('Testing content transfer service', () => {
         }),
       );
       expect(file.content).toBeUndefined();
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'read',
+        { jurisdictionId: undefined },
+      );
       expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
@@ -330,12 +339,17 @@ describe('Testing content transfer service', () => {
       }
     });
 
-    it('refuses a file of another format or version', async () => {
+    it.each([
+      ['format', { format: 'another-format' }],
+      ['version', { version: 2 }],
+    ])('refuses a file of another %s', async (_label, extra) => {
       mockTarget();
 
       await expect(
-        service.previewImport(importFile({ version: 2 }), adminUser),
-      ).rejects.toThrow(BadRequestException);
+        service.previewImport(importFile(extra), adminUser),
+      ).rejects.toThrow(
+        'the file is not a version 1 bloom-content-transfer export',
+      );
     });
 
     it('refuses a jurisdiction this environment does not have', async () => {
@@ -449,20 +463,29 @@ describe('Testing content transfer service', () => {
       });
       expect(prisma.jurisdictionContent.createMany).toHaveBeenCalledWith({
         data: [
-          expect.objectContaining({
+          {
             jurisdictionId: 'target-id',
             language: LanguagesEnum.en,
             footer: {
               logo: { logoFileId: 'new-footer-logo', logoAltText: 'Seal' },
             },
-          }),
-          expect.objectContaining({
+            faq: Prisma.DbNull,
+            resources: Prisma.DbNull,
+            disclaimers: { privacyHtml: '<p>Privacy</p>' },
+            contact: Prisma.DbNull,
+          },
+          {
+            jurisdictionId: 'target-id',
             language: LanguagesEnum.es,
+            footer: Prisma.DbNull,
+            faq: Prisma.DbNull,
+            resources: Prisma.DbNull,
             disclaimers: {
               privacyHtml: '<p>Privacidad</p>',
               _sourceHashes: { privacyHtml: hash },
             },
-          }),
+            contact: Prisma.DbNull,
+          },
         ],
       });
       expect(prisma.jurisdictions.update).toHaveBeenCalledWith({
@@ -615,6 +638,176 @@ describe('Testing content transfer service', () => {
       expect(rows[2].footer.logo._sourceHashes).toEqual({
         logoFileId: sourceHash('older-english-logo'),
       });
+    });
+
+    it.each([
+      [
+        'a string that appears twice',
+        { translations: [translationRow, translationRow] },
+        'translation public|es|nav.listings appears twice',
+      ],
+      [
+        'a language that appears twice',
+        {
+          content: [
+            { language: LanguagesEnum.en },
+            { language: LanguagesEnum.en },
+          ],
+        },
+        'content for en appears twice',
+      ],
+      [
+        'a footer logo key that is not a storage key',
+        {
+          content: [
+            {
+              language: LanguagesEnum.en,
+              footer: { logo: { logoFileId: '../logo' } },
+            },
+          ],
+        },
+        'file ids ../logo are not usable storage keys',
+      ],
+      [
+        'a brand logo key that is not a storage key',
+        {
+          brand: { brand: null, logoFileId: 'logo?x=1', faviconFileId: null },
+        },
+        'file ids logo?x=1 are not usable storage keys',
+      ],
+      [
+        'a brand the branding editor would refuse',
+        {
+          brand: {
+            brand: { primary: { base: 'purple' } },
+            logoFileId: null,
+            faviconFileId: null,
+          },
+        },
+        'the brand is not valid',
+      ],
+      [
+        'a font the font url does not serve',
+        {
+          brand: {
+            brand: {
+              primary: { base: '#773E98' },
+              fontFamily: 'Inter',
+              fontUrl: 'https://fonts.googleapis.com/css2?family=Inter',
+            },
+            logoFileId: null,
+            faviconFileId: null,
+          },
+        },
+        'does not serve the font family Inter',
+      ],
+    ])('refuses %s', async (_label, extra, message) => {
+      mockTarget();
+
+      await expect(
+        service.previewImport(importFile(extra), adminUser),
+      ).rejects.toThrow(message);
+    });
+
+    it('refuses an uploaded key that is not a storage key', async () => {
+      mockTarget();
+      mockWrites();
+
+      await expect(
+        service.applyImport(
+          importFile({
+            fileIds: { 'brand-logo': 'new-brand-logo', 'footer-logo': '../x' },
+          }),
+          adminUser,
+        ),
+      ).rejects.toThrow('file footer-logo was not uploaded');
+    });
+
+    it('groups string changes by site and language, leaving identical rows out', async () => {
+      mockTarget();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          translationRow,
+          { ...translationRow, site: SiteEnum.email, key: 'email.gone' },
+        ]);
+
+      const preview = await service.previewImport(
+        importFile({
+          translations: [
+            translationRow,
+            { ...translationRow, language: LanguagesEnum.en, key: 'nav.new' },
+          ],
+        }),
+        adminUser,
+      );
+
+      expect(preview.translations).toEqual([
+        {
+          site: SiteEnum.email,
+          language: LanguagesEnum.es,
+          added: 0,
+          changed: 0,
+          removed: 1,
+        },
+        {
+          site: SiteEnum.public,
+          language: LanguagesEnum.en,
+          added: 1,
+          changed: 0,
+          removed: 0,
+        },
+      ]);
+    });
+
+    it('leaves content and branding alone when the file has neither', async () => {
+      mockTarget();
+      mockWrites();
+      const file = importFile();
+      delete file.content;
+      delete file.brand;
+
+      const preview = await service.previewImport(file, adminUser);
+      await service.applyImport(file, adminUser);
+
+      expect(preview.content).toEqual([]);
+      expect(preview).not.toHaveProperty('brand');
+      expect(prisma.jurisdictionContent.deleteMany).not.toHaveBeenCalled();
+      expect(prisma.jurisdictions.update).not.toHaveBeenCalled();
+    });
+
+    it('reports a logo the target does not have yet as added', async () => {
+      mockTarget();
+      (prisma.jurisdictions.findFirst as jest.Mock).mockResolvedValue({
+        id: 'target-id',
+        brand: null,
+        brandLogo: null,
+        brandFavicon: null,
+      });
+
+      const preview = await service.previewImport(importFile(), adminUser);
+
+      expect(preview.brand).toEqual({
+        fields: ['primary'],
+        logo: 'added',
+        favicon: null,
+      });
+    });
+
+    it('checks only update access to translations for a global file', async () => {
+      mockTarget();
+
+      await service.previewImport(
+        importFile({
+          jurisdictionName: null,
+          translations: [{ ...translationRow, site: SiteEnum.partners }],
+        }),
+        adminUser,
+      );
+
+      expect(permissionServiceMock.canOrThrow.mock.calls).toEqual([
+        [adminUser, 'translation', 'update', { jurisdictionId: undefined }],
+      ]);
     });
 
     it('replaces only the global partners and email strings for a global file', async () => {
