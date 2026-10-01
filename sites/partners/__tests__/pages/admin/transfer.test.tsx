@@ -13,7 +13,7 @@ import {
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import * as helpers from "../../../src/lib/helpers"
-import SettingsTransfer from "../../../src/pages/admin/transfer"
+import AdminTransfer from "../../../src/pages/admin/transfer"
 
 jest.mock("../../../src/lib/helpers", () => ({
   ...jest.requireActual("../../../src/lib/helpers"),
@@ -184,7 +184,7 @@ const renderPage = (profileOverrides = {}) =>
             featureFlag === FeatureFlagEnum.enableDbDrivenContent,
         }}
       >
-        <SettingsTransfer />
+        <AdminTransfer />
       </AuthContext.Provider>
     </MessageContext.Provider>
   )
@@ -212,8 +212,14 @@ const cellsOf = (row: HTMLElement) =>
     .map((cell) => cell.textContent)
 
 describe("admin/transfer", () => {
-  it("sends a non-admin to unauthorized", () => {
+  it("sends a jurisdictional admin to unauthorized", () => {
     renderPage({ userRoles: { isJurisdictionalAdmin: true } })
+
+    expect(pushMock).toHaveBeenCalledWith("/unauthorized")
+  })
+
+  it("sends an admin who is not a superadmin to unauthorized", () => {
+    renderPage({ userRoles: { isAdmin: true } })
 
     expect(pushMock).toHaveBeenCalledWith("/unauthorized")
   })

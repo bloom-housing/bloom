@@ -21,9 +21,7 @@ const AdminBranding = () => {
   const { addToast } = useContext(MessageContext)
   const { mutate: saveBrand, isLoading: isSaving } = useMutate()
   const { profile, jurisdictionsService } = useContext(AuthContext)
-  const { enableBranding, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.branding)
-
-  const authorized = enableBranding && !!profile?.userRoles?.isSuperAdmin
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.branding)
 
   const jurisdictions = useMemo(
     () =>

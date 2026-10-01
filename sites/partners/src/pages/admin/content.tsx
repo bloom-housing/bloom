@@ -241,9 +241,7 @@ const AdminContent = () => {
   const { addToast } = useContext(MessageContext)
   const { mutate: saveContent, isLoading: isSaving } = useMutate()
   const { profile, jurisdictionContentService } = useContext(AuthContext)
-  const { enableContent, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.content)
-
-  const authorized = enableContent && !!profile?.userRoles?.isSuperAdmin
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.content)
 
   const jurisdictions = useMemo(
     () =>

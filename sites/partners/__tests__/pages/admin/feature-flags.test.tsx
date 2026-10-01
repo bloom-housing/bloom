@@ -3,6 +3,12 @@ import { setupServer } from "msw/lib/node"
 import { fireEvent, mockNextRouter, render, screen, waitFor, within } from "../../testUtils"
 import FeatureFlags from "../../../src/pages/admin/feature-flags"
 import { rest } from "msw"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagsService,
+  JurisdictionsService,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
 const server = setupServer()
 
@@ -72,32 +78,36 @@ const jurisdictions = [
 ]
 
 describe("admin", () => {
-  it("should show unauthorized if user is not a superAdmin", () => {
-    const { location } = window
-    delete window.location
-
-    window.location = {
-      href: "",
-    } as Location
-    window.URL.createObjectURL = jest.fn()
-    document.cookie = "access-token-available=True"
-
-    server.use(
-      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-        return res(
-          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
-        )
-      }),
-      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
-        return res(ctx.json(""))
-      }),
-      rest.get("http://localhost:3100/featureFlags", (_req, res, ctx) => {
-        return res(ctx.json([]))
-      })
+  const renderWithRoles = (userRoles: Record<string, boolean>) => {
+    const { pushMock } = mockNextRouter()
+    const list = jest.fn().mockResolvedValue([])
+    render(
+      <AuthContext.Provider
+        value={{
+          profile: { ...user, userRoles },
+          doJurisdictionsHaveFeatureFlagOn: () => false,
+          featureFlagService: { list } as unknown as FeatureFlagsService,
+          jurisdictionsService: { list } as unknown as JurisdictionsService,
+        }}
+      >
+        <FeatureFlags />
+      </AuthContext.Provider>
     )
-    render(<FeatureFlags />)
-    expect(window.location.href).toBe("/unauthorized")
-    window.location = location
+    return { pushMock, list }
+  }
+
+  it("sends an admin who is not a superadmin to unauthorized without loading flags", () => {
+    const { pushMock, list } = renderWithRoles({ isAdmin: true })
+
+    expect(pushMock).toHaveBeenCalledWith("/unauthorized")
+    expect(list).not.toHaveBeenCalled()
+  })
+
+  it("loads the flags for a superadmin", async () => {
+    const { pushMock, list } = renderWithRoles({ isAdmin: true, isSuperAdmin: true })
+
+    await waitFor(() => expect(list).toHaveBeenCalled())
+    expect(pushMock).not.toHaveBeenCalled()
   })
 
   it("should display the feature flag page when superadmin for by jurisdiction", async () => {
@@ -115,7 +125,7 @@ describe("admin", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost:3100/featureFlags", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/featureFlags", (_req, res, ctx) => {
         return res(ctx.json(featureFlags))
       }),
       rest.get("http://localhost/api/adapter/jurisdictions", (_req, res, ctx) => {
@@ -174,7 +184,7 @@ describe("admin", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost:3100/featureFlags", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/featureFlags", (_req, res, ctx) => {
         return res(ctx.json(featureFlags))
       }),
       rest.get("http://localhost/api/adapter/jurisdictions", (_req, res, ctx) => {
@@ -243,7 +253,7 @@ describe("admin", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost:3100/featureFlags", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/featureFlags", (_req, res, ctx) => {
         return res(ctx.json(featureFlags))
       }),
       rest.get("http://localhost/api/adapter/featureFlags", (_req, res, ctx) => {
@@ -317,7 +327,7 @@ describe("admin", () => {
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
         return res(ctx.json(""))
       }),
-      rest.get("http://localhost:3100/featureFlags", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/featureFlags", (_req, res, ctx) => {
         return res(ctx.json(featureFlags))
       }),
       rest.get("http://localhost/api/adapter/featureFlags", (_req, res, ctx) => {

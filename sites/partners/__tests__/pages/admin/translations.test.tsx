@@ -15,7 +15,7 @@ import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, render } from "../../testUtils"
 import { overrideTranslations } from "../../../src/lib/translations"
 import { publicOverrideTranslations } from "../../../src/lib/publicTranslations"
-import SettingsTranslations from "../../../src/pages/admin/translations"
+import AdminTranslations from "../../../src/pages/admin/translations"
 
 const server = setupServer()
 
@@ -147,7 +147,7 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
           flagOn && featureFlag === FeatureFlagEnum.enableDbDrivenContent,
       }}
     >
-      <SettingsTranslations />
+      <AdminTranslations />
     </AuthContext.Provider>
   )
 
@@ -203,13 +203,13 @@ const filterFor = async (text: string, anchor = FIRST_BASE_KEY) => {
 const expectBaseShown = async (value: string) =>
   waitFor(() => expect(screen.getAllByText(value).length).toBeGreaterThan(0))
 
-describe("<SettingsTranslations>", () => {
+describe("<AdminTranslations>", () => {
   describe("page access", () => {
-    it("renders the settings page with a translations tab", async () => {
+    it("renders the Admin page with a translations tab", async () => {
       renderPage()
 
       expect(await screen.findByRole("heading", { level: 1, name: "Admin" })).toBeInTheDocument()
-      // The settings tabs render as navigation links rather than ARIA tabs.
+      // The Admin tabs render as navigation links rather than ARIA tabs.
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
     })
 
@@ -226,8 +226,14 @@ describe("<SettingsTranslations>", () => {
       expect(pushMock).toHaveBeenCalledWith("/unauthorized")
     })
 
-    it("redirects a jurisdictional admin, since editing is limited to admins", () => {
+    it("redirects a jurisdictional admin", () => {
       renderPage({ userRoles: { isJurisdictionalAdmin: true } })
+
+      expect(pushMock).toHaveBeenCalledWith("/unauthorized")
+    })
+
+    it("redirects an admin who is not a superadmin", () => {
+      renderPage({ userRoles: { isAdmin: true } })
 
       expect(pushMock).toHaveBeenCalledWith("/unauthorized")
     })
@@ -238,7 +244,7 @@ describe("<SettingsTranslations>", () => {
       expect(pushMock).toHaveBeenCalledWith("/unauthorized")
     })
 
-    it("does not redirect an admin when the flag is on", async () => {
+    it("does not redirect a superadmin when the flag is on", async () => {
       renderPage()
 
       await screen.findByRole("heading", { level: 1, name: "Admin" })

@@ -1,5 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import PencilSquareIcon from "@heroicons/react/24/solid/PencilSquareIcon"
 import { Field, MinimalTable, t } from "@bloom-housing/ui-components"
@@ -15,8 +16,9 @@ export enum TabsIndexEnum {
 }
 
 const FeatureFlags = () => {
-  const { profile, featureFlagService, jurisdictionsService } = useContext(AuthContext)
-  const { hideTabs, tabs } = useAdminTabs(AdminIndexEnum.featureFlags)
+  const router = useRouter()
+  const { featureFlagService, jurisdictionsService } = useContext(AuthContext)
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.featureFlags)
   const [isLoading, setIsLoading] = useState(true)
   const [featureFlags, setFeatureFlags] = useState([])
   const [jurisdictions, setJurisdictions] = useState([])
@@ -34,10 +36,10 @@ const FeatureFlags = () => {
       setJurisdictions(retrievedJurisdictions)
       setIsLoading(false)
     }
-    if (isLoading) {
+    if (isLoading && authorized) {
       void fetchData()
     }
-  }, [featureFlagService, jurisdictionsService, isLoading])
+  }, [featureFlagService, jurisdictionsService, isLoading, authorized])
 
   useEffect(() => {
     if (selectedJurisdiction) {
@@ -127,8 +129,8 @@ const FeatureFlags = () => {
     setIsLoading(true)
   }
 
-  if (!profile || !profile?.userRoles?.isSuperAdmin) {
-    window.location.href = "/unauthorized"
+  if (!authorized) {
+    void router.push("/unauthorized")
     return null
   }
 

@@ -71,8 +71,8 @@ export const useAdminTabs = (selectedIndex: AdminIndexEnum) => {
   const visibleTabs = getVisibleAdminTabs(featureFlags, profile?.userRoles)
 
   return {
-    ...featureFlags,
     visibleTabs,
+    authorized: visibleTabs.includes(selectedIndex),
     hideTabs: visibleTabs.length <= 1,
     tabs: (
       <Tabs

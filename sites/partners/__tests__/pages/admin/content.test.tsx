@@ -12,7 +12,7 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { mockNextRouter, mockTipTapEditor, render } from "../../testUtils"
-import SettingsContent from "../../../src/pages/admin/content"
+import AdminContent from "../../../src/pages/admin/content"
 import * as helpers from "../../../src/lib/helpers"
 
 jest.mock("../../../src/lib/helpers", () => ({
@@ -153,14 +153,14 @@ const renderPage = (profileOverrides = {}, flagOn = true) =>
             flagOn && featureFlag === FeatureFlagEnum.enableDbDrivenContent,
         }}
       >
-        <SettingsContent />
+        <AdminContent />
       </AuthContext.Provider>
     </MessageContext.Provider>
   )
 
-describe("<SettingsContent>", () => {
+describe("<AdminContent>", () => {
   describe("page access", () => {
-    it("renders the settings page with a content tab", async () => {
+    it("renders the Admin page with a content tab", async () => {
       renderPage()
 
       expect(await screen.findByRole("heading", { level: 1, name: "Admin" })).toBeInTheDocument()
@@ -180,8 +180,14 @@ describe("<SettingsContent>", () => {
       expect(screen.getByRole("link", { name: "Translations" })).toBeInTheDocument()
     })
 
-    it("redirects a jurisdictional admin, since editing is limited to admins", () => {
+    it("redirects a jurisdictional admin", () => {
       renderPage({ userRoles: { isJurisdictionalAdmin: true } })
+
+      expect(pushMock).toHaveBeenCalledWith("/unauthorized")
+    })
+
+    it("redirects an admin who is not a superadmin", () => {
+      renderPage({ userRoles: { isAdmin: true } })
 
       expect(pushMock).toHaveBeenCalledWith("/unauthorized")
     })

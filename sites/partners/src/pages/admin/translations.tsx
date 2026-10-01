@@ -61,13 +61,7 @@ const AdminTranslations = () => {
   const { mutate: saveOverrides, isLoading: isSaving } = useMutate()
   const { mutate: revertOverride, isLoading: isReverting } = useMutate()
   const { profile } = useContext(AuthContext)
-  const {
-    enableContent: enableTranslations,
-    hideTabs,
-    tabs,
-  } = useAdminTabs(AdminIndexEnum.translations)
-
-  const authorized = enableTranslations && !!profile?.userRoles?.isSuperAdmin
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.translations)
 
   const jurisdictions = useMemo(
     () =>

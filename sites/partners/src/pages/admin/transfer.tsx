@@ -100,9 +100,7 @@ const AdminTransfer = () => {
   const router = useRouter()
   const { addToast } = useContext(MessageContext)
   const { profile, contentTransferService } = useContext(AuthContext)
-  const { enableContent, enableBranding, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.transfer)
-
-  const authorized = (enableContent || enableBranding) && !!profile?.userRoles?.isSuperAdmin
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.transfer)
 
   const jurisdictions = useMemo(
     () =>
