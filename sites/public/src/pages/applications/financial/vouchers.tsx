@@ -25,8 +25,6 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { StopLightMessage } from "../../../components/applications/stopLights/StopLightMessage"
-import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 
 const ApplicationVouchers = () => {
@@ -68,7 +66,7 @@ const ApplicationVouchers = () => {
     enabledRuleKeys,
     router.query.blockedRule as string | undefined
   )
-  const { onFieldBlur, banner } = useStopLightBanners(
+  const { onFieldBlur } = useStopLightBanners(
     "vouchersSubsidies",
     application,
     listing,
@@ -152,7 +150,6 @@ const ApplicationVouchers = () => {
           stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
-          <StopLightMessage rule={banner} className={styles["message-inside-card"]} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>

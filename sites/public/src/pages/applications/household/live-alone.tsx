@@ -21,8 +21,6 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { StopLightMessage } from "../../../components/applications/stopLights/StopLightMessage"
-import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
@@ -44,7 +42,7 @@ const ApplicationLiveAlone = () => {
   // passing empty object as getValues because the form's householdSize is the radio string ("liveAlone"/"withOthers"),
   // not the number;
   // the radio's onChange already wrote the real householdSize onto application
-  const { onFieldBlur, banner } = useStopLightBanners(
+  const { onFieldBlur } = useStopLightBanners(
     "liveAlone",
     application,
     listing,
@@ -113,7 +111,6 @@ const ApplicationLiveAlone = () => {
           stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
-          <StopLightMessage rule={banner} className={styles["message-inside-card"]} />
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}

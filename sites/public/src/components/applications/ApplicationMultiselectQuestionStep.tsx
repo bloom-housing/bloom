@@ -38,8 +38,6 @@ import ApplicationFormLayout, {
 } from "../../layouts/application-form"
 import { useStopLightGate } from "../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../lib/applications/stopLights/useStopLightBanners"
-import { StopLightMessage } from "./stopLights/StopLightMessage"
-import styles from "../../layouts/application-form.module.scss"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
 
 export interface ApplicationMultiselectQuestionStepProps {
@@ -122,7 +120,7 @@ const ApplicationMultiselectQuestionStep = ({
     enabledRuleKeys,
     router.query.blockedRule as string | undefined
   )
-  const { onFieldBlur, banner } = useStopLightBanners(
+  const { onFieldBlur } = useStopLightBanners(
     applicationStep,
     application,
     listing,
@@ -398,7 +396,6 @@ const ApplicationMultiselectQuestionStep = ({
           stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
-          <StopLightMessage rule={banner} className={styles["message-inside-card"]} />
 
           <div style={{ display: verifyAddress ? "none" : "block" }} key={question?.id}>
             <CardSection>

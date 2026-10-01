@@ -33,8 +33,6 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { StopLightMessage } from "../../../components/applications/stopLights/StopLightMessage"
-import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
@@ -63,7 +61,7 @@ const ApplicationDemographics = () => {
     enabledRuleKeys,
     router.query.blockedRule as string | undefined
   )
-  const { onFieldBlur, banner } = useStopLightBanners(
+  const { onFieldBlur } = useStopLightBanners(
     "demographics",
     application,
     listing,
@@ -199,7 +197,6 @@ const ApplicationDemographics = () => {
           conductor={conductor}
           stopLights={stopLights}
         >
-          <StopLightMessage rule={banner} className={styles["message-inside-card"]} />
           <CardSection divider={"inset"}>
             {showRaceQuestion && (
               <fieldset>
