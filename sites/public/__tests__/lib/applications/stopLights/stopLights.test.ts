@@ -4,7 +4,10 @@ import {
   FeatureFlagEnum,
   Listing,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { StopLightRule } from "../../../../src/lib/applications/stopLights/stopLightRules"
+import {
+  StopLightRule,
+  stopLightRules,
+} from "../../../../src/lib/applications/stopLights/stopLightRules"
 import { getEnabledStopLightRuleKeys } from "../../../../src/lib/applications/stopLights/enabledStopLightRuleKeys"
 
 const exampleRedRule: StopLightRule = {
@@ -13,7 +16,8 @@ const exampleRedRule: StopLightRule = {
   light: "red",
   evaluate: (application: Application, listing: Listing) =>
     application.householdSize > listing.householdSizeMax,
-  heading: "stopLights.exampleHouseholdTooLarge.heading",
+  modalTitle: "stopLights.exampleHouseholdTooLarge.modalTitle",
+  alertTitle: "stopLights.exampleHouseholdTooLarge.alertTitle",
   body: "stopLights.exampleHouseholdTooLarge.body",
   editFieldAnchor: "householdSize",
 }
@@ -23,7 +27,8 @@ const exampleYellowRule: StopLightRule = {
   step: "income",
   light: "yellow",
   evaluate: (application: Application) => Number(application.income ?? 0) === 0,
-  heading: "stopLights.exampleNoIncomeReported.heading",
+  modalTitle: "stopLights.exampleNoIncomeReported.modalTitle",
+  alertTitle: "stopLights.exampleNoIncomeReported.alertTitle",
   body: "stopLights.exampleNoIncomeReported.body",
 }
 
@@ -36,6 +41,18 @@ it("evaluates a red rule", () => {
 it("evaluates a yellow rule", () => {
   expect(exampleYellowRule.evaluate({ income: "0" } as Application, {} as Listing)).toBe(true)
   expect(exampleYellowRule.evaluate({ income: "1000" } as Application, {} as Listing)).toBe(false)
+})
+
+describe("stopLightRules registry", () => {
+  it("has at most one rule per step, since a page carries at most one light", () => {
+    const steps = stopLightRules.map((rule) => rule.step)
+    expect(steps.filter((step, index) => steps.indexOf(step) !== index)).toEqual([])
+  })
+
+  it("has unique rule keys", () => {
+    const keys = stopLightRules.map((rule) => rule.key)
+    expect(keys.filter((key, index) => keys.indexOf(key) !== index)).toEqual([])
+  })
 })
 
 describe("getEnabledStopLightRuleKeys", () => {

@@ -43,7 +43,12 @@ import { ContentWarningDialog } from "../../components/settings/ContentWarningDi
 import { TextEditorContent } from "../../components/shared/TextEditor"
 import styles from "./content.module.scss"
 
-type FieldConfig = { path: string; labelKey: string; type: "text" | "html" }
+type FieldConfig = {
+  path: string
+  labelKey: string
+  type: "text" | "html"
+  noteKey?: string
+}
 
 type ListConfig = {
   listPath: string
@@ -149,7 +154,12 @@ const DOCUMENTS: DocumentConfig[] = [
             displayField: "title",
             fields: [
               { name: "title", labelKey: "content.cardTitle", type: "text" },
-              { name: "href", labelKey: "content.cardLink", type: "text" },
+              {
+                name: "href",
+                labelKey: "content.cardLink",
+                noteKey: "content.linkHrefNote",
+                type: "text",
+              },
               { name: "contentHtml", labelKey: "content.cardContent", type: "html" },
             ],
           },
@@ -167,7 +177,12 @@ const DOCUMENTS: DocumentConfig[] = [
     fields: [
       { path: "footer.logo.logoSrc", labelKey: "content.logoSrc", type: "text" },
       { path: "footer.logo.logoAltText", labelKey: "content.logoAlt", type: "text" },
-      { path: "footer.logo.logoUrl", labelKey: "content.logoUrl", type: "text" },
+      {
+        path: "footer.logo.logoUrl",
+        labelKey: "content.logoUrl",
+        noteKey: "content.linkHrefNote",
+        type: "text",
+      },
     ],
     lists: [
       {
@@ -179,7 +194,12 @@ const DOCUMENTS: DocumentConfig[] = [
           displayField: "text",
           fields: [
             { name: "text", labelKey: "content.linkText", type: "text" },
-            { name: "href", labelKey: "content.linkHref", type: "text" },
+            {
+              name: "href",
+              labelKey: "content.linkHref",
+              noteKey: "content.linkHrefNote",
+              type: "text",
+            },
           ],
         },
       },
@@ -466,6 +486,7 @@ const SettingsContent = () => {
               className={styles["field-card"]}
               path={field.path}
               labelKey={field.labelKey}
+              noteKey={field.noteKey}
               type={field.type}
               draft={draft}
               englishDraft={englishDraft}

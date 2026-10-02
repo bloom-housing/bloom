@@ -48,6 +48,7 @@ type ContentFieldCardProps = {
   /** The field being edited, e.g. `contact.phone` or `faq.categories[applying].title`. */
   path: string
   labelKey: string
+  noteKey?: string
   type: ContentFieldType
   draft: ContentDraft
   englishDraft: ContentDraft
@@ -62,6 +63,7 @@ type ContentFieldCardProps = {
 export const ContentFieldCard = ({
   path,
   labelKey,
+  noteKey,
   type,
   draft,
   englishDraft,
@@ -137,6 +139,7 @@ export const ContentFieldCard = ({
                 id={path}
                 name={path}
                 label={t(labelKey)}
+                subNote={noteKey ? t(noteKey) : undefined}
                 defaultValue={stringValue}
                 inputProps={{
                   onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
