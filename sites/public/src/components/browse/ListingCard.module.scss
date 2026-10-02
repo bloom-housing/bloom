@@ -20,13 +20,13 @@
 
     .name,
     a {
-      color: var(--seeds-color-blue-500);
+      color: var(--seeds-color-primary);
     }
 
     &:hover {
       .name,
       a {
-        color: var(--seeds-color-blue-900);
+        color: var(--seeds-color-primary-darker);
       }
     }
 
