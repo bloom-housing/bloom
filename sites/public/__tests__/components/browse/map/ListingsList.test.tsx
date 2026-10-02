@@ -122,7 +122,7 @@ describe("ListingsList", () => {
       searchResults: {
         ...baseContext.searchResults,
         listings: [],
-        markers: [{ id: "marker-1" }, { id: "marker-2" }],
+        markers: [],
       },
     })
 
@@ -146,7 +146,7 @@ describe("ListingsList", () => {
       searchResults: {
         ...baseContext.searchResults,
         listings: [],
-        markers: [{ id: "marker-1" }],
+        markers: [],
       },
     })
 
