@@ -143,6 +143,16 @@ export const devSeeding = async (
       jurisdictions: { connect: { id: jurisdiction.id } },
     },
   });
+  await prismaClient.featureFlags.create({
+    data: {
+      name: FeatureFlagEnum.enableDbDrivenBranding,
+      description: featureFlagMap.find(
+        (flag) => flag.name === FeatureFlagEnum.enableDbDrivenBranding,
+      ).description,
+      active: true,
+      jurisdictions: { connect: { id: jurisdiction.id } },
+    },
+  });
 
   await prismaClient.featureFlags.create({
     data: featureFlagFactory(
