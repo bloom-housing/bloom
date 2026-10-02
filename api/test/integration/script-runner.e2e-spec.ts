@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { INestApplication, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { of, throwError } from 'rxjs';
@@ -212,6 +213,10 @@ describe('Script Runner Controller Tests', () => {
       const logoPath = 'sites/public/public/images/logo.png';
 
       const keyPrefix = `brand/${jurisdictionId}/`;
+      const logoKey = `${keyPrefix}logo-${createHash('sha256')
+        .update(Buffer.from('image bytes'))
+        .digest('hex')
+        .slice(0, 12)}.png`;
       const linkedAssets = async () =>
         await prisma.assets.count({
           where: { fileId: { startsWith: keyPrefix } },
@@ -227,12 +232,12 @@ describe('Script Runner Controller Tests', () => {
 
       await call({ jurisdictionName, commit: true, logoPath }).expect(200);
       expect(await linkedAssets()).toEqual(1);
-      expect(await linkedLogo()).toEqual(`${keyPrefix}logo.png`);
+      expect(await linkedLogo()).toEqual(logoKey);
 
       await call({ jurisdictionName, commit: true, logoPath }).expect(200);
       expect(await linkedAssets()).toEqual(1);
       // Counting rows alone would pass if the second run disconnected the asset instead.
-      expect(await linkedLogo()).toEqual(`${keyPrefix}logo.png`);
+      expect(await linkedLogo()).toEqual(logoKey);
     });
 
     // The acceptance criterion: a second run reports accurately. The brand column is jsonb, which

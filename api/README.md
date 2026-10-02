@@ -142,17 +142,20 @@ Body fields:
   references it from its own layout, so they cannot be discovered. Omit them to leave the stored
   assets alone. The file must end in `.png`, `.svg` or `.webp`.
 - `brand` overrides what the stylesheet gave, field by field, and takes the same shape the branding
-  endpoint accepts. Use it for anything the parse got wrong or could not find.
+  endpoint accepts. A supplied `primary` or `secondary` replaces the parsed ramp, since a ramp's
+  shades belong to its base. Use it for anything the parse got wrong or could not find.
 
 Only declarations directly under `:root` are read, and the button radius only from a `.seeds-button`
 block under it.
 
 A font family is only written when `brand.fontUrl` supplies a Google Fonts url. A fork serves its
 font from its own files, and a brand font has to be a Google Fonts url, so migrating the family
-alone would name a font the page doesn't loads. The report says when a family was found and dropped.
+alone would name a font the page doesn't load. The report says when a family was found and dropped.
 
-Assets are stored under `brand/<jurisdiction id>/`, so a re-run overwrites in place and two
-jurisdictions cannot collide. They need `S3_PUBLIC_BUCKET` set. There is no server-side upload on a Cloudinary install, so one
+Assets are stored under `brand/<jurisdiction id>/`, named by a hash of their contents.
+A re-run with the same image uploads nothing, and a changed image gets a new key,
+so the image the site is serving is not overwritten. A replaced image stays in the bucket.
+`S3_PUBLIC_BUCKET` needs to be set. There is no server-side upload on a Cloudinary install, so one
 is refused rather than half migrated: upload the two images through the Partners branding page and
 re-run without `logoPath` and `faviconPath`.
 

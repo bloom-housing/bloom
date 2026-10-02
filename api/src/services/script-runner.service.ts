@@ -19,6 +19,7 @@ import { AxiosError } from 'axios';
 import { HttpService } from '@nestjs/axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import dayjs from 'dayjs';
+import { createHash } from 'crypto';
 import { extname } from 'path';
 import { Request as ExpressRequest } from 'express';
 import { AmiChartService } from './ami-chart.service';
@@ -562,7 +563,7 @@ export class ScriptRunnerService {
   }
 
   // The stylesheet parse is the starting point and the request body wins field by field, so an
-  // operator can correct a parse without editing the fork.
+  // operator can correct a parse without editing the fork. A supplied ramp replaces the parsed one.
   private brandToWrite(
     parsed: ParsedBrand,
     overrides: BrandDTO | undefined,
@@ -625,7 +626,9 @@ export class ScriptRunnerService {
 
       const url = sourceUrl(path);
       const body = await this.getSourceImage(url);
-      const key = `brand/${jurisdictionId}/${kind}${extension}`;
+      // Keyed by content, so an upload never replaces the image the site is serving.
+      const hash = createHash('sha256').update(body).digest('hex').slice(0, 12);
+      const key = `brand/${jurisdictionId}/${kind}-${hash}${extension}`;
       fetched.push({ kind, url, key, body, contentType });
     }
 
@@ -633,16 +636,16 @@ export class ScriptRunnerService {
     const fileIds: Record<string, string> = {};
 
     for (const { kind, url, key, body, contentType } of fetched) {
+      if (stored[kind] === key) {
+        report.push(`${kind}: ${url} -> ${key}, already linked`);
+        continue;
+      }
+
       if (dto.commit) {
         await this.s3Service.uploadToPublic(key, body, contentType);
       }
-
-      if (stored[kind] === key) {
-        report.push(`${kind}: ${url} -> ${key}, already linked`);
-      } else {
-        fileIds[kind] = key;
-        report.push(`${kind}: ${url} -> ${key}`);
-      }
+      fileIds[kind] = key;
+      report.push(`${kind}: ${url} -> ${key}`);
     }
 
     return {

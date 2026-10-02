@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { BadRequestException, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
@@ -1034,6 +1035,15 @@ describe('Testing script runner service', () => {
 
     const writtenBrand = () => updateBrand.mock.calls[0][1];
 
+    const assetKey = (name: string, bytes = 'image bytes') => {
+      const [kind, extension] = name.split('.');
+      const hash = createHash('sha256')
+        .update(Buffer.from(bytes))
+        .digest('hex')
+        .slice(0, 12);
+      return `brand/${jurisdictionId}/${kind}-${hash}.${extension}`;
+    };
+
     beforeEach(() => {
       process.env.S3_PUBLIC_BUCKET = 'fake-public';
       s3ServiceMock.uploadToPublic.mockClear();
@@ -1136,7 +1146,7 @@ describe('Testing script runner service', () => {
     });
 
     describe('assets', () => {
-      it('uploads under a key derived from the jurisdiction, not a random one', async () => {
+      it('uploads under a key derived from the jurisdiction and the image contents', async () => {
         await service.migrateJurisdictionBranding(
           request(),
           body({
@@ -1146,13 +1156,31 @@ describe('Testing script runner service', () => {
         );
 
         expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledWith(
-          `brand/${jurisdictionId}/logo.png`,
+          assetKey('logo.png'),
           expect.any(Buffer),
           'image/png',
         );
-        expect(writtenBrand().logoFileId).toEqual(
-          `brand/${jurisdictionId}/logo.png`,
+        expect(writtenBrand().logoFileId).toEqual(assetKey('logo.png'));
+      });
+
+      it('uploads a changed image under a new key and links it', async () => {
+        prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+          id: jurisdictionId,
+          brand: null,
+          brandLogo: { fileId: assetKey('logo.png', 'old bytes') },
+        });
+
+        await service.migrateJurisdictionBranding(
+          request(),
+          body({ commit: true, logoPath: 'images/logo.png' }),
         );
+
+        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledWith(
+          assetKey('logo.png'),
+          expect.any(Buffer),
+          'image/png',
+        );
+        expect(writtenBrand().logoFileId).toEqual(assetKey('logo.png'));
       });
 
       // The type is taken from the path rather than the response, so a fork repository cannot
@@ -1188,8 +1216,6 @@ describe('Testing script runner service', () => {
         },
       );
 
-      // The key is the one the public site already serves, so a partial upload would swap a live
-      // image and leave it swapped, with the run reporting a 400 and writing nothing.
       it('uploads nothing when a later image cannot be fetched', async () => {
         jest
           .spyOn(service, 'getSourceImage')
@@ -1222,21 +1248,17 @@ describe('Testing script runner service', () => {
         );
 
         expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledTimes(2);
-        expect(writtenBrand().logoFileId).toEqual(
-          `brand/${jurisdictionId}/logo.png`,
-        );
-        expect(writtenBrand().faviconFileId).toEqual(
-          `brand/${jurisdictionId}/favicon.svg`,
-        );
+        expect(writtenBrand().logoFileId).toEqual(assetKey('logo.png'));
+        expect(writtenBrand().faviconFileId).toEqual(assetKey('favicon.svg'));
       });
 
       // brandAssetWrite always creates an assets row, so re-linking the same key would orphan the
       // previous one on every run.
-      it('does not re-link a key the jurisdiction already points at', async () => {
+      it('does not upload or re-link an image the jurisdiction already points at', async () => {
         prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
           id: jurisdictionId,
           brand: null,
-          brandLogo: { fileId: `brand/${jurisdictionId}/logo.png` },
+          brandLogo: { fileId: assetKey('logo.png') },
         });
 
         await service.migrateJurisdictionBranding(
@@ -1247,7 +1269,7 @@ describe('Testing script runner service', () => {
           }),
         );
 
-        expect(s3ServiceMock.uploadToPublic).toHaveBeenCalled();
+        expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
         expect(writtenBrand().logoFileId).toBeUndefined();
       });
 
