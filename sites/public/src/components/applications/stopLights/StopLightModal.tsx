@@ -1,15 +1,14 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import { Button, Dialog, Message } from "@bloom-housing/ui-seeds"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import { StopLightRule } from "../../../lib/applications/stopLights/stopLightRules"
+import { StopLightMessage } from "./StopLightMessage"
 
 interface StopLightDialogProps {
   isOpen: boolean
   rule: StopLightRule | null
-  variant: "alert" | "warn"
   idPrefix: "red-light" | "yellow-light"
   onClose: () => void
-  // takes the rule so the null check below is the only one either modal needs
   renderFooter: (rule: StopLightRule) => React.ReactNode
 }
 
@@ -41,8 +40,6 @@ const focusEditFieldAnchor = (anchor?: string) => {
   })
 }
 
-// everything the two lights share: a step carries at most one rule, so this renders that
-// rule or nothing at all
 const StopLightDialog = (props: StopLightDialogProps) => {
   const { rule, idPrefix } = props
 
@@ -57,9 +54,7 @@ const StopLightDialog = (props: StopLightDialogProps) => {
     >
       <Dialog.Header id={`${idPrefix}-modal-header`}>{t(rule.modalTitle)}</Dialog.Header>
       <Dialog.Content id={`${idPrefix}-modal-content`}>
-        <Message fullwidth variant={props.variant}>
-          <strong>{t(rule.alertTitle)}</strong> <p className="seeds-body-text">{t(rule.body)}</p>
-        </Message>
+        <StopLightMessage rule={rule} />
       </Dialog.Content>
       <Dialog.Footer>{props.renderFooter(rule)}</Dialog.Footer>
     </Dialog>
@@ -70,7 +65,6 @@ const RedLightModal = (props: RedLightModalProps) => (
   <StopLightDialog
     isOpen={props.isOpen}
     rule={props.rule}
-    variant="alert"
     idPrefix="red-light"
     onClose={props.onEdit}
     renderFooter={(rule) => (
@@ -105,7 +99,6 @@ const YellowLightModal = (props: YellowLightModalProps) => (
   <StopLightDialog
     isOpen={props.isOpen}
     rule={props.rule}
-    variant="warn"
     idPrefix="yellow-light"
     onClose={props.onCancel}
     renderFooter={() => (
