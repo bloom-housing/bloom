@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import Markdown from "markdown-to-jsx"
 import { t } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import {
   FeatureFlagEnum,
@@ -57,13 +57,15 @@ const FaqPage = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
             </Heading>
           </Card.Header>
           <Card.Section>
-            <div className={"seeds-m-be-6"}>
-              <Markdown>
-                {t("faq.stillHaveQuestionsContent", {
-                  contactEmail: t("resources.contactEmail"),
-                })}
-              </Markdown>
-            </div>
+            {tIfExists("resources.contactEmail") && (
+              <div className={"seeds-m-be-6"}>
+                <Markdown>
+                  {t("faq.stillHaveQuestionsContent", {
+                    contactEmail: t("resources.contactEmail"),
+                  })}
+                </Markdown>
+              </div>
+            )}
             {enableResources && (
               <Button href={"/additional-resources"}>{t("faq.viewResourcePage")}</Button>
             )}

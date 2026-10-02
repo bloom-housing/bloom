@@ -31,6 +31,7 @@ addTranslation({
   "branding.lightnessWarning": "test:tooDark",
   "t.dismiss": "test:dismiss",
   "branding.shade.dark": "test:dark",
+  "branding.resetShades": "test:resetShades",
   "branding.shade.darker": "test:darker",
   "branding.shade.light": "test:light",
   "branding.shade.lighter": "test:lighter",
@@ -353,6 +354,82 @@ describe("settings/branding", () => {
 
     await screen.findAllByLabelText("test:base")
     RAMP_WARNING_IDS.forEach((id) => expect(screen.queryByTestId(id)).not.toBeInTheDocument())
+  })
+
+  describe("resetting the shades", () => {
+    const resetButton = () => document.getElementById("primary-reset-shades")
+
+    it("is absent until a shade is set", async () => {
+      respondWithBrand({ primary: { base: "#773E98" } })
+      renderPage()
+
+      await screen.findAllByLabelText("test:base")
+      expect(resetButton()).toBeNull()
+    })
+
+    it("appears once a shade is set", async () => {
+      respondWithBrand({ primary: { base: "#773E98" } })
+      renderPage()
+
+      const dark = (await screen.findAllByLabelText("test:dark"))[0]
+      await userEvent.type(dark, "#111111")
+
+      await waitFor(() => expect(resetButton()).not.toBeNull())
+    })
+
+    it("goes away again once the shades are reset", async () => {
+      respondWithBrand({ primary: { base: "#773E98", dark: "#111111" } })
+      renderPage()
+
+      await waitFor(() => expect(resetButton()).not.toBeNull())
+      await userEvent.click(resetButton())
+
+      await waitFor(() => expect(resetButton()).toBeNull())
+    })
+
+    it("clears every shade the admin set", async () => {
+      respondWithBrand({
+        primary: { base: "#773E98", dark: "#111111", lighter: "#222222" },
+      })
+      renderPage()
+
+      await waitFor(() => expect(resetButton()).not.toBeNull())
+      await userEvent.click(resetButton())
+
+      const dark = screen.getAllByLabelText("test:dark")[0] as HTMLInputElement
+      const lighter = screen.getAllByLabelText("test:lighter")[0] as HTMLInputElement
+      expect(dark.value).toEqual("")
+      expect(lighter.value).toEqual("")
+    })
+
+    // Clearing is what restores derivation, so the save must omit them rather than store blanks.
+    it("leaves the reset shades out of the save, so they derive again", async () => {
+      respondWithBrand({ primary: { base: "#773E98", dark: "#111111" } })
+      acceptSave()
+      renderPage()
+
+      await waitFor(() => expect(resetButton()).not.toBeNull())
+      await userEvent.click(resetButton())
+      await userEvent.click(screen.getByText("test:save"))
+
+      await waitFor(() => expect(savedBody).not.toBeNull())
+      expect(savedBody.brand.primary).toEqual({ base: "#773E98" })
+    })
+
+    it("leaves the other ramp alone", async () => {
+      respondWithBrand({
+        primary: { base: "#773E98", dark: "#111111" },
+        secondary: { base: "#0077DA", dark: "#222222" },
+      })
+      renderPage()
+
+      await waitFor(() => expect(resetButton()).not.toBeNull())
+      await userEvent.click(resetButton())
+
+      expect((screen.getAllByLabelText("test:dark")[1] as HTMLInputElement).value).toEqual(
+        "#222222"
+      )
+    })
   })
 
   it("leaves a derived shade out of the save, so it keeps deriving", async () => {

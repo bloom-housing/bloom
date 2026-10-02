@@ -155,6 +155,9 @@ const BrandingForm = ({
   const applyColor = (field: keyof BrandFormValues, hex: string) =>
     setValue(field, hex, { shouldDirty: true, shouldValidate: true })
 
+  const resetShades = (ramp: RampName) =>
+    RAMP_SHADES.forEach((shade) => applyColor(fieldName(ramp, shade), ""))
+
   const rampSection = (ramp: RampName, label: string) => {
     const base = watch(fieldName(ramp, "base"))
     const derived = derivedShades(base)
@@ -198,6 +201,20 @@ const BrandingForm = ({
             </Grid.Cell>
           ))}
         </Grid.Row>
+        <div className={styles["shades-header"]}>
+          <p className={styles["shades-note"]}>{t("branding.shadesNote")}</p>
+          {RAMP_SHADES.some((shade) => watch(fieldName(ramp, shade))?.trim()) && (
+            <Button
+              type="button"
+              variant="text"
+              size="sm"
+              onClick={() => resetShades(ramp)}
+              id={`${ramp}-reset-shades`}
+            >
+              {t("branding.resetShades")}
+            </Button>
+          )}
+        </div>
         {RAMP_SHADES.map((shade) => (
           <BrandColorWarning
             key={shade}
@@ -238,6 +255,7 @@ const BrandingForm = ({
                   id="headingFontFamily"
                   name="headingFontFamily"
                   label={t("branding.headingFontFamily")}
+                  subNote={t("branding.headingFontFamilyNote")}
                   register={register}
                   error={!!errors?.headingFontFamily}
                   errorMessage={errors?.headingFontFamily?.message}

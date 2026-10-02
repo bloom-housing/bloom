@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import { addTranslation } from "@bloom-housing/ui-components"
 import BrandPreview, { previewVariables } from "../../../src/components/settings/BrandPreview"
 import { brandToFormValues } from "../../../src/lib/branding"
@@ -7,6 +7,9 @@ import { brandToFormValues } from "../../../src/lib/branding"
 // The suite supplies the strings it asserts on, so editing the shipped copy cannot break it.
 addTranslation({
   "branding.preview": "test:preview",
+  "branding.previewHeading": "test:previewHeading",
+  "branding.previewBody": "test:previewBody",
+  "branding.previewSerif": "test:previewSerif",
   "branding.previewNote": "test:previewNote",
   "branding.previewPrimaryAction": "test:primaryAction",
   "branding.previewSecondaryAction": "test:secondaryAction",
@@ -103,5 +106,112 @@ describe("BrandPreview", () => {
     screen
       .getAllByRole("button")
       .forEach((button) => expect(button).toHaveAttribute("type", "button"))
+  })
+})
+
+const GOOGLE_FONT = "https://fonts.googleapis.com/css2?family=Inter&display=swap"
+
+describe("the font preview", () => {
+  const brandFontLinks = () =>
+    Array.from(document.head.querySelectorAll("link[data-brand-preview-font]"))
+
+  afterEach(() => brandFontLinks().forEach((link) => link.remove()))
+
+  describe("previewVariables", () => {
+    it("names the same variables the document writes", () => {
+      const variables = previewVariables(
+        valuesWith({
+          fontUrl: GOOGLE_FONT,
+          fontFamily: "Inter",
+          headingFontFamily: "Playfair Display",
+          serifFontFamily: "Noto Serif",
+        })
+      )
+
+      expect(variables["--seeds-font-sans"]).toEqual(
+        '"Inter", var(--brand-font-fallback-sans, sans-serif)'
+      )
+      expect(variables["--seeds-font-alt-sans"]).toEqual(
+        '"Playfair Display", var(--brand-font-fallback-alt-sans, sans-serif)'
+      )
+      expect(variables["--seeds-font-serif"]).toEqual(
+        '"Noto Serif", var(--brand-font-fallback-serif, serif)'
+      )
+    })
+
+    // Matches the document: headings fall back to the sans family when none is set for them.
+    it("uses the sans family for headings when no heading family is set", () => {
+      const variables = previewVariables(valuesWith({ fontUrl: GOOGLE_FONT, fontFamily: "Inter" }))
+
+      expect(variables["--seeds-font-alt-sans"]).toEqual(
+        '"Inter", var(--brand-font-fallback-alt-sans, sans-serif)'
+      )
+    })
+
+    // Without the stylesheet the sample renders in the fallback and looks like the font applied.
+    it("writes no family without a usable font url", () => {
+      const variables = previewVariables(valuesWith({ fontFamily: "Inter" }))
+
+      expect(variables["--seeds-font-sans"]).toBeUndefined()
+    })
+
+    it("writes no family the brand dto would reject", () => {
+      const variables = previewVariables(
+        valuesWith({ fontUrl: GOOGLE_FONT, fontFamily: "var(--x)" })
+      )
+
+      expect(variables["--seeds-font-sans"]).toBeUndefined()
+    })
+  })
+
+  describe("loading the stylesheet", () => {
+    it("links the font once the url settles", async () => {
+      render(<BrandPreview values={valuesWith({ fontUrl: GOOGLE_FONT })} />)
+
+      await waitFor(() => expect(brandFontLinks()).toHaveLength(1))
+      expect(brandFontLinks()[0].getAttribute("href")).toEqual(GOOGLE_FONT)
+    })
+
+    // The url is typed, so a half-formed or arbitrary host must never be requested.
+    it.each([
+      "https://fonts.example.test/css2?family=Inter",
+      "http://fonts.googleapis.com/css2?family=Inter",
+      "https://fonts.googleapis.com:8080/css2?family=Inter",
+      "https://fonts.goog",
+      "",
+    ])("links nothing for %s", async (fontUrl) => {
+      render(<BrandPreview values={valuesWith({ fontUrl })} />)
+
+      await new Promise((resolve) => setTimeout(resolve, 600))
+      expect(brandFontLinks()).toHaveLength(0)
+    })
+
+    it("removes the link when the preview goes away", async () => {
+      const { unmount } = render(<BrandPreview values={valuesWith({ fontUrl: GOOGLE_FONT })} />)
+      await waitFor(() => expect(brandFontLinks()).toHaveLength(1))
+
+      unmount()
+
+      expect(brandFontLinks()).toHaveLength(0)
+    })
+
+    it("replaces the link rather than stacking them when the url changes", async () => {
+      const { rerender } = render(<BrandPreview values={valuesWith({ fontUrl: GOOGLE_FONT })} />)
+      await waitFor(() => expect(brandFontLinks()).toHaveLength(1))
+
+      const other = "https://fonts.googleapis.com/css2?family=Lato"
+      rerender(<BrandPreview values={valuesWith({ fontUrl: other })} />)
+
+      await waitFor(() => expect(brandFontLinks()[0].getAttribute("href")).toEqual(other))
+      expect(brandFontLinks()).toHaveLength(1)
+    })
+  })
+
+  it("renders a heading, body and serif sample", () => {
+    render(<BrandPreview values={valuesWith({ primaryBase: "#773E98" })} />)
+
+    expect(screen.getByText("test:previewHeading")).toBeInTheDocument()
+    expect(screen.getByText("test:previewBody")).toBeInTheDocument()
+    expect(screen.getByText("test:previewSerif")).toBeInTheDocument()
   })
 })
