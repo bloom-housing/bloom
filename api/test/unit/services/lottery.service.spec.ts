@@ -34,6 +34,7 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { S3Service } from '../../../src/services/s3.service';
 import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 import { TranslationService } from '../../../src/services/translation.service';
+import { FeatureFlagEnum } from '../../../src/enums/feature-flags/feature-flags-enum';
 import { mockApplicationSet } from './application.service.spec';
 import { mockMultiselectQuestion } from './multiselect-question.service.spec';
 
