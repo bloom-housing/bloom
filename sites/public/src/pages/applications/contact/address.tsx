@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Field, FieldGroup, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -30,6 +31,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -49,7 +52,7 @@ const ApplicationAddress = () => {
   )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
+  const { control, register, handleSubmit, setValue, watch, errors, trigger, getValues } = useForm<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
@@ -67,19 +70,38 @@ const ApplicationAddress = () => {
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "primaryApplicantAddress",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "primaryApplicantAddress",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
     if (!verifyAddress) {
-      setFoundAddress({})
-      setVerifyAddress(true)
-      void findValidatedAddress(
-        data.applicant.applicantAddress,
-        setFoundAddress,
-        setNewAddressSelected
-      )
-      window.scrollTo({ top: 0 })
+      const pendingSave = { ...data, applicant: { ...application.applicant, ...data.applicant } }
+      guardSubmit(pendingSave, () => {
+        setFoundAddress({})
+        setVerifyAddress(true)
+        void findValidatedAddress(
+          data.applicant.applicantAddress,
+          setFoundAddress,
+          setNewAddressSelected
+        )
+        window.scrollTo({ top: 0 })
+      })
 
       return // Skip rest of the submit process
     }
@@ -152,7 +174,11 @@ const ApplicationAddress = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form
+        id="applications-address"
+        onSubmit={handleSubmit(onSubmit, onError)}
+        onBlur={onFieldBlur}
+      >
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -177,6 +203,7 @@ const ApplicationAddress = () => {
               : undefined,
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <div style={{ display: verifyAddress ? "none" : "block" }}>

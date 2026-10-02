@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
+import { Accessibility, Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   AuthContext,
   Form,
@@ -19,6 +21,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
@@ -41,20 +45,37 @@ const ApplicationAda = () => {
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "adaHouseholdMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "adaHouseholdMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-    const accessibility = adaFeatureKeys.reduce<Record<string, boolean | null>>((acc, feature) => {
+    const accessibility = adaFeatureKeys.reduce<Omit<Accessibility, "id">>((acc, feature) => {
       acc[feature] = !!data[`app-accessibility-${feature}`]
       return acc
     }, {})
 
-    conductor.currentStep.save({
-      accessibility,
+    const pendingSave = { accessibility } as Partial<Application>
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     onFormError()
@@ -117,7 +138,7 @@ const ApplicationAda = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.ada.title")}
@@ -132,6 +153,7 @@ const ApplicationAda = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>

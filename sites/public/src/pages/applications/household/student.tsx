@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -19,6 +20,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationHouseholdStudent = () => {
   const { profile } = useContext(AuthContext)
@@ -34,16 +37,33 @@ const ApplicationHouseholdStudent = () => {
     defaultValues: { householdStudent: application.householdStudent?.toString() },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "householdStudent",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "householdStudent",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
     const { householdStudent } = data
-    conductor.currentStep.save({
-      householdStudent: householdStudent === "true",
+    const pendingSave = { householdStudent: householdStudent === "true" }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.completeSection(2)
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.completeSection(2)
-    conductor.routeToNextOrReturnUrl()
   }
 
   const onError = () => {
@@ -81,7 +101,7 @@ const ApplicationHouseholdStudent = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={questionText}
@@ -96,6 +116,7 @@ const ApplicationHouseholdStudent = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
