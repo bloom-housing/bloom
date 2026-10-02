@@ -160,17 +160,10 @@ const ListingFormActions = ({
   const approveAndSetStatus = useCallback(
     async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
       try {
-        const result = await listingsService.update({
-          id: listing.id,
+        const result = await listingsService.updateListingStatus({
           body: {
-            ...(listing as unknown as ListingUpdate),
-            // account for type mismatch between ListingMultiSelectQuestionType and IdDto
-            listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
-              (multiselectQuestions) => ({
-                ordinal: multiselectQuestions.ordinal,
-                id: multiselectQuestions.multiselectQuestions?.id,
-              })
-            ),
+            id: listing.id,
+            jurisdictions: listing.jurisdictions,
             status,
           },
         })

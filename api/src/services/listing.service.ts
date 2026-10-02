@@ -69,6 +69,7 @@ import {
   summarizeUnits,
   summarizeByPriorityType,
 } from '../utilities/unit-utilities';
+import { ListingUpdateStatus } from '../dtos/listings/listing-status-update.dto';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -3891,5 +3892,135 @@ export class ListingService implements OnModuleInit {
         lng: Number(mapMarker.listingsBuildingAddress.longitude),
       } as ListingMapMarker;
     });
+  }
+
+  async updateStatus(
+    dto: ListingUpdateStatus,
+    requestingUser: User,
+  ): Promise<Listing> {
+    const storedListing = await this.findOrThrow(dto.id, ListingViews.full);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
+    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        featureFlags: true,
+        listingApprovalPermissions: true,
+        id: true,
+      },
+      where: {
+        id: storedListing.jurisdictions.id,
+      },
+    });
+
+    await this.snapshotCreateService.createListingSnapshot(dto.id);
+
+    const rawListing = await this.prisma.listings.update({
+      data: {
+        contentUpdatedAt: new Date(),
+        lastUpdatedByUser: requestingUser
+          ? {
+              connect: {
+                id: requestingUser.id,
+              },
+            }
+          : undefined,
+        publishedAt: ListingService.resolvePublishedAt(
+          dto.status,
+          storedListing.status,
+          storedListing.publishedAt,
+        ),
+        closedAt:
+          storedListing.status !== ListingsStatusEnum.closed &&
+          dto.status === ListingsStatusEnum.closed
+            ? new Date()
+            : storedListing.closedAt,
+        status: dto.status,
+      },
+      include: includeViews.full,
+      where: {
+        id: dto.id,
+      },
+    });
+
+    const mappedListing = mapTo(Listing, rawListing);
+
+    const listingApprovalPermissions =
+      rawJurisdiction.listingApprovalPermissions;
+
+    if (listingApprovalPermissions?.length > 0)
+      await this.listingApprovalNotify({
+        user: requestingUser,
+        listingInfo: { id: mappedListing.id, name: mappedListing.name },
+        listingFileNumber: mappedListing.listingFileNumber,
+        approvingRoles: listingApprovalPermissions,
+        status: dto.status,
+        previousStatus: storedListing.status,
+        jurisId: rawJurisdiction.id,
+        scheduledPublishAt: storedListing.scheduledPublishAt,
+      });
+    else if (
+      dto.status === ListingsStatusEnum.active &&
+      storedListing.status === ListingsStatusEnum.pending
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      const jurisdiction = await this.prisma.jurisdictions.findUnique({
+        select: { publicUrl: true },
+        where: { id: rawJurisdiction.id },
+      });
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        jurisdiction.publicUrl || '',
+      );
+    }
+
+    const sendPublishNotificationEmail =
+      dto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
+    if (sendPublishNotificationEmail) {
+      const useComingSoon =
+        !!mappedListing.scheduledApplicationOpenAt &&
+        dayjs(mappedListing.scheduledApplicationOpenAt).isAfter(new Date());
+      await this.sendListingPublishNotification(
+        mappedListing,
+        useComingSoon ? 'comingSoon' : 'standard',
+      );
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          useComingSoon ? 'comingSoon' : 'standard',
+        );
+      }
+    }
+    await this.cachePurge(storedListing.status, dto.status, mappedListing.id);
+
+    return mappedListing;
   }
 }
