@@ -11,6 +11,7 @@ export enum SettingsIndexEnum {
   translations,
   content,
   branding,
+  transfer,
 }
 
 type SettingsTabsFeatureFlags = {
@@ -44,6 +45,7 @@ export const getVisibleSettingsTabs = (
     translations: !!enableTranslations && !!userRoles?.isAdmin,
     content: !!enableContent && !!userRoles?.isAdmin,
     branding: !!enableBranding && !!userRoles?.isAdmin,
+    transfer: (!!enableContent || !!enableBranding) && !!userRoles?.isAdmin,
   }
 }
 
@@ -65,6 +67,7 @@ export const getSettingsTabs = (
     translations: enableTranslations,
     content: enableContent,
     branding: enableBranding,
+    transfer: enableTransfer,
   } = getVisibleSettingsTabs(featureFlags, userRoles)
 
   const baseUrl = "/settings"
@@ -75,6 +78,7 @@ export const getSettingsTabs = (
   if (enableTranslations) enabledTabs.push(SettingsIndexEnum.translations)
   if (enableContent) enabledTabs.push(SettingsIndexEnum.content)
   if (enableBranding) enabledTabs.push(SettingsIndexEnum.branding)
+  if (enableTransfer) enabledTabs.push(SettingsIndexEnum.transfer)
 
   return (
     <Tabs
@@ -138,6 +142,15 @@ export const getSettingsTabs = (
             active={selectedIndex === SettingsIndexEnum.branding}
           >
             <span>{t("settings.branding")}</span>
+          </Tabs.Tab>
+        )}
+        {enableTransfer && (
+          <Tabs.Tab
+            href={`${baseUrl}/transfer`}
+            data-testid="transfer-tab"
+            active={selectedIndex === SettingsIndexEnum.transfer}
+          >
+            <span>{t("settings.transfer")}</span>
           </Tabs.Tab>
         )}
       </Tabs.TabList>

@@ -3979,6 +3979,84 @@ export class JurisdictionContentService {
   }
 }
 
+export class ContentTransferService {
+  /**
+   * Export a jurisdiction's translations, content and branding
+   */
+  exportJurisdiction(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ContentTransferFile> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/jurisdictions/{jurisdictionId}/export"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Export the global translation strings
+   */
+  exportGlobal(options: IRequestOptions = {}): Promise<ContentTransferFile> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/global/export"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Show what importing a file would change, without writing
+   */
+  previewImport(
+    params: {
+      /** requestBody */
+      body?: ContentTransferImport
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ContentTransferPreview> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/import/preview"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Replace everything a file covers with its contents
+   */
+  applyImport(
+    params: {
+      /** requestBody */
+      body?: ContentTransferImport
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/contentTransfer/import"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 /** SuccessDTO */
 export interface SuccessDTO {
   /**  */
@@ -11416,6 +11494,177 @@ export interface JurisdictionContentUpdate {
   lastUpdatedAt?: Date
 }
 
+/** ContentTransferTranslation */
+export interface ContentTransferTranslation {
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  origin: TranslationOrigin
+
+  /**  */
+  sourceHash: string
+}
+
+/** ContentTransferContent */
+export interface ContentTransferContent {
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  footer?: object
+
+  /**  */
+  faq?: object
+
+  /**  */
+  resources?: object
+
+  /**  */
+  disclaimers?: object
+
+  /**  */
+  contact?: object
+}
+
+/** ContentTransferBrand */
+export interface ContentTransferBrand {
+  /**  */
+  brand: object
+
+  /**  */
+  logoFileId: string
+
+  /**  */
+  faviconFileId: string
+}
+
+/** ContentTransferAsset */
+export interface ContentTransferAsset {
+  /**  */
+  fileId: string
+
+  /**  */
+  contentType: string
+
+  /** The file, base64 encoded */
+  data: string
+}
+
+/** ContentTransferFile */
+export interface ContentTransferFile {
+  /**  */
+  format: string
+
+  /**  */
+  version: number
+
+  /**  */
+  exportedAt: Date
+
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  translations: ContentTransferTranslation[]
+
+  /**  */
+  content?: ContentTransferContent[]
+
+  /**  */
+  brand?: ContentTransferBrand
+
+  /**  */
+  assets: ContentTransferAsset[]
+}
+
+/** ContentTransferImport */
+export interface ContentTransferImport {
+  /**  */
+  format: string
+
+  /**  */
+  version: number
+
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  translations: ContentTransferTranslation[]
+
+  /**  */
+  content?: ContentTransferContent[]
+
+  /**  */
+  brand?: ContentTransferBrand
+
+  /**  */
+  fileIds?: object
+}
+
+/** ContentTransferTranslationChanges */
+export interface ContentTransferTranslationChanges {
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  added: number
+
+  /**  */
+  changed: number
+
+  /**  */
+  removed: number
+}
+
+/** ContentTransferContentChange */
+export interface ContentTransferContentChange {
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  change: ContentTransferChange
+}
+
+/** ContentTransferBrandChanges */
+export interface ContentTransferBrandChanges {
+  /**  */
+  fields: string[]
+
+  /**  */
+  logo: ContentTransferChange
+
+  /**  */
+  favicon: ContentTransferChange
+}
+
+/** ContentTransferPreview */
+export interface ContentTransferPreview {
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  translations: ContentTransferTranslationChanges[]
+
+  /**  */
+  content: ContentTransferContentChange[]
+
+  /**  */
+  brand?: ContentTransferBrandChanges
+}
+
 export enum FilterAvailabilityEnum {
   "closedWaitlist" = "closedWaitlist",
   "comingSoon" = "comingSoon",
@@ -12031,4 +12280,10 @@ export enum SiteEnum {
 export enum TranslationOrigin {
   "machine" = "machine",
   "human" = "human",
+}
+
+export enum ContentTransferChange {
+  "added" = "added",
+  "changed" = "changed",
+  "removed" = "removed",
 }

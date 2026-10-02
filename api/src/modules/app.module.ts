@@ -30,6 +30,7 @@ import { UserModule } from './user.module';
 import { BackgroundJobsModule } from './background-jobs.module';
 import { TranslationModule } from './translation.module';
 import { JurisdictionContentModule } from './jurisdiction-content.module';
+import { ContentTransferModule } from './content-transfer.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { JurisdictionContentModule } from './jurisdiction-content.module';
     ExternalListingModule,
     TranslationModule,
     JurisdictionContentModule,
+    ContentTransferModule,
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -100,6 +102,7 @@ import { JurisdictionContentModule } from './jurisdiction-content.module';
     ExternalListingModule,
     TranslationModule,
     JurisdictionContentModule,
+    ContentTransferModule,
   ],
 })
 export class AppModule {}

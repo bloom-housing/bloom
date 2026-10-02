@@ -82,7 +82,7 @@ selectViews[JurisdictionViews.full] = {
   whatToExpectUnderConstruction: true,
 };
 
-const storableBrand = (
+export const storableBrand = (
   brand?: BrandDTO | null,
 ): Prisma.InputJsonObject | typeof Prisma.DbNull | undefined => {
   if (brand === null) return Prisma.DbNull;
@@ -137,7 +137,24 @@ const brandAssetConnect = (assetId?: string) =>
     ? { connect: { id: assetId } }
     : { disconnect: true };
 
-const brandAssetWrite = (fileId: string | null | undefined, label: string) => {
+export const assertFileIdsAreUsable = (
+  fileIds: (string | null | undefined)[],
+): void => {
+  const unusable = fileIds.filter(
+    (fileId): fileId is string =>
+      !!fileId?.trim() && !isUsableFileId(fileId.trim()),
+  );
+  if (unusable.length) {
+    throw new BadRequestException(
+      `file ids ${unusable.join(', ')} are not usable storage keys`,
+    );
+  }
+};
+
+export const brandAssetWrite = (
+  fileId: string | null | undefined,
+  label: string,
+) => {
   if (fileId === undefined) return undefined;
 
   const key = fileId?.trim();
@@ -281,7 +298,7 @@ export class JurisdictionService {
   ): Promise<Jurisdiction> {
     await this.findOrThrow(jurisdictionId);
 
-    this.assertFileIdsAreUsable([
+    assertFileIdsAreUsable([
       incomingData.logoFileId,
       incomingData.faviconFileId,
     ]);
@@ -300,18 +317,6 @@ export class JurisdictionService {
       include: view,
     });
     return mapTo(Jurisdiction, withResponseBrand(rawResult));
-  }
-
-  private assertFileIdsAreUsable(fileIds: (string | null | undefined)[]): void {
-    const unusable = fileIds.filter(
-      (fileId): fileId is string =>
-        !!fileId?.trim() && !isUsableFileId(fileId.trim()),
-    );
-    if (unusable.length) {
-      throw new BadRequestException(
-        `file ids ${unusable.join(', ')} are not usable storage keys`,
-      );
-    }
   }
 
   private async assertAssetsExist(ids: (string | undefined)[]): Promise<void> {

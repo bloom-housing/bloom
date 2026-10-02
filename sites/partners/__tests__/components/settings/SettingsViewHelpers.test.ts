@@ -26,6 +26,7 @@ describe("getVisibleSettingsTabs", () => {
       "agencies",
       "translations",
       "branding",
+      "transfer",
     ])
   })
 
@@ -77,9 +78,26 @@ describe("getVisibleSettingsTabs", () => {
   })
 })
 
+describe("transfer tab", () => {
+  it("shows export and import to an admin when either the content or the branding flag is on", () => {
+    const flags = { enablePreferences: false, enableProperties: false }
+    expect(
+      getVisibleSettingsTabs({ ...flags, enableContent: true }, { isAdmin: true }).transfer
+    ).toBe(true)
+    expect(
+      getVisibleSettingsTabs({ ...flags, enableBranding: true }, { isAdmin: true }).transfer
+    ).toBe(true)
+    expect(getVisibleSettingsTabs(flags, { isAdmin: true }).transfer).toBe(false)
+  })
+
+  it("hides export and import from a jurisdictional admin", () => {
+    expect(visibleFor({ isJurisdictionalAdmin: true })).not.toContain("transfer")
+  })
+})
+
 describe("getEnabledSettingsTabCount", () => {
   it("counts only the tabs the role can open", () => {
-    expect(getEnabledSettingsTabCount(allFlagsOn, { isAdmin: true })).toBe(5)
+    expect(getEnabledSettingsTabCount(allFlagsOn, { isAdmin: true })).toBe(6)
     expect(getEnabledSettingsTabCount(allFlagsOn, { isLimitedJurisdictionalAdmin: true })).toBe(1)
   })
 
