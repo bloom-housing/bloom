@@ -70,6 +70,13 @@ const ListingsList = (props: ListingsListProps) => {
                     ? t("listingFilters.noMatchingListingsTitle")
                     : t("t.noVisibleListings")}
                 </Heading>
+                {t("t.tryChangingArea")}
+              </>
+            ) : (
+              <>
+                <Heading priority={2} size={"xl"} className={"seeds-m-be-header"}>
+                  {t("t.noMatchingListings")}
+                </Heading>
                 {enableFilterByStatus ? (
                   <>
                     <p className={styles["listings-subheader"]}>
@@ -87,15 +94,8 @@ const ListingsList = (props: ListingsListProps) => {
                     </Button>
                   </>
                 ) : (
-                  t("t.tryChangingArea")
+                  <div>{t("t.tryRemovingFilters")}</div>
                 )}
-              </>
-            ) : (
-              <>
-                <Heading priority={2} size={"xl"} className={"seeds-m-be-header"}>
-                  {t("t.noMatchingListings")}
-                </Heading>
-                <div>{t("t.tryRemovingFilters")}</div>
               </>
             )}
           </>
