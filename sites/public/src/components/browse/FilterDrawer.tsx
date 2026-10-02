@@ -13,6 +13,7 @@ import {
   ParkingTypeEnum,
   UnitAccessibilityPriorityTypeEnum,
   IdDTO,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
@@ -54,6 +55,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     setError,
     clearErrors,
     reset,
+    watch,
     formState: { errors },
   } = useForm({ mode: "onBlur" })
 
@@ -97,6 +99,22 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableFilterByCounty
   )
 
+  const enableFilterByStatus = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByStatus
+  )
+
+  const statusFilterOption = watch(
+    ListingFilterKeys.status,
+    props.filterState?.[ListingFilterKeys.status] ?? ListingsStatusEnum.active
+  )
+
+  const onSubmit = (data: FilterData) => {
+    if (data[ListingFilterKeys.status] === ListingsStatusEnum.closed) {
+      delete data[ListingFilterKeys.availabilities]
+    }
+    props.onSubmit(data)
+  }
+
   // When unit groups are off, closed waitlist has no backend signal, so hide it
   const availabilityDisplayValues = getAvailabilityValues(enableUnitGroups).filter(
     (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
@@ -119,7 +137,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
       <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
       <Drawer.Content id="drawer-content">
         <div role="document">
-          <Form method="get" onSubmit={handleSubmit(props.onSubmit)} id="filter">
+          <Form method="get" onSubmit={handleSubmit(onSubmit)} id="filter">
             <SearchSection register={register} nameState={props.filterState?.name} />
             {enableIsVerified && (
               <CheckboxGroup
@@ -135,6 +153,23 @@ const FilterDrawer = (props: FilterDrawerProps) => {
                 customColumnNumber={1}
               />
             )}
+            {enableFilterByStatus && (
+              <RadioGroup
+                groupLabel={t("listingFilters.status")}
+                name={ListingFilterKeys.status}
+                fields={[ListingsStatusEnum.active, ListingsStatusEnum.closed].map((status) => {
+                  return {
+                    key: `${ListingFilterKeys.status}.${status}`,
+                    value: status,
+                    label: t(`listingFilters.statusOptions.${status}`),
+                    defaultChecked:
+                      (props.filterState?.[ListingFilterKeys.status] ??
+                        ListingsStatusEnum.active) === status,
+                  }
+                })}
+                register={register}
+              />
+            )}
             <CheckboxGroup
               groupLabel={t("t.availability")}
               fields={buildDefaultFilterFields(
@@ -143,6 +178,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
                 availabilityKeys,
                 props.filterState
               )}
+              disabled={statusFilterOption === ListingsStatusEnum.closed}
               register={register}
             />
             {enableHomeType && (
