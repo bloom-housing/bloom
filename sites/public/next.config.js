@@ -50,7 +50,7 @@ module.exports = withBundleAnalyzer({
     idleTimeout: process.env.IDLE_TIMEOUT,
     jurisdictionName: process.env.JURISDICTION_NAME,
     timeZone: process.env.TIME_ZONE || "America/Los_Angeles",
-    cacheRevalidate: process.env.CACHE_REVALIDATE ? process.env.CACHE_REVALIDATE : "3600",
+    cacheRevalidate: process.env.CACHE_REVALIDATE ? process.env.CACHE_REVALIDATE : "30",
     listingCacheRevalidate: process.env.LISTING_CACHE_REVALIDATE
       ? process.env.LISTING_CACHE_REVALIDATE
       : "30",

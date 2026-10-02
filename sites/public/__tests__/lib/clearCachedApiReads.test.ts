@@ -37,6 +37,24 @@ describe("clearCachedApiReads", () => {
     expect(mockedGet).toHaveBeenCalledTimes(2)
   })
 
+  // A read sent before an admin's save can answer after the clear that save triggers.
+  it.each([
+    ["public overrides", (h: Hooks) => h.fetchPublicOverrides("en"), { en: { "a.key": "Old" } }],
+    ["the jurisdiction", (h: Hooks) => h.fetchJurisdictionByName(), { id: "jurisdiction-id" }],
+  ])("does not cache %s read before a clear that answers after it", async (_label, read, data) => {
+    let answer: (value: unknown) => void = () => undefined
+    mockedGet.mockReturnValueOnce(new Promise((resolve) => (answer = resolve)))
+    mockedGet.mockResolvedValue({ data })
+
+    const inFlight = read(hooks)
+    hooks.clearCachedApiReads()
+    answer({ data })
+    await inFlight
+
+    await read(hooks)
+    expect(mockedGet).toHaveBeenCalledTimes(2)
+  })
+
   it("clears every language, not only the one last read", async () => {
     mockedGet.mockResolvedValue({ data: { en: { "a.key": "First" } } })
     await hooks.fetchPublicOverrides("en")
@@ -154,7 +172,7 @@ describe("clearCachedApiReads", () => {
 
   // This number decides how long a revalidation that never arrived stays visible, and every other
   // spec sets it explicitly, so the fallback is worth pinning.
-  it("serves a cached read for an hour when cacheRevalidate is unset", async () => {
+  it("serves a cached read for 30 seconds when cacheRevalidate is unset", async () => {
     delete process.env.cacheRevalidate
     mockedGet.mockResolvedValue({ data: { en: { "a.key": "First" } } })
     const readAt = Date.now()
@@ -162,11 +180,11 @@ describe("clearCachedApiReads", () => {
 
     await hooks.fetchPublicOverrides("en")
 
-    clock.mockReturnValue(readAt + 59 * 60 * 1000)
+    clock.mockReturnValue(readAt + 29 * 1000)
     await hooks.fetchPublicOverrides("en")
     expect(mockedGet).toHaveBeenCalledTimes(1)
 
-    clock.mockReturnValue(readAt + 61 * 60 * 1000)
+    clock.mockReturnValue(readAt + 31 * 1000)
     await hooks.fetchPublicOverrides("en")
     expect(mockedGet).toHaveBeenCalledTimes(2)
 

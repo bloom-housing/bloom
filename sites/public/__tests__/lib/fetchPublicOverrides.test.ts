@@ -111,11 +111,31 @@ describe("fetchPublicOverrides", () => {
   })
 
   // The site has to build on its bundled strings rather than fail the page.
-  it("returns null when the request fails, which Next can serialize", async () => {
+  it("returns null when the request fails during the build, which Next can serialize", async () => {
     jest.spyOn(console, "log").mockImplementation()
+    process.env.NEXT_PHASE = "phase-production-build"
     mockedGet.mockRejectedValue(new Error("api down"))
 
     expect(await fetchPublicOverrides("en")).toBeNull()
+    delete process.env.NEXT_PHASE
+  })
+
+  it("returns null when a visitor's read fails", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    mockedGet.mockRejectedValue(new Error("api down"))
+
+    expect(
+      await fetchPublicOverrides("en", { headers: {}, socket: { remoteAddress: "198.51.100.4" } })
+    ).toBeNull()
+  })
+
+  // Next keeps the page it already has when a regeneration throws, rather than replacing an admin's
+  // edit with the bundled strings.
+  it("throws when a rebuild's read fails", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    mockedGet.mockRejectedValue(new Error("api down"))
+
+    await expect(fetchPublicOverrides("en")).rejects.toThrow("api down")
   })
 
   // A cached result would survive an ISR regeneration and hide an edit made since the last one.

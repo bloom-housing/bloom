@@ -52,6 +52,18 @@ describe("maskAxiosResponse", () => {
     expect(masked.config.data).toEqual({ email: "****@example.org", password: "*******" })
   })
 
+  it("drops the request, whose raw headers include the passkey", () => {
+    const masked = maskAxiosResponse({
+      status: 400,
+      config: { headers: { passkey: "secret" } },
+      request: { _header: "GET /user HTTP/1.1\r\npasskey: secret\r\n" },
+    })
+
+    expect(masked.request).toBeUndefined()
+    expect(JSON.stringify(masked)).not.toContain("secret")
+    expect(masked.status).toEqual(400)
+  })
+
   it("returns a response with no config unchanged", () => {
     const response = { status: 500 }
     expect(maskAxiosResponse(response)).toBe(response)

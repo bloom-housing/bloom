@@ -331,6 +331,7 @@ export const API_TIMEOUT_MS = 5000
   would regenerate the same content. globalThis is shared across every entry in the process.
 */
 type ApiReadCaches = {
+  generation: number
   jurisdiction: Jurisdiction | null
   jurisdictionUntil: number
   jurisdictionPhase?: string
@@ -345,6 +346,7 @@ type ApiReadCaches = {
 const CACHE_KEY = "__bloomPublicApiReadCaches"
 
 const caches: ApiReadCaches = ((globalThis as Record<string, unknown>)[CACHE_KEY] ??= {
+  generation: 0,
   jurisdiction: null,
   jurisdictionUntil: 0,
   jurisdictionPhase: undefined,
@@ -380,6 +382,7 @@ export async function fetchJurisdictionByName(req?: any) {
     const jurisdictionName = process.env.jurisdictionName
 
     const headers = sharedReadHeaders(req)
+    const generation = caches.generation
     const jurisdictionRes = await axios.get(
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
@@ -387,6 +390,7 @@ export async function fetchJurisdictionByName(req?: any) {
         timeout: API_TIMEOUT_MS,
       }
     )
+    if (generation !== caches.generation) return jurisdictionRes?.data
     caches.jurisdiction = jurisdictionRes?.data
     caches.jurisdictionUntil = Date.now() + cacheWindowMs(phase)
     caches.jurisdictionPhase = phase
@@ -410,6 +414,7 @@ const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contac
   Drops cached API reads, so the next one goes to the API. Every cache is cleared together.
 */
 export const clearCachedApiReads = (): void => {
+  caches.generation = (caches.generation ?? 0) + 1
   caches.jurisdiction = null
   caches.jurisdictionUntil = 0
   caches.jurisdictionPhase = undefined
@@ -422,7 +427,7 @@ export const clearCachedApiReads = (): void => {
 const cacheWindowMs = (phase?: string) => {
   if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
   const revalidate = Number(process.env.cacheRevalidate)
-  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 3600000
+  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 30000
 }
 
 const cachedRead = async <T>(
@@ -437,8 +442,9 @@ const cachedRead = async <T>(
     return cached.value
   }
 
+  const generation = caches.generation
   const value = await read()
-  if (isUsable(value)) {
+  if (isUsable(value) && generation === caches.generation) {
     cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
   }
   return value
@@ -461,6 +467,7 @@ const fetchJurisdictionScoped = async <T>(
   }
 
   const headers = sharedReadHeaders(req)
+  const generation = caches.generation
 
   try {
     const response = await axios.get(`${process.env.backendApiBase}${path}`, {
@@ -469,12 +476,14 @@ const fetchJurisdictionScoped = async <T>(
       timeout: API_TIMEOUT_MS,
     })
     const value = (response?.data ?? null) as T | null
-    if (value) {
+    if (value && generation === caches.generation) {
       cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
     }
     return value
   } catch (error) {
     console.log(`error fetching ${label} = `, error.message)
+    // A failed rebuild keeps the page Next already has, rather than replacing it with bundled copy.
+    if (!req && phase !== "phase-production-build") throw error
     return null
   }
 }

@@ -111,6 +111,7 @@ export const getStaticProps: GetStaticProps = async (context: {
     return { notFound: true }
   }
   const shared = fetchSharedPageProps(context.locale)
+  shared.catch(() => undefined)
 
   if (response.data.externalURL) {
     try {

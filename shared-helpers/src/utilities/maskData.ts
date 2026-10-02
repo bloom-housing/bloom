@@ -4,9 +4,12 @@ export const maskAxiosResponse = (response: any) => {
   if (!config) return response
 
   const configData = config.data ? JSON.parse(config.data) : undefined
+  // request is Node's ClientRequest, whose _header has every outgoing header, the passkey included.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { request, ...rest } = response
 
   return {
-    ...response,
+    ...rest,
     config: {
       ...config,
       ...(configData ? { data: maskData(configData) } : {}),
