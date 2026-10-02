@@ -36,19 +36,16 @@ import {
   valueAt,
 } from "../../lib/contentEditor"
 import { ContentConflictDialog } from "../../components/settings/ContentConflictDialog"
-import { ContentFieldCard } from "../../components/settings/ContentFieldCard"
+import { ContentFieldCard, ContentImageCard } from "../../components/settings/ContentFieldCard"
 import { ContentItemDrawer, ItemField } from "../../components/settings/ContentItemDrawer"
 import { ContentList } from "../../components/settings/ContentList"
 import { ContentWarningDialog } from "../../components/settings/ContentWarningDialog"
 import { TextEditorContent } from "../../components/shared/TextEditor"
 import styles from "./content.module.scss"
 
-type FieldConfig = {
-  path: string
-  labelKey: string
-  type: "text" | "html"
-  noteKey?: string
-}
+type FieldConfig =
+  | { path: string; labelKey: string; type: "text" | "html"; noteKey?: string }
+  | { path: string; labelKey: string; type: "image"; fileIdPath: string }
 
 type ListConfig = {
   listPath: string
@@ -175,7 +172,12 @@ const DOCUMENTS: DocumentConfig[] = [
       addLabelKey: "content.addTextSection",
     },
     fields: [
-      { path: "footer.logo.logoSrc", labelKey: "content.logoSrc", type: "text" },
+      {
+        path: "footer.logo.logoSrc",
+        fileIdPath: "footer.logo.logoFileId",
+        labelKey: "content.logoSrc",
+        type: "image",
+      },
       { path: "footer.logo.logoAltText", labelKey: "content.logoAlt", type: "text" },
       {
         path: "footer.logo.logoUrl",
@@ -262,6 +264,7 @@ const SettingsContent = () => {
   const [conflict, setConflict] = useState(false)
   const [resetCount, setResetCount] = useState(0)
   const [hidingPaths, setHidingPaths] = useState<string[]>([])
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({})
 
   const selectedJurisdiction = jurisdictions.find(
     (jurisdiction) => jurisdiction.id === (jurisdictionId || jurisdictions[0]?.id)
@@ -354,6 +357,7 @@ const SettingsContent = () => {
           language: activeLanguage,
           body: buildUpdate(toSave, languageRow?.updatedAt),
         })
+        await mutate(cacheKey)
         setConflict(false)
         setDraftState(null)
         setResetCount((count) => count + 1)
@@ -365,7 +369,6 @@ const SettingsContent = () => {
           addToast(t("errors.alert.badRequest"), { variant: "alert" })
           console.log(error)
         }
-      } finally {
         await mutate(cacheKey)
       }
     })
@@ -461,7 +464,11 @@ const SettingsContent = () => {
             </Button>
             <Button
               variant="primary"
-              disabled={!hasUnsavedChanges || loading}
+              disabled={
+                !hasUnsavedChanges ||
+                loading ||
+                Object.values(uploadProgress).some((progress) => progress > 0)
+              }
               loadingMessage={isSaving && t("t.loading")}
               onClick={handleSave}
             >
@@ -480,23 +487,45 @@ const SettingsContent = () => {
 
         {!loading &&
           !loadError &&
-          activeFields.map((field) => (
-            <ContentFieldCard
-              key={field.path}
-              className={styles["field-card"]}
-              path={field.path}
-              labelKey={field.labelKey}
-              noteKey={field.noteKey}
-              type={field.type}
-              draft={draft}
-              englishDraft={englishDraft}
-              isEnglish={isEnglish}
-              stale={isStale(languageRow?.staleFields, field.path)}
-              direction={direction}
-              resetKey={`${scope}|${resetCount}`}
-              onChange={(next) => setDraft(() => next)}
-            />
-          ))}
+          activeFields.map((field) =>
+            field.type === "image" ? (
+              <ContentImageCard
+                key={field.path}
+                className={styles["field-card"]}
+                path={field.path}
+                fileIdPath={field.fileIdPath}
+                labelKey={field.labelKey}
+                draft={draft}
+                englishDraft={englishDraft}
+                isEnglish={isEnglish}
+                stale={
+                  isStale(languageRow?.staleFields, field.path) ||
+                  isStale(languageRow?.staleFields, field.fileIdPath)
+                }
+                progress={uploadProgress[field.fileIdPath] ?? 0}
+                onUpdate={setDraft}
+                onProgress={(progress) =>
+                  setUploadProgress((current) => ({ ...current, [field.fileIdPath]: progress }))
+                }
+              />
+            ) : (
+              <ContentFieldCard
+                key={field.path}
+                className={styles["field-card"]}
+                path={field.path}
+                labelKey={field.labelKey}
+                noteKey={field.noteKey}
+                type={field.type}
+                draft={draft}
+                englishDraft={englishDraft}
+                isEnglish={isEnglish}
+                stale={isStale(languageRow?.staleFields, field.path)}
+                direction={direction}
+                resetKey={`${scope}|${resetCount}`}
+                onChange={(next) => setDraft(() => next)}
+              />
+            )
+          )}
         {!loading &&
           !loadError &&
           activeDocument?.textSections &&

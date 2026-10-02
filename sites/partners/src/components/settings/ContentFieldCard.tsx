@@ -1,5 +1,5 @@
 import React from "react"
-import { Field, t } from "@bloom-housing/ui-components"
+import { Dropzone, Field, t } from "@bloom-housing/ui-components"
 import { Button, Card, FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { useEditor } from "@tiptap/react"
 import {
@@ -11,6 +11,7 @@ import {
   valueAt,
 } from "../../lib/contentEditor"
 import { EditorExtensions, TextEditor, TextEditorContent } from "../shared/TextEditor"
+import { fileUploader, FileUploadData } from "../../lib/helpers"
 import styles from "./ContentFieldCard.module.scss"
 
 export type ContentFieldType = "text" | "html"
@@ -152,6 +153,106 @@ export const ContentFieldCard = ({
             </Button>
           </div>
         )}
+      </Card.Section>
+    </Card>
+  )
+}
+
+type ContentImageCardProps = {
+  /** The image address, e.g. `footer.logo.logoSrc`. */
+  path: string
+  /** The uploaded file's storage key, e.g. `footer.logo.logoFileId`. */
+  fileIdPath: string
+  labelKey: string
+  draft: ContentDraft
+  englishDraft: ContentDraft
+  isEnglish: boolean
+  stale: boolean
+  className?: string
+  progress: number
+  onUpdate: (apply: (current: ContentDraft) => ContentDraft) => void
+  onProgress: (progress: number) => void
+}
+
+export const ContentImageCard = ({
+  path,
+  fileIdPath,
+  labelKey,
+  draft,
+  englishDraft,
+  isEnglish,
+  stale,
+  className,
+  progress,
+  onUpdate,
+  onProgress,
+}: ContentImageCardProps) => {
+  const value = valueAt(draft, path)
+  const englishValue = valueAt(englishDraft, path)
+  const src = typeof value === "string" && value ? value : undefined
+
+  const upload = async (file: File) => {
+    await fileUploader({
+      file,
+      setFileUploadData: ((data: FileUploadData) => {
+        if (!data.fileId) return
+        onUpdate((current) =>
+          setValueAt(setValueAt(current, fileIdPath, data.fileId), path, data.url)
+        )
+      }) as never,
+      setProgressValue: ((next: number) => onProgress(next === 100 ? 0 : next)) as never,
+      contentType: file.type,
+      contentDisposition: "inline",
+    })
+  }
+
+  return (
+    <Card className={className}>
+      <Card.Section>
+        <div className={styles["field-header"]}>
+          {!src && (
+            <Tag variant="secondary">
+              {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
+            </Tag>
+          )}
+          {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
+        </div>
+
+        {!isEnglish && (
+          <div className={styles["english-source"]}>
+            <FieldValue label={t("content.englishSource")}>
+              {typeof englishValue === "string" && englishValue ? (
+                <img className={styles["image-preview"]} src={englishValue} alt={t(labelKey)} />
+              ) : (
+                <span>{t("content.notSet")}</span>
+              )}
+            </FieldValue>
+          </div>
+        )}
+
+        <div className={styles["field-editor"]}>
+          <Dropzone
+            id={fileIdPath}
+            label={t(labelKey)}
+            uploader={upload}
+            accept="image/png,image/svg+xml,image/webp"
+            progress={progress}
+          />
+          {src && (
+            <>
+              <img className={styles["image-preview"]} src={src} alt={t(labelKey)} />
+              <Button
+                variant="text"
+                size="sm"
+                onClick={() =>
+                  onUpdate((current) => clearValueAt(clearValueAt(current, fileIdPath), path))
+                }
+              >
+                {isEnglish ? t("content.clear") : t("content.revertToEnglish")}
+              </Button>
+            </>
+          )}
+        </div>
       </Card.Section>
     </Card>
   )
