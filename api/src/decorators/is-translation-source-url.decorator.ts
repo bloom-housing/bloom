@@ -6,6 +6,8 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
+export const SAFE_SOURCE_PATH = /^(?!.*\.\.)[\w][\w.\-/]*$/;
+
 // Hosts the translation backfill may read override files from.
 export const ALLOWED_TRANSLATION_SOURCE_HOSTS = ['raw.githubusercontent.com'];
 

@@ -8,11 +8,15 @@ import { EmailModule } from './email.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
+import { JurisdictionModule } from './jurisdiction.module';
+import { S3Module } from './s3.module';
 
 @Module({
   imports: [
     AmiChartModule,
     HttpModule,
+    JurisdictionModule,
+    S3Module,
     EmailModule,
     FeatureFlagModule,
     MultiselectQuestionModule,
