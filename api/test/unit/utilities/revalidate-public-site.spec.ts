@@ -24,7 +24,8 @@ describe('revalidatePublicSite', () => {
 
   beforeEach(() => {
     resolve4.mockReset();
-    process.env.API_PASS_KEY = 'test-passkey';
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://localhost:3000';
     delete process.env.PUBLIC_SITE_DISCOVERY_NAME;
     warn = jest
       .spyOn(Logger.prototype, 'warn')
@@ -33,40 +34,52 @@ describe('revalidatePublicSite', () => {
 
   afterEach(() => {
     warn.mockRestore();
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+    delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
   });
 
-  it('posts to the jurisdiction url when no discovery name is set', async () => {
+  it('posts the secret to the configured url when no discovery name is set', async () => {
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, 'http://localhost:3000');
+    await revalidatePublicSite(http);
 
     expect(http.post).toHaveBeenCalledTimes(1);
     expect(http.post).toHaveBeenCalledWith(
       'http://localhost:3000/api/revalidate',
       {},
-      expect.objectContaining({ headers: { passkey: 'test-passkey' } }),
+      expect.objectContaining({
+        headers: { 'revalidate-secret': 'test-secret' },
+      }),
     );
     expect(resolve4).not.toHaveBeenCalled();
   });
 
-  it('drops a trailing slash from the jurisdiction url', async () => {
+  it('posts once to each distinct configured url, without a trailing slash', async () => {
+    process.env.PUBLIC_SITE_REVALIDATE_URLS =
+      'https://one.example.org/, https://two.example.org,https://one.example.org';
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, 'https://housing.example.org/');
+    await revalidatePublicSite(http);
 
+    expect(http.post).toHaveBeenCalledTimes(2);
     expect(http.post).toHaveBeenCalledWith(
-      'https://housing.example.org/api/revalidate',
+      'https://one.example.org/api/revalidate',
+      {},
+      expect.anything(),
+    );
+    expect(http.post).toHaveBeenCalledWith(
+      'https://two.example.org/api/revalidate',
       {},
       expect.anything(),
     );
   });
 
-  it('posts to every address behind the discovery name', async () => {
+  it('posts to every address behind the discovery name, ignoring the configured urls', async () => {
     process.env.PUBLIC_SITE_DISCOVERY_NAME = 'bloom-site-public.bloom.local';
     resolve4.mockResolvedValue(['10.0.1.7', '10.0.2.9']);
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, 'https://housing.example.org');
+    await revalidatePublicSite(http);
 
     expect(resolve4).toHaveBeenCalledWith('bloom-site-public.bloom.local');
     expect(http.post).toHaveBeenCalledTimes(2);
@@ -91,9 +104,7 @@ describe('revalidatePublicSite', () => {
       .mockReturnValueOnce(of({ data: {} }));
     const http = { post } as unknown as HttpService;
 
-    await expect(
-      revalidatePublicSite(http, 'https://housing.example.org'),
-    ).resolves.toBeUndefined();
+    await expect(revalidatePublicSite(http)).resolves.toBeUndefined();
 
     expect(post).toHaveBeenCalledTimes(2);
   });
@@ -103,7 +114,7 @@ describe('revalidatePublicSite', () => {
   it('gives the post a timeout', async () => {
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, 'http://localhost:3000');
+    await revalidatePublicSite(http);
 
     expect(http.post).toHaveBeenCalledWith(
       'http://localhost:3000/api/revalidate',
@@ -118,7 +129,7 @@ describe('revalidatePublicSite', () => {
     resolve4.mockResolvedValue([]);
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, 'https://housing.example.org');
+    await revalidatePublicSite(http);
 
     expect(http.post).not.toHaveBeenCalled();
   });
@@ -128,11 +139,12 @@ describe('revalidatePublicSite', () => {
     ['a scheme that is not http', 'file:///etc/passwd'],
     ['credentials in the url', 'http://user:pass@housing.example.org'],
   ])(
-    'refuses to send the passkey to a url with %s',
-    async (_label, publicUrl) => {
+    'refuses to send the secret to a configured url with %s',
+    async (_label, url) => {
+      process.env.PUBLIC_SITE_REVALIDATE_URLS = url;
       const http = httpSucceeding();
 
-      await revalidatePublicSite(http, publicUrl);
+      await revalidatePublicSite(http);
 
       expect(http.post).not.toHaveBeenCalled();
     },
@@ -143,18 +155,17 @@ describe('revalidatePublicSite', () => {
     resolve4.mockRejectedValue(new Error('queryA ENOTFOUND'));
     const http = httpSucceeding();
 
-    await expect(
-      revalidatePublicSite(http, 'https://housing.example.org'),
-    ).resolves.toBeUndefined();
+    await expect(revalidatePublicSite(http)).resolves.toBeUndefined();
 
     expect(http.post).not.toHaveBeenCalled();
   });
 
-  it('does nothing when the jurisdiction has no public url', async () => {
+  it('does nothing when no public site url is configured', async () => {
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, null);
-    await revalidatePublicSite(http, '   ');
+    delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
+    await revalidatePublicSite(http);
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = ' , ';
     await revalidatePublicSite(http);
 
     expect(http.post).not.toHaveBeenCalled();
@@ -162,28 +173,36 @@ describe('revalidatePublicSite', () => {
 
   // The route on the public site refuses every call when it has no secret, so there is nothing to
   // gain by posting.
-  it('does nothing when the api has no passkey', async () => {
-    delete process.env.API_PASS_KEY;
+  it('does nothing when the api has no revalidate secret', async () => {
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
     const http = httpSucceeding();
 
-    await revalidatePublicSite(http, 'http://localhost:3000');
+    await revalidatePublicSite(http);
 
     expect(http.post).not.toHaveBeenCalled();
+  });
+
+  it('never sends the api passkey', async () => {
+    process.env.API_PASS_KEY = 'api-passkey';
+    const http = httpSucceeding();
+
+    await revalidatePublicSite(http);
+
+    expect(JSON.stringify((http.post as jest.Mock).mock.calls)).not.toContain(
+      'api-passkey',
+    );
+    delete process.env.API_PASS_KEY;
   });
 
   it('never throws when the public site rejects the call', async () => {
     const http = httpFailing({ response: { status: 401 } });
 
-    await expect(
-      revalidatePublicSite(http, 'http://localhost:3000'),
-    ).resolves.toBeUndefined();
+    await expect(revalidatePublicSite(http)).resolves.toBeUndefined();
   });
 
   it('survives an error that is not an object', async () => {
     const http = httpFailing('socket hang up');
 
-    await expect(
-      revalidatePublicSite(http, 'http://localhost:3000'),
-    ).resolves.toBeUndefined();
+    await expect(revalidatePublicSite(http)).resolves.toBeUndefined();
   });
 });

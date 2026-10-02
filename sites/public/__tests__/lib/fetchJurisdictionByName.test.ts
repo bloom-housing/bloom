@@ -43,6 +43,20 @@ describe("fetchJurisdictionByName", () => {
     )
   })
 
+  it("sends the revalidate secret on a read made without a visitor's request", async () => {
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = "test-secret"
+
+    await fetchJurisdictionByName()
+
+    expect(mockedGet).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        headers: { passkey: process.env.API_PASS_KEY, "revalidate-secret": "test-secret" },
+      })
+    )
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET
+  })
+
   it("attributes the request to the visitor when it has one", async () => {
     await fetchJurisdictionByName({
       headers: { "x-forwarded-for": "203.0.113.1" },

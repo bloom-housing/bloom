@@ -1,16 +1,16 @@
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { ThrottlerLimitDetail } from '@nestjs/throttler/dist/throttler.guard.interface';
-import { matchesApiPassKey } from '../utilities/api-pass-key';
+import { matchesSecret } from '../utilities/api-pass-key';
 
 @Injectable()
 export class ThrottleGuard extends ThrottlerGuard {
   protected async shouldSkip(context: ExecutionContext): Promise<boolean> {
     const { req } = this.getRequestResponse(context);
 
-    return (
-      !req?.headers?.['x-forwarded-for'] &&
-      matchesApiPassKey(req?.headers?.passkey)
+    return matchesSecret(
+      req?.headers?.['revalidate-secret'],
+      process.env.PUBLIC_SITE_REVALIDATE_SECRET,
     );
   }
 

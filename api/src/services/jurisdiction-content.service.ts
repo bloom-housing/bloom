@@ -200,11 +200,7 @@ export class JurisdictionContentService {
       throw new ConflictException({ message: 'jurisdictionContentConflict' });
     }
 
-    const jurisdiction = await this.prisma.jurisdictions.findFirst({
-      where: { id: jurisdictionId },
-      select: { publicUrl: true },
-    });
-    await revalidatePublicSite(this.httpService, jurisdiction?.publicUrl);
+    await revalidatePublicSite(this.httpService);
 
     return mapTo(
       JurisdictionContent,

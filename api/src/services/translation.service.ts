@@ -266,7 +266,7 @@ export class TranslationService {
     const conflicts = results.filter((key): key is string => key !== null);
 
     if (site === SiteEnum.public && conflicts.length < results.length) {
-      await this.revalidate(jurisdictionId);
+      await revalidatePublicSite(this.httpService);
     }
 
     if (conflicts.length) {
@@ -276,15 +276,6 @@ export class TranslationService {
       });
     }
     return { success: true };
-  }
-
-  private async revalidate(jurisdictionId: string | null): Promise<void> {
-    if (!jurisdictionId) return;
-    const jurisdiction = await this.prisma.jurisdictions.findFirst({
-      where: { id: jurisdictionId },
-      select: { publicUrl: true },
-    });
-    await revalidatePublicSite(this.httpService, jurisdiction?.publicUrl);
   }
 
   // Applies one edit under a per-key optimistic lock; returns the key if another writer
@@ -345,7 +336,7 @@ export class TranslationService {
     });
 
     if (site === SiteEnum.public) {
-      await this.revalidate(jurisdictionId);
+      await revalidatePublicSite(this.httpService);
     }
     return { success: true };
   }

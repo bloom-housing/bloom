@@ -347,7 +347,8 @@ describe('Testing jurisdiction service', () => {
 
   // update() writes the same brand columns as updateBrand, so it has to rebuild too.
   it('asks the public site to rebuild after a jurisdiction update', async () => {
-    process.env.API_PASS_KEY = 'test-passkey';
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://site';
     httpServiceMock.post.mockClear();
     httpServiceMock.post.mockReturnValue(of({}));
     const mockedJurisdiction = mockJurisdiction(3, new Date());
@@ -356,7 +357,7 @@ describe('Testing jurisdiction service', () => {
       .mockResolvedValue(mockedJurisdiction);
     prisma.jurisdictions.update = jest
       .fn()
-      .mockResolvedValue({ ...mockedJurisdiction, publicUrl: 'http://site' });
+      .mockResolvedValue(mockedJurisdiction);
 
     await service.update({
       id: mockedJurisdiction.id,
@@ -368,7 +369,8 @@ describe('Testing jurisdiction service', () => {
       {},
       expect.anything(),
     );
-    delete process.env.API_PASS_KEY;
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+    delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
   });
 
   it('testing update() existing record found', async () => {
@@ -597,13 +599,14 @@ describe('Testing jurisdiction service', () => {
       delete process.env.S3_REGION;
       httpServiceMock.post.mockClear();
       httpServiceMock.post.mockReturnValue(of({}));
-      // revalidatePublicSite returns early without a passkey. Local runs inherit one from
-      // api/.env, which @prisma/client loads on import, and CI has no such file.
-      process.env.API_PASS_KEY = 'test-passkey';
+      // revalidatePublicSite does nothing without a secret and a target, and CI has no api/.env.
+      process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+      process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://site';
     });
 
     afterEach(() => {
-      delete process.env.API_PASS_KEY;
+      delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+      delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
     });
 
     it('derives the missing ramp values at read time', async () => {
@@ -725,9 +728,7 @@ describe('Testing jurisdiction service', () => {
       });
 
       it('asks the public site to rebuild after the brand is saved', async () => {
-        prisma.jurisdictions.update = jest
-          .fn()
-          .mockResolvedValue(row({ publicUrl: 'http://site' }));
+        prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
         prisma.jurisdictions.findFirst = jest
           .fn()
           .mockResolvedValue({ id: jurisdictionId });
@@ -744,9 +745,7 @@ describe('Testing jurisdiction service', () => {
       });
 
       it('saves the brand even when the public site cannot be reached', async () => {
-        prisma.jurisdictions.update = jest
-          .fn()
-          .mockResolvedValue(row({ publicUrl: 'http://site' }));
+        prisma.jurisdictions.update = jest.fn().mockResolvedValue(row());
         prisma.jurisdictions.findFirst = jest
           .fn()
           .mockResolvedValue({ id: jurisdictionId });

@@ -1,7 +1,9 @@
 import { timingSafeEqual } from 'crypto';
 
-export const matchesApiPassKey = (supplied: unknown): boolean => {
-  const secret = process.env.API_PASS_KEY;
+export const matchesSecret = (
+  supplied: unknown,
+  secret: string | undefined,
+): boolean => {
   if (!secret || typeof supplied !== 'string') return false;
 
   const a = Buffer.from(supplied);
@@ -9,3 +11,6 @@ export const matchesApiPassKey = (supplied: unknown): boolean => {
 
   return a.length === b.length && timingSafeEqual(a, b);
 };
+
+export const matchesApiPassKey = (supplied: unknown): boolean =>
+  matchesSecret(supplied, process.env.API_PASS_KEY);

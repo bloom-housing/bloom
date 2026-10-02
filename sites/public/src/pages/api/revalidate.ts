@@ -91,15 +91,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: "Use POST" })
   }
 
-  const secret = process.env.API_PASS_KEY
+  const secret = process.env.PUBLIC_SITE_REVALIDATE_SECRET
   if (!secret) {
-    console.error("revalidate: API_PASS_KEY is not set")
+    console.error("revalidate: PUBLIC_SITE_REVALIDATE_SECRET is not set")
     return res.status(503).json({ message: "Revalidation is not configured" })
   }
 
-  if (!matches(req.headers.passkey, secret)) {
+  if (!matches(req.headers["revalidate-secret"], secret)) {
     // Logged so a caller probing this route leaves a trace.
-    console.error("revalidate: rejected a call with no matching passkey")
+    console.error("revalidate: rejected a call with no matching secret")
     return res.status(401).json({ message: "Traffic not from a known source" })
   }
 

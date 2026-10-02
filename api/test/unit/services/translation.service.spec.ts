@@ -249,14 +249,15 @@ describe('Testing translations service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: 'jurisdiction' });
-    // revalidatePublicSite returns early without a passkey. Local runs inherit one from api/.env,
-    // which @prisma/client loads on import, and CI has no such file.
-    process.env.API_PASS_KEY = 'test-passkey';
+    // revalidatePublicSite does nothing without a secret and a target, and CI has no api/.env.
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://site';
   });
 
   afterEach(() => {
     mockConsoleWarn.mockRestore();
-    delete process.env.API_PASS_KEY;
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+    delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
   });
 
   describe('listRawOverrides', () => {
@@ -425,7 +426,7 @@ describe('Testing translations service', () => {
     it('asks the public site to rebuild after a public override is saved', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
       prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
 
@@ -449,7 +450,7 @@ describe('Testing translations service', () => {
     it('leaves the public site alone for the other scopes', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.findMany = jest.fn().mockResolvedValue([]);
       prisma.translationStrings.create = jest.fn().mockResolvedValue({});
 
@@ -468,7 +469,7 @@ describe('Testing translations service', () => {
     it('rebuilds when only some of the edits conflicted', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.updateMany = jest
         .fn()
         .mockResolvedValueOnce({ count: 1 })
@@ -502,7 +503,7 @@ describe('Testing translations service', () => {
     it('does not rebuild when every edit conflicted', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.updateMany = jest
         .fn()
         .mockResolvedValueOnce({ count: 0 });
@@ -526,7 +527,7 @@ describe('Testing translations service', () => {
     it('saves the override even when the public site cannot be reached', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
       prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
       httpServiceMock.post = jest
@@ -720,7 +721,7 @@ describe('Testing translations service', () => {
     it('asks the public site to rebuild after a public override is deleted', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.deleteMany = jest
         .fn()
         .mockResolvedValueOnce({ count: 1 });
@@ -743,7 +744,7 @@ describe('Testing translations service', () => {
     it('leaves the public site alone when another scope is deleted', async () => {
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: 'jurisdiction', publicUrl: 'http://site' });
+        .mockResolvedValue({ id: 'jurisdiction' });
       prisma.translationStrings.deleteMany = jest
         .fn()
         .mockResolvedValueOnce({ count: 1 });

@@ -7,7 +7,7 @@ jest.mock("../../../src/lib/hooks", () => ({
 
 import handler, { REVALIDATED_PATHS, localisedPaths } from "../../../src/pages/api/revalidate"
 
-const PASSKEY = "test-passkey"
+const SECRET = "test-secret"
 
 type ResponseStub = {
   res: NextApiResponse
@@ -32,20 +32,34 @@ const buildResponse = (): ResponseStub => {
 }
 
 const buildRequest = (overrides: Partial<NextApiRequest> = {}): NextApiRequest =>
-  ({ method: "POST", headers: { passkey: PASSKEY }, ...overrides } as unknown as NextApiRequest)
+  ({
+    method: "POST",
+    headers: { "revalidate-secret": SECRET },
+    ...overrides,
+  } as unknown as NextApiRequest)
 
 describe("/api/revalidate", () => {
   let errorLog: jest.SpyInstance
 
   beforeEach(() => {
     clearCachedApiReads.mockReset()
-    process.env.API_PASS_KEY = PASSKEY
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = SECRET
     process.env.LANGUAGES = "en"
     errorLog = jest.spyOn(console, "error").mockImplementation(() => undefined)
   })
 
   afterEach(() => {
     errorLog.mockRestore()
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET
+  })
+
+  it("refuses the api passkey in place of the secret", async () => {
+    process.env.API_PASS_KEY = "api-passkey"
+    const stub = buildResponse()
+    await handler(buildRequest({ headers: { passkey: "api-passkey" } }), stub.res)
+
+    expect(stub.status).toHaveBeenCalledWith(401)
+    delete process.env.API_PASS_KEY
   })
 
   it("refuses anything but POST", async () => {
@@ -57,7 +71,7 @@ describe("/api/revalidate", () => {
     expect(stub.revalidate).not.toHaveBeenCalled()
   })
 
-  it("refuses a call without the passkey", async () => {
+  it("refuses a call without the secret", async () => {
     const stub = buildResponse()
     await handler(buildRequest({ headers: {} }), stub.res)
 
@@ -65,17 +79,17 @@ describe("/api/revalidate", () => {
     expect(stub.revalidate).not.toHaveBeenCalled()
   })
 
-  it("refuses a call whose passkey does not match", async () => {
+  it("refuses a call whose secret does not match", async () => {
     const stub = buildResponse()
-    await handler(buildRequest({ headers: { passkey: "wrong" } }), stub.res)
+    await handler(buildRequest({ headers: { "revalidate-secret": "wrong" } }), stub.res)
 
     expect(stub.status).toHaveBeenCalledWith(401)
     expect(stub.revalidate).not.toHaveBeenCalled()
   })
 
-  it("refuses a passkey of the right length but the wrong value", async () => {
+  it("refuses a secret of the right length but the wrong value", async () => {
     const stub = buildResponse()
-    await handler(buildRequest({ headers: { passkey: "test-passkez" } }), stub.res)
+    await handler(buildRequest({ headers: { "revalidate-secret": "test-secrez" } }), stub.res)
 
     expect(stub.status).toHaveBeenCalledWith(401)
   })
@@ -85,13 +99,13 @@ describe("/api/revalidate", () => {
     const stub = buildResponse()
     await handler(buildRequest({ headers: {} }), stub.res)
 
-    expect(errorLog).toHaveBeenCalledWith("revalidate: rejected a call with no matching passkey")
+    expect(errorLog).toHaveBeenCalledWith("revalidate: rejected a call with no matching secret")
   })
 
   // ApiKeyGuard on the api treats a missing key as "allow"; this route must not, since an
   // unauthenticated caller could otherwise rebuild every page.
   it("refuses every call when no secret is configured", async () => {
-    delete process.env.API_PASS_KEY
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET
     const stub = buildResponse()
     await handler(buildRequest(), stub.res)
 
@@ -156,11 +170,11 @@ describe("/api/revalidate", () => {
     )
   })
 
-  // The clear is the expensive half of this route, so it has to sit behind the passkey check.
-  it("does not touch the caches when the passkey is wrong", async () => {
+  // The clear is the expensive half of this route, so it has to sit behind the secret check.
+  it("does not touch the caches when the secret is wrong", async () => {
     const stub = buildResponse()
 
-    await handler(buildRequest({ headers: { passkey: "wrong" } }), stub.res)
+    await handler(buildRequest({ headers: { "revalidate-secret": "wrong" } }), stub.res)
 
     expect(clearCachedApiReads).not.toHaveBeenCalled()
   })

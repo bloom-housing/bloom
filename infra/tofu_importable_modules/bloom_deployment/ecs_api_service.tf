@@ -59,8 +59,8 @@ resource "aws_ecs_task_definition" "bloom_api" {
           valueFrom = aws_secretsmanager_secret.google_translate_api_key.arn
         },
         {
-          name      = "API_PASS_KEY",
-          valueFrom = aws_secretsmanager_secret.api_pass_key.arn
+          name      = "PUBLIC_SITE_REVALIDATE_SECRET",
+          valueFrom = aws_secretsmanager_secret.public_site_revalidate_secret.arn
         }
       ]
       portMappings = [

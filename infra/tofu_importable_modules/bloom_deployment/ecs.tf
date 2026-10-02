@@ -89,10 +89,10 @@ resource "aws_secretsmanager_secret" "api_jwt_signing_key" {
   }
 }
 
-resource "aws_secretsmanager_secret" "api_pass_key" {
+resource "aws_secretsmanager_secret" "public_site_revalidate_secret" {
   region                  = var.aws_region
-  description             = "Key authenticating traffic to the Bloom API, and the API's rebuild requests to the public site"
-  name_prefix             = "bloom-api-pass-key"
+  description             = "Secret authenticating the API's rebuild requests to the public site, and the site's reads for those rebuilds"
+  name_prefix             = "bloom-public-site-revalidate-secret"
   recovery_window_in_days = 7 # minimum
 
   # TODO: use an ephemeral resource instead of local-exec:
@@ -169,7 +169,7 @@ locals {
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
-          Resource = aws_secretsmanager_secret.api_pass_key.arn
+          Resource = aws_secretsmanager_secret.public_site_revalidate_secret.arn
         }
       ]
       container_policy = jsonencode({
@@ -204,11 +204,6 @@ locals {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
           Resource = aws_secretsmanager_secret.mapbox_api_key.arn
-        },
-        {
-          Action   = "secretsmanager:GetSecretValue"
-          Effect   = "Allow"
-          Resource = aws_secretsmanager_secret.api_pass_key.arn
         }
       ]
       container_policy = jsonencode({
@@ -230,7 +225,7 @@ locals {
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
-          Resource = aws_secretsmanager_secret.api_pass_key.arn
+          Resource = aws_secretsmanager_secret.public_site_revalidate_secret.arn
         }
       ]
       container_policy = jsonencode({

@@ -70,6 +70,42 @@ describe("fetchPublicOverrides", () => {
     )
   })
 
+  describe("with a revalidate secret", () => {
+    beforeEach(() => {
+      process.env.PUBLIC_SITE_REVALIDATE_SECRET = "test-secret"
+    })
+
+    afterEach(() => {
+      delete process.env.PUBLIC_SITE_REVALIDATE_SECRET
+    })
+
+    // The API exempts these reads from its rate limit, since a rebuild repeats them for every page.
+    it("sends the secret on a read made without a visitor's request", async () => {
+      await fetchPublicOverrides("en")
+
+      expect(mockedGet).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: { passkey: process.env.API_PASS_KEY, "revalidate-secret": "test-secret" },
+        })
+      )
+    })
+
+    it("does not send the secret on a visitor's read", async () => {
+      await fetchPublicOverrides("en", {
+        headers: { "x-forwarded-for": "203.0.113.9" },
+        socket: {},
+      })
+
+      expect(mockedGet).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: { passkey: process.env.API_PASS_KEY, "x-forwarded-for": "203.0.113.9" },
+        })
+      )
+    })
+  })
+
   it("returns the layers the API supplies", async () => {
     expect(await fetchPublicOverrides("en")).toEqual({ en: { "a.key": "Override" } })
   })

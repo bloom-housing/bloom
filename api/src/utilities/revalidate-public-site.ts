@@ -14,22 +14,23 @@ const describe = (error: unknown): string =>
   String((error as Error)?.message ?? error);
 
 // AWS runs several public site instances behind one load balancer, and each instance caches its
-// own rendered pages. A single post to publicUrl would leave the others stale. Each task also
-// registers an address under the discovery name, which gives one post per instance.
-const instanceOrigins = async (
-  publicUrl?: string | null,
-): Promise<string[]> => {
+// own rendered pages. Each task registers an address under the discovery name, which gives one post
+// per instance. The target comes only from the environment, since the secret is sent to it.
+const instanceOrigins = async (): Promise<string[]> => {
   const discoveryName = process.env.PUBLIC_SITE_DISCOVERY_NAME;
   if (discoveryName) {
     const addresses = await dns.resolve4(discoveryName);
     return addresses.map((address) => `http://${address}:${DISCOVERY_PORT}`);
   }
 
-  const trimmed = normalizeOrigin(publicUrl);
-  return trimmed ? [trimmed] : [];
+  const configured = (process.env.PUBLIC_SITE_REVALIDATE_URLS ?? '')
+    .split(',')
+    .map(normalizeOrigin)
+    .filter((origin): origin is string => !!origin);
+  return [...new Set(configured)];
 };
 
-const usablePublicUrl = (value: string): boolean => {
+const usableOrigin = (value: string): boolean => {
   try {
     const url = new URL(value);
     return (
@@ -42,11 +43,11 @@ const usablePublicUrl = (value: string): boolean => {
   }
 };
 
-const normalizeOrigin = (publicUrl?: string | null): string | undefined => {
-  const trimmed = publicUrl?.trim().replace(/\/+$/, '');
+const normalizeOrigin = (value: string): string | undefined => {
+  const trimmed = value.trim().replace(/\/+$/, '');
   if (!trimmed) return undefined;
 
-  if (!usablePublicUrl(trimmed)) {
+  if (!usableOrigin(trimmed)) {
     logger.warn(`${trimmed} is not a usable public site url`);
     return undefined;
   }
@@ -55,19 +56,18 @@ const normalizeOrigin = (publicUrl?: string | null): string | undefined => {
 
 export const revalidatePublicSite = async (
   http: HttpService,
-  publicUrl?: string | null,
 ): Promise<void> => {
-  const passkey = process.env.API_PASS_KEY;
-  if (!passkey) {
+  const secret = process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+  if (!secret) {
     logger.warn(
-      'API_PASS_KEY is not set. The public site keeps the edit until its cache expires',
+      'PUBLIC_SITE_REVALIDATE_SECRET is not set. The public site keeps the edit until its cache expires',
     );
     return;
   }
 
   let origins: string[];
   try {
-    origins = await instanceOrigins(publicUrl);
+    origins = await instanceOrigins();
   } catch (error) {
     logger.warn(
       `could not resolve ${process.env.PUBLIC_SITE_DISCOVERY_NAME}: ${describe(
@@ -86,7 +86,7 @@ export const revalidatePublicSite = async (
             {},
             {
               timeout: REVALIDATE_TIMEOUT_MS,
-              headers: { passkey },
+              headers: { 'revalidate-secret': secret },
             },
           ),
         );
@@ -94,22 +94,5 @@ export const revalidatePublicSite = async (
         logger.warn(`could not revalidate ${origin}: ${describe(error)}`);
       }
     }),
-  );
-};
-
-export const revalidatePublicSites = async (
-  http: HttpService,
-  publicUrls: (string | null | undefined)[],
-): Promise<void> => {
-  if (process.env.PUBLIC_SITE_DISCOVERY_NAME) {
-    await revalidatePublicSite(http);
-    return;
-  }
-
-  const distinct = [...new Set(publicUrls.map(normalizeOrigin))].filter(
-    (origin): origin is string => !!origin,
-  );
-  await Promise.all(
-    distinct.map((origin) => revalidatePublicSite(http, origin)),
   );
 };

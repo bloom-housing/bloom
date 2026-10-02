@@ -40,14 +40,15 @@ describe('Testing jurisdiction content service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: 'jurisdiction' });
-    // revalidatePublicSite returns early without a passkey. Local runs inherit one from api/.env,
-    // which @prisma/client loads on import, and CI has no such file.
-    process.env.API_PASS_KEY = 'test-passkey';
+    // revalidatePublicSite does nothing without a secret and a target, and CI has no api/.env.
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://site';
   });
 
   afterEach(() => {
     mockConsoleWarn.mockRestore();
-    delete process.env.API_PASS_KEY;
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+    delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
   });
 
   describe('getMergedContent', () => {
@@ -343,7 +344,7 @@ describe('Testing jurisdiction content service', () => {
       const jurisdictionId = randomUUID();
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: jurisdictionId, publicUrl: 'http://site' });
+        .mockResolvedValue({ id: jurisdictionId });
       prisma.jurisdictionContent.create = jest.fn().mockResolvedValueOnce({});
       prisma.jurisdictionContent.findFirst = jest
         .fn()
@@ -367,7 +368,7 @@ describe('Testing jurisdiction content service', () => {
       const jurisdictionId = randomUUID();
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: jurisdictionId, publicUrl: 'http://site' });
+        .mockResolvedValue({ id: jurisdictionId });
       prisma.jurisdictionContent.create = jest.fn().mockResolvedValueOnce({});
       prisma.jurisdictionContent.findFirst = jest
         .fn()
@@ -390,7 +391,7 @@ describe('Testing jurisdiction content service', () => {
       const jurisdictionId = randomUUID();
       prisma.jurisdictions.findFirst = jest
         .fn()
-        .mockResolvedValue({ id: jurisdictionId, publicUrl: 'http://site' });
+        .mockResolvedValue({ id: jurisdictionId });
       prisma.jurisdictionContent.create = jest.fn().mockRejectedValueOnce(
         new Prisma.PrismaClientKnownRequestError('exists', {
           code: 'P2002',

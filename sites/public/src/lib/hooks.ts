@@ -358,6 +358,17 @@ const caches: ApiReadCaches = ((globalThis as Record<string, unknown>)[CACHE_KEY
 export const JURISDICTION_RETRY_MS = 5000
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const sharedReadHeaders = (req?: any): Record<string, string> => {
+  const headers: Record<string, string> = { passkey: process.env.API_PASS_KEY }
+  if (req) {
+    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+  } else if (process.env.PUBLIC_SITE_REVALIDATE_SECRET) {
+    headers["revalidate-secret"] = process.env.PUBLIC_SITE_REVALIDATE_SECRET
+  }
+  return headers
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
   const phase = process.env.NEXT_PHASE
 
@@ -368,12 +379,7 @@ export async function fetchJurisdictionByName(req?: any) {
 
     const jurisdictionName = process.env.jurisdictionName
 
-    const headers = {
-      passkey: process.env.API_PASS_KEY,
-    }
-    if (req) {
-      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
-    }
+    const headers = sharedReadHeaders(req)
     const jurisdictionRes = await axios.get(
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
@@ -454,12 +460,7 @@ const fetchJurisdictionScoped = async <T>(
     return cached.value
   }
 
-  const headers = {
-    passkey: process.env.API_PASS_KEY,
-  }
-  if (req) {
-    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
-  }
+  const headers = sharedReadHeaders(req)
 
   try {
     const response = await axios.get(`${process.env.backendApiBase}${path}`, {
