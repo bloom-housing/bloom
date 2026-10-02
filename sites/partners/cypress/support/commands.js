@@ -418,6 +418,8 @@ Cypress.Commands.add(
     if (existingListingName) {
       cy.findAndOpenListing(existingListingName)
       cy.getByID("listingEditButton").contains("Edit").click()
+      // The detail page also has an id="name", so wait for the edit form before typing.
+      cy.getByID("saveAndContinueButton").should("be.visible")
     } else {
       cy.getByID("addListingButton").contains("Add listing").click()
       if (jurisdiction) {
