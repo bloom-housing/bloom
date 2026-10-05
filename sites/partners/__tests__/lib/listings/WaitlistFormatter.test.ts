@@ -80,11 +80,9 @@ describe("WaitlistFormatter", () => {
     data.accessibleUnitWaitlistOnly = true
     expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(true)
 
-    // independent of the "show waitlist size" radio
     data.waitlistOpenQuestion = YesNoEnum.no
     expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(true)
 
-    // listing without a waitlist never stores true
     data.listingAvailabilityQuestion = "availableUnits"
     expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(false)
   })
