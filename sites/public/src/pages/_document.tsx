@@ -78,6 +78,9 @@ export const brandStyleBlock = ({
     fontFamily ? `--seeds-font-sans: ${fontStack(fontFamily, "sans")};` : "",
     headingFont ? `--seeds-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",
     serifFontFamily ? `--seeds-font-serif: ${fontStack(serifFontFamily, "serif")};` : "",
+    fontFamily ? `--bloom-font-sans: ${fontStack(fontFamily, "sans")};` : "",
+    headingFont ? `--bloom-font-alt-sans: ${fontStack(headingFont, "alt-sans")};` : "",
+    serifFontFamily ? `--bloom-font-serif: ${fontStack(serifFontFamily, "serif")};` : "",
     buttonRadius ? `--brand-button-radius: ${radiusVariable(buttonRadius)};` : "",
   ]
     .filter(Boolean)
