@@ -17,7 +17,7 @@ export const unitToRow = (unit: Unit & { tempId?: number }): TableDataRow => ({
   tempId: unit.tempId,
   number: unit.number,
   unitType: unit.unitTypes ? [unit.unitTypes.name] : [],
-  amiChart: unit.amiChart.name,
+  amiChart: unit?.amiChart?.name,
   amiPercentage: unit.amiPercentage,
   monthlyRent: unit.monthlyRent,
   sqFeet: unit.sqFeet,
