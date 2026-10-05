@@ -1,15 +1,14 @@
-import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
-import { fireEvent, render, screen } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import React from "react"
-import Users from "../../../src/pages/users"
-import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { mockNextRouter } from "../../testUtils"
+import { AuthProvider, ConfigProvider, MessageProvider } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlag,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { fireEvent, mockNextRouter, render, screen } from "../../testUtils"
+import Users from "../../../src/pages/users"
 
 const server = setupServer()
 
@@ -192,7 +191,8 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
+    const usersHeading = await screen.findByRole("heading", { name: "Users" })
+    expect(usersHeading).toBeInTheDocument()
     expect(screen.getByText("Filter")).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Add user" })).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Export to CSV" })).toBeInTheDocument()

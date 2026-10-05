@@ -8,8 +8,7 @@ import {
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { act, fireEvent, screen, within } from "@testing-library/react"
-import { mockNextRouter, render } from "../../../testUtils"
+import { act, fireEvent, mockNextRouter, render, screen, within } from "../../../testUtils"
 import ApplicationsList from "../../../../src/pages/listings/[id]/applications/index"
 
 const server = setupServer()
@@ -72,7 +71,7 @@ describe("applications", () => {
     expect(error).toBeInTheDocument()
   })
 
-  it("should render applications table when data is returned", () => {
+  it("should render applications table when data is returned", async () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
 
@@ -116,7 +115,8 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    expect(screen.getAllByText("Archer Studios").length).toBeGreaterThan(0)
+    const listingName = await screen.findAllByText("Archer Studios")
+    expect(listingName.length).toBeGreaterThan(0)
     expect(screen.getByText("Add application")).toBeInTheDocument()
     expect(screen.getByText("Export")).toBeInTheDocument()
     expect(screen.getAllByText("All applications").length).toBeGreaterThan(0)
@@ -202,7 +202,7 @@ describe("applications", () => {
     expect(screen.getByText("No")).toBeInTheDocument()
   })
 
-  it("should directly open application add page when add application is clicked while listing is open", () => {
+  it("should directly open application add page when add application is clicked while listing is open", async () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
 
@@ -246,7 +246,8 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    fireEvent.click(screen.getByText("Add application"))
+    const addApplicationButton = await screen.findByRole("button", { name: "Add application" })
+    fireEvent.click(addApplicationButton)
     expect(pushMock).toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
   })
 
@@ -295,7 +296,8 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    fireEvent.click(screen.getByText("Add application"))
+    const addApplicationButton = await screen.findByRole("button", { name: "Add application" })
+    fireEvent.click(addApplicationButton)
     const modalHeader = await screen.findByText("Confirmation needed")
     expect(modalHeader).toBeInTheDocument()
     expect(pushMock).not.toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
@@ -352,7 +354,7 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    const exportButton = screen.getByRole("button", { name: "Export" })
+    const exportButton = await screen.findByRole("button", { name: "Export" })
     expect(exportButton).toBeInTheDocument()
     act(() => {
       fireEvent.click(exportButton)
