@@ -20,6 +20,7 @@ import { FormListing } from "../../../../lib/listings/formTypes"
 
 type RankingsAndResultsProps = {
   disableDueDates?: boolean
+  enableAccessibleUnitWaitlistOnly?: boolean
   enableUnitGroups?: boolean
   enableWaitlistAdditionalFields?: boolean
   enableWaitlistLottery?: boolean
@@ -33,6 +34,7 @@ type RankingsAndResultsProps = {
 
 const RankingsAndResults = ({
   disableDueDates,
+  enableAccessibleUnitWaitlistOnly,
   enableUnitGroups,
   enableWaitlistAdditionalFields,
   enableWaitlistLottery,
@@ -73,6 +75,8 @@ const RankingsAndResults = ({
     control,
     name: "listingAvailabilityQuestion",
   })
+
+  const listingHasWaitlist = availabilityQuestion === "openWaitlist" || enableUnitGroups
 
   const showFCFSLotterySection = enableWaitlistLottery || availabilityQuestion !== "openWaitlist"
 
@@ -330,46 +334,59 @@ const RankingsAndResults = ({
             />
           </Grid.Cell>
         </Grid.Row>
-        {waitlistOpen === YesNoEnum.yes &&
-          (availabilityQuestion === "openWaitlist" || enableUnitGroups) && (
-            <Grid.Row columns={3}>
-              {enableWaitlistAdditionalFields && (
-                <>
-                  <Grid.Cell>
-                    <Field
-                      name="waitlistMaxSize"
-                      id="waitlistMaxSize"
-                      register={register}
-                      label={t("listings.waitlist.maxSizeQuestion")}
-                      placeholder={""}
-                      type={"number"}
-                      subNote={t("t.recommended")}
-                    />
-                  </Grid.Cell>
-                  <Grid.Cell>
-                    <Field
-                      name="waitlistCurrentSize"
-                      id="waitlistCurrentSize"
-                      register={register}
-                      label={t("listings.waitlist.currentSizeQuestion")}
-                      placeholder={""}
-                      type={"number"}
-                    />
-                  </Grid.Cell>
-                </>
-              )}
-              <Grid.Cell>
-                <Field
-                  name="waitlistOpenSpots"
-                  id="waitlistOpenSpots"
-                  register={register}
-                  label={t("listings.waitlist.openSizeQuestion")}
-                  placeholder={""}
-                  type={"number"}
-                />
-              </Grid.Cell>
-            </Grid.Row>
-          )}
+        {enableAccessibleUnitWaitlistOnly && listingHasWaitlist && (
+          <Grid.Row>
+            <Grid.Cell>
+              <Field
+                id="accessibleUnitWaitlistOnly"
+                name="accessibleUnitWaitlistOnly"
+                type="checkbox"
+                label={t("listings.waitlist.accessibleUnitWaitlistOnly")}
+                register={register}
+                labelClassName={styles["label-option"]}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
+        {waitlistOpen === YesNoEnum.yes && listingHasWaitlist && (
+          <Grid.Row columns={3}>
+            {enableWaitlistAdditionalFields && (
+              <>
+                <Grid.Cell>
+                  <Field
+                    name="waitlistMaxSize"
+                    id="waitlistMaxSize"
+                    register={register}
+                    label={t("listings.waitlist.maxSizeQuestion")}
+                    placeholder={""}
+                    type={"number"}
+                    subNote={t("t.recommended")}
+                  />
+                </Grid.Cell>
+                <Grid.Cell>
+                  <Field
+                    name="waitlistCurrentSize"
+                    id="waitlistCurrentSize"
+                    register={register}
+                    label={t("listings.waitlist.currentSizeQuestion")}
+                    placeholder={""}
+                    type={"number"}
+                  />
+                </Grid.Cell>
+              </>
+            )}
+            <Grid.Cell>
+              <Field
+                name="waitlistOpenSpots"
+                id="waitlistOpenSpots"
+                register={register}
+                label={t("listings.waitlist.openSizeQuestion")}
+                placeholder={""}
+                type={"number"}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
         <Grid.Row columns={3}>
           <Grid.Cell className="seeds-grid-span-2">
             <TextEditor

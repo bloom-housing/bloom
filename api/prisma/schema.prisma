@@ -1220,6 +1220,7 @@ model Listings {
   accessibility                        String?
   accessibleMarketingFlyer             String?                     @map("accessible_marketing_flyer")
   accessibleMarketingFlyerFileId       String?                     @map("accessible_marketing_flyer_file_id") @db.Uuid
+  accessibleUnitWaitlistOnly           Boolean?                    @default(false) @map("accessible_unit_waitlist_only")
   additionalApplicationSubmissionNotes String?                     @map("additional_application_submission_notes")
   afsLastRunAt                         DateTime?                   @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
   allowsCats                           Boolean?                    @map("allows_cats")
@@ -1401,6 +1402,7 @@ model ListingSnapshot {
   accessibility                           String?
   accessibleMarketingFlyer                String?                     @map("accessible_marketing_flyer")
   accessibleMarketingFlyerFileSnapshotId  String?                     @map("accessible_marketing_flyer_file_snapshot_id") @db.Uuid
+  accessibleUnitWaitlistOnly              Boolean?                    @default(false) @map("accessible_unit_waitlist_only")
   additionalApplicationSubmissionNotes    String?                     @map("additional_application_submission_notes")
   afsLastRunAt                            DateTime?                   @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
   allowsCats                              Boolean?                    @map("allows_cats")

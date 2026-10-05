@@ -13,6 +13,7 @@ export enum FeatureFlagEnum {
   disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
+  enableAccessibleUnitWaitlistOnly = 'enableAccessibleUnitWaitlistOnly',
   enableAdditionalResources = 'enableAdditionalResources',
   enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
   enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
@@ -161,6 +162,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
     description:
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+    description:
+      "When true, the 'Accessible Unit Wait List Only' checkbox is displayed in the waitlist section of the listing form, on the partners listing details page, and in the listings CSV export",
   },
   {
     name: FeatureFlagEnum.enableAdditionalResources,

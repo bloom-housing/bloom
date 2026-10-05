@@ -1208,6 +1208,11 @@ class Listing extends AbstractDTO {
   waitlistOpenSpots?: number;
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  accessibleUnitWaitlistOnly?: boolean;
+
+  @Expose()
   @ValidateListingPublish('whatToExpect', {
     groups: [ValidationsGroupsEnum.default],
   })
