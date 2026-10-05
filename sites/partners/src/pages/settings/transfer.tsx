@@ -27,6 +27,7 @@ const TRANSFER_FLAGS: string[] = [
 ]
 
 const IMAGE_TYPES = ["image/png", "image/svg+xml", "image/webp"]
+const FAVICON_TYPES = ["image/png"]
 
 class ImageError extends Error {}
 
@@ -48,7 +49,8 @@ const imagesToUpload = (file: ContentTransferFile): ContentTransferAsset[] => {
   return [...new Set(keys)].map((key) => {
     const asset = (file.assets ?? []).find((candidate) => candidate.fileId === key)
     if (!asset) throw new ImageError(t("transfer.missingImage", { fileId: key }))
-    if (!IMAGE_TYPES.includes(asset.contentType)) {
+    const types = key === file.brand?.faviconFileId ? FAVICON_TYPES : IMAGE_TYPES
+    if (!types.includes(asset.contentType)) {
       throw new ImageError(t("transfer.imageType", { fileId: key }))
     }
     return asset

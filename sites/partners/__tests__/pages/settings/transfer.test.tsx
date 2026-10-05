@@ -393,6 +393,15 @@ describe("settings/transfer", () => {
         },
         "test:imageType brand-logo",
       ],
+      [
+        "a favicon that is not a PNG",
+        {
+          ...exportFile,
+          brand: { brand: null, logoFileId: null, faviconFileId: "brand-favicon" },
+          assets: [{ fileId: "brand-favicon", contentType: "image/svg+xml", data: btoa("<svg/>") }],
+        },
+        "test:imageType brand-favicon",
+      ],
     ])("refuses %s before asking for a preview", async (_label, file, message) => {
       const previews: unknown[] = []
       server.use(
