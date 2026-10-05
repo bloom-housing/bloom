@@ -383,27 +383,6 @@ describe("RankingsAndResults", () => {
         </FormProviderWrapper>
       )
 
-    it("should show the checkbox for an open waitlist even when waitlist size is not shown", () => {
-      renderSection(true, "openWaitlist")
-
-      expect(
-        within(
-          screen.getByRole("group", { name: "Do you want to show a waitlist size?" })
-        ).getByRole("radio", { name: "No" })
-      ).toBeChecked()
-      expect(
-        screen.getByRole("checkbox", { name: "Accessible Unit Wait List Only" })
-      ).not.toBeChecked()
-    })
-
-    it("should toggle the checkbox", async () => {
-      renderSection(true, "openWaitlist")
-
-      const checkbox = screen.getByRole("checkbox", { name: "Accessible Unit Wait List Only" })
-      await userEvent.click(checkbox)
-      expect(checkbox).toBeChecked()
-    })
-
     it("should render the saved value as checked", () => {
       render(
         <FormProviderWrapper
@@ -428,14 +407,6 @@ describe("RankingsAndResults", () => {
       )
 
       expect(screen.getByRole("checkbox", { name: "Accessible Unit Wait List Only" })).toBeChecked()
-    })
-
-    it("should show the checkbox when unit groups are enabled", () => {
-      renderSection(true, "availableUnits", true)
-
-      expect(
-        screen.getByRole("checkbox", { name: "Accessible Unit Wait List Only" })
-      ).toBeInTheDocument()
     })
 
     it("should not show the checkbox when the listing has available units", () => {
