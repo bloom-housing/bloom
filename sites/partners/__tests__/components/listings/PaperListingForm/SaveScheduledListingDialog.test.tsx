@@ -67,4 +67,22 @@ describe("SaveScheduledListingDialog", () => {
       )
     ).toBeInTheDocument()
   })
+
+  it("renders land use copy when publishesToClosed is true and the date was cleared", () => {
+    render(
+      <SaveScheduledListingDialog
+        isOpen={true}
+        onClose={jest.fn()}
+        onConfirm={jest.fn()}
+        currentScheduledPublishAt={null}
+        publishesToClosed={true}
+      />
+    )
+
+    expect(
+      screen.getByText(
+        "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date."
+      )
+    ).toBeInTheDocument()
+  })
 })

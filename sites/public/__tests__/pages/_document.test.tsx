@@ -278,6 +278,36 @@ describe("_document", () => {
     )
   })
 
+  // ui-components reads the bloom font tokens.
+  it("sets the font in both namespaces", async () => {
+    const style = await styleFor(
+      jurisdictionWith({
+        primary,
+        fontFamily: "Inter",
+        headingFontFamily: "Playfair Display",
+        serifFontFamily: "Noto Serif",
+        fontUrl:
+          "https://fonts.googleapis.com/css2?family=Inter&family=Playfair+Display&family=Noto+Serif",
+      })
+    )
+
+    expect(style).toContain(
+      `--bloom-font-sans: "Inter", var(--brand-font-fallback-sans, sans-serif);`
+    )
+    expect(style).toContain(
+      `--bloom-font-alt-sans: "Playfair Display", var(--brand-font-fallback-alt-sans, sans-serif);`
+    )
+    expect(style).toContain(
+      `--bloom-font-serif: "Noto Serif", var(--brand-font-fallback-serif, serif);`
+    )
+  })
+
+  it("sets no bloom font token when the brand has no font", async () => {
+    const style = await styleFor(jurisdictionWith({ primary }))
+
+    expect(style).not.toContain("--bloom-font-")
+  })
+
   it("uses a stored heading font for the alt token only", async () => {
     const style = await styleFor(
       jurisdictionWith({
