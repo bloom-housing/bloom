@@ -421,7 +421,6 @@ export const unit: Unit = {
   number: undefined,
   accessibilityPriorityType: undefined,
   sqFeet: "285",
-
   unitTypes: {
     id: "random_id_35edf",
     createdAt: new Date(),
@@ -1140,9 +1139,31 @@ export const listing: Listing = {
   petPolicy:
     "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
   units: [
-    unit,
+    {
+      ...unit,
+      amiChart: {
+        id: "Cq870hadhBHUGb_uW_3",
+        name: "Test AMI Chart",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        jurisdictions: {
+          id: "Cq870hwYXcPxCYT4_uW_3",
+        },
+      },
+    },
     {
       id: "Cq870hwYXcPxCYT4_uW_3",
+      amiChart: {
+        id: "Cq870hadhBHUGb_uW_3",
+        name: "Test AMI Chart",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        jurisdictions: {
+          id: "Cq870hwYXcPxCYT4_uW_3",
+        },
+      },
       amiPercentage: "45.0",
       annualIncomeMin: "26496.0",
       monthlyIncomeMin: "2208.0",
@@ -1156,7 +1177,6 @@ export const listing: Listing = {
       number: undefined,
       accessibilityPriorityType: undefined,
       sqFeet: "285",
-
       unitTypes: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1170,6 +1190,16 @@ export const listing: Listing = {
     },
     {
       id: "9XQrfuAPOn8wtD7HlhCTR",
+      amiChart: {
+        id: "Cq870hadhBHUGb_uW_3",
+        name: "Test AMI Chart",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        jurisdictions: {
+          id: "Cq870hwYXcPxCYT4_uW_3",
+        },
+      },
       amiPercentage: "45.0",
       annualIncomeMin: "26496.0",
       monthlyIncomeMin: "2208.0",
@@ -1197,6 +1227,16 @@ export const listing: Listing = {
     },
     {
       id: "bamrJpZA9JmnLSMEbTlI4",
+      amiChart: {
+        id: "Cq870hadhBHUGb_uW_3",
+        name: "Test AMI Chart",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        jurisdictions: {
+          id: "Cq870hwYXcPxCYT4_uW_3",
+        },
+      },
       amiPercentage: "45.0",
       annualIncomeMin: "26496.0",
       monthlyIncomeMin: "2208.0",
@@ -1224,6 +1264,16 @@ export const listing: Listing = {
     },
     {
       id: "BCwOFAHJDpyPbKcVBjIUM",
+      amiChart: {
+        id: "Cq870hadhBHUGb_uW_3",
+        name: "Test AMI Chart",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        jurisdictions: {
+          id: "Cq870hwYXcPxCYT4_uW_3",
+        },
+      },
       amiPercentage: "45.0",
       annualIncomeMin: "26496.0",
       monthlyIncomeMin: "2208.0",
@@ -1252,6 +1302,16 @@ export const listing: Listing = {
     },
     {
       id: "5t56gXJdJLZiksBuX8BtL",
+      amiChart: {
+        id: "Cq870hadhBHUGb_uW_3",
+        name: "Test AMI Chart",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        items: [],
+        jurisdictions: {
+          id: "Cq870hwYXcPxCYT4_uW_3",
+        },
+      },
       amiPercentage: "45.0",
       annualIncomeMin: "26496.0",
       monthlyIncomeMin: "2208.0",
