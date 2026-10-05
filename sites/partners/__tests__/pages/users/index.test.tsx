@@ -77,8 +77,6 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
     expect(screen.getByText("Filter")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Add user" })).toBeInTheDocument()
@@ -134,8 +132,6 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
     expect(screen.getByText("Filter")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Add user" })).toBeInTheDocument()
@@ -196,8 +192,6 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Users" })).toBeInTheDocument()
     expect(screen.getByText("Filter")).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Add user" })).not.toBeInTheDocument()

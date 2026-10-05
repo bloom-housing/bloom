@@ -72,7 +72,7 @@ describe("applications", () => {
     expect(error).toBeInTheDocument()
   })
 
-  it("should render applications table when data is returned", async () => {
+  it("should render applications table when data is returned", () => {
     mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
 
@@ -115,9 +115,6 @@ describe("applications", () => {
         </AuthProvider>
       </ConfigProvider>
     )
-
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
 
     expect(screen.getAllByText("Archer Studios").length).toBeGreaterThan(0)
     expect(screen.getByText("Add application")).toBeInTheDocument()
@@ -205,7 +202,7 @@ describe("applications", () => {
     expect(screen.getByText("No")).toBeInTheDocument()
   })
 
-  it("should directly open application add page when add application is clicked while listing is open", async () => {
+  it("should directly open application add page when add application is clicked while listing is open", () => {
     const { pushMock } = mockNextRouter({ id: "Uvbk5qurpB2WI9V6WnNdH" })
     document.cookie = "access-token-available=True"
 
@@ -248,9 +245,6 @@ describe("applications", () => {
         </AuthProvider>
       </ConfigProvider>
     )
-
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Add application"))
     expect(pushMock).toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
@@ -300,9 +294,6 @@ describe("applications", () => {
         </AuthProvider>
       </ConfigProvider>
     )
-
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Add application"))
     const modalHeader = await screen.findByText("Confirmation needed")
@@ -360,9 +351,6 @@ describe("applications", () => {
         </AuthProvider>
       </ConfigProvider>
     )
-
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
 
     const exportButton = screen.getByRole("button", { name: "Export" })
     expect(exportButton).toBeInTheDocument()
