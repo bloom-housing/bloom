@@ -140,7 +140,8 @@ Body fields:
 - `overridesPath` is the stylesheet to parse, defaulting to `sites/public/styles/overrides.scss`.
 - `logoPath` and `faviconPath` are the images to upload. Each fork names its logo differently and
   references it from its own layout, so they cannot be discovered. Omit them to leave the stored
-  assets alone. The file must end in `.png`, `.svg` or `.webp`.
+  assets alone. The logo must end in `.png`, `.svg` or `.webp`, and the favicon in `.png`, matching
+  the branding editor.
 - `brand` overrides what the stylesheet gave, field by field, and takes the same shape the branding
   endpoint accepts. A supplied `primary` or `secondary` replaces the parsed ramp, since a ramp's
   shades belong to its base. Use it for anything the parse got wrong or could not find.

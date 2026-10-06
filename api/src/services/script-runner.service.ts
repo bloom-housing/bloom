@@ -76,6 +76,7 @@ const IMAGE_TYPES: Record<string, string> = {
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
 };
+const FAVICON_TYPES: Record<string, string> = { '.png': 'image/png' };
 const DEFAULT_OVERRIDES_PATH = 'sites/public/styles/overrides.scss';
 
 /**
@@ -602,8 +603,8 @@ export class ScriptRunnerService {
     report: string[];
   }> {
     const wanted = [
-      { kind: 'logo', path: dto.logoPath },
-      { kind: 'favicon', path: dto.faviconPath },
+      { kind: 'logo', path: dto.logoPath, types: IMAGE_TYPES },
+      { kind: 'favicon', path: dto.faviconPath, types: FAVICON_TYPES },
     ].filter(({ path }) => !!path);
 
     if (!wanted.length) return { report: [] };
@@ -615,12 +616,12 @@ export class ScriptRunnerService {
     }
 
     const fetched = [];
-    for (const { kind, path } of wanted) {
+    for (const { kind, path, types } of wanted) {
       const extension = extname(path).toLowerCase();
-      const contentType = IMAGE_TYPES[extension];
+      const contentType = types[extension];
       if (!contentType) {
         throw new BadRequestException(
-          `${path} is not one of ${Object.keys(IMAGE_TYPES).join(', ')}`,
+          `${path} is not one of ${Object.keys(types).join(', ')}`,
         );
       }
 

@@ -1216,6 +1216,20 @@ describe('Testing script runner service', () => {
         },
       );
 
+      it.each(['images/favicon.svg', 'images/favicon.webp'])(
+        'refuses the favicon %s, which the branding page would not accept',
+        async (faviconPath) => {
+          await expect(
+            service.migrateJurisdictionBranding(
+              request(),
+              body({ commit: true, faviconPath }),
+            ),
+          ).rejects.toThrow(BadRequestException);
+
+          expect(s3ServiceMock.uploadToPublic).not.toHaveBeenCalled();
+        },
+      );
+
       it('uploads nothing when a later image cannot be fetched', async () => {
         jest
           .spyOn(service, 'getSourceImage')
@@ -1243,13 +1257,13 @@ describe('Testing script runner service', () => {
           body({
             commit: true,
             logoPath: 'images/logo.png',
-            faviconPath: 'images/favicon.svg',
+            faviconPath: 'images/favicon.png',
           }),
         );
 
         expect(s3ServiceMock.uploadToPublic).toHaveBeenCalledTimes(2);
         expect(writtenBrand().logoFileId).toEqual(assetKey('logo.png'));
-        expect(writtenBrand().faviconFileId).toEqual(assetKey('favicon.svg'));
+        expect(writtenBrand().faviconFileId).toEqual(assetKey('favicon.png'));
       });
 
       // brandAssetWrite always creates an assets row, so re-linking the same key would orphan the
