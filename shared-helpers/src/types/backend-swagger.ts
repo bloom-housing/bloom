@@ -11873,6 +11873,7 @@ export enum FeatureFlagEnum {
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
+  "disableReferralOpportunity" = "disableReferralOpportunity",
   "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
