@@ -10,7 +10,7 @@ The source of truth for all feature flags is [feature-flags-enum.ts](../api/src/
 
 ### Managing jurisdiction relationship
 
-The easiest way to manage feature flags is through a hidden page on the partner site. If you are logged in as a super admin, navigate to the `/admin` endpoint to access it.
+The easiest way to manage feature flags is through the Admin section of the partner site, which only super admins can see. Choose Admin in the navigation, or go to `/admin/feature-flags`.
 
 From there you can:
 
