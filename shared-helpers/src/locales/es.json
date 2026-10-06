@@ -356,7 +356,7 @@
   "application.name.lastName": "Apellido",
   "application.name.lastOrFamilyName": "Apellido o apellido",
   "application.name.middleName": "Segundo nombre",
-  "application.name.middleNameOptional": "Inicial media (opcional)",
+  "application.name.middleNameOptional": "Segundo nombre (opcional)",
   "application.name.noEmailAddress": "No tengo dirección de email",
   "application.name.title": "¿Cuál es su nombre?",
   "application.name.yourDateOfBirth": "Su fecha de nacimiento",
