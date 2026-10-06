@@ -23,16 +23,11 @@ const renderAdmin = (userRoles: Record<string, boolean>, flags: string[]) => {
 }
 
 describe("admin", () => {
-  it("opens the first tab a superadmin can see", async () => {
-    const replaceMock = renderAdmin({ isAdmin: true, isSuperAdmin: true }, [
-      FeatureFlagEnum.enableDbDrivenContent,
-    ])
-
-    await waitFor(() => expect(replaceMock).toHaveBeenCalledWith("/admin/translations"))
-  })
-
-  it("opens feature flags when no database content or branding is on", async () => {
-    const replaceMock = renderAdmin({ isAdmin: true, isSuperAdmin: true }, [])
+  it.each([
+    ["no database content or branding", []],
+    ["database content on", [FeatureFlagEnum.enableDbDrivenContent]],
+  ])("opens feature flags for a superadmin with %s", async (_label, flags) => {
+    const replaceMock = renderAdmin({ isAdmin: true, isSuperAdmin: true }, flags)
 
     await waitFor(() => expect(replaceMock).toHaveBeenCalledWith("/admin/feature-flags"))
   })

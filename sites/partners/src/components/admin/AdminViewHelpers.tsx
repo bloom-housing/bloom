@@ -5,11 +5,11 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum, UserRole } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum AdminIndexEnum {
-  translations = 0,
+  featureFlags = 0,
+  translations,
   content,
   branding,
   transfer,
-  featureFlags,
 }
 
 type AdminTabsFeatureFlags = {
@@ -18,6 +18,11 @@ type AdminTabsFeatureFlags = {
 }
 
 const ADMIN_TABS: Record<AdminIndexEnum, { href: string; labelKey: string; testId: string }> = {
+  [AdminIndexEnum.featureFlags]: {
+    href: "/admin/feature-flags",
+    labelKey: "admin.featureFlags",
+    testId: "feature-flags-tab",
+  },
   [AdminIndexEnum.translations]: {
     href: "/admin/translations",
     labelKey: "settings.translations",
@@ -38,11 +43,6 @@ const ADMIN_TABS: Record<AdminIndexEnum, { href: string; labelKey: string; testI
     labelKey: "settings.transfer",
     testId: "transfer-tab",
   },
-  [AdminIndexEnum.featureFlags]: {
-    href: "/admin/feature-flags",
-    labelKey: "admin.featureFlags",
-    testId: "feature-flags-tab",
-  },
 }
 
 export const adminPath = (tab: AdminIndexEnum) => ADMIN_TABS[tab].href
@@ -54,10 +54,10 @@ export const getVisibleAdminTabs = (
   if (!userRoles?.isSuperAdmin) return []
 
   return [
+    AdminIndexEnum.featureFlags,
     ...(enableContent ? [AdminIndexEnum.translations, AdminIndexEnum.content] : []),
     ...(enableBranding ? [AdminIndexEnum.branding] : []),
     ...(enableContent || enableBranding ? [AdminIndexEnum.transfer] : []),
-    AdminIndexEnum.featureFlags,
   ]
 }
 

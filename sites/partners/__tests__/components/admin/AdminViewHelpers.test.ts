@@ -9,28 +9,28 @@ const superAdmin = { isAdmin: true, isSuperAdmin: true }
 describe("getVisibleAdminTabs", () => {
   it("shows every tab to a superadmin when both flags are on", () => {
     expect(getVisibleAdminTabs({ enableContent: true, enableBranding: true }, superAdmin)).toEqual([
+      AdminIndexEnum.featureFlags,
       AdminIndexEnum.translations,
       AdminIndexEnum.content,
       AdminIndexEnum.branding,
       AdminIndexEnum.transfer,
-      AdminIndexEnum.featureFlags,
     ])
   })
 
   it("shows translations, content and export and import for the content flag alone", () => {
     expect(getVisibleAdminTabs({ enableContent: true }, superAdmin)).toEqual([
+      AdminIndexEnum.featureFlags,
       AdminIndexEnum.translations,
       AdminIndexEnum.content,
       AdminIndexEnum.transfer,
-      AdminIndexEnum.featureFlags,
     ])
   })
 
   it("shows branding and export and import for the branding flag alone", () => {
     expect(getVisibleAdminTabs({ enableBranding: true }, superAdmin)).toEqual([
+      AdminIndexEnum.featureFlags,
       AdminIndexEnum.branding,
       AdminIndexEnum.transfer,
-      AdminIndexEnum.featureFlags,
     ])
   })
 
