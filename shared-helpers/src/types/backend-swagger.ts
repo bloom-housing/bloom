@@ -11200,7 +11200,10 @@ export interface FooterLinkDTO {
 /** FooterLogoDTO */
 export interface FooterLogoDTO {
   /**  */
-  logoSrc: string
+  logoSrc?: string
+
+  /**  */
+  logoFileId?: string
 
   /**  */
   logoAltText?: string
