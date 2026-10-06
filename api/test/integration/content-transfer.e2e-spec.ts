@@ -43,7 +43,7 @@ describe('Content Transfer Controller Tests', () => {
 
   const asImport = (
     file: Record<string, unknown>,
-    jurisdictionName: string,
+    jurisdictionName: string | null | undefined,
   ) => {
     const { assets, exportedAt, ...rest } = file;
     void assets;
@@ -343,6 +343,61 @@ describe('Content Transfer Controller Tests', () => {
         .set(passkey)
         .set('Cookie', adminCookies)
         .send(asImport(file, sourceName))
+        .expect(400);
+    });
+
+    it('previews a global export as a global import', async () => {
+      const file = (
+        await request(app.getHttpServer())
+          .get('/contentTransfer/global/export')
+          .set(passkey)
+          .set('Cookie', adminCookies)
+          .expect(200)
+      ).body;
+
+      const res = await request(app.getHttpServer())
+        .post('/contentTransfer/import/preview')
+        .set(passkey)
+        .set('Cookie', adminCookies)
+        .send(asImport(file, null))
+        .expect(200);
+
+      expect(res.body.jurisdictionName).toBeNull();
+    });
+
+    // A jurisdiction file without its name would otherwise be read as global and overwrite the
+    // global strings.
+    it.each([
+      ['missing', undefined],
+      ['empty', ''],
+    ])('refuses a file whose jurisdiction name is %s', async (_label, name) => {
+      const file = await exportSource();
+
+      const res = await request(app.getHttpServer())
+        .post('/contentTransfer/import/preview')
+        .set(passkey)
+        .set('Cookie', adminCookies)
+        .send(asImport(file, name))
+        .expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain('jurisdictionName');
+    });
+
+    // A missing part would otherwise clear the stored brand, logo or favicon.
+    it.each([
+      ['an empty brand section', {}],
+      [
+        'a brand section without its favicon',
+        { brand: { primary: { base: '#773E98' } }, logoFileId: null },
+      ],
+    ])('refuses %s', async (_label, brand) => {
+      const file = await exportSource();
+
+      await request(app.getHttpServer())
+        .post('/contentTransfer/import/preview')
+        .set(passkey)
+        .set('Cookie', adminCookies)
+        .send({ ...asImport(file, targetName), brand })
         .expect(400);
     });
 

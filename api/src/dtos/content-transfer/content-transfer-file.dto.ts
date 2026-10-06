@@ -6,11 +6,13 @@ import {
   IsDefined,
   IsEnum,
   IsInt,
+  IsNotEmpty,
   IsObject,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -110,19 +112,28 @@ export class ContentTransferContent {
 
 export class ContentTransferBrand {
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf((o) => o.brand !== null, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsObject({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Object, nullable: true })
   brand: object | null;
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf((o) => o.logoFileId !== null, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ nullable: true })
   logoFileId: string | null;
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf((o) => o.faviconFileId !== null, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ nullable: true })
   faviconFileId: string | null;
@@ -198,9 +209,14 @@ export class ContentTransferImport {
   @ApiProperty({ example: CONTENT_TRANSFER_VERSION })
   version: number;
 
+  // Only null marks a global import; a missing or empty name is a malformed file.
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf((o) => o.jurisdictionName !== null, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ nullable: true })
   jurisdictionName: string | null;
 
