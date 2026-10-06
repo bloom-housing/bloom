@@ -31,6 +31,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -60,6 +61,26 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={true}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("group", { name: "Is there a referral opportunity?" })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should update the referral question label when enableReferralQuestionUnits flag is turned on", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={true}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -81,6 +102,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -116,7 +138,8 @@ describe("ApplicationTypes", () => {
         <FormProviderWrapper>
           <ApplicationTypes
             disableCommonApplication={false}
-            enableReferralQuestionUnits={true}
+            disableReferralOpportunity={false}
+            enableReferralQuestionUnits={false}
             jurisdiction={jurisdiction.id}
             listing={listing}
             requiredFields={[]}
@@ -188,6 +211,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -220,6 +244,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -247,6 +272,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -289,6 +315,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={true}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -326,6 +353,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={true}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -356,6 +384,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -376,6 +405,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={{ ...listing, listingType: EnumListingListingType.landUse }}
@@ -401,6 +431,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={{ ...listing, listingType: EnumListingListingType.landUse }}
@@ -430,6 +461,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={{ ...listing, listingType: EnumListingListingType.landUse }}

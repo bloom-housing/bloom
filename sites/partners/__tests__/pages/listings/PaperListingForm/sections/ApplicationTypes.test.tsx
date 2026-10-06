@@ -54,6 +54,7 @@ describe("ApplicationTypes", () => {
           requiredFields={[]}
           jurisdiction={"jurisdictionA"}
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
         />
       </FormProviderWrapper>
@@ -84,7 +85,7 @@ describe("ApplicationTypes", () => {
     expect(within(referralApplication).getByRole("radio", { name: "Yes" })).toBeInTheDocument()
   })
 
-  it("should render referral opportunity section", async () => {
+  it("should render referral opportunity section when disableReferralOpportunity is false", async () => {
     render(
       <FormProviderWrapper>
         <ApplicationTypes
@@ -92,6 +93,7 @@ describe("ApplicationTypes", () => {
           requiredFields={[]}
           jurisdiction={"jurisdictionA"}
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
         />
       </FormProviderWrapper>
@@ -111,6 +113,27 @@ describe("ApplicationTypes", () => {
     // validate that the phone mask works
     await userEvent.type(referralContactPhone, "1234567890")
     expect(referralContactPhone).toHaveValue("(123) 456-7890")
+  })
+
+  it("should not render referral opportunity section when disableReferralOpportunity is true", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          listing={listing}
+          requiredFields={[]}
+          jurisdiction={"jurisdictionA"}
+          disableCommonApplication={false}
+          disableReferralOpportunity={true}
+          enableReferralQuestionUnits={false}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("group", {
+        name: "Is there a referral opportunity?",
+      })
+    ).not.toBeInTheDocument()
   })
 
   describe("phoneMask", () => {
@@ -134,6 +157,7 @@ describe("ApplicationTypes", () => {
             requiredFields={[]}
             jurisdiction={"jurisdictionA"}
             disableCommonApplication={false}
+            disableReferralOpportunity={false}
             enableReferralQuestionUnits={false}
           />
         </FormProviderWrapper>
@@ -165,6 +189,7 @@ describe("ApplicationTypes", () => {
             requiredFields={[]}
             jurisdiction={"jurisdictionA"}
             disableCommonApplication={false}
+            disableReferralOpportunity={false}
             enableReferralQuestionUnits={false}
           />
         </FormProviderWrapper>
@@ -193,6 +218,7 @@ describe("ApplicationTypes", () => {
               requiredFields={[]}
               jurisdiction={"jurisdictionA"}
               disableCommonApplication={false}
+              disableReferralOpportunity={false}
               enableReferralQuestionUnits={false}
             />
           </FormProviderWithJurisdiction>
@@ -233,6 +259,7 @@ describe("ApplicationTypes", () => {
               requiredFields={[]}
               jurisdiction={"jurisdictionA"}
               disableCommonApplication={false}
+              disableReferralOpportunity={false}
               enableReferralQuestionUnits={false}
             />
           </FormProviderWithJurisdiction>
