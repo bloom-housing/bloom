@@ -2407,6 +2407,7 @@ const featureFlags = [
   FeatureFlagEnum.disableHowToContact,
   FeatureFlagEnum.disableWorkInRegion,
   FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+  FeatureFlagEnum.enableApproveAndPublishOnEdit,
   FeatureFlagEnum.enableDuplicatesDetailsInEmail,
   FeatureFlagEnum.enableExportTerms,
   FeatureFlagEnum.enableFaq,

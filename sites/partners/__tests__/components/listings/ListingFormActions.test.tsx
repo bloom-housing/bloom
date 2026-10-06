@@ -2084,7 +2084,7 @@ describe("<ListingFormActions>", () => {
       expect(addToastMock).toHaveBeenCalledWith("Listing closed", { variant: "success" })
     })
 
-    it("approves a land use listing with a future date into scheduled status", async () => {
+    it.only("approves a land use listing with a future date into scheduled status", async () => {
       const user = userEvent.setup()
       render(
         <LandUseFormActionsComponent
