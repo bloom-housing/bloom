@@ -552,6 +552,65 @@ describe("admin/branding", () => {
     expect(savedBody.logoFileId).toEqual("9f1c2e3a")
   })
 
+  // Dropzone hides itself once progress reaches 100, so deleting a pending upload has to reset the
+  // progress or the field can never take another file.
+  it("takes another file after a pending upload is deleted", async () => {
+    const fileIds = ["9f1c2e3a", "4b7d0e21"]
+    const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+    uploader.mockImplementation(({ setFileUploadData, setProgressValue }) => {
+      const fileId = fileIds.shift()
+      setProgressValue(100)
+      setFileUploadData({ id: fileId, url: `https://example.test/${fileId}`, fileId })
+      return Promise.resolve()
+    })
+    respondWithBrand({ primary: { base: "#773E98" } })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+    await userEvent.upload(
+      document.getElementById("brand-logo-upload") as HTMLInputElement,
+      new File(["x"], "logo.png", { type: "image/png" })
+    )
+    await waitFor(() => expect(document.getElementById("brand-logo-upload-delete")).not.toBeNull())
+
+    await userEvent.click(document.getElementById("brand-logo-upload-delete"))
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+    await userEvent.upload(
+      document.getElementById("brand-logo-upload") as HTMLInputElement,
+      new File(["y"], "logo-2.png", { type: "image/png" })
+    )
+    await waitFor(() => expect(document.getElementById("brand-logo-upload-delete")).not.toBeNull())
+    await userEvent.click(screen.getByText("test:save"))
+
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody.logoFileId).toEqual("4b7d0e21")
+  })
+
+  it("keeps save disabled when a stored logo is deleted during an upload", async () => {
+    const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+    uploader.mockImplementation(({ setProgressValue }) => {
+      setProgressValue(3)
+      return Promise.resolve()
+    })
+    respondWithBrand({ primary: { base: "#773E98" }, logoUrl: "https://example.test/logo.png" })
+    acceptSave()
+    renderPage()
+
+    await waitFor(() => expect(document.getElementById("brand-logo-upload")).not.toBeNull())
+    await userEvent.upload(
+      document.getElementById("brand-logo-upload") as HTMLInputElement,
+      new File(["x"], "logo.png", { type: "image/png" })
+    )
+    await waitFor(() => expect(screen.getByText("test:save").closest("button")).toBeDisabled())
+
+    await userEvent.click(document.getElementById("brand-logo-upload-delete"))
+
+    expect(screen.getByText("test:save").closest("button")).toBeDisabled()
+    expect(savedBody).toBeNull()
+  })
+
   it("refuses to save while an upload is still in flight", async () => {
     // fileUploader resolves after the presign, before the file lands, so progress is mid-flight.
     const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
