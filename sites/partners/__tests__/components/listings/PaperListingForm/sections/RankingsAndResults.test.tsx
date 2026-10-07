@@ -355,4 +355,74 @@ describe("RankingsAndResults", () => {
       expect(screen.getByTestId("review-order-lottery")).toBeDisabled()
     })
   })
+
+  describe("Accessible Unit Wait List Only", () => {
+    const renderSection = (
+      enableAccessibleUnitWaitlistOnly: boolean,
+      listingAvailabilityQuestion: string,
+      enableUnitGroups = false
+    ) =>
+      render(
+        <FormProviderWrapper
+          values={{
+            ...formDefaults,
+            jurisdictions: { id: "jurisdiction1" },
+            listingAvailabilityQuestion,
+          }}
+        >
+          <RankingsAndResults
+            requiredFields={[]}
+            whatToExpectEditor={null}
+            whatToExpectAdditionalTextEditor={null}
+            enableAccessibleUnitWaitlistOnly={enableAccessibleUnitWaitlistOnly}
+            enableUnitGroups={enableUnitGroups}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={false}
+            enableWhatToExpectAdditionalField={false}
+          />
+        </FormProviderWrapper>
+      )
+
+    it("should render the saved value as checked", () => {
+      render(
+        <FormProviderWrapper
+          values={{
+            ...formDefaults,
+            jurisdictions: { id: "jurisdiction1" },
+            listingAvailabilityQuestion: "openWaitlist",
+            accessibleUnitWaitlistOnly: true,
+          }}
+        >
+          <RankingsAndResults
+            requiredFields={[]}
+            whatToExpectEditor={null}
+            whatToExpectAdditionalTextEditor={null}
+            enableAccessibleUnitWaitlistOnly={true}
+            enableUnitGroups={false}
+            enableWaitlistAdditionalFields={false}
+            enableWaitlistLottery={false}
+            enableWhatToExpectAdditionalField={false}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.getByRole("checkbox", { name: "Accessible Unit Wait List Only" })).toBeChecked()
+    })
+
+    it("should not show the checkbox when the listing has available units", () => {
+      renderSection(true, "availableUnits")
+
+      expect(
+        screen.queryByRole("checkbox", { name: "Accessible Unit Wait List Only" })
+      ).not.toBeInTheDocument()
+    })
+
+    it("should not show the checkbox when the feature flag is off", () => {
+      renderSection(false, "openWaitlist")
+
+      expect(
+        screen.queryByRole("checkbox", { name: "Accessible Unit Wait List Only" })
+      ).not.toBeInTheDocument()
+    })
+  })
 })

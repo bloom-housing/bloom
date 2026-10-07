@@ -4,9 +4,9 @@ import Formatter from "./Formatter"
 export default class WaitlistFormatter extends Formatter {
   /** Process all of the waitlist settings */
   process() {
-    const showWaitlist =
-      this.data.waitlistOpenQuestion === YesNoEnum.yes &&
-      (this.data.listingAvailabilityQuestion === "openWaitlist" || this.metadata.enableUnitGroups)
+    const listingHasWaitlist =
+      this.data.listingAvailabilityQuestion === "openWaitlist" || this.metadata.enableUnitGroups
+    const showWaitlist = this.data.waitlistOpenQuestion === YesNoEnum.yes && listingHasWaitlist
 
     this.processBoolean("isWaitlistOpen", {
       when: showWaitlist,
@@ -23,6 +23,10 @@ export default class WaitlistFormatter extends Formatter {
     this.processBoolean("waitlistOpenSpots", {
       when: this.data.waitlistOpenSpots && showWaitlist,
       trueCase: () => Number(this.data.waitlistOpenSpots),
+    })
+    this.processBoolean("accessibleUnitWaitlistOnly", {
+      when: listingHasWaitlist && !!this.data.accessibleUnitWaitlistOnly,
+      falseCase: () => false,
     })
   }
 }

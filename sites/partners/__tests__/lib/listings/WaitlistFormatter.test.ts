@@ -69,4 +69,32 @@ describe("WaitlistFormatter", () => {
     setFalse(data)
     expect(formatData(data).isWaitlistOpen).toEqual(false)
   })
+
+  it("should format accessibleUnitWaitlistOnly", () => {
+    const data = {} as FormListing
+    expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(false)
+
+    data.listingAvailabilityQuestion = "openWaitlist"
+    expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(false)
+
+    data.accessibleUnitWaitlistOnly = true
+    expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(true)
+
+    data.waitlistOpenQuestion = YesNoEnum.no
+    expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(true)
+
+    data.listingAvailabilityQuestion = "availableUnits"
+    expect(formatData(data).accessibleUnitWaitlistOnly).toEqual(false)
+  })
+
+  it("should keep accessibleUnitWaitlistOnly when unit groups are enabled", () => {
+    const data = {
+      listingAvailabilityQuestion: "availableUnits",
+      accessibleUnitWaitlistOnly: true,
+    } as FormListing
+    const result = new WaitlistFormatter({ ...data }, {
+      enableUnitGroups: true,
+    } as FormMetadata).format().data
+    expect(result.accessibleUnitWaitlistOnly).toEqual(true)
+  })
 })

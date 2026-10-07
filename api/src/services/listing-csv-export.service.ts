@@ -1374,6 +1374,19 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
     if (
       doAnyJurisdictionHaveFeatureFlagSet(
         user.jurisdictions,
+        FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+      )
+    ) {
+      headers.push({
+        path: 'accessibleUnitWaitlistOnly',
+        label: 'Accessible Unit Wait List Only',
+        format: this.formatYesNo,
+      });
+    }
+
+    if (
+      doAnyJurisdictionHaveFeatureFlagSet(
+        user.jurisdictions,
         FeatureFlagEnum.enableMarketingStatus,
       )
     ) {

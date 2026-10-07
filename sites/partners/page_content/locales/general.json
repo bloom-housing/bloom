@@ -736,6 +736,7 @@
   "listings.unitsDescription": "Select the building units that are available through the listing.",
   "listings.unitTypesOrIndividual": "Do you want to show unit types or individual units?",
   "listings.usingCommonDigitalApplication": "Are you using the common digital application?",
+  "listings.waitlist.accessibleUnitWaitlistOnly": "Accessible Unit Wait List Only",
   "listings.waitlist.currentSizeQuestion": "How many people are on the current list?",
   "listings.waitlist.maxSize": "Maximum waitlist size",
   "listings.waitlist.maxSizeQuestion": "What is the maximum size of the waitlist?",

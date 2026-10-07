@@ -846,6 +846,10 @@ const ListingForm = ({
                               enableOnlyAdminCanEditListingDates &&
                               !profile.userRoles.isAdmin
                             }
+                            enableAccessibleUnitWaitlistOnly={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+                              jurisdictionId
+                            )}
                             enableUnitGroups={enableUnitGroups}
                             enableWaitlistAdditionalFields={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableWaitlistAdditionalFields,

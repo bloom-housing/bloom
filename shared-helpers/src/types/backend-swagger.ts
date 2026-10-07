@@ -5671,6 +5671,9 @@ export interface Listing {
   waitlistOpenSpots?: number
 
   /**  */
+  accessibleUnitWaitlistOnly?: boolean
+
+  /**  */
   whatToExpect?: string
 
   /**  */
@@ -6553,6 +6556,9 @@ export interface ListingCreate {
   waitlistOpenSpots?: number
 
   /**  */
+  accessibleUnitWaitlistOnly?: boolean
+
+  /**  */
   whatToExpect?: string
 
   /**  */
@@ -7424,6 +7430,9 @@ export interface ListingUpdate {
 
   /**  */
   waitlistOpenSpots?: number
+
+  /**  */
+  accessibleUnitWaitlistOnly?: boolean
 
   /**  */
   whatToExpect?: string
@@ -11876,6 +11885,7 @@ export enum FeatureFlagEnum {
   "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
+  "enableAccessibleUnitWaitlistOnly" = "enableAccessibleUnitWaitlistOnly",
   "enableAdditionalResources" = "enableAdditionalResources",
   "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
   "enableApplicationExpirationNonAdmins" = "enableApplicationExpirationNonAdmins",

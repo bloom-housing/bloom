@@ -22,6 +22,11 @@ const DetailRankingsAndResults = () => {
     listing.jurisdictions.id
   )
 
+  const enableAccessibleUnitWaitlistOnly = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+    listing.jurisdictions.id
+  )
+
   const enableUnitGroups = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableUnitGroups,
     listing.jurisdictions.id
@@ -108,6 +113,16 @@ const DetailRankingsAndResults = () => {
                 {getDetailBoolean(listing.isWaitlistOpen)}
               </FieldValue>
             </Grid.Cell>
+            {enableAccessibleUnitWaitlistOnly && (
+              <Grid.Cell>
+                <FieldValue
+                  id="accessibleUnitWaitlistOnly"
+                  label={t("listings.waitlist.accessibleUnitWaitlistOnly")}
+                >
+                  {getDetailBoolean(listing.accessibleUnitWaitlistOnly)}
+                </FieldValue>
+              </Grid.Cell>
+            )}
           </Grid.Row>
           <Grid.Row>
             {enableWaitlistAdditionalFields && (
