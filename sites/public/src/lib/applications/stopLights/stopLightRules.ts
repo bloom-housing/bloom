@@ -39,4 +39,5 @@ const seniorBuildingAgeExample: StopLightRule = {
   editFieldAnchor: "applicant.dateOfBirth",
 }
 
+// For each new rule make sure to add `StopLightBanner` for a field that triggers the rule.
 export const stopLightRules: StopLightRule[] = [seniorBuildingAgeExample]
