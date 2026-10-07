@@ -3933,7 +3933,10 @@ export class ListingService implements OnModuleInit {
     const listingApprovalPermissions =
       rawJurisdiction.listingApprovalPermissions;
 
-    if (listingApprovalPermissions?.length) {
+    if (
+      listingApprovalPermissions?.length &&
+      dto.status === ListingsStatusEnum.active
+    ) {
       let isForbidden = true;
       const approvingRoles: string[] = [];
       if (listingApprovalPermissions.includes(UserRoleEnum.admin))
