@@ -3920,6 +3920,69 @@ export class ListingService implements OnModuleInit {
       },
     });
 
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
+    const listingApprovalPermissions =
+      rawJurisdiction.listingApprovalPermissions;
+
+    if (listingApprovalPermissions?.length) {
+      let isForbidden = true;
+      const approvingRoles: string[] = [];
+      if (listingApprovalPermissions.includes(UserRoleEnum.admin))
+        approvingRoles.push('isAdmin');
+      if (listingApprovalPermissions.includes(UserRoleEnum.supportAdmin))
+        approvingRoles.push('isSupportAdmin');
+      if (listingApprovalPermissions.includes(UserRoleEnum.partner))
+        approvingRoles.push('isPartner');
+      if (listingApprovalPermissions.includes(UserRoleEnum.jurisdictionAdmin)) {
+        approvingRoles.push('isJurisdictionalAdmin');
+      }
+      if (
+        listingApprovalPermissions.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
+        )
+      ) {
+        approvingRoles.push('isLimitedJurisdictionalAdmin');
+      }
+      approvingRoles.forEach((elem) => {
+        if (requestingUser.userRoles[elem]) {
+          isForbidden = false;
+        }
+      });
+      if (isForbidden) {
+        throw new ForbiddenException(
+          `User does not have permissions to approve listing ${dto.id}`,
+        );
+      }
+    }
+
+    if (enableAutoOpenDate && storedListing.scheduledApplicationOpenAt) {
+      storedListing.scheduledApplicationOpenAt =
+        this.normalizeScheduledApplicationOpenAt(
+          storedListing.scheduledApplicationOpenAt,
+        );
+      this.checkScheduledDateIsInFuture(
+        storedListing.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        storedListing.scheduledApplicationOpenAt,
+        storedListing.scheduledPublishAt,
+      );
+    }
+
+    const sendPublishNotificationEmail =
+      dto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
     await this.snapshotCreateService.createListingSnapshot(dto.id);
 
     const rawListing = await this.prisma.listings.update({
@@ -3951,9 +4014,6 @@ export class ListingService implements OnModuleInit {
     });
 
     const mappedListing = mapTo(Listing, rawListing);
-
-    const listingApprovalPermissions =
-      rawJurisdiction.listingApprovalPermissions;
 
     if (listingApprovalPermissions?.length > 0)
       await this.listingApprovalNotify({
@@ -3993,10 +4053,6 @@ export class ListingService implements OnModuleInit {
       );
     }
 
-    const sendPublishNotificationEmail =
-      dto.status === ListingsStatusEnum.active &&
-      storedListing.status !== ListingsStatusEnum.active;
-
     if (sendPublishNotificationEmail) {
       const useComingSoon =
         !!mappedListing.scheduledApplicationOpenAt &&
@@ -4019,6 +4075,16 @@ export class ListingService implements OnModuleInit {
         );
       }
     }
+
+    if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
+      const multiselectQuestions =
+        mappedListing.listingMultiselectQuestions.map(
+          (listingMultiselectQuestion) =>
+            listingMultiselectQuestion.multiselectQuestions,
+        );
+      void this.multiselectQuestionService.activateMany(multiselectQuestions);
+    }
+
     await this.cachePurge(storedListing.status, dto.status, mappedListing.id);
 
     return mappedListing;
