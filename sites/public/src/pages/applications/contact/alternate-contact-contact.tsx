@@ -32,6 +32,7 @@ const ApplicationAlternateContactContact = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, errors, trigger, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
     shouldFocusError: false,

@@ -32,6 +32,7 @@ const ApplicationName = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, watch, errors, trigger, clearErrors, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
     shouldFocusError: false,
