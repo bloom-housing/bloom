@@ -11915,6 +11915,7 @@ export enum FeatureFlagEnum {
   "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
   "enableApplicationExpirationNonAdmins" = "enableApplicationExpirationNonAdmins",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableApproveAndPublishOnEdit" = "enableApproveAndPublishOnEdit",
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",

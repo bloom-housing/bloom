@@ -62,6 +62,7 @@ export const createBloomingtonJurisdiction = async (
       featureFlags: [
         ...optionalV2MSQ,
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableApproveAndPublishOnEdit,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableCustomListingNotifications,
         FeatureFlagEnum.enableDbDrivenBranding,

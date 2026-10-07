@@ -119,6 +119,10 @@ const ListingFormActions = ({
     FeatureFlagEnum.enableLandUse,
     listingJurisdiction?.id
   )
+  const enableApproveAndPublishOnEdit = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApproveAndPublishOnEdit,
+    listingJurisdiction?.id
+  )
 
   const approvalPublishesToClosed = publishesLandUseToClosed({
     listingType: listing?.listingType,
@@ -160,13 +164,32 @@ const ListingFormActions = ({
   const approveAndSetStatus = useCallback(
     async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
       try {
-        const result = await listingsService.updateListingStatus({
-          body: {
+        let result = null
+        if (type === ListingFormActionsType.edit) {
+          result = await listingsService.update({
             id: listing.id,
-            jurisdictions: listing.jurisdictions,
-            status,
-          },
-        })
+            body: {
+              ...(listing as unknown as ListingUpdate),
+              // account for type mismatch between ListingMultiSelectQuestionType and IdDto
+              listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
+                (multiselectQuestions) => ({
+                  ordinal: multiselectQuestions.ordinal,
+                  id: multiselectQuestions.multiselectQuestions?.id,
+                })
+              ),
+              status,
+            },
+          })
+        } else {
+          // If not in edit mode, we only update the listing status so use the alternative update method
+          result = await listingsService.updateListingStatus({
+            body: {
+              id: listing.id,
+              jurisdictions: listing.jurisdictions,
+              status,
+            },
+          })
+        }
         if (result) {
           addToast(
             status === ListingsStatusEnum.scheduled
@@ -190,7 +213,7 @@ const ListingFormActions = ({
         )
       }
     },
-    [addToast, listing, listingsService, router, setErrorAlert]
+    [addToast, listing, listingsService, router, setErrorAlert, type]
   )
 
   const unapproveAndSetStatus = useCallback(async () => {
@@ -574,9 +597,13 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.pendingReview &&
       type === ListingFormActionsType.edit
     ) {
-      if (isListingApprover && !profile?.userRoles.isPartner) {
-        elements.push(requestChangesButton)
-      } else if (profile?.userRoles.isSupportAdmin) {
+      if (
+        (isListingApprover && !profile?.userRoles.isPartner) ||
+        profile?.userRoles.isSupportAdmin
+      ) {
+        if (enableApproveAndPublishOnEdit) {
+          elements.push(approveAndPublishButton)
+        }
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {
