@@ -17,6 +17,7 @@ export const unitToRow = (unit: Unit & { tempId?: number }): TableDataRow => ({
   tempId: unit.tempId,
   number: unit.number,
   unitType: unit.unitTypes ? [unit.unitTypes.name] : [],
+  amiChart: unit?.amiChart?.name,
   amiPercentage: unit.amiPercentage,
   monthlyRent: unit.monthlyRent,
   sqFeet: unit.sqFeet,
@@ -177,6 +178,7 @@ export const getUnitColumns = ({
     : [
         textColumn("number", "listings.unit.number", { size: 90 }),
         unitTypeColumn(),
+        textColumn("amiChart", "t.amiChart", { size: 130 }),
         textColumn("amiPercentage", "t.ami", { size: 70 }),
         textColumn("monthlyRent", "listings.unit.rent", { size: 100 }),
         textColumn("sqFeet", "listings.unit.sqft", { size: 80 }),
