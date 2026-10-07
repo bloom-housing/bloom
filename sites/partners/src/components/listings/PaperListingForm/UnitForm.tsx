@@ -199,6 +199,12 @@ const UnitForm = ({
             values[`maxIncomeHouseholdSize${override.householdSize}`] = override.income
           })
         }
+        for (let i = 1; i <= maxAmiHouseholdSize; i++) {
+          const draftOverride = defaultUnit[`maxIncomeHouseholdSize${i}`]
+          if (draftOverride) {
+            values[`maxIncomeHouseholdSize${i}`] = draftOverride
+          }
+        }
       }
 
       values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
