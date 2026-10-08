@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { ForbiddenException, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { of, throwError } from 'rxjs';
@@ -1001,9 +1001,9 @@ describe('Testing script runner service', () => {
     const scriptName =
       'migrate translation overrides to key rows for Bloomington';
 
-    const request = () =>
+    const request = (userRoles = { isAdmin: true, isSuperAdmin: true }) =>
       ({
-        user: { id: userId } as unknown as User,
+        user: { id: userId, userRoles } as unknown as User,
       } as unknown as ExpressRequest);
 
     const body = (overrides = {}) => ({
@@ -1012,6 +1012,17 @@ describe('Testing script runner service', () => {
       skipExisting: false,
       languages: [LanguagesEnum.en],
       ...overrides,
+    });
+
+    it('refuses an admin who is not a superadmin before reading anything', async () => {
+      await expect(
+        service.migrateTranslationOverridesToKeyRows(
+          request({ isAdmin: true, isSuperAdmin: false }),
+          body({ commit: true }),
+        ),
+      ).rejects.toThrow(ForbiddenException);
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(service.getTranslationFile).not.toHaveBeenCalled();
     });
 
     beforeEach(() => {
