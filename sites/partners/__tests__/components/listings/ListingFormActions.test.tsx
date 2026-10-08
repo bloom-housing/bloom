@@ -2116,12 +2116,14 @@ describe("<ListingFormActions>", () => {
       expect(addToastMock).toHaveBeenCalledWith("Listing scheduled", { variant: "success" })
     })
 
-    it("approves a land use listing in edit mode using the update endpoint", async () => {
+    it("approves a land use listing in edit mode with enableApproveAndPublishOnEdit enabled", async () => {
       const previousFlagCheck = doJurisdictionsHaveFeatureFlagOn
       doJurisdictionsHaveFeatureFlagOn = (flag) =>
         flag === FeatureFlagEnum.enableAutopublish ||
         flag === FeatureFlagEnum.enableLandUse ||
         flag === FeatureFlagEnum.enableApproveAndPublishOnEdit
+
+      const submitFormWithStatusMock = jest.fn()
 
       const user = userEvent.setup()
       render(
@@ -2130,6 +2132,7 @@ describe("<ListingFormActions>", () => {
           formActionType={ListingFormActionsType.edit}
           listingType={EnumListingListingType.landUse}
           scheduledPublishAt={null}
+          submitFormWithStatus={submitFormWithStatusMock}
         />
       )
 
@@ -2139,15 +2142,9 @@ describe("<ListingFormActions>", () => {
       await user.click(within(dialog).getByRole("button", { name: "Approve" }))
 
       await waitFor(() =>
-        expect(listingsUpdateMock).toHaveBeenCalledWith(
-          expect.objectContaining({
-            id: listing.id,
-            body: expect.objectContaining({ status: ListingsStatusEnum.closed }),
-          })
-        )
+        expect(submitFormWithStatusMock).toHaveBeenCalledWith("redirect", ListingsStatusEnum.active)
       )
       expect(listingsStatusUpdateMock).not.toHaveBeenCalled()
-      expect(addToastMock).toHaveBeenCalledWith("Listing closed", { variant: "success" })
 
       doJurisdictionsHaveFeatureFlagOn = previousFlagCheck
     })

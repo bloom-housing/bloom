@@ -164,42 +164,28 @@ const ListingFormActions = ({
   const approveAndSetStatus = useCallback(
     async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
       try {
-        let result = null
         if (type === ListingFormActionsType.edit) {
-          result = await listingsService.update({
-            id: listing.id,
-            body: {
-              ...(listing as unknown as ListingUpdate),
-              // account for type mismatch between ListingMultiSelectQuestionType and IdDto
-              listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
-                (multiselectQuestions) => ({
-                  ordinal: multiselectQuestions.ordinal,
-                  id: multiselectQuestions.multiselectQuestions?.id,
-                })
-              ),
-              status,
-            },
-          })
+          submitFormWithStatus("redirect", ListingsStatusEnum.active)
         } else {
           // If not in edit mode, we only update the listing status so use the alternative update method
-          result = await listingsService.updateListingStatus({
+          const result = await listingsService.updateListingStatus({
             body: {
               id: listing.id,
               jurisdictions: listing.jurisdictions,
               status,
             },
           })
-        }
-        if (result) {
-          addToast(
-            status === ListingsStatusEnum.scheduled
-              ? t("listings.approval.listingScheduled")
-              : status === ListingsStatusEnum.closed
-              ? t("listings.approval.listingClosed")
-              : t("listings.approval.listingPublished"),
-            { variant: "success" }
-          )
-          await router.push(`/`)
+          if (result) {
+            addToast(
+              status === ListingsStatusEnum.scheduled
+                ? t("listings.approval.listingScheduled")
+                : status === ListingsStatusEnum.closed
+                ? t("listings.approval.listingClosed")
+                : t("listings.approval.listingPublished"),
+              { variant: "success" }
+            )
+            await router.push(`/`)
+          }
         }
       } catch (err) {
         if (err.response?.status === 400) {
