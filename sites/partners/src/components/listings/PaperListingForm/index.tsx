@@ -877,6 +877,10 @@ const ListingForm = ({
                               FeatureFlagEnum.disableCommonApplication,
                               jurisdictionId
                             )}
+                            disableReferralOpportunity={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.disableReferralOpportunity,
+                              jurisdictionId
+                            )}
                             enableReferralQuestionUnits={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableReferralQuestionUnits,
                               jurisdictionId

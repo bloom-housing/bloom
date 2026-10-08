@@ -449,39 +449,47 @@ export function getColDefs(
 
         return `${data.sendMailToMailingAddress ? value : data.applicant.applicantAddress.zipCode}`
       },
-    },
-    {
-      headerName: t("applications.table.workStreet"),
-      field: "applicant.applicantWorkAddress.street",
-      sortable: false,
-      filter: false,
-      width: 250,
-      minWidth: 50,
-    },
-    {
-      headerName: t("applications.table.workCity"),
-      field: "applicant.applicantWorkAddress.city",
-      sortable: false,
-      filter: false,
-      width: 120,
-      minWidth: 50,
-    },
-    {
-      headerName: t("applications.table.workState"),
-      field: "applicant.applicantWorkAddress.state",
-      sortable: false,
-      filter: false,
-      width: 110,
-      minWidth: 50,
-    },
-    {
-      headerName: t("applications.table.workZip"),
-      field: "applicant.applicantWorkAddress.zipCode",
-      sortable: false,
-      filter: false,
-      width: 110,
-      minWidth: 50,
-    },
+    }
+  )
+
+  if (!disableWorkInRegion) {
+    defs.push(
+      {
+        headerName: t("applications.table.workStreet"),
+        field: "applicant.applicantWorkAddress.street",
+        sortable: false,
+        filter: false,
+        width: 250,
+        minWidth: 50,
+      },
+      {
+        headerName: t("applications.table.workCity"),
+        field: "applicant.applicantWorkAddress.city",
+        sortable: false,
+        filter: false,
+        width: 120,
+        minWidth: 50,
+      },
+      {
+        headerName: t("applications.table.workState"),
+        field: "applicant.applicantWorkAddress.state",
+        sortable: false,
+        filter: false,
+        width: 110,
+        minWidth: 50,
+      },
+      {
+        headerName: t("applications.table.workZip"),
+        field: "applicant.applicantWorkAddress.zipCode",
+        sortable: false,
+        filter: false,
+        width: 110,
+        minWidth: 50,
+      }
+    )
+  }
+
+  defs.push(
     {
       headerName: t("applications.table.altContactFirstName"),
       field: "alternateContact.firstName",

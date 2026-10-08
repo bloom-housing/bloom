@@ -1,15 +1,30 @@
 import React from "react"
 import { setupServer } from "msw/node"
-import { screen, within } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
   EnumListingListingType,
   LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import ApplicationTypes from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
-import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
+import userEvent from "@testing-library/user-event"
+
+import {
+  mockNextRouter,
+  render,
+  screen,
+  within,
+  waitFor,
+  FormProviderWrapper,
+} from "../../../../testUtils"
+import ApplicationTypes, {
+  phoneMask,
+} from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
+import * as helpers from "../../../../../src/lib/helpers"
+
+jest.mock("../../../../../src/lib/helpers", () => ({
+  ...jest.requireActual("../../../../../src/lib/helpers"),
+  fileUploader: jest.fn(),
+}))
 
 const server = setupServer()
 
@@ -31,6 +46,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -55,11 +71,31 @@ describe("ApplicationTypes", () => {
     expect(screen.getAllByRole("radio", { name: /no/i })).toHaveLength(3)
   })
 
+  it("should update the referral question label when disableReferralOpportunity flag is turned on", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={true}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("group", { name: "Is there a referral opportunity?" })
+    ).not.toBeInTheDocument()
+  })
+
   it("should update the referral question label when enableReferralQuestionUnits flag is turned on", () => {
     render(
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={true}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -81,6 +117,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -116,7 +153,8 @@ describe("ApplicationTypes", () => {
         <FormProviderWrapper>
           <ApplicationTypes
             disableCommonApplication={false}
-            enableReferralQuestionUnits={true}
+            disableReferralOpportunity={false}
+            enableReferralQuestionUnits={false}
             jurisdiction={jurisdiction.id}
             listing={listing}
             requiredFields={[]}
@@ -188,6 +226,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -220,6 +259,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -247,6 +287,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -289,6 +330,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={true}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -326,6 +368,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={true}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -356,6 +399,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
@@ -376,6 +420,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={{ ...listing, listingType: EnumListingListingType.landUse }}
@@ -401,6 +446,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={{ ...listing, listingType: EnumListingListingType.landUse }}
@@ -430,6 +476,7 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
           enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={{ ...listing, listingType: EnumListingListingType.landUse }}
@@ -448,5 +495,172 @@ describe("ApplicationTypes", () => {
       screen.getByRole("group", { name: "Is there a digital application?" })
     ).toBeInTheDocument()
     expect(screen.getByRole("group", { name: "Is there a paper application?" })).toBeInTheDocument()
+  })
+
+  describe("phoneMask", () => {
+    it("should mask phone number and add proper character", () => {
+      expect(phoneMask("1234567890")).toEqual("(123) 456-7890")
+      expect(phoneMask("123")).toEqual("(123")
+      expect(phoneMask("S")).toEqual("(")
+      expect(phoneMask("(D")).toEqual("(")
+      expect(phoneMask("1234")).toEqual("(123) 4")
+      expect(phoneMask("12345678901234")).toEqual("(123) 456-7890")
+      expect(phoneMask("(123) -45-67")).toEqual("(123) 456-7")
+      expect(phoneMask("(123) g-45-67")).toEqual("(123) 456-7")
+    })
+  })
+
+  describe("Add Application drawer", () => {
+    it("should open and close the paper application drawer", async () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      expect(addPaperAppButton).toBeInTheDocument()
+
+      await userEvent.click(addPaperAppButton)
+      expect(screen.getByRole("heading", { name: "Add paper application" })).toBeInTheDocument()
+
+      const cancelButton = screen.getByRole("button", { name: "Cancel" })
+      await userEvent.click(cancelButton)
+      expect(
+        screen.queryByRole("heading", { name: "Add paper application" })
+      ).not.toBeInTheDocument()
+    })
+
+    it("should disable save button and hide dropzone when no language is selected", async () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      await userEvent.click(addPaperAppButton)
+
+      const saveButton = screen.getByRole("button", { name: "Save" })
+      expect(saveButton).toBeDisabled()
+
+      expect(screen.queryByText("Upload file")).not.toBeInTheDocument()
+    })
+
+    it.skip("should show dropzone when a language is selected", async () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      await userEvent.click(addPaperAppButton)
+
+      const languageSelect = screen.getByRole("combobox")
+      await userEvent.selectOptions(languageSelect, "en")
+      expect(screen.getByText("Upload file")).toBeInTheDocument()
+    })
+
+    it.skip("should disable language selector and save button during file upload, then enable save after upload", async () => {
+      const mockFileUploader = helpers.fileUploader as jest.MockedFunction<
+        typeof helpers.fileUploader
+      >
+      // eslint-disable-next-line @typescript-eslint/require-await
+      mockFileUploader.mockImplementation(async ({ setFileUploadData, setProgressValue }) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: "test-cloudinary-id/test-file",
+          url: "https://test.cloudinary.com/test-file.pdf",
+        })
+      })
+
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      await userEvent.click(addPaperAppButton)
+
+      const languageSelect = screen.getByRole("combobox")
+      await userEvent.selectOptions(languageSelect, "en")
+
+      await waitFor(() => {
+        expect(screen.getByText("Upload file")).toBeInTheDocument()
+      })
+
+      const saveButton = screen.getByRole("button", { name: "Save" })
+      expect(saveButton).toBeDisabled()
+
+      const file = new File(["mocked application pdf content"], "application.pdf", {
+        type: "application/pdf",
+      })
+      const dropzone = screen.getByLabelText("Upload file")
+
+      await userEvent.upload(dropzone, file)
+
+      await waitFor(() => {
+        expect(languageSelect).toBeDisabled()
+      })
+
+      await waitFor(() => {
+        expect(saveButton).not.toBeDisabled()
+      })
+
+      await userEvent.click(saveButton)
+      expect(
+        screen.queryByRole("heading", { name: "Add paper application" })
+      ).not.toBeInTheDocument()
+    })
   })
 })

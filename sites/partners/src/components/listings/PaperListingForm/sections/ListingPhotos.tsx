@@ -10,7 +10,11 @@ import {
   Textarea,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid, Heading } from "@bloom-housing/ui-seeds"
-import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
+import {
+  getUrlForListingImage,
+  CLOUDINARY_BUILDING_LABEL,
+  BUILDING_LABEL,
+} from "@bloom-housing/shared-helpers"
 import {
   Asset,
   ListingImage,
@@ -187,9 +191,11 @@ const ListingPhotos = (props: ListingPhotosProps) => {
   }
 
   const savePhoto = useCallback(() => {
+    const label =
+      process.env.useS3FileStorage === "TRUE" ? BUILDING_LABEL : CLOUDINARY_BUILDING_LABEL
     const newImage: ListingImage = {
       ordinal: drawerImages.length,
-      assets: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL } as Asset,
+      assets: { fileId: latestUpload.id, label: label } as Asset,
       description: "",
     }
     if (props.enableListingImageAltText) {

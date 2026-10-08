@@ -159,16 +159,20 @@ const DetailsPrimaryApplicant = ({
         />
       </Grid.Row>
 
-      <SectionWithGrid.HeadingRow>
-        {t("application.contact.workAddress")}
-      </SectionWithGrid.HeadingRow>
-      <Grid.Row columns={3}>
-        <DetailsAddressColumns
-          type={AddressColsType.work}
-          application={application}
-          dataTestId="workAddress"
-        />
-      </Grid.Row>
+      {!disableWorkInRegion && (
+        <>
+          <SectionWithGrid.HeadingRow>
+            {t("application.contact.workAddress")}
+          </SectionWithGrid.HeadingRow>
+          <Grid.Row columns={3}>
+            <DetailsAddressColumns
+              type={AddressColsType.work}
+              application={application}
+              dataTestId="workAddress"
+            />
+          </Grid.Row>
+        </>
+      )}
     </SectionWithGrid>
   )
 }

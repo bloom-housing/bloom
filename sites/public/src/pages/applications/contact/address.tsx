@@ -86,13 +86,47 @@ const ApplicationAddress = () => {
     enabledRuleKeys,
     getValues
   )
+
+  const applyAnswers = (target, data, verifiedAddress?: FoundAddress["newAddress"]) => {
+    mergeDeep(target, data)
+    if (verifiedAddress) {
+      target.applicant.applicantAddress.street = verifiedAddress.street
+      target.applicant.applicantAddress.street2 = verifiedAddress.street2
+      target.applicant.applicantAddress.city = verifiedAddress.city
+      target.applicant.applicantAddress.zipCode = verifiedAddress.zipCode
+      target.applicant.applicantAddress.state = verifiedAddress.state
+      target.applicant.applicantAddress.longitude = verifiedAddress.longitude
+      target.applicant.applicantAddress.latitude = verifiedAddress.latitude
+    }
+
+    if (target.applicant.noPhone) {
+      target.applicant.phoneNumber = ""
+      target.applicant.phoneNumberType = ""
+    }
+    if (!target.additionalPhone) {
+      target.additionalPhoneNumber = ""
+      target.additionalPhoneNumberType = ""
+    }
+    if (!target.sendMailToMailingAddress) {
+      target.applicationsMailingAddress = blankApplication.applicationsMailingAddress
+    }
+    if (!target.applicant.workInRegion) {
+      target.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
+    }
+  }
+
+  const buildPendingSave = (data, verifiedAddress?: FoundAddress["newAddress"]) => {
+    const draft = JSON.parse(JSON.stringify(application))
+    applyAnswers(draft, JSON.parse(JSON.stringify(data)), verifiedAddress)
+    return draft
+  }
+
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
     if (!verifyAddress) {
-      const pendingSave = { ...data, applicant: { ...application.applicant, ...data.applicant } }
-      guardSubmit(pendingSave, () => {
+      guardSubmit(buildPendingSave(data), () => {
         setFoundAddress({})
         setVerifyAddress(true)
         void findValidatedAddress(
@@ -106,34 +140,19 @@ const ApplicationAddress = () => {
       return // Skip rest of the submit process
     }
 
-    mergeDeep(application, data)
-    if (newAddressSelected && foundAddress.newAddress) {
-      application.applicant.applicantAddress.street = foundAddress.newAddress.street
-      application.applicant.applicantAddress.street2 = foundAddress.newAddress.street2
-      application.applicant.applicantAddress.city = foundAddress.newAddress.city
-      application.applicant.applicantAddress.zipCode = foundAddress.newAddress.zipCode
-      application.applicant.applicantAddress.state = foundAddress.newAddress.state
-      application.applicant.applicantAddress.longitude = foundAddress.newAddress.longitude
-      application.applicant.applicantAddress.latitude = foundAddress.newAddress.latitude
+    const verifiedAddress = newAddressSelected ? foundAddress.newAddress : undefined
+    const proceed = () => {
+      applyAnswers(application, data, verifiedAddress)
+      conductor.sync()
+
+      conductor.routeToNextOrReturnUrl()
     }
 
-    if (application.applicant.noPhone) {
-      application.applicant.phoneNumber = ""
-      application.applicant.phoneNumberType = ""
+    if (verifiedAddress) {
+      guardSubmit(buildPendingSave(data, verifiedAddress), proceed)
+    } else {
+      proceed()
     }
-    if (!application.additionalPhone) {
-      application.additionalPhoneNumber = ""
-      application.additionalPhoneNumberType = ""
-    }
-    if (!application.sendMailToMailingAddress) {
-      application.applicationsMailingAddress = blankApplication.applicationsMailingAddress
-    }
-    if (!application.applicant.workInRegion) {
-      application.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
-    }
-    conductor.sync()
-
-    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     onFormError()

@@ -13,4 +13,5 @@ export interface StopLightRule {
   editFieldAnchor?: string // element id to scroll/focus on "Update my answer", red light only
 }
 
+// For each new rule make sure to add `StopLightBanner` for a field that triggers the rule.
 export const stopLightRules: StopLightRule[] = []

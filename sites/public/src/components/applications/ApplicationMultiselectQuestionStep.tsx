@@ -203,7 +203,13 @@ const ApplicationMultiselectQuestionStep = ({
     return { [applicationSection]: [...otherQuestions, body.current] }
   }
 
-  const continueSubmit = () => {
+  const onSubmit = (data) => {
+    if (verifyAddressStep === 0) {
+      body.current = enableV2MSQ
+        ? mapCheckboxesToApi(data, question, applicationSection)
+        : mapCheckboxesToApiV1(data, question, applicationSection)
+    }
+
     // Verify address on preferences
     if (questionOptions.some((item) => item.shouldCollectAddress || item.collectAddress)) {
       const step: number = (body.current.selections || body.current.options).findIndex(
@@ -237,50 +243,41 @@ const ApplicationMultiselectQuestionStep = ({
       }
     }
 
-    if (questions.length > 1 && body.current) {
-      // If there is more than one question, save the data in segments
-      const currentQuestions = enableV2MSQ
-        ? conductor.application.applicationSelections.filter(
-            (selection: ApplicationSelectionCreate) =>
-              questions.find(
-                (question) => question.multiselectQuestions.id === selection.multiselectQuestion.id
-              ) && selection.multiselectQuestion.id != body.current.multiselectQuestion.id
-          )
-        : conductor.application[applicationSection].filter(
-            (question) => question.key !== body.current.key
-          )
+    guardSubmit(buildPendingSave(), () => {
+      if (questions.length > 1 && body.current) {
+        // If there is more than one question, save the data in segments
+        const currentQuestions = enableV2MSQ
+          ? conductor.application.applicationSelections.filter(
+              (selection: ApplicationSelectionCreate) =>
+                questions.find(
+                  (question) =>
+                    question.multiselectQuestions.id === selection.multiselectQuestion.id
+                ) && selection.multiselectQuestion.id != body.current.multiselectQuestion.id
+            )
+          : conductor.application[applicationSection].filter(
+              (question) => question.key !== body.current.key
+            )
 
-      conductor.currentStep.save([...currentQuestions, body.current])
-      setApplicationQuestions([...currentQuestions, body.current])
-    } else {
-      // Otherwise, submit all at once
-      conductor.currentStep.save([body.current])
-    }
-    // Update to the next page if we have more pages
-    if (page !== questions.length && !conductor.returnToReview) {
-      setVerifyAddressStep(0)
-      setVerifyAddress(false)
-      setPage(page + 1)
-      body.current = null
-      window.scrollTo({ top: 0 })
-      return
-    }
-    // Otherwise complete the section and move to the next URL
-    conductor.completeSection(applicationSectionNumber)
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
-  }
-
-  const onSubmit = (data) => {
-    if (verifyAddressStep === 0) {
-      body.current = enableV2MSQ
-        ? mapCheckboxesToApi(data, question, applicationSection)
-        : mapCheckboxesToApiV1(data, question, applicationSection)
-      guardSubmit(buildPendingSave(), continueSubmit)
-      return
-    }
-
-    continueSubmit()
+        conductor.currentStep.save([...currentQuestions, body.current])
+        setApplicationQuestions([...currentQuestions, body.current])
+      } else {
+        // Otherwise, submit all at once
+        conductor.currentStep.save([body.current])
+      }
+      // Update to the next page if we have more pages
+      if (page !== questions.length && !conductor.returnToReview) {
+        setVerifyAddressStep(0)
+        setVerifyAddress(false)
+        setPage(page + 1)
+        body.current = null
+        window.scrollTo({ top: 0 })
+        return
+      }
+      // Otherwise complete the section and move to the next URL
+      conductor.completeSection(applicationSectionNumber)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
 
   const onError = () => {

@@ -29,3 +29,8 @@
   width: 100%;
   padding-top: var(--seeds-s2);
 }
+
+.image-preview {
+  max-block-size: var(--seeds-s20);
+  align-self: flex-start;
+}

@@ -11200,7 +11200,10 @@ export interface FooterLinkDTO {
 /** FooterLogoDTO */
 export interface FooterLogoDTO {
   /**  */
-  logoSrc: string
+  logoSrc?: string
+
+  /**  */
+  logoFileId?: string
 
   /**  */
   logoAltText?: string
@@ -11870,6 +11873,7 @@ export enum FeatureFlagEnum {
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
+  "disableReferralOpportunity" = "disableReferralOpportunity",
   "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
