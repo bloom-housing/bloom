@@ -70,6 +70,7 @@ export enum FeatureFlagEnum {
   enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
   enablePartnerLotteryExport = 'enablePartnerLotteryExport',
+  enablePartnerLotteryRun = 'enablePartnerLotteryRun',
   enablePartnerSettings = 'enablePartnerSettings',
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
@@ -433,6 +434,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enablePartnerLotteryExport,
     description:
       'When true, partner can export lottery immediately after it is run.',
+  },
+  {
+    name: FeatureFlagEnum.enablePartnerLotteryRun,
+    description: 'When true, a partner user can run the lottery',
   },
   {
     name: FeatureFlagEnum.enablePartnerSettings,
