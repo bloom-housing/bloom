@@ -43,6 +43,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
 | [enableApplicationExpirationNonAdmins](./feature-flags/enableApplicationExpirationNonAdmins.md) | When true, application data in the partner site will expire for non-admin users after 45 days |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
+| [enableApproveAndPublishOnEdit](./feature-flags/enableApproveAndPublishOnEdit.md) | When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving |
 | [enableAutoOpenDate](./feature-flags/enableAutoOpenDate.md) | When true, partners can set an optional scheduled listing applications open date |
 | [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
