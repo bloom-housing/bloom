@@ -20,6 +20,14 @@ export const translations = (
         footer: {
           line1: 'Bloom',
           line2: '',
+          thankYou: 'Gracias',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'Hola',
+          message:
+            'Use el siguiente código para iniciar sesión en su cuenta de %{jurisdictionName}. Este código será válido durante 10 minutos. Nunca comparta este código.',
+          singleUseCode: '%{singleUseCode}',
         },
         confirmation: {
           eligible: {
@@ -283,6 +291,63 @@ export const translations = (
       };
     case LanguagesEnum.vi:
       return {
+        t: {
+          hello: 'Xin chào',
+          seeListing: 'XEM DANH SÁCH',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: 'Cảm ơn bạn',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'Xin chào',
+          message:
+            'Sử dụng mã sau để đăng nhập vào tài khoản %{jurisdictionName} của bạn. Mã này chỉ có hiệu lực trong 10 phút. Không bao giờ chia sẻ mã này.',
+          singleUseCode: '%{singleUseCode}',
+        },
+        confirmation: {
+          eligible: {
+            waitlist:
+              'Những người nộp đơn đủ điều kiện sẽ được đưa vào danh sách chờ theo thứ tự tiếp nhận đơn cho đến khi tất cả các vị trí được lấp đầy.',
+            waitlistContact:
+              'Bạn có thể được liên hệ trong khi ở trong danh sách chờ để xác nhận rằng bạn muốn tiếp tục ở trong danh sách.',
+            waitlistContactAdvocate:
+              'Khách hàng của bạn có thể được liên hệ trong khi ở trong danh sách chờ để xác nhận rằng họ muốn tiếp tục ở trong danh sách chờ.',
+            waitlistPreference:
+              'Các tùy chọn nhà ở, nếu có, sẽ ảnh hưởng đến thứ tự danh sách chờ.',
+          },
+          interview:
+            'Nếu bạn được liên hệ để phỏng vấn, bạn sẽ được yêu cầu điền một đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.',
+          interviewAdvocate:
+            'Nếu khách hàng của bạn được liên hệ để phỏng vấn, họ sẽ được yêu cầu điền một đơn đăng ký chi tiết hơn và cung cấp các tài liệu hỗ trợ.',
+          whatHappensNext: 'Điều gì sẽ xảy ra tiếp theo?',
+          questions: 'Có câu hỏi?',
+          needToMakeUpdates: 'Cần thực hiện thay đổi?',
+          applicationsClosed: 'Đơn đăng ký <br />đã đóng',
+          applicationsRanked: 'Đơn đăng ký <br />đã xếp hạng',
+          applicationReceived: 'Đơn đăng ký <br />đã nhận',
+          yourConfirmationNumber: 'Số xác nhận của bạn',
+          gotYourConfirmationNumber:
+            'Chúng tôi đã nhận được đơn đăng ký của bạn cho:',
+        },
+        leasingAgent: {
+          officeHours: 'Giờ làm việc',
+          propertyManager: 'Quản lý tài sản',
+          contactAgentToUpdateInfo:
+            'Nếu bạn cần cập nhật thông tin trên đơn đăng ký của mình, đừng nộp đơn mới. Thay vào đó, hãy liên hệ với đại lý của danh sách này.',
+          contactAgentForQuestions:
+            'Nếu bạn có câu hỏi về đơn đăng ký này, vui lòng liên hệ với đại lý của danh sách này.',
+        },
+        register: {
+          welcome: 'Chào mừng',
+          welcomeMessage:
+            'Cảm ơn bạn đã tạo tài khoản trên %{appUrl}. Giờ đây, bạn sẽ dễ dàng hơn khi bắt đầu, lưu và gửi đơn đăng ký trực tuyến cho các danh sách xuất hiện trên trang web.',
+          confirmMyAccount: 'Xác nhận tài khoản của tôi',
+          toConfirmAccountMessage:
+            'Để hoàn tất việc tạo tài khoản của bạn, vui lòng nhấp vào liên kết dưới đây:',
+        },
         applicationBulk: {
           viewApplications: 'Xem đơn đăng ký',
           success: {
@@ -426,12 +491,25 @@ export const translations = (
           privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         lotteryAvailable: {
+          header: 'Kết quả xổ số nhà ở mới đã có',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: 'Điều khoản sử dụng',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'Bloom thường không chấp nhận các đơn xin trùng lặp. Một đơn xin trùng lặp là đơn xin có người cũng xuất hiện trên một đơn xin khác cho cùng một cơ hội nhà ở. Để biết thông tin chi tiết hơn về cách chúng tôi xử lý các đơn xin trùng lặp, hãy xem của chúng tôi',
+          otherOpportunities1:
+            'Để xem các cơ hội nhà ở khác, vui lòng truy cập %{appUrl}. Bạn có thể đăng ký để nhận thông báo về các cơ hội đăng ký mới',
+          otherOpportunities2: 'tại đây',
+          otherOpportunities3:
+            'Nếu bạn muốn tìm hiểu về cách thức hoạt động của xổ số, vui lòng xem phần xổ số của',
+          otherOpportunities4: 'Trung tâm trợ giúp Housing Portal',
+          resultsAvailable:
+            'Kết quả đã có cho một xổ số nhà ở cho %{listingName}. Vui lòng xem tài khoản cổng thông tin nhà ở của bạn để biết thêm thông tin.',
+          signIn: 'Đăng nhập để xem kết quả của bạn',
+          whatHappensHeader: 'Điều gì sẽ xảy ra tiếp theo?',
+          whatHappensContent:
+            'Người quản lý tài sản sẽ bắt đầu liên hệ với người nộp đơn theo thứ tự xếp hạng xổ số, trong từng tùy chọn xổ số. Khi tất cả các căn hộ đã được lấp đầy, người quản lý tài sản sẽ ngừng liên hệ với người nộp đơn. Tất cả các căn hộ có thể được lấp đầy trước khi người quản lý tài sản đạt đến thứ hạng của bạn. Nếu điều này xảy ra, bạn sẽ không được liên hệ.',
         },
         applicationUpdate: {
           title: 'Ứng dụng của bạn đã được cập nhật cho %{listingName}',
@@ -485,6 +563,60 @@ export const translations = (
       };
     case LanguagesEnum.zh:
       return {
+        t: {
+          hello: '您好',
+          seeListing: '查看列表',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: '谢谢',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: '您好',
+          message:
+            '请使用以下代码登录您的 %{jurisdictionName} 账户。此代码仅在 10 分钟内有效。请勿与他人分享此代码。',
+          singleUseCode: '%{singleUseCode}',
+        },
+        confirmation: {
+          eligible: {
+            waitlist:
+              '符合条件的申请人将按照申请接收顺序被列入候补名单，直到名额全部填满。',
+            waitlistContact:
+              '在候补名单期间，我们可能会与您联系，以确认您是否希望继续留在候补名单上。',
+            waitlistContactAdvocate:
+              '在候补名单期间，我们可能会与您的客户联系，以确认他们是否希望继续留在候补名单上。',
+            waitlistPreference: '住房优先条件（如适用）将影响候补名单的顺序。',
+          },
+          interview:
+            '如果您被联系参加面谈，您将被要求填写更详细的申请并提供相关证明文件。',
+          interviewAdvocate:
+            '如果您的客户被联系参加面谈，他们将被要求填写更详细的申请并提供相关证明文件。',
+          whatHappensNext: '接下来会发生什么？',
+          questions: '有疑问？',
+          needToMakeUpdates: '需要进行修改？',
+          applicationsClosed: '申请<br />已截止',
+          applicationsRanked: '申请<br />已排名',
+          applicationReceived: '申请<br />已收到',
+          yourConfirmationNumber: '您的确认号码',
+          gotYourConfirmationNumber: '我们已收到您针对以下房源的申请：',
+        },
+        leasingAgent: {
+          officeHours: '办公时间',
+          propertyManager: '物业经理',
+          contactAgentToUpdateInfo:
+            '如果您需要更新申请中的信息，请不要重新提交申请，而是联系该房源的代理人。',
+          contactAgentForQuestions:
+            '如果您对此申请有任何疑问，请联系该房源的代理人。',
+        },
+        register: {
+          welcome: '欢迎',
+          welcomeMessage:
+            '感谢您在 %{appUrl} 创建账户。现在，您可以更轻松地针对网站上显示的房源开始、保存和提交在线申请。',
+          confirmMyAccount: '确认我的账户',
+          toConfirmAccountMessage: '要完成您的账户创建，请点击下面的链接：',
+        },
         applicationBulk: {
           viewApplications: '查看申请',
           success: {
@@ -621,12 +753,24 @@ export const translations = (
           privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         lotteryAvailable: {
+          header: '新的住房抽签结果已公布',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: '使用条款',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'Bloom 一般不接受重复申请。重复申请是指申请者与另一份申请者有相同的住房机会。有关我们如何处理重复申请的更多详细信息，请参阅我们的',
+          otherOpportunities1:
+            '要查看其他住房机会，请访问 %{appUrl}。您可以注册以接收新申请机会的通知',
+          otherOpportunities2: '点击此处',
+          otherOpportunities3: '如果您想了解抽签的运作方式，请参阅',
+          otherOpportunities4: 'Housing Portal 帮助中心的抽签部分',
+          resultsAvailable:
+            '%{listingName} 的住房抽签结果已公布。请查看您的住房门户账户以获取更多信息。',
+          signIn: '登录查看您的结果',
+          whatHappensHeader: '接下来会发生什么？',
+          whatHappensContent:
+            '物业经理将按照抽签排名顺序，在每个抽签优先条件内开始联系申请人。当所有单元都已填满时，物业经理将停止联系申请人。在物业经理联系到您的排名之前，所有单元可能已经填满。如果发生这种情况，您将不会被联系。',
         },
         applicationUpdate: {
           title: '您的申请已更新至 %{listingName}',
@@ -670,6 +814,63 @@ export const translations = (
       };
     case LanguagesEnum.tl:
       return {
+        t: {
+          hello: 'Kumusta',
+          seeListing: 'TINGNAN ANG LISTAHAN',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: 'Salamat',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'Kumusta',
+          message:
+            'Gamitin ang sumusunod na code upang mag-sign in sa iyong %{jurisdictionName} account. Valid lamang ang code na ito sa susunod na 10 minuto. Huwag kailanman ibahagi ang code na ito.',
+          singleUseCode: '%{singleUseCode}',
+        },
+        confirmation: {
+          eligible: {
+            waitlist:
+              'Ang mga kwalipikadong aplikante ay ilalagay sa waitlist batay sa first come first serve na batayan hanggang mapuno ang mga bakante.',
+            waitlistContact:
+              'Maaari kang makontak habang nasa waitlist upang kumpirmahin na nais mong manatili sa waitlist.',
+            waitlistContactAdvocate:
+              'Maaaring makontak ang iyong kliyente habang nasa waitlist upang kumpirmahin na nais niyang manatili sa waitlist.',
+            waitlistPreference:
+              'Ang mga kagustuhan sa pabahay, kung naaangkop, ay makakaapekto sa pagkasunod-sunod ng waitlist.',
+          },
+          interview:
+            'Kung makokontak ka para sa isang panayam, hihilingin sa iyo na punan ang isang mas detalyadong aplikasyon at magbigay ng mga sumusuportang dokumento.',
+          interviewAdvocate:
+            'Kung makokontak ang iyong kliyente para sa isang panayam, hihilingin sa kanila na punan ang isang mas detalyadong aplikasyon at magbigay ng mga sumusuportang dokumento.',
+          whatHappensNext: 'Ano ang susunod na mangyayari?',
+          questions: 'Mga Tanong?',
+          needToMakeUpdates: 'Kailangan mong gumawa ng mga update?',
+          applicationsClosed: 'Aplikasyon <br />sarado',
+          applicationsRanked: 'Aplikasyon <br />naka-ranggo',
+          applicationReceived: 'Aplikasyon <br />natanggap',
+          yourConfirmationNumber: 'Ang Iyong Numero ng Kumpirmasyon',
+          gotYourConfirmationNumber:
+            'Natanggap namin ang iyong aplikasyon para sa:',
+        },
+        leasingAgent: {
+          officeHours: 'Oras ng Opisina',
+          propertyManager: 'Tagapamahala ng Ari-arian',
+          contactAgentToUpdateInfo:
+            'Kung kailangan mong i-update ang impormasyon sa iyong aplikasyon, huwag mag-apply ulit. Sa halip, makipag-ugnayan sa ahente ng listing na ito.',
+          contactAgentForQuestions:
+            'Kung mayroon kang mga tanong tungkol sa aplikasyong ito, mangyaring makipag-ugnayan sa ahente ng listing na ito.',
+        },
+        register: {
+          welcome: 'Maligayang pagdating',
+          welcomeMessage:
+            'Salamat sa paggawa ng iyong account sa %{appUrl}. Magiging mas madali na ngayon para sa iyo na magsimula, mag-save, at magsumite ng mga online na aplikasyon para sa mga listing na lumalabas sa site.',
+          confirmMyAccount: 'Kumpirmahin ang aking account',
+          toConfirmAccountMessage:
+            'Upang makumpleto ang paggawa ng iyong account, mangyaring i-click ang link sa ibaba:',
+        },
         applicationBulk: {
           viewApplications: 'Tingnan ang mga Aplikasyon',
           success: {
@@ -816,12 +1017,25 @@ export const translations = (
           privacyPolicyUrl: 'localhost:3000/privacy-policy',
         },
         lotteryAvailable: {
+          header: 'Available na ang Mga Bagong Resulta ng Lottery ng Pabahay',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: 'Mga Tuntunin ng Paggamit',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'Ang Bloom sa pangkalahatan ay hindi tumatanggap ng mga duplicate na aplikasyon. Ang isang duplicate na aplikasyon ay isa na mayroong isang tao na lumilitaw din sa isa pang aplikasyon para sa parehong pagkakataon sa pabahay. Para sa mas detalyadong impormasyon sa kung paano namin pinangangasiwaan ang mga duplicate, tingnan ang aming',
+          otherOpportunities1:
+            'Upang makita ang iba pang mga pagkakataon sa pabahay, bisitahin ang %{appUrl}. Maaari kang mag-sign up upang matanggap ang mga abiso ng mga bagong pagkakataon sa aplikasyon',
+          otherOpportunities2: 'dito',
+          otherOpportunities3:
+            'Kung nais mong matuto tungkol sa kung paano gumagana ang mga lottery, mangyaring tingnan ang seksyon ng lottery ng',
+          otherOpportunities4: 'Housing Portal Help Center',
+          resultsAvailable:
+            'Available na ang mga resulta para sa isang lottery ng pabahay para sa %{listingName}. Tingnan ang iyong account sa housing portal para sa karagdagang impormasyon.',
+          signIn: 'Mag-sign In upang Tingnan ang Iyong Mga Resulta',
+          whatHappensHeader: 'Ano ang susunod na mangyayari?',
+          whatHappensContent:
+            'Magsisimulang makipag-ugnayan ang tagapamahala ng ari-arian sa mga aplikante ayon sa pagkasunod-sunod ng ranggo ng lottery, sa bawat kagustuhan sa lottery. Kapag napuno na ang lahat ng unit, hihinto ang tagapamahala ng ari-arian sa pakikipag-ugnayan sa mga aplikante. Posibleng mapuno na ang lahat ng unit bago maabot ng tagapamahala ng ari-arian ang iyong ranggo. Kung mangyari ito, hindi ka makokontak.',
         },
         applicationUpdate: {
           title: 'Na-update na ang iyong aplikasyon para sa %{listingName}',
@@ -876,6 +1090,73 @@ export const translations = (
       };
     case LanguagesEnum.bn:
       return {
+        t: {
+          hello: 'হ্যালো',
+          seeListing: 'তালিকা দেখুন',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: 'ধন্যবাদ',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'হাই',
+          message:
+            'আপনার %{jurisdictionName} অ্যাকাউন্টে সাইন ইন করতে নিচের কোডটি ব্যবহার করুন। এই কোডটি ১০ মিনিটের জন্য বৈধ থাকবে। এই কোডটি কখনো শেয়ার করবেন না।',
+          singleUseCode: '%{singleUseCode}',
+        },
+        confirmation: {
+          eligible: {
+            waitlist:
+              'যোগ্য আবেদনকারীদের আবেদন গ্রহণের ক্রম অনুযায়ী অপেক্ষার তালিকায় রাখা হবে, যতক্ষণ না সকল স্থান পূরণ হয়।',
+            waitlistContact:
+              'আপনি অপেক্ষার তালিকায় থাকার সময় আপনার সাথে যোগাযোগ করা হতে পারে যাতে নিশ্চিত করা যায় যে আপনি তালিকায় থাকতে চান।',
+            waitlistContactAdvocate:
+              'আপনার ক্লায়েন্ট অপেক্ষার তালিকায় থাকার সময় তার সাথে যোগাযোগ করা হতে পারে যাতে নিশ্চিত করা যায় যে তিনি তালিকায় থাকতে চান।',
+            waitlistPreference:
+              'আবাসন পছন্দসমূহ, যদি প্রযোজ্য হয়, অপেক্ষার তালিকার ক্রমকে প্রভাবিত করবে।',
+          },
+          interview:
+            'যদি আপনার সাথে সাক্ষাৎকারের জন্য যোগাযোগ করা হয়, তাহলে আপনাকে আরও বিস্তারিত আবেদন পূরণ করতে এবং সহায়ক কাগজপত্র জমা দিতে বলা হবে।',
+          interviewAdvocate:
+            'যদি আপনার ক্লায়েন্টের সাথে সাক্ষাৎকারের জন্য যোগাযোগ করা হয়, তাহলে তাকে আরও বিস্তারিত আবেদন পূরণ করতে এবং সহায়ক কাগজপত্র জমা দিতে বলা হবে।',
+          whatHappensNext: 'এরপর কী হবে?',
+          questions: 'প্রশ্ন আছে?',
+          needToMakeUpdates: 'পরিবর্তন করা প্রয়োজন?',
+          applicationsClosed: 'আবেদন <br />বন্ধ',
+          applicationsRanked: 'আবেদন <br />ক্রমানুসারে স্থান পেয়েছে',
+          applicationReceived: 'আবেদন <br />গৃহীত হয়েছে',
+          yourConfirmationNumber: 'আপনার নিশ্চিতকরণ নম্বর',
+          gotYourConfirmationNumber: 'আমরা আপনার আবেদন পেয়েছি এর জন্য:',
+        },
+        leasingAgent: {
+          officeHours: 'অফিস সময়',
+          propertyManager: 'প্রপার্টি ম্যানেজার',
+          contactAgentToUpdateInfo:
+            'আপনার আবেদনের তথ্য পরিবর্তনের প্রয়োজন হলে, নতুন আবেদন করবেন না। পরিবর্তে, এই তালিকার এজেন্টের সাথে যোগাযোগ করুন।',
+          contactAgentForQuestions:
+            'এই আবেদন সম্পর্কে আপনার কোনো প্রশ্ন থাকলে, অনুগ্রহ করে এই তালিকার এজেন্টের সাথে যোগাযোগ করুন।',
+        },
+        register: {
+          welcome: 'স্বাগতম',
+          welcomeMessage:
+            '%{appUrl}-এ আপনার অ্যাকাউন্ট তৈরি করার জন্য ধন্যবাদ। এখন সাইটে প্রদর্শিত তালিকার জন্য অনলাইন আবেদন শুরু করা, সংরক্ষণ করা এবং জমা দেওয়া আপনার জন্য আরও সহজ হবে।',
+          confirmMyAccount: 'আমার অ্যাকাউন্ট নিশ্চিত করুন',
+          toConfirmAccountMessage:
+            'আপনার অ্যাকাউন্ট তৈরি সম্পূর্ণ করতে, দয়া করে নীচের লিঙ্কে ক্লিক করুন:',
+        },
+        accountRemoval: {
+          subject:
+            'নিষ্ক্রিয়তার কারণে Bloom Housing অ্যাকাউন্ট অপসারণের সময়সূচি নির্ধারিত হয়েছে',
+          courtesyText1:
+            'এটি একটি সৌজন্য ইমেল যা আপনাকে জানাচ্ছে যে আপনার Bloom হাউজিং পোর্টাল অ্যাকাউন্টটি ৩ বছর ধরে নিষ্ক্রিয় থাকার কারণে, আমাদের নীতি অনুযায়ী এটি ৩০ দিনের মধ্যে মুছে ফেলা হবে।',
+          courtesyText2:
+            'আপনি যদি আপনার অ্যাকাউন্ট রাখতে চান, তাহলে অনুগ্রহ করে আগামী মাসের মধ্যে যেকোনো সময় লগ ইন করুন এবং আমরা আপনার অ্যাকাউন্টটি পুনরায় সক্রিয় হিসেবে বিবেচনা করব।',
+          signIn: 'Bloom Housing-এ সাইন ইন করুন',
+          privacyPolicy: 'প্রাইভেসি পলিসি',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
         applicationBulk: {
           viewApplications: 'আবেদনগুলো দেখুন',
           success: {
@@ -1010,12 +1291,25 @@ export const translations = (
           },
         },
         lotteryAvailable: {
+          header: 'নতুন হাউজিং লটারি ফলাফল উপলব্ধ',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: 'ব্যবহারের শর্তাবলি',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'ব্লুম সাধারণত একই আবাসন সুবিধার জন্য একাধিক আবেদনে একই ব্যক্তির নাম থাকলে—অর্থাৎ দ্বৈত আবেদন—তা গ্রহণ করে না। দ্বৈত আবেদনের বিষয়টি আমরা কীভাবে পরিচালনা করি সে সম্পর্কে বিস্তারিত তথ্যের জন্য আমাদের',
+          otherOpportunities1:
+            'অন্যান্য আবাসন সুযোগ দেখতে, অনুগ্রহ করে %{appUrl} ভিজিট করুন। নতুন আবেদনের সুযোগের বিজ্ঞপ্তি পেতে আপনি সাইন আপ করতে পারেন',
+          otherOpportunities2: 'এখানে',
+          otherOpportunities3:
+            'লটারি কীভাবে কাজ করে তা জানতে চাইলে, অনুগ্রহ করে দেখুন',
+          otherOpportunities4: 'Housing Portal হেল্প সেন্টারের লটারি বিভাগ',
+          resultsAvailable:
+            '%{listingName}-এর জন্য একটি হাউজিং লটারির ফলাফল উপলব্ধ। আরও তথ্যের জন্য আপনার হাউজিং পোর্টাল অ্যাকাউন্ট দেখুন।',
+          signIn: 'আপনার ফলাফল দেখতে সাইন ইন করুন',
+          whatHappensHeader: 'এরপর কী হবে?',
+          whatHappensContent:
+            'প্রপার্টি ম্যানেজার প্রতিটি লটারি পছন্দের মধ্যে লটারি র‌্যাঙ্কের ক্রম অনুযায়ী আবেদনকারীদের সাথে যোগাযোগ শুরু করবেন। যখন সমস্ত ইউনিট পূর্ণ হয়ে যাবে, তখন প্রপার্টি ম্যানেজার আবেদনকারীদের সাথে যোগাযোগ বন্ধ করবেন। প্রপার্টি ম্যানেজার আপনার র‌্যাঙ্কে পৌঁছানোর আগে সমস্ত ইউনিট পূর্ণ হয়ে যেতে পারে। এটি ঘটলে, আপনার সাথে যোগাযোগ করা হবে না।',
         },
         applicationUpdate: {
           title:
@@ -1070,6 +1364,72 @@ export const translations = (
       };
     case LanguagesEnum.ar:
       return {
+        t: {
+          hello: 'مرحبا',
+          seeListing: 'عرض القائمة',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: 'شكراً لك',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'مرحباً',
+          message:
+            'استخدم الرمز التالي لتسجيل الدخول إلى حسابك في %{jurisdictionName}. هذا الرمز صالح لمدة 10 دقائق فقط. لا تشارك هذا الرمز مع أي شخص أبداً.',
+          singleUseCode: '%{singleUseCode}',
+        },
+        confirmation: {
+          eligible: {
+            waitlist:
+              'سيتم وضع المتقدمين المؤهلين في قائمة الانتظار بحسب ترتيب استلام الطلبات حتى يتم ملء جميع الشواغر.',
+            waitlistContact:
+              'قد يتم الاتصال بك أثناء وجودك في قائمة الانتظار للتأكد من رغبتك في البقاء في القائمة.',
+            waitlistContactAdvocate:
+              'قد يتم الاتصال بعميلك أثناء وجوده في قائمة الانتظار للتأكد من رغبته في البقاء في قائمة الانتظار.',
+            waitlistPreference:
+              'ستؤثر أولويات الإسكان، إن وجدت، على ترتيب قائمة الانتظار.',
+          },
+          interview:
+            'إذا تم الاتصال بك لإجراء مقابلة، سيُطلب منك تعبئة طلب أكثر تفصيلاً وتقديم المستندات الداعمة.',
+          interviewAdvocate:
+            'إذا تم الاتصال بعميلك لإجراء مقابلة، سيُطلب منه تعبئة طلب أكثر تفصيلاً وتقديم المستندات الداعمة.',
+          whatHappensNext: 'ماذا يحدث بعد ذلك؟',
+          questions: 'أسئلة؟',
+          needToMakeUpdates: 'تحتاج إلى إجراء تعديلات؟',
+          applicationsClosed: 'الطلب <br />مغلق',
+          applicationsRanked: 'الطلب <br />مرتب',
+          applicationReceived: 'الطلب <br />مستلم',
+          yourConfirmationNumber: 'رقم التأكيد الخاص بك',
+          gotYourConfirmationNumber: 'استلمنا طلبك الخاص بـ:',
+        },
+        leasingAgent: {
+          officeHours: 'ساعات العمل',
+          propertyManager: 'مدير العقار',
+          contactAgentToUpdateInfo:
+            'إذا كنت بحاجة إلى تحديث معلومات في طلبك، لا تقدم طلباً جديداً. بل تواصل مع وكيل هذا الإعلان.',
+          contactAgentForQuestions:
+            'إذا كانت لديك أسئلة بخصوص هذا الطلب، يرجى التواصل مع وكيل هذا الإعلان.',
+        },
+        register: {
+          welcome: 'مرحباً',
+          welcomeMessage:
+            'شكراً لإنشاء حسابك على %{appUrl}. سيكون من الأسهل الآن عليك بدء وحفظ وتقديم الطلبات عبر الإنترنت للقوائم المعروضة على الموقع.',
+          confirmMyAccount: 'تأكيد حسابي',
+          toConfirmAccountMessage:
+            'لإكمال إنشاء حسابك، يرجى النقر على الرابط أدناه:',
+        },
+        accountRemoval: {
+          subject: 'حذف مجدول لحساب Bloom Housing بسبب عدم النشاط',
+          courtesyText1:
+            'هذه رسالة تذكيرية لإعلامك بأنه نظراً لعدم نشاط حسابك في بوابة Bloom Housing لمدة 3 سنوات، سيتم حذف حسابك في غضون 30 يوماً وفقاً لسياستنا',
+          courtesyText2:
+            'إذا كنت ترغب في الاحتفاظ بحسابك، يرجى تسجيل الدخول في أي وقت خلال الشهر القادم وسنعتبر حسابك نشطاً مرة أخرى.',
+          signIn: 'تسجيل الدخول إلى Bloom Housing',
+          privacyPolicy: 'سياسة الخصوصية',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
         applicationBulk: {
           viewApplications: 'عرض الطلبات',
           success: {
@@ -1198,12 +1558,25 @@ export const translations = (
           },
         },
         lotteryAvailable: {
+          header: 'نتائج قرعة الإسكان الجديدة متاحة',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: 'شروط الاستخدام',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'بشكل عام، لا تقبل Bloom الطلبات المكررة. ويُقصد بالطلب المكرر ذلك الطلب الذي يتضمن شخصاً يظهر أيضاً في طلب آخر لنفس فرصة السكن. لمزيد من التفاصيل حول كيفية تعاملنا مع الطلبات المكررة، يرجى الاطلاع على',
+          otherOpportunities1:
+            'لعرض فرص سكن أخرى، يرجى زيارة %{appUrl}. يمكنك التسجيل لتلقي إشعارات بفرص تقديم الطلبات الجديدة',
+          otherOpportunities2: 'هنا',
+          otherOpportunities3:
+            'إذا كنت تريد معرفة كيفية عمل القرعات، يرجى الاطلاع على قسم القرعة في',
+          otherOpportunities4: 'مركز مساعدة Housing Portal',
+          resultsAvailable:
+            'نتائج قرعة الإسكان متاحة الآن لـ %{listingName}. يرجى الاطلاع على حسابك في بوابة الإسكان لمزيد من المعلومات.',
+          signIn: 'سجّل الدخول لعرض نتائجك',
+          whatHappensHeader: 'ماذا يحدث بعد ذلك؟',
+          whatHappensContent:
+            'سيبدأ مدير العقار بالاتصال بالمتقدمين بحسب ترتيب تصنيف القرعة، ضمن كل أولوية من أولويات القرعة. وعند امتلاء جميع الوحدات، سيتوقف مدير العقار عن الاتصال بالمتقدمين. قد تُشغل جميع الوحدات قبل أن يصل مدير العقار إلى ترتيبك. وإذا حدث ذلك، فلن يتم الاتصال بك.',
         },
         applicationUpdate: {
           title: 'تم تحديث طلبك لـ %{listingName}',
@@ -1253,6 +1626,40 @@ export const translations = (
       };
     case LanguagesEnum.ko:
       return {
+        t: {
+          hello: '안녕하세요',
+          seeListing: '목록 보기',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: '감사합니다',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: '안녕하세요',
+          message:
+            '다음 코드를 사용하여 %{jurisdictionName} 계정에 로그인하세요. 이 코드는 10분 동안만 유효합니다. 이 코드를 절대 공유하지 마세요.',
+          singleUseCode: '%{singleUseCode}',
+        },
+        register: {
+          welcome: '환영합니다',
+          welcomeMessage:
+            '%{appUrl}에서 계정을 만들어 주셔서 감사합니다. 이제 사이트에 표시되는 매물에 대해 온라인 신청서를 더 쉽게 시작, 저장 및 제출할 수 있습니다.',
+          confirmMyAccount: '내 계정 확인',
+          toConfirmAccountMessage:
+            '계정 생성을 완료하려면 아래 링크를 클릭하세요:',
+        },
+        accountRemoval: {
+          subject: '비활동으로 인한 Bloom Housing 계정 삭제 예정',
+          courtesyText1:
+            '이것은 안내 이메일로, 귀하의 Bloom Housing 포털 계정이 3년 동안 비활성 상태였기 때문에 당사 정책에 따라 30일 이내에 계정이 삭제될 예정임을 알려드립니다',
+          courtesyText2:
+            '계정을 유지하고 싶으시다면, 다음 달 중 언제든지 로그인해 주시면 계정을 다시 활성 상태로 간주하겠습니다.',
+          signIn: 'Bloom Housing에 로그인',
+          privacyPolicy: '개인정보 보호정책',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
         applicationBulk: {
           viewApplications: '신청서 보기',
           success: {
@@ -1384,26 +1791,58 @@ export const translations = (
         },
         confirmation: {
           eligible: {
+            waitlist:
+              '자격을 갖춘 신청자는 모든 공석이 채워질 때까지 신청 접수 순서에 따라 대기자 명단에 올라갑니다.',
+            waitlistContact:
+              '대기자 명단에 있는 동안 계속 대기자 명단에 남아 있기를 원하는지 확인하기 위해 연락을 받을 수 있습니다.',
             waitlistContactAdvocate:
               '대기자 명단에 있는 고객에게 연락하여 대기자 명단에 계속 남아 있기를 원하는지 확인하는 절차를 거칠 수 있습니다.',
+            waitlistPreference:
+              '주택 우선 사항(해당되는 경우)은 대기자 명단 순서에 영향을 미칩니다.',
           },
+          interview:
+            '면접을 위해 연락을 받으시면, 더 자세한 신청서를 작성하고 증빙 서류를 제출해야 합니다.',
           questions: '질문?',
           interviewAdvocate:
             '의뢰인이 인터뷰 요청을 받게 되면, 보다 자세한 신청서를 작성하고 관련 서류를 제출해야 합니다.',
+          whatHappensNext: '다음에는 어떻게 되나요?',
+          needToMakeUpdates: '수정이 필요하신가요?',
+          applicationsClosed: '신청 <br />마감',
+          applicationsRanked: '신청 <br />순위 지정됨',
+          applicationReceived: '신청 <br />접수됨',
+          yourConfirmationNumber: '귀하의 확인 번호',
+          gotYourConfirmationNumber: '다음에 대한 신청서를 접수했습니다:',
           gotYourConfirmationNumberOnYourBehalf:
             '저희는 귀하를 대신하여 신청서를 접수했습니다.',
         },
         leasingAgent: {
+          officeHours: '운영 시간',
+          propertyManager: '부동산 관리자',
+          contactAgentToUpdateInfo:
+            '신청서의 정보를 업데이트해야 하는 경우 새로 신청하지 마십시오. 대신 이 매물의 담당자에게 문의하십시오.',
           contactAgentForQuestions:
             '본 신청서와 관련하여 궁금한 사항이 있으시면 해당 매물 담당자에게 문의해 주십시오.',
         },
         lotteryAvailable: {
+          header: '새로운 주택 추첨 결과 확인 가능',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: '이용 약관',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'Bloom은 일반적으로 중복 신청을 허용하지 않습니다. 중복 신청이란 동일한 주택 공급 건에 대해 다른 신청서에도 이름이 올라가 있는 지원자가 포함된 경우를 의미합니다. 중복 신청 처리 방식에 대한 자세한 내용은 다음을 참조하십시오',
+          otherOpportunities1:
+            '다른 주택 기회를 보려면 %{appUrl}을 방문하세요. 새로운 신청 기회에 대한 알림을 받으려면 가입할 수 있습니다',
+          otherOpportunities2: '여기',
+          otherOpportunities3:
+            '추첨이 어떻게 진행되는지 알아보려면 다음의 추첨 섹션을 참조하세요',
+          otherOpportunities4: 'Housing Portal 고객센터',
+          resultsAvailable:
+            '%{listingName}에 대한 주택 추첨 결과를 확인할 수 있습니다. 자세한 내용은 주택 포털 계정을 확인하세요.',
+          signIn: '로그인하여 결과 보기',
+          whatHappensHeader: '다음에는 어떻게 되나요?',
+          whatHappensContent:
+            '부동산 관리자는 각 추첨 우선 사항 내에서 추첨 순위 순서로 신청자에게 연락을 시작합니다. 모든 세대가 채워지면 부동산 관리자는 신청자에게 연락을 중단합니다. 부동산 관리자가 귀하의 순위에 도달하기 전에 모든 세대가 채워질 수 있습니다. 이 경우 연락을 받지 못합니다.',
         },
         applicationUpdate: {
           title: '귀하의 신청서가 %{listingName}에 대해 업데이트되었습니다.',
@@ -1455,6 +1894,41 @@ export const translations = (
       };
     case LanguagesEnum.hy:
       return {
+        t: {
+          hello: 'Բարև',
+          seeListing: 'Դիտեք ցուցակը',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: 'Շնորհակալություն',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'Բարև',
+          message:
+            'Օգտագործեք հետևյալ կոդը Ձեր %{jurisdictionName} հաշվին մուտք գործելու համար: Այս կոդը վավեր է միայն հաջորդ 10 րոպեի ընթացքում: Երբեք չկիսվեք այս կոդով:',
+          singleUseCode: '%{singleUseCode}',
+        },
+        register: {
+          welcome: 'Բարի գալուստ',
+          welcomeMessage:
+            'Շնորհակալություն %{appUrl}-ում Ձեր հաշիվը ստեղծելու համար։ Այժմ Ձեզ համար ավելի հեշտ կլինի սկսել, պահել և ներկայացնել առցանց դիմումներ կայքում հայտնված ցուցակների համար։',
+          confirmMyAccount: 'Հաստատել իմ հաշիվը',
+          toConfirmAccountMessage:
+            'Ձեր հաշվի ստեղծումն ավարտելու համար, խնդրում ենք սեղմել ստորև բերված հղումը՝',
+        },
+        accountRemoval: {
+          subject:
+            'Bloom Housing հաշվի պլանավորված հեռացումը ոչ ակտիվության պատճառով',
+          courtesyText1:
+            'Սա տեղեկացնող նամակ է՝ տեղեկացնելու Ձեզ, որ քանի որ Ձեր Bloom Housing պորտալի հաշիվը եղել է ոչ ակտիվ 3 տարի, Ձեր հաշիվը կհեռացվի 30 օրվա ընթացքում՝ մեր քաղականության համաձայն',
+          courtesyText2:
+            'Եթե ցանկանում եք պահել Ձեր հաշիվը, խնդրում ենք մուտք գործել ցանկացած պահի հետագա ամսվա ընթացքում, և մենք կդիտարկենք Ձեր հաշիվը որպես կրկին ակտիվ։',
+          signIn: 'Մուտք գործել Bloom Housing',
+          privacyPolicy: 'Գաղտնիության քաղաքականություն',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
         applicationBulk: {
           viewApplications: 'Դիտել դիմումները',
           success: {
@@ -1590,26 +2064,58 @@ export const translations = (
         },
         confirmation: {
           eligible: {
+            waitlist:
+              'Իրավասու դիմորդները կզբաղեցնեն սպասման ցուցակում տեղ՝ դիմումի ստացման հերթականությամբ, մինչև բոլոր տեղերը զբաղվեն։',
+            waitlistContact:
+              'Սպասման ցուցակում գտնվելու ընթացքում Ձեզ հետ կարող են կապ հաստատել՝ հաստատելու համար, որ ցանկանում եք մնալ ցուցակում։',
             waitlistContactAdvocate:
               'Ձեր հաճախորդի հետ կարող են կապ հաստատել սպասման ցուցակում գտնվելու ընթացքում՝ հաստատելու համար, որ նա ցանկանում է մնալ սպասման ցուցակում։',
+            waitlistPreference:
+              'Բնակարանային նախապատվությունները, եթե կիրառելի են, կազդեն սպասման ցուցակի հերթականության վրա։',
           },
+          interview:
+            'Եթե Ձեզ հետ կապ հաստատեն հարցազրույցի համար, Ձեզանից կխնդրվի լրացնել ավելի մանրամասն դիմում և տրամադրել հիմնավորող փաստաթղթեր։',
           questions: 'Հարցեր՞',
           interviewAdvocate:
             'Եթե ձեր հաճախորդի հետ կապ հաստատեն հարցազրույցի համար, նրան կխնդրեն լրացնել ավելի մանրամասն դիմում և տրամադրել հիմնավորող փաստաթղթեր։',
+          whatHappensNext: 'Ի՞նչ տեղի կունենա հետո:',
+          needToMakeUpdates: 'Անհրաժեշտ է փոփոխություններ կատարել:',
+          applicationsClosed: 'Դիմում <br />փակված է',
+          applicationsRanked: 'Դիմում <br />դասակարգված է',
+          applicationReceived: 'Դիմում <br />ստացված է',
+          yourConfirmationNumber: 'Ձեր հաստատման համարը',
+          gotYourConfirmationNumber: 'Մենք ստացել ենք Ձեր դիմումը՝',
           gotYourConfirmationNumberOnYourBehalf:
             'Մենք Ձեր անունից դիմում ենք ստացել',
         },
         leasingAgent: {
+          officeHours: 'Աշխատանքային ժամեր',
+          propertyManager: 'Գույքի կառավարիչ',
+          contactAgentToUpdateInfo:
+            'Եթե Ձեզ անհրաժեշտ է թարմացնել Ձեր դիմումի տեղեկությունները, մի ներկայացրեք նոր դիմում։ Փոխարենը կապվեք այս ցուցակի գործակալի հետ։',
           contactAgentForQuestions:
             'Եթե ունեք հարցեր այս դիմումի վերաբերյալ, խնդրում ենք կապվել այս ցուցակի գործակալի հետ։',
         },
         lotteryAvailable: {
+          header: 'Նոր բնակարանային վիճակախաղի արդյունքները հասանելի են',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: 'Օգտագործման պայմաններ',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'Bloom-ը, որպես կանոն, չի ընդունում կրկնօրինակ դիմումներ: Կրկնօրինակ դիմումը այն դիմումն է, որի դեպքում անձը նույնպես նշված է նույն բնակարանային հնարավորության համար նախատեսված մեկ այլ դիմումում: Կրկնօրինակ դիմումների հետ վարվելու վերաբերյալ ավելի մանրամասն տեղեկությունների համար տե՛ս մեր',
+          otherOpportunities1:
+            'Այլ բնակարանային հնարավորություններ տեսնելու համար, այցելեք %{appUrl}։ Կարող եք գրանցվել՝ նոր դիմումի հնարավորությունների մասին ծանուցումներ ստանալու համար',
+          otherOpportunities2: 'այստեղ',
+          otherOpportunities3:
+            'Եթե ցանկանում եք իմանալ, թե ինչպես են աշխատում վիճակախաղերը, խնդրում ենք տեսնել վիճակախաղի բաժինը',
+          otherOpportunities4: 'Housing Portal Օգնության կենտրոնի',
+          resultsAvailable:
+            '%{listingName}-ի համար բնակարանային վիճակախաղի արդյունքները հասանելի են։ Լրացուցիչ տեղեկությունների համար տեսեք Ձեր բնակարանային պորտալի հաշիվը։',
+          signIn: 'Մուտք գործեք Ձեր արդյունքները դիտելու համար',
+          whatHappensHeader: 'Ի՞նչ տեղի կունենա հետո:',
+          whatHappensContent:
+            'Գույքի կառավարիչը կսկսի կապ հաստատել դիմորդների հետ վիճակախաղի դասակարգման հերթականությամբ, յուրաքանչյուր վիճակախաղի նախապատվության շրջանակում։ Երբ բոլոր միավորները զբաղված են, գույքի կառավարիչը կդադարեցնի կապ հաստատել դիմորդների հետ։ Բոլոր միավորները կարող են զբաղված լինել նախքան գույքի կառավարիչը հասնի Ձեր դասակարգմանը։ Եթե դա տեղի ունենա, Ձեզ հետ կապ չի հաստատվի։',
         },
         applicationUpdate: {
           title: 'Ձեր ծրագիրը թարմացվել է %{listingName}-ի համար',
@@ -1662,6 +2168,40 @@ export const translations = (
       };
     case LanguagesEnum.fa:
       return {
+        t: {
+          hello: 'سلام',
+          seeListing: 'مشاهده فهرست',
+        },
+        footer: {
+          line1: 'Bloom',
+          line2: '',
+          thankYou: 'با تشکر',
+          footer: 'Bloom Housing',
+        },
+        singleUseCodeEmail: {
+          greeting: 'سلام',
+          message:
+            'برای ورود به حساب %{jurisdictionName} خود از کد زیر استفاده کنید. این کد فقط برای ۱۰ دقیقه آینده معتبر است. هرگز این کد را با دیگران به اشتراک نگذارید.',
+          singleUseCode: '%{singleUseCode}',
+        },
+        register: {
+          welcome: 'خوش آمدید',
+          welcomeMessage:
+            'با تشکر از ایجاد حساب خود در %{appUrl}. اکنون برای شما آسان‌تر خواهد بود که درخواست‌های آنلاین را برای فهرست‌های موجود در سایت شروع، ذخیره و ارسال کنید.',
+          confirmMyAccount: 'تأیید حساب من',
+          toConfirmAccountMessage:
+            'برای تکمیل ایجاد حساب خود، لطفاً روی پیوند زیر کلیک کنید:',
+        },
+        accountRemoval: {
+          subject: 'حذف زمان‌بندی‌شده حساب Bloom Housing به دلیل عدم فعالیت',
+          courtesyText1:
+            'این یک ایمیل اطلاع‌رسانی است تا به شما اطلاع دهد که چون حساب شما در پورتال Bloom Housing به مدت ۳ سال غیرفعال بوده است، طبق سیاست ما، حساب شما ظرف ۳۰ روز حذف خواهد شد',
+          courtesyText2:
+            'اگر می‌خواهید حساب خود را حفظ کنید، لطفاً در هر زمان طی یک ماه آینده وارد شوید و ما حساب شما را دوباره فعال در نظر خواهیم گرفت.',
+          signIn: 'ورود به Bloom Housing',
+          privacyPolicy: 'سیاست حفظ حریم خصوصی',
+          privacyPolicyUrl: 'localhost:3000/privacy-policy',
+        },
         applicationBulk: {
           viewApplications: 'مشاهده درخواست‌ها',
           success: {
@@ -1776,6 +2316,18 @@ export const translations = (
             line1: 'این اطلاعات ممکن است تغییر کند',
             line2: 'لطفاً برای جدیدترین اطلاعات، آگهی را مشاهده کنید',
           },
+          viewButton: {
+            en: 'View listing & apply',
+            es: 'Ver listado y aplicar',
+            zh: '查看列表并申请',
+            vi: 'Xem danh sách và áp dụng',
+            tl: 'Tingnan ang listahan at mag-apply',
+            bn: 'তালিকা দেখুন এবং আবেদন করুন',
+            ar: 'عرض القائمة والتقديم',
+            fa: 'مشاهده لیست و اعمال',
+            hy: 'Դիտեք ցուցակը և կիրառեք',
+            ko: '목록 보기 및 신청',
+          },
           footer: {
             accessibleMarketingFlyer: 'بروشور بازاریابی قابل دسترس',
             unsubscribeAndEmailSettings: 'لغو اشتراک و مدیریت تنظیمات ایمیل',
@@ -1783,26 +2335,59 @@ export const translations = (
         },
         confirmation: {
           eligible: {
+            waitlist:
+              'متقاضیان واجد شرایط بر اساس ترتیب دریافت درخواست در لیست انتظار قرار می‌گیرند تا زمانی که همه جاهای خالی پر شوند.',
+            waitlistContact:
+              'ممکن است در زمانی که در لیست انتظار هستید با شما تماس گرفته شود تا تأیید شود که می‌خواهید در لیست باقی بمانید.',
             waitlistContactAdvocate:
               'ممکن است در زمان حضور در لیست انتظار، با موکل شما تماس گرفته شود تا تأیید شود که مایل به ماندن در لیست انتظار است.',
+            waitlistPreference:
+              'اولویت‌های مسکن، در صورت وجود، بر ترتیب لیست انتظار تأثیر خواهند گذاشت.',
           },
+          interview:
+            'اگر برای مصاحبه با شما تماس گرفته شود، از شما خواسته می‌شود درخواست دقیق‌تری را تکمیل کرده و مدارک پشتیبان ارائه دهید.',
           questions: 'سوالات؟',
           interviewAdvocate:
             'اگر با موکل شما برای مصاحبه تماس گرفته شود، از او خواسته می‌شود فرم درخواست دقیق‌تری را پر کند و مدارک پشتیبان را ارائه دهد.',
+          whatHappensNext: 'بعد چه اتفاقی می‌افتد؟',
+          needToMakeUpdates: 'نیاز به ایجاد تغییرات دارید؟',
+          applicationsClosed: 'درخواست <br />بسته شد',
+          applicationsRanked: 'درخواست <br />رتبه‌بندی شد',
+          applicationReceived: 'درخواست <br />دریافت شد',
+          yourConfirmationNumber: 'شماره تأیید شما',
+          gotYourConfirmationNumber:
+            'درخواست شما را برای این مورد دریافت کردیم:',
           gotYourConfirmationNumberOnYourBehalf:
             'ما از طرف شما درخواستی دریافت کردیم برای',
         },
         leasingAgent: {
+          officeHours: 'ساعات کاری',
+          propertyManager: 'مدیر ملک',
+          contactAgentToUpdateInfo:
+            'اگر نیاز دارید اطلاعات درخواست خود را به‌روزرسانی کنید، دوباره درخواست ندهید. در عوض، با نماینده این آگهی تماس بگیرید.',
           contactAgentForQuestions:
             'اگر در مورد این درخواست سوالی دارید، لطفاً با نماینده این آگهی تماس بگیرید.',
         },
         lotteryAvailable: {
+          header: 'نتایج جدید قرعه‌کشی مسکن موجود است',
           termsUrl: 'https://www.exygy.com',
           termsOfUse: 'شرایط استفاده',
           helpCenterUrl: 'https://www.exygy.com',
           notificationsUrl: 'https://www.exygy.com',
           duplicatesDetails:
             'بلوم عموماً درخواست‌های تکراری را نمی‌پذیرد. درخواست تکراری، درخواستی است که در آن شخصی در درخواست دیگری برای همان فرصت مسکن نیز حضور دارد. برای اطلاعات بیشتر در مورد نحوه رسیدگی ما به درخواست‌های تکراری، به وب‌سایت ما مراجعه کنید',
+          otherOpportunities1:
+            'برای مشاهده سایر فرصت‌های مسکن، لطفاً از %{appUrl} دیدن کنید. می‌توانید برای دریافت اعلان‌های فرصت‌های درخواست جدید ثبت‌نام کنید',
+          otherOpportunities2: 'اینجا',
+          otherOpportunities3:
+            'اگر می‌خواهید درباره نحوه عملکرد قرعه‌کشی‌ها بدانید، لطفاً به بخش قرعه‌کشی در',
+          otherOpportunities4: 'مرکز راهنمایی Housing Portal مراجعه کنید',
+          resultsAvailable:
+            'نتایج قرعه‌کشی مسکن برای %{listingName} موجود است. برای اطلاعات بیشتر به حساب پورتال مسکن خود مراجعه کنید.',
+          signIn: 'برای مشاهده نتایج خود وارد شوید',
+          whatHappensHeader: 'بعد چه اتفاقی می‌افتد؟',
+          whatHappensContent:
+            'مدیر ملک شروع به تماس با متقاضیان بر اساس ترتیب رتبه قرعه‌کشی، در هر اولویت قرعه‌کشی، خواهد کرد. هنگامی که همه واحدها پر شدند، مدیر ملک تماس با متقاضیان را متوقف می‌کند. ممکن است همه واحدها پیش از رسیدن مدیر ملک به رتبه شما پر شوند. اگر این اتفاق بیفتد، با شما تماس گرفته نخواهد شد.',
         },
         applicationUpdate: {
           title: 'برنامه شما برای %{listingName} به‌روزرسانی شده است.',
