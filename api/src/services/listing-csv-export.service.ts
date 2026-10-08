@@ -729,6 +729,11 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
   }
 
   async getCsvHeaders(user: User): Promise<CsvHeader[]> {
+    const disableReferralOpportunity = doAnyJurisdictionHaveFeatureFlagSet(
+      user.jurisdictions,
+      FeatureFlagEnum.disableReferralOpportunity,
+    );
+
     const enableNonRegulatedListings = doAnyJurisdictionHaveFeatureFlagSet(
       user.jurisdictions,
       FeatureFlagEnum.enableNonRegulatedListings,
@@ -1555,16 +1560,21 @@ export class ListingCsvExporterService implements CsvExporterServiceInterface {
               : '';
           },
         },
-        {
-          path: 'referralOpportunity',
-          label: doAllJurisdictionHaveFeatureFlagSet(
-            user.jurisdictions,
-            FeatureFlagEnum.enableReferralQuestionUnits,
-          )
-            ? 'Referral Only Units'
-            : 'Referral Opportunity',
-          format: this.formatYesNo,
-        },
+        ...(!disableReferralOpportunity
+          ? [
+              {
+                path: 'referralOpportunity',
+                label: doAllJurisdictionHaveFeatureFlagSet(
+                  user.jurisdictions,
+                  FeatureFlagEnum.enableReferralQuestionUnits,
+                )
+                  ? 'Referral Only Units'
+                  : 'Referral Opportunity',
+                format: this.formatYesNo,
+              },
+            ]
+          : []),
+
         {
           path: 'applicationMailingAddressId',
           label: 'Can applications be mailed in?',

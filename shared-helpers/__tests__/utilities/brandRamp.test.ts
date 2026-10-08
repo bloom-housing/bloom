@@ -1,4 +1,10 @@
-import { completeRamp, hexToHsl, hslToHex, HEX_COLOR } from "../../src/utilities/brandRamp"
+import {
+  completeRamp,
+  expandHex,
+  hexToHsl,
+  hslToHex,
+  HEX_COLOR,
+} from "../../src/utilities/brandRamp"
 
 // The expected values come from the api's own fixtures rather than from this copy, so the two
 // files agreeing is what the test proves.
@@ -95,5 +101,24 @@ describe("HEX_COLOR", () => {
 
   it.each(["773E98", "#GG3E98", "#773E9", "rebeccapurple"])("refuses %s", (value) => {
     expect(HEX_COLOR.test(value)).toBe(false)
+  })
+})
+
+describe("expandHex", () => {
+  it("doubles each digit of a three digit hex", () => {
+    expect(expandHex("#ABC")).toEqual("#AABBCC")
+  })
+
+  it.each(["#773E98", "rebeccapurple", "#ABCD"])("leaves %s alone", (value) => {
+    expect(expandHex(value)).toEqual(value)
+  })
+})
+
+describe("hexToHsl input forms", () => {
+  it.each([
+    ["#ABC", "ABC"],
+    ["#773E98", "773E98"],
+  ])("reads %s and %s the same way", (withHash, without) => {
+    expect(hexToHsl(without)).toEqual(hexToHsl(withHash))
   })
 })

@@ -1568,7 +1568,7 @@ export class ListingService implements OnModuleInit {
       dto.unitGroups,
     );
 
-    // Remove requiredFields and minimumImagesRequired properties before saving to database
+    // Remove the validation-only meta fields before saving to database
     const {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       requiredFields,
@@ -1576,6 +1576,8 @@ export class ListingService implements OnModuleInit {
       minimumImagesRequired,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       listingFeaturesConfiguration,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      publishesToClosed,
       ...listingData
     } = dto;
 
@@ -2322,7 +2324,7 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    // Remove requiredFields and minimumImagesRequired properties before saving to database
+    // Remove the validation-only meta fields before saving to database
     const {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       requiredFields,
@@ -2330,6 +2332,8 @@ export class ListingService implements OnModuleInit {
       minimumImagesRequired,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       listingFeaturesConfiguration,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      publishesToClosed,
       ...incomingDto
     } = dto;
     const storedListing = await this.findOrThrow(
@@ -3464,6 +3468,22 @@ export class ListingService implements OnModuleInit {
     }
     if (incomingStatus === ListingsStatusEnum.pending) {
       return null;
+    }
+    // A listing can go live as closed without ever being active (land use listings published with
+    // no scheduled publish date), so entering closed from a never-published status is a publish.
+    if (
+      incomingStatus === ListingsStatusEnum.closed &&
+      !storedPublishedAt &&
+      (
+        [
+          ListingsStatusEnum.pending,
+          ListingsStatusEnum.pendingReview,
+          ListingsStatusEnum.changesRequested,
+          ListingsStatusEnum.scheduled,
+        ] as ListingsStatusEnum[]
+      ).includes(storedStatus)
+    ) {
+      return new Date();
     }
     return storedPublishedAt ?? null;
   }

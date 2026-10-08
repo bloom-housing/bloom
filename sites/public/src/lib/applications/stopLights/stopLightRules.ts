@@ -8,9 +8,10 @@ export interface StopLightRule {
   step: string // matches ApplicationConductor step/route name, e.g. "primaryApplicantName"
   light: StopLightColor
   evaluate: (application: Application, listing: Listing) => boolean
-  heading: string // translation key
+  modalTitle: string // translation key
+  alertTitle: string // translation key
   body: string // translation key
-  editFieldAnchor?: string // element id to scroll/focus on "Edit", red light only
+  editFieldAnchor?: string // element id to scroll/focus on "Update my answer", red light only
 }
 
 // Example for test purposes
@@ -32,9 +33,11 @@ const seniorBuildingAgeExample: StopLightRule = {
     const applicantAge = dayjs().diff(dateOfBirth, "year")
     return applicantAge < minimumAge
   },
-  heading: "stopLights.seniorBuildingMinimumAge.heading",
+  modalTitle: "stopLights.seniorBuildingMinimumAge.modalTitle",
+  alertTitle: "stopLights.seniorBuildingMinimumAge.alertTitle",
   body: "stopLights.seniorBuildingMinimumAge.body",
   editFieldAnchor: "applicant.dateOfBirth",
 }
 
+// For each new rule make sure to add `StopLightBanner` for a field that triggers the rule.
 export const stopLightRules: StopLightRule[] = [seniorBuildingAgeExample]
