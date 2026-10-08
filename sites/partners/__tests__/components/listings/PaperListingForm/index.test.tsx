@@ -336,7 +336,7 @@ describe("PaperListingForm", () => {
       within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Numbered list" })
     ).toBeInTheDocument()
     expect(
-      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Line break" })
+      within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Horizontal line" })
     ).toBeInTheDocument()
     expect(
       within(whatToExpectEditorWrapper).getByRole("menuitem", { name: "Set link" })
@@ -383,7 +383,9 @@ describe("PaperListingForm", () => {
       })
     ).toBeInTheDocument()
     expect(
-      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Line break" })
+      within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", {
+        name: "Horizontal line",
+      })
     ).toBeInTheDocument()
     expect(
       within(whatToExpectAdditonalTextEditorWrapper).getByRole("menuitem", { name: "Set link" })

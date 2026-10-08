@@ -11,6 +11,7 @@ import LinkIcon from "@heroicons/react/16/solid/LinkIcon"
 import UnlinkIcon from "@heroicons/react/16/solid/LinkSlashIcon"
 import { Icon } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
+import { isInternalLink } from "@bloom-housing/shared-helpers"
 import styles from "./TextEditor.module.scss"
 
 export const EditorExtensions = [
@@ -61,6 +62,12 @@ export const EditorExtensions = [
   }),
 ]
 
+export const linkHref = (url: string): string => {
+  if (/^[a-z][a-z0-9+.-]*:/i.test(url) || isInternalLink(url)) return url
+  if (url.startsWith("//")) return `https:${url}`
+  return `https://${url}`
+}
+
 const MenuBar = ({ editor }) => {
   const setLink = useCallback(() => {
     const previousUrl = editor?.getAttributes("link").href
@@ -78,8 +85,7 @@ const MenuBar = ({ editor }) => {
       return
     }
 
-    // Prepend https:// if the user typed a bare URL with no protocol.
-    const href = /^[a-z][a-z0-9+.-]*:/i.test(url) ? url : `https://${url}`
+    const href = linkHref(url)
 
     // update link
     try {
@@ -191,7 +197,7 @@ const MenuBar = ({ editor }) => {
       <button
         onClick={() => editor?.chain().focus().setHorizontalRule().run()}
         type="button"
-        aria-label={"Line break"}
+        aria-label={"Horizontal line"}
         id={"editor-line-break"}
         role={"menuitem"}
         onKeyDown={(event) => {
