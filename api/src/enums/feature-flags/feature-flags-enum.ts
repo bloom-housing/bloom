@@ -10,6 +10,7 @@ export enum FeatureFlagEnum {
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
+  disableReferralOpportunity = 'disableReferralOpportunity',
   disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
@@ -146,6 +147,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.disablePartnerPublicListingEdits,
     description:
       'When true, partner users cannot edit open or closed listings, or unpublish open listings',
+  },
+  {
+    name: FeatureFlagEnum.disableReferralOpportunity,
+    description:
+      'When true, disables the referral opportunity question on the listing edit and detail pages on partner site',
   },
   {
     name: FeatureFlagEnum.disableReservedCommunityTypeEdit,
@@ -457,7 +463,8 @@ export const featureFlagMap: {
   },
   {
     name: FeatureFlagEnum.enableReferralQuestionUnits,
-    description: 'when true, updates the the referral details question labels',
+    description:
+      'When true, updates the the referral opportunity question to be specifically about units',
   },
   {
     name: FeatureFlagEnum.enableRegions,
