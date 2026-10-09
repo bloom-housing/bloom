@@ -1019,7 +1019,7 @@
   "translations.keepTranslation": "Keep translation",
   "translations.keyPath": "Key",
   "translations.revert": "Revert",
-  "translations.saveCount": "Save %{count} changes",
+  "translations.saveCount": "Save %{smart_count} change |||| Save %{smart_count} changes",
   "translations.site": "Site",
   "translations.defaultNoJurisdiction": "Default (no jurisdiction)",
   "translations.siteEmail": "Email",

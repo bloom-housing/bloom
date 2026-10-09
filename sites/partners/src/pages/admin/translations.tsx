@@ -223,19 +223,19 @@ const AdminTranslations = () => {
       {
         headerName: t("translations.keyPath"),
         field: "key",
-        minWidth: 220,
+        minWidth: 180,
         flex: 1,
       },
       {
         headerName: t("translations.baseValue"),
         field: "baseValue",
-        minWidth: 220,
+        minWidth: 180,
         flex: 2,
         valueFormatter: ({ value }) => (value === null ? t("t.none") : value),
       },
       {
         headerName: t("translations.currentValue"),
-        minWidth: 220,
+        minWidth: 180,
         flex: 2,
         editable: dataLoaded && !isSaving,
         singleClickEdit: true,
@@ -260,7 +260,7 @@ const AdminTranslations = () => {
       },
       {
         headerName: t("t.status"),
-        minWidth: 140,
+        minWidth: 230,
         valueGetter: ({ data }: { data: TranslationGridRow }) => {
           if (data.editedValue !== null) return t("translations.statusEdited")
           if (data.stale) return t("translations.statusStale")
@@ -274,7 +274,7 @@ const AdminTranslations = () => {
         maxWidth: 260,
         resizable: false,
         cellRendererFramework: ({ data }: { data: TranslationGridRow }) => (
-          <>
+          <div className={styles["row-actions"]}>
             {/* Without an override the row shows default text, which may be the English fallback. */}
             {data.stale && data.editedValue === null && data.overrideValue !== null && (
               <Button
@@ -305,7 +305,7 @@ const AdminTranslations = () => {
                 {t("translations.revert")}
               </Button>
             )}
-          </>
+          </div>
         ),
       },
     ],
@@ -460,7 +460,9 @@ const AdminTranslations = () => {
               onClick={handleSave}
               id="saveTranslations"
             >
-              {hasUnsavedChanges ? t("translations.saveCount", { count: editCount }) : t("t.save")}
+              {hasUnsavedChanges
+                ? t("translations.saveCount", { smart_count: editCount })
+                : t("t.save")}
             </Button>
             <Button
               variant="secondary"
