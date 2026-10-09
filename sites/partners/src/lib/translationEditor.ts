@@ -127,6 +127,12 @@ export const applyEdit = (
   return next
 }
 
+// Records the current text unchanged, so saving it records the current English as its source.
+export const keepTranslation = (edits: PendingEdits, row: TranslationEditorRow): PendingEdits => ({
+  ...edits,
+  [row.key]: { value: effectiveValue(row) ?? "", version: row.updatedAt },
+})
+
 /**
  * The keys a batch save rejected because someone else changed them first.
  *

@@ -55,7 +55,10 @@ const AdminBranding = () => {
           try {
             const updated = await jurisdictionsService.updateBrand({
               jurisdictionId: activeJurisdictionId,
-              body: brandUpdateFrom(values, { logoFileId, faviconFileId, clearBrand }),
+              body: {
+                ...brandUpdateFrom(values, { logoFileId, faviconFileId, clearBrand }),
+                lastUpdatedAt: jurisdiction?.updatedAt,
+              },
             })
             // The read endpoint is cacheable, so the response seeds the cache rather than a refetch.
             void mutate(cacheKey, updated, false)
@@ -63,7 +66,17 @@ const AdminBranding = () => {
             addToast(t("branding.alertSaved"), { variant: "success" })
             resolve([])
           } catch (caught) {
-            const response = (caught as { response?: { data?: { message?: unknown } } })?.response
+            const response = (
+              caught as {
+                response?: { status?: number; data?: { message?: unknown; current?: unknown } }
+              }
+            )?.response
+            if (response?.status === 409) {
+              void mutate(cacheKey, response.data?.current, false)
+              addToast(t("branding.alertConflict"), { variant: "alert" })
+              resolve([])
+              return
+            }
             const { fields, unplaced } = brandErrorsFrom(response?.data?.message)
             if (unplaced.length) {
               addToast(unplaced.join(" "), { variant: "alert" })

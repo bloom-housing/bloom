@@ -22,6 +22,7 @@ jest.mock("../../../src/lib/helpers", () => ({
 
 // The suite supplies the strings it asserts on, so editing the shipped copy cannot break it.
 addTranslation({
+  "branding.alertConflict": "test:alertConflict",
   "branding.primary": "test:primary",
   "branding.secondary": "test:secondary",
   "branding.baseColor": "test:base",
@@ -508,6 +509,58 @@ describe("admin/branding", () => {
 
     await waitFor(() => expect(savedBody).not.toBeNull())
     expect(savedBody).toEqual({})
+  })
+
+  it("sends the version it loaded, so a newer save is a conflict", async () => {
+    server.use(
+      ...READ_PATHS.map((path) =>
+        rest.get(path, (_req, res, ctx) =>
+          res(ctx.json({ id: "jurisdiction1", brand: null, updatedAt: "2026-10-09T12:00:00.000Z" }))
+        )
+      )
+    )
+    acceptSave()
+    renderPage()
+
+    await screen.findByText("test:primary")
+    await userEvent.click(screen.getByText("test:save"))
+
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody).toEqual({ lastUpdatedAt: "2026-10-09T12:00:00.000Z" })
+  })
+
+  it("keeps the edits and warns when someone else saved first", async () => {
+    server.use(
+      ...SAVE_PATHS.map((path) =>
+        rest.put(path, async (req, res, ctx) => {
+          savedBody = await req.json()
+          return res(
+            ctx.status(409),
+            ctx.json({
+              message: "brandConflict",
+              current: { id: "jurisdiction1", brand: null, updatedAt: "2026-10-09T13:00:00.000Z" },
+            })
+          )
+        })
+      )
+    )
+    renderPage()
+
+    const base = (await screen.findAllByLabelText("test:base"))[0]
+    await userEvent.type(base, "#773E98")
+    await userEvent.click(screen.getByText("test:save"))
+
+    await waitFor(() => expect(toasts).toContain("test:alertConflict"))
+    expect(screen.getAllByDisplayValue("#773E98").length).toBeGreaterThan(0)
+
+    // The next save is checked against the version the conflict returned.
+    savedBody = null
+    acceptSave()
+    await userEvent.click(screen.getByText("test:save"))
+    await waitFor(() => expect(savedBody).not.toBeNull())
+    expect(savedBody).toEqual(
+      expect.objectContaining({ lastUpdatedAt: "2026-10-09T13:00:00.000Z" })
+    )
   })
 
   it("clears the brand and both assets from the remove action", async () => {

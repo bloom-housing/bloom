@@ -1,6 +1,7 @@
 import {
   Injectable,
   BadRequestException,
+  ConflictException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -40,6 +41,7 @@ const selectViews: Partial<
     },
     id: true,
     name: true,
+    updatedAt: true,
     languages: true,
     notificationsSignUpUrl: true,
     raceEthnicityConfiguration: true,
@@ -304,18 +306,51 @@ export class JurisdictionService {
     ]);
     await assertFontIsAvailable(this.httpService, incomingData.brand);
 
-    const rawResult = await this.prisma.jurisdictions.update({
-      data: {
-        brand: storableBrand(incomingData.brand),
-        brandLogo: brandAssetWrite(incomingData.logoFileId, 'brandLogo'),
-        brandFavicon: brandAssetWrite(
-          incomingData.faviconFileId,
-          'brandFavicon',
-        ),
-      },
-      where: { id: jurisdictionId },
-      include: view,
-    });
+    let rawResult;
+    try {
+      rawResult = await this.prisma.jurisdictions.update({
+        data: {
+          brand: storableBrand(incomingData.brand),
+          brandLogo: brandAssetWrite(incomingData.logoFileId, 'brandLogo'),
+          brandFavicon: brandAssetWrite(
+            incomingData.faviconFileId,
+            'brandFavicon',
+          ),
+        },
+        where: {
+          id: jurisdictionId,
+          ...(incomingData.lastUpdatedAt
+            ? {
+                updatedAt: {
+                  gte: incomingData.lastUpdatedAt,
+                  lt: new Date(incomingData.lastUpdatedAt.getTime() + 1),
+                },
+              }
+            : {}),
+        },
+        include: view,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        const current = await this.prisma.jurisdictions.findUnique({
+          where: { id: jurisdictionId },
+          include: view,
+        });
+        if (!current) {
+          throw new NotFoundException(
+            `jurisdictionId ${jurisdictionId} was requested but not found`,
+          );
+        }
+        throw new ConflictException({
+          message: 'brandConflict',
+          current: mapTo(Jurisdiction, withResponseBrand(current)),
+        });
+      }
+      throw error;
+    }
     return mapTo(Jurisdiction, withResponseBrand(rawResult));
   }
 
