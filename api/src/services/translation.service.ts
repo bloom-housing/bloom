@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import {
   ConflictException,
   Injectable,
@@ -25,6 +26,7 @@ import { baseTranslationRows } from '../locales/email-translations';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
 @Injectable()
 export class TranslationService {
@@ -32,6 +34,7 @@ export class TranslationService {
     private prisma: PrismaService,
     private readonly googleTranslateService: GoogleTranslateService,
     private readonly permissionService: PermissionService,
+    private readonly httpService: HttpService,
   ) {}
 
   public async getMergedTranslations(
@@ -262,6 +265,10 @@ export class TranslationService {
     );
     const conflicts = results.filter((key): key is string => key !== null);
 
+    if (site === SiteEnum.public && conflicts.length < results.length) {
+      await revalidatePublicSite(this.httpService);
+    }
+
     if (conflicts.length) {
       throw new ConflictException({
         message: 'translationConflict',
@@ -327,6 +334,10 @@ export class TranslationService {
     await this.prisma.translationStrings.deleteMany({
       where: { jurisdictionId, language, site, key },
     });
+
+    if (site === SiteEnum.public) {
+      await revalidatePublicSite(this.httpService);
+    }
     return { success: true };
   }
 

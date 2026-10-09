@@ -14,6 +14,9 @@ describe("fetchJurisdictionContent", () => {
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
     const hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchJurisdictionContent = hooks.fetchJurisdictionContent
     API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
@@ -87,8 +90,27 @@ describe("fetchJurisdictionContent", () => {
     expect(await fetchJurisdictionContent("en")).toBeNull()
   })
 
-  it("returns null when the request fails, so the page keeps its bundled content", async () => {
+  it("returns null when a visitor's read fails, so the page keeps its bundled content", async () => {
     mockedGet.mockRejectedValue(new Error("no api"))
+
+    expect(
+      await fetchJurisdictionContent("en", {
+        headers: {},
+        socket: { remoteAddress: "198.51.100.4" },
+      })
+    ).toBeNull()
+  })
+
+  // Next keeps the page it already has when a regeneration throws.
+  it("throws when a rebuild's read fails", async () => {
+    mockedGet.mockRejectedValue(new Error("no api"))
+
+    await expect(fetchJurisdictionContent("en")).rejects.toThrow("no api")
+  })
+
+  // The api answers 204 for a jurisdiction with no content rows, which is not a failure.
+  it("returns null without throwing when the jurisdiction has no content", async () => {
+    mockedGet.mockResolvedValue({ data: "" })
 
     expect(await fetchJurisdictionContent("en")).toBeNull()
   })
@@ -119,6 +141,9 @@ describe("fetchSharedPageProps", () => {
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
     hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchSharedPageProps = hooks.fetchSharedPageProps
     process.env.backendApiBase = "http://localhost:3100"
     process.env.jurisdictionName = "Bloomington"

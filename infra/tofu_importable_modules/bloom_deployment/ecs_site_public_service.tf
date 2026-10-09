@@ -8,8 +8,9 @@ locals {
     LISTINGS_QUERY                = "/listings"
     MAX_BROWSE_LISTINGS           = "10"
     HOUSING_COUNSELOR_SERVICE_URL = "/get-assistance"
-    IDLE_TIMEOUT                  = "5"  # seconds
-    CACHE_REVALIDATE              = "30" # seconds
+    IDLE_TIMEOUT                  = "5"    # seconds
+    CACHE_REVALIDATE              = "3600" # seconds; a save asks for a rebuild rather than waiting this out.
+    LISTING_CACHE_REVALIDATE      = "30"   # seconds; listing paths cannot be named for a rebuild.
     SHOW_PUBLIC_LOTTERY           = "TRUE"
     SHOW_MANDATED_ACCOUNTS        = "FALSE"
     SHOW_PWDLESS                  = "FALSE"
@@ -17,6 +18,20 @@ locals {
     OTEL_EXPORTER_OTLP_ENDPOINT   = "http://127.0.0.1:4317"
     NON_PROD_BANNER               = "FALSE"
   }
+}
+# One A record per running task, so the api can post the revalidation call to each of them.
+resource "aws_service_discovery_service" "site_public" {
+  region = var.aws_region
+  name   = "site-public"
+  dns_config {
+    namespace_id   = aws_service_discovery_private_dns_namespace.bloom.id
+    routing_policy = "MULTIVALUE"
+    dns_records {
+      type = "A"
+      ttl  = 10
+    }
+  }
+  health_check_custom_config {}
 }
 resource "aws_ecs_task_definition" "bloom_site_public" {
   region                   = var.aws_region
@@ -44,6 +59,10 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
         {
           name      = "MAPBOX_TOKEN",
           valueFrom = aws_secretsmanager_secret.mapbox_api_key.arn
+        },
+        {
+          name      = "PUBLIC_SITE_REVALIDATE_SECRET",
+          valueFrom = aws_secretsmanager_secret.public_site_revalidate_secret.arn
         }
       ]
       portMappings = [
@@ -125,6 +144,9 @@ resource "aws_ecs_service" "bloom_site_public" {
         "awslogs-stream-prefix" = "service-connect-proxy"
       }
     }
+  }
+  service_registries {
+    registry_arn = aws_service_discovery_service.site_public.arn
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.site_public.arn
