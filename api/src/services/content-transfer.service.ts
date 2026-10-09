@@ -46,6 +46,7 @@ import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { assertFontIsAvailable } from '../utilities/font-availability';
 import { mapTo } from '../utilities/mapTo';
 import { sourceHash } from '../utilities/translation-source-hash';
+import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
 const ASSET_TIMEOUT_MS = 10000;
 
@@ -299,6 +300,7 @@ export class ContentTransferService {
     const prepared = await this.prepareImport(dto, user);
     const uploadedKey = this.uploadedKeys(prepared, dto.fileIds ?? {});
     await this.prisma.$transaction(this.importWrites(prepared, uploadedKey));
+    await revalidatePublicSite(this.httpService);
     return { success: true };
   }
 

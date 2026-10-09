@@ -76,7 +76,10 @@ describe('Testing content transfer service', () => {
     delete process.env.S3_PUBLIC_BUCKET;
     delete process.env.S3_REGION;
     permissionServiceMock = { canOrThrow: jest.fn() };
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://site';
     httpServiceMock = {
+      post: jest.fn().mockReturnValue(of({ data: {} })),
       get: jest.fn().mockImplementation((url: string) =>
         of({
           data: Buffer.from(`bytes of ${url.split('/').pop()}`),
@@ -498,6 +501,41 @@ describe('Testing content transfer service', () => {
           brandFavicon: { disconnect: true },
         },
       });
+    });
+
+    const uploadedImport = () =>
+      importFile({
+        fileIds: {
+          'brand-logo': 'new-brand-logo',
+          'footer-logo': 'new-footer-logo',
+        },
+      });
+
+    it('asks the public site to rebuild once the import is saved', async () => {
+      mockTarget();
+      mockWrites();
+
+      await service.applyImport(uploadedImport(), adminUser);
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+      expect(
+        (prisma.$transaction as jest.Mock).mock.invocationCallOrder[0],
+      ).toBeLessThan(httpServiceMock.post.mock.invocationCallOrder[0]);
+    });
+
+    it('does not ask the public site to rebuild when the import fails', async () => {
+      mockTarget();
+      mockWrites();
+      prisma.$transaction = jest.fn().mockRejectedValue(new Error('failed'));
+
+      await expect(
+        service.applyImport(uploadedImport(), adminUser),
+      ).rejects.toThrow('failed');
+      expect(httpServiceMock.post).not.toHaveBeenCalled();
     });
 
     it('counts a string whose origin or source hash differs as changed', async () => {
