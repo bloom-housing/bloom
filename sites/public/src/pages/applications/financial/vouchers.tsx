@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { t, FieldGroup } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -22,6 +23,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 
 const ApplicationVouchers = () => {
@@ -54,21 +57,39 @@ const ApplicationVouchers = () => {
         },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "vouchersSubsidies",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "vouchersSubsidies",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    let toSave: { incomeVouchers: string[] }
+    let pendingSave: { incomeVouchers: string[] }
     if (enableMultiselectVoucherQuestion) {
       const selected = Object.values(data).filter((val) => val !== false)
-      toSave = { incomeVouchers: selected as string[] }
+      pendingSave = { incomeVouchers: selected as string[] }
     } else {
-      toSave = { incomeVouchers: data?.incomeVouchers ? [data.incomeVouchers] : [] }
+      pendingSave = { incomeVouchers: data?.incomeVouchers ? [data.incomeVouchers] : [] }
     }
 
-    conductor.currentStep.save(toSave)
-    conductor.routeToNextOrReturnUrl()
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
+    })
   }
   const onError = () => {
     onFormError()
@@ -88,7 +109,7 @@ const ApplicationVouchers = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -126,6 +147,7 @@ const ApplicationVouchers = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>

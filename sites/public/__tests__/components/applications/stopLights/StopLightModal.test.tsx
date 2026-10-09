@@ -116,7 +116,6 @@ describe("StopLightModal", () => {
       expect(screen.getByRole("button", { name: "Return to listings" })).toBeInTheDocument()
     })
 
-    // the gate clears its rule on dismiss, so the layout hands the modal a null rule
     it("renders nothing when there is no rule", () => {
       render(<RedHarness rule={null} onEdit={onEdit} />)
 
@@ -147,9 +146,6 @@ describe("StopLightModal", () => {
       expect(screen.getByLabelText("Month")).not.toHaveFocus()
     })
 
-    // where "Return to listings" actually navigates (the specific listing, or a fallback
-    // to the browse page) is decided by the layout, which owns the conductor's listing;
-    // see application-form.test.tsx
     it("calls onReturnToListings, and not onEdit, when Return to listings is clicked", async () => {
       const onReturnToListings = jest.fn()
       render(
@@ -196,7 +192,6 @@ describe("StopLightModal", () => {
       expect(screen.getByRole("button", { name: "I understand — continue" })).toBeInTheDocument()
     })
 
-    // the gate clears its rule on acknowledge or cancel, so the layout hands the modal a null rule
     it("renders nothing when there is no rule", () => {
       render(<YellowHarness rule={null} onCancel={onCancel} onAcknowledge={onAcknowledge} />)
 

@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { Field, FieldGroup, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  Application,
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -29,6 +31,8 @@ import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
@@ -42,12 +46,28 @@ const ApplicationDemographics = () => {
     currentPageSection += 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, getValues } = useForm<Record<string, any>>({
     defaultValues: {
       ethnicity: application.demographics?.ethnicity,
       race: application.demographics?.race,
     },
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "demographics",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "demographics",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const spokenLanguageValue: string = watch(
     "spokenLanguage",
@@ -55,7 +75,7 @@ const ApplicationDemographics = () => {
   )
 
   const onSubmit = (data) => {
-    conductor.currentStep.save({
+    const pendingSave = {
       demographics: {
         ethnicity: data.ethnicity || "",
         gender: enableGenderQuestion ? data.gender : "",
@@ -68,8 +88,11 @@ const ApplicationDemographics = () => {
             : data.spokenLanguage
           : "",
       },
+    } as Partial<Application>
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.routeToNextOrReturnUrl()
   }
 
   const enableLimitedHowDidYouHear = isFeatureFlagOn(
@@ -157,7 +180,7 @@ const ApplicationDemographics = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.review.demographics.title")}
@@ -172,6 +195,7 @@ const ApplicationDemographics = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <CardSection divider={"inset"}>
             {showRaceQuestion && (

@@ -391,6 +391,28 @@ export class ListingsService {
     })
   }
   /**
+   * Update listing status by id
+   */
+  updateListingStatus(
+    params: {
+      /** requestBody */
+      body?: ListingUpdateStatus
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/updateListingStatus"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update listing by id
    */
   update(
@@ -6718,6 +6740,18 @@ export interface ListingDuplicate {
   storedListing: IdDTO
 }
 
+/** ListingUpdateStatus */
+export interface ListingUpdateStatus {
+  /**  */
+  id: string
+
+  /**  */
+  status: ListingsStatusEnum
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
 /** UnitAmiChartOverrideUpdate */
 export interface UnitAmiChartOverrideUpdate {
   /**  */
@@ -12122,6 +12156,7 @@ export enum FeatureFlagEnum {
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
   "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
+  "disableReferralOpportunity" = "disableReferralOpportunity",
   "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
@@ -12129,6 +12164,7 @@ export enum FeatureFlagEnum {
   "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
   "enableApplicationExpirationNonAdmins" = "enableApplicationExpirationNonAdmins",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableApproveAndPublishOnEdit" = "enableApproveAndPublishOnEdit",
   "enableAutoOpenDate" = "enableAutoOpenDate",
   "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
