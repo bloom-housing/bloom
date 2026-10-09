@@ -1,5 +1,9 @@
 import { createHash } from 'crypto';
-import { BadRequestException, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Logger,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { of, throwError } from 'rxjs';
@@ -1022,9 +1026,9 @@ describe('Testing script runner service', () => {
       }
     }`;
 
-    const request = () =>
+    const request = (isSuperAdmin = true) =>
       ({
-        user: { id: userId } as unknown as User,
+        user: { id: userId, userRoles: { isSuperAdmin } } as unknown as User,
       } as unknown as ExpressRequest);
 
     const body = (overrides = {}) => ({
@@ -1060,6 +1064,13 @@ describe('Testing script runner service', () => {
       updateBrand = jest
         .spyOn(jurisdictionService, 'updateBrand')
         .mockResolvedValue(null);
+    });
+
+    it('forbids an admin who is not a superadmin', async () => {
+      await expect(
+        service.migrateJurisdictionBranding(request(false), body()),
+      ).rejects.toThrow(ForbiddenException);
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
     });
 
     it('writes what the stylesheet declares', async () => {

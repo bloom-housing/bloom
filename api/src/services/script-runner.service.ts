@@ -65,6 +65,7 @@ import {
   parseBrandSources,
   UnreadableStylesheetError,
 } from '../utilities/brand-migration';
+import { assertSuperAdmin } from '../utilities/assert-super-admin';
 
 const TRANSLATION_FETCH_TIMEOUT_MS = 30_000;
 const SOURCE_FETCH_TIMEOUT_MS = 30_000;
@@ -484,6 +485,7 @@ export class ScriptRunnerService {
     dto: JurisdictionBrandingMigrationDTO,
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
+    assertSuperAdmin(requestingUser);
 
     const jurisdiction = await this.prisma.jurisdictions.findFirst({
       select: {
