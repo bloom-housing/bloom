@@ -594,6 +594,27 @@ describe('Jurisdiction Content Controller Tests', () => {
         'faq.categories[applying].items[how].answerHtml',
       ]);
 
+      // A reviewer confirms the translation still fits, saving it unchanged.
+      await request(app.getHttpServer())
+        .put(scope('vi'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({
+          ...faqFor('<p>Nop don truc tuyen.</p>'),
+          lastUpdatedAt: afterChange.body.updatedAt,
+          confirmedSourcePaths: [
+            'faq.categories[applying].items[how].answerHtml',
+          ],
+        })
+        .expect(200);
+
+      const afterConfirm = await request(app.getHttpServer())
+        .get(scope('vi'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .expect(200);
+      expect(afterConfirm.body.staleFields).toEqual([]);
+
       const publicRead = await request(app.getHttpServer())
         .get(
           `/jurisdictionContent/jurisdictions/${jurisdiction.id}?language=vi`,

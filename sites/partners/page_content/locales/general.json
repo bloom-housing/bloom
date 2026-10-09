@@ -257,6 +257,7 @@
   "content.documentResources": "Resources",
   "content.englishSource": "English",
   "content.hidden": "Hidden",
+  "content.keepTranslation": "Keep translation",
   "content.hideWarningDescription": "These fields are empty and English has a value, so the sections they fill will stop appearing for this language.",
   "content.hideWarningTitle": "This will hide content",
   "content.notSet": "Not set",

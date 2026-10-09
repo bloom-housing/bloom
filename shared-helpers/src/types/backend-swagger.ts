@@ -11492,6 +11492,9 @@ export interface JurisdictionContentUpdate {
 
   /**  */
   lastUpdatedAt?: Date
+
+  /**  */
+  confirmedSourcePaths?: string[]
 }
 
 /** ContentTransferTranslation */

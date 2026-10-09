@@ -59,6 +59,7 @@ type ContentFieldCardProps = {
   resetKey: string
   className?: string
   onChange: (draft: ContentDraft) => void
+  onKeep?: () => void
 }
 
 export const ContentFieldCard = ({
@@ -74,6 +75,7 @@ export const ContentFieldCard = ({
   resetKey,
   className,
   onChange,
+  onKeep,
 }: ContentFieldCardProps) => {
   const value = valueAt(draft, path)
   const state = fieldState(value)
@@ -94,6 +96,11 @@ export const ContentFieldCard = ({
           )}
           {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
           {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
+          {stale && onKeep && (
+            <Button variant="text" size="sm" onClick={onKeep}>
+              {t("content.keepTranslation")}
+            </Button>
+          )}
         </div>
 
         {!isEnglish && (
@@ -172,6 +179,7 @@ type ContentImageCardProps = {
   progress: number
   onUpdate: (apply: (current: ContentDraft) => ContentDraft) => void
   onProgress: (progress: number) => void
+  onKeep?: () => void
 }
 
 export const ContentImageCard = ({
@@ -186,6 +194,7 @@ export const ContentImageCard = ({
   progress,
   onUpdate,
   onProgress,
+  onKeep,
 }: ContentImageCardProps) => {
   const value = valueAt(draft, path)
   const englishValue = valueAt(englishDraft, path)
@@ -216,6 +225,11 @@ export const ContentImageCard = ({
             </Tag>
           )}
           {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
+          {stale && onKeep && (
+            <Button variant="text" size="sm" onClick={onKeep}>
+              {t("content.keepTranslation")}
+            </Button>
+          )}
         </div>
 
         {!isEnglish && (

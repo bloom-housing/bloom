@@ -301,12 +301,22 @@ const AdminContent = () => {
       draft: apply(current?.scope === scope ? current.draft : savedDraft),
     }))
 
-  const hasUnsavedChanges = hasDraftChanges(draft, savedDraft)
+  const [confirmedPaths, setConfirmedPaths] = useState<string[]>([])
+  const staleFields = (languageRow?.staleFields ?? []).filter(
+    (path) => !confirmedPaths.includes(path)
+  )
+  const keep = (paths: string[]) =>
+    setConfirmedPaths((current) => [
+      ...new Set([...current, ...paths.filter((path) => isStale(languageRow?.staleFields, path))]),
+    ])
+
+  const hasUnsavedChanges = hasDraftChanges(draft, savedDraft) || confirmedPaths.length > 0
   useUnsavedChangesWarning(hasUnsavedChanges, t("content.unsavedChangesWarning"))
 
   const changeScope = (apply: () => void) => {
     apply()
     setConflict(false)
+    setConfirmedPaths([])
   }
 
   const [drawer, setDrawer] = useState<{
@@ -350,11 +360,12 @@ const AdminContent = () => {
         await jurisdictionContentService.updateJurisdictionContent({
           jurisdictionId: activeJurisdictionId,
           language: activeLanguage,
-          body: buildUpdate(toSave, languageRow?.updatedAt),
+          body: buildUpdate(toSave, languageRow?.updatedAt, confirmedPaths),
         })
         await mutate(cacheKey)
         setConflict(false)
         setDraftState(null)
+        setConfirmedPaths([])
         setResetCount((count) => count + 1)
         addToast(t("content.alertSaved"), { variant: "success" })
       } catch (error) {
@@ -451,6 +462,7 @@ const AdminContent = () => {
               disabled={!hasUnsavedChanges || isSaving}
               onClick={() => {
                 setDraftState(null)
+                setConfirmedPaths([])
                 setDrawer(null)
                 setResetCount((count) => count + 1)
               }}
@@ -493,15 +505,13 @@ const AdminContent = () => {
                 draft={draft}
                 englishDraft={englishDraft}
                 isEnglish={isEnglish}
-                stale={
-                  isStale(languageRow?.staleFields, field.path) ||
-                  isStale(languageRow?.staleFields, field.fileIdPath)
-                }
+                stale={isStale(staleFields, field.path) || isStale(staleFields, field.fileIdPath)}
                 progress={uploadProgress[field.fileIdPath] ?? 0}
                 onUpdate={setDraft}
                 onProgress={(progress) =>
                   setUploadProgress((current) => ({ ...current, [field.fileIdPath]: progress }))
                 }
+                onKeep={() => keep([field.path, field.fileIdPath])}
               />
             ) : (
               <ContentFieldCard
@@ -514,7 +524,8 @@ const AdminContent = () => {
                 draft={draft}
                 englishDraft={englishDraft}
                 isEnglish={isEnglish}
-                stale={isStale(languageRow?.staleFields, field.path)}
+                stale={isStale(staleFields, field.path)}
+                onKeep={() => keep([field.path])}
                 direction={direction}
                 resetKey={`${scope}|${resetCount}`}
                 onChange={(next) => setDraft(() => next)}
@@ -538,8 +549,13 @@ const AdminContent = () => {
                 <Card.Section>
                   <div className={styles["field-header"]}>
                     <span className={styles["field-label"]}>{t(config.labelKey)}</span>
-                    {isStale(languageRow?.staleFields, config.path) && (
-                      <Tag variant="highlight-warm">{t("content.stale")}</Tag>
+                    {isStale(staleFields, config.path) && (
+                      <>
+                        <Tag variant="highlight-warm">{t("content.stale")}</Tag>
+                        <Button variant="text" size="sm" onClick={() => keep([config.path])}>
+                          {t("content.keepTranslation")}
+                        </Button>
+                      </>
                     )}
                     <Button
                       variant="primary-outlined"
@@ -634,7 +650,7 @@ const AdminContent = () => {
               draft={draft}
               englishDraft={englishDraft}
               isEnglish={isEnglish}
-              staleFields={languageRow?.staleFields}
+              staleFields={staleFields}
               onEdit={(itemPath) =>
                 setDrawer({
                   basePath: itemPath,
@@ -660,7 +676,7 @@ const AdminContent = () => {
                           draft={draft}
                           englishDraft={englishDraft}
                           isEnglish={isEnglish}
-                          staleFields={languageRow?.staleFields}
+                          staleFields={staleFields}
                           onEdit={(itemPath) =>
                             setDrawer({
                               basePath: itemPath,
@@ -681,13 +697,14 @@ const AdminContent = () => {
       </TabView>
 
       <ContentItemDrawer
+        onKeep={(path) => keep([path])}
         basePath={drawer?.basePath ?? null}
         titleKey={drawer?.titleKey ?? "content.document"}
         fields={drawer?.fields ?? []}
         draft={pending?.draft ?? draft}
         englishDraft={englishDraft}
         isEnglish={isEnglish}
-        staleFields={languageRow?.staleFields}
+        staleFields={staleFields}
         direction={direction}
         confirmDisabled={!!pending && !hasDraftChanges(pending.draft, pending.start)}
         onChange={(next) =>
@@ -711,6 +728,7 @@ const AdminContent = () => {
         onDiscard={() => {
           setConflict(false)
           setDraftState(null)
+          setConfirmedPaths([])
           setResetCount((count) => count + 1)
           void mutate(cacheKey)
         }}
