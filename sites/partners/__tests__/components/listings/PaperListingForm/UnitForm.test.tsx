@@ -669,4 +669,87 @@ describe("UnitForm", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Make a copy" })).not.toBeInTheDocument()
   })
+
+  describe("AMI chart overrides", () => {
+    beforeAll(() => {
+      server.use(
+        rest.get(`http://localhost:3100/amiCharts/${amiChart1.id}`, (_req, res, ctx) => {
+          return res(ctx.json(amiChart1))
+        })
+      )
+    })
+
+    const amiUnit = {
+      ...tempUnit,
+      amiChart: { id: amiChart1.id },
+      amiPercentage: "20",
+    } as TempUnit
+
+    const renderWithUnit = (defaultUnit: TempUnit) =>
+      render(
+        <UnitForm
+          {...defaultUnitFormProps}
+          onClose={jest.fn()}
+          onSubmit={jest.fn()}
+          draft={true}
+          nextId={2}
+          defaultUnit={defaultUnit}
+          jurisdictionId={"123"}
+        />
+      )
+
+    it("should load persisted overrides over chart values", async () => {
+      renderWithUnit({
+        ...amiUnit,
+        unitAmiChartOverrides: {
+          id: "override-1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          items: [{ percentOfAmi: 20, householdSize: 2, income: 40000 }],
+        },
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      await waitFor(() => {
+        const inputs = screen.getAllByRole("spinbutton", { name: "Minimum income" })
+        expect(inputs[0]).toHaveValue(24000)
+        expect(inputs[1]).toHaveValue(40000)
+        expect(inputs[2]).toHaveValue(48000)
+      })
+    })
+
+    it("should load draft overrides saved from the drawer", async () => {
+      renderWithUnit({ ...amiUnit, maxIncomeHouseholdSize3: "55555" } as TempUnit)
+
+      await waitForFormLoad()
+
+      await waitFor(() => {
+        const inputs = screen.getAllByRole("spinbutton", { name: "Minimum income" })
+        expect(inputs[1]).toHaveValue(36000)
+        expect(inputs[2]).toHaveValue(55555)
+        expect(inputs[3]).toHaveValue(60000)
+      })
+    })
+
+    it("should prefer draft overrides over persisted overrides", async () => {
+      renderWithUnit({
+        ...amiUnit,
+        maxIncomeHouseholdSize2: "41000",
+        unitAmiChartOverrides: {
+          id: "override-1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          items: [{ percentOfAmi: 20, householdSize: 2, income: 40000 }],
+        },
+      } as TempUnit)
+
+      await waitForFormLoad()
+
+      await waitFor(() => {
+        const inputs = screen.getAllByRole("spinbutton", { name: "Minimum income" })
+        expect(inputs[1]).toHaveValue(41000)
+      })
+    })
+  })
 })
