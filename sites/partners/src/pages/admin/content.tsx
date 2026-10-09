@@ -573,19 +573,29 @@ const AdminContent = () => {
                         <Button
                           variant="text"
                           size="sm"
-                          onClick={() =>
-                            setDrawer({
+                          onClick={() => {
+                            const opened = {
                               basePath: config.path,
                               titleKey: config.labelKey,
                               fields: [
                                 {
                                   name: String(index),
                                   labelKey: "content.textSection",
-                                  type: "html",
+                                  type: "html" as const,
                                 },
                               ],
-                            })
-                          }
+                            }
+                            // Sections are positional, so a gap before this one would be saved as
+                            // null.
+                            if (sections.some((section) => section.usingEnglish)) {
+                              openPending(
+                                setTextSections(draft, config.path, sectionValues),
+                                opened
+                              )
+                            } else {
+                              setDrawer(opened)
+                            }
+                          }}
                         >
                           {t("t.edit")}
                         </Button>

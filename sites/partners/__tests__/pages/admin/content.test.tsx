@@ -483,6 +483,41 @@ describe("<AdminContent>", () => {
       expect(within(sectionRow("Added in English")).queryByText("test:usingEnglish")).toBeNull()
     })
 
+    it("translates a later text section first by copying the English ones before it", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { textSectionsHtml: ["<p>First</p>", "<p>Second</p>"] },
+        }),
+        row(LanguagesEnum.es),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await screen.findByText("Second")
+
+      await userEvent.click(within(sectionRow("Second")).getByRole("button", { name: "Edit" }))
+      await typeInEditor("footer.textSectionsHtml.1", " segunda")
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      const sections = (bodies[0].footer as { textSectionsHtml: string[] }).textSectionsHtml
+      expect(sections).toHaveLength(2)
+      expect(sections[0]).toEqual("<p>First</p>")
+      expect(sections[1]).toContain("segunda")
+    })
+
     it("says that footer text sections are replaced as a set for a language", async () => {
       respondWithRows([
         row(LanguagesEnum.en, { footer: { textSectionsHtml: ["<p>A section</p>"] } }),
