@@ -16,6 +16,18 @@ import styles from "./ContentFieldCard.module.scss"
 
 export type ContentFieldType = "text" | "html"
 
+export const StaleMark = ({ stale, onKeep }: { stale: boolean; onKeep?: () => void }) =>
+  stale ? (
+    <>
+      <Tag variant="highlight-warm">{t("content.stale")}</Tag>
+      {onKeep && (
+        <Button variant="text" size="sm" onClick={onKeep}>
+          {t("content.keepTranslation")}
+        </Button>
+      )}
+    </>
+  ) : null
+
 type RichTextControlProps = {
   path: string
   labelKey: string
@@ -95,12 +107,7 @@ export const ContentFieldCard = ({
             </>
           )}
           {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
-          {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
-          {stale && onKeep && (
-            <Button variant="text" size="sm" onClick={onKeep}>
-              {t("content.keepTranslation")}
-            </Button>
-          )}
+          <StaleMark stale={stale} onKeep={onKeep} />
         </div>
 
         {!isEnglish && (
@@ -224,12 +231,7 @@ export const ContentImageCard = ({
               {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
             </Tag>
           )}
-          {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
-          {stale && onKeep && (
-            <Button variant="text" size="sm" onClick={onKeep}>
-              {t("content.keepTranslation")}
-            </Button>
-          )}
+          <StaleMark stale={stale} onKeep={onKeep} />
         </div>
 
         {!isEnglish && (

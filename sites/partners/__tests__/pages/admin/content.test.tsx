@@ -268,6 +268,25 @@ describe("<AdminContent>", () => {
       )
     })
 
+    it("brings back a kept field's stale mark when the changes are discarded", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, { disclaimers: { privacyHtml: "<p>Updated</p>" } }),
+        row(LanguagesEnum.es, {
+          disclaimers: { privacyHtml: "<p>Privacidad</p>" },
+          staleFields: ["disclaimers.privacyHtml"],
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.click(await screen.findByRole("button", { name: "test:keepTranslation" }))
+      await userEvent.click(screen.getByRole("button", { name: "test:discardChanges" }))
+
+      expect(await screen.findByText("test:stale")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:discardChanges" })).toBeDisabled()
+    })
+
     it("lists FAQ categories and the questions inside them", async () => {
       respondWithRows([
         row(LanguagesEnum.en, {

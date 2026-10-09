@@ -11,7 +11,6 @@ import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { useAdminTabs, AdminIndexEnum } from "../../components/admin/AdminViewHelpers"
 import BrandingForm, { BrandingSubmission } from "../../components/settings/BrandingForm"
-import { isConflict } from "../../lib/contentEditor"
 import { useJurisdiction } from "../../lib/hooks"
 import { brandErrorsFrom, brandToFormValues, brandUpdateFrom } from "../../lib/branding"
 import styles from "./branding.module.scss"
@@ -67,15 +66,17 @@ const AdminBranding = () => {
             addToast(t("branding.alertSaved"), { variant: "success" })
             resolve([])
           } catch (caught) {
-            if (isConflict(caught)) {
-              const current = (caught as { response?: { data?: { current?: unknown } } })?.response
-                ?.data?.current
-              void mutate(cacheKey, current, false)
+            const response = (
+              caught as {
+                response?: { status?: number; data?: { message?: unknown; current?: unknown } }
+              }
+            )?.response
+            if (response?.status === 409) {
+              void mutate(cacheKey, response.data?.current, false)
               addToast(t("branding.alertConflict"), { variant: "alert" })
               resolve([])
               return
             }
-            const response = (caught as { response?: { data?: { message?: unknown } } })?.response
             const { fields, unplaced } = brandErrorsFrom(response?.data?.message)
             if (unplaced.length) {
               addToast(unplaced.join(" "), { variant: "alert" })
