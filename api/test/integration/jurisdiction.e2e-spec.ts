@@ -393,6 +393,30 @@ describe('Jurisdiction Controller Tests', () => {
         expect(stored.brandFavicon.label).toEqual('brandFavicon');
       });
 
+      it('rejects a save made from a version older than the stored one', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+        const loaded = jurisdiction.updatedAt.toISOString();
+
+        await putBrand(jurisdiction.id, {
+          brand: { primary: { base: '#773E98' } },
+          lastUpdatedAt: loaded,
+        }).expect(200);
+
+        const conflict = await putBrand(jurisdiction.id, {
+          brand: { primary: { base: '#0F5A7A' } },
+          lastUpdatedAt: loaded,
+        }).expect(409);
+        expect(conflict.body.current.brand.primary.base).toEqual('#773E98');
+        expect(conflict.body.current.updatedAt).not.toEqual(loaded);
+
+        const stored = await prisma.jurisdictions.findUnique({
+          where: { id: jurisdiction.id },
+        });
+        expect(stored.brand).toEqual({ primary: { base: '#773E98' } });
+      });
+
       it('changes nothing else on the jurisdiction', async () => {
         const jurisdiction = await prisma.jurisdictions.create({
           data: jurisdictionFactory(),

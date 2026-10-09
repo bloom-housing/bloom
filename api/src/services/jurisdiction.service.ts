@@ -1,6 +1,7 @@
 import {
   Injectable,
   BadRequestException,
+  ConflictException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
@@ -304,18 +305,41 @@ export class JurisdictionService {
     ]);
     await assertFontIsAvailable(this.httpService, incomingData.brand);
 
-    const rawResult = await this.prisma.jurisdictions.update({
-      data: {
-        brand: storableBrand(incomingData.brand),
-        brandLogo: brandAssetWrite(incomingData.logoFileId, 'brandLogo'),
-        brandFavicon: brandAssetWrite(
-          incomingData.faviconFileId,
-          'brandFavicon',
-        ),
-      },
-      where: { id: jurisdictionId },
-      include: view,
-    });
+    let rawResult;
+    try {
+      rawResult = await this.prisma.jurisdictions.update({
+        data: {
+          brand: storableBrand(incomingData.brand),
+          brandLogo: brandAssetWrite(incomingData.logoFileId, 'brandLogo'),
+          brandFavicon: brandAssetWrite(
+            incomingData.faviconFileId,
+            'brandFavicon',
+          ),
+        },
+        where: {
+          id: jurisdictionId,
+          ...(incomingData.lastUpdatedAt
+            ? { updatedAt: incomingData.lastUpdatedAt }
+            : {}),
+        },
+        include: view,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        const current = await this.prisma.jurisdictions.findUnique({
+          where: { id: jurisdictionId },
+          include: view,
+        });
+        throw new ConflictException({
+          message: 'brandConflict',
+          current: mapTo(Jurisdiction, withResponseBrand(current)),
+        });
+      }
+      throw error;
+    }
     return mapTo(Jurisdiction, withResponseBrand(rawResult));
   }
 

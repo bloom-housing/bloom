@@ -11,6 +11,7 @@ import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import { useAdminTabs, AdminIndexEnum } from "../../components/admin/AdminViewHelpers"
 import BrandingForm, { BrandingSubmission } from "../../components/settings/BrandingForm"
+import { isConflict } from "../../lib/contentEditor"
 import { useJurisdiction } from "../../lib/hooks"
 import { brandErrorsFrom, brandToFormValues, brandUpdateFrom } from "../../lib/branding"
 import styles from "./branding.module.scss"
@@ -55,7 +56,10 @@ const AdminBranding = () => {
           try {
             const updated = await jurisdictionsService.updateBrand({
               jurisdictionId: activeJurisdictionId,
-              body: brandUpdateFrom(values, { logoFileId, faviconFileId, clearBrand }),
+              body: {
+                ...brandUpdateFrom(values, { logoFileId, faviconFileId, clearBrand }),
+                lastUpdatedAt: jurisdiction?.updatedAt,
+              },
             })
             // The read endpoint is cacheable, so the response seeds the cache rather than a refetch.
             void mutate(cacheKey, updated, false)
@@ -63,6 +67,14 @@ const AdminBranding = () => {
             addToast(t("branding.alertSaved"), { variant: "success" })
             resolve([])
           } catch (caught) {
+            if (isConflict(caught)) {
+              const current = (caught as { response?: { data?: { current?: unknown } } })?.response
+                ?.data?.current
+              void mutate(cacheKey, current, false)
+              addToast(t("branding.alertConflict"), { variant: "alert" })
+              resolve([])
+              return
+            }
             const response = (caught as { response?: { data?: { message?: unknown } } })?.response
             const { fields, unplaced } = brandErrorsFrom(response?.data?.message)
             if (unplaced.length) {

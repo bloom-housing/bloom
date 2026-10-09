@@ -1,5 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import {
+  IsDate,
   IsOptional,
   IsString,
   MaxLength,
@@ -30,4 +31,11 @@ export class JurisdictionBrandUpdate {
   @MaxLength(2048, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({ nullable: true })
   faviconFileId?: string | null;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  @ApiPropertyOptional()
+  lastUpdatedAt?: Date;
 }

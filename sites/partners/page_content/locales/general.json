@@ -847,6 +847,7 @@
   "settings.preferenceValidatingAddress": "Do you need help validating the address?",
   "settings.preferenceView": "View preference",
   "settings.properties": "Properties",
+  "branding.alertConflict": "Someone else saved this jurisdiction after you opened it. Your changes are still here: save again to replace theirs, or discard to load what they saved.",
   "branding.alertLoadFailed": "Branding could not be loaded",
   "branding.alertSaved": "Branding saved",
   "branding.assets": "Logo and favicon",

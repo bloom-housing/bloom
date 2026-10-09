@@ -8777,6 +8777,9 @@ export interface JurisdictionBrandUpdate {
 
   /**  */
   faviconFileId?: string
+
+  /**  */
+  lastUpdatedAt?: Date
 }
 
 /** FeatureFlag */
