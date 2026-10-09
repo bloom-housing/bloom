@@ -1014,6 +1014,7 @@
   "translations.emptyValue": "(empty)",
   "translations.hideSectionDescription": "These keys have no default text, so the sections they fill will stop appearing on the site.",
   "translations.hideSectionTitle": "This will hide a section",
+  "translations.keepTranslation": "Keep translation",
   "translations.keyPath": "Key",
   "translations.revert": "Revert",
   "translations.saveCount": "Save %{count} changes",

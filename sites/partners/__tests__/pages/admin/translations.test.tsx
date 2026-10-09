@@ -765,6 +765,37 @@ describe("<AdminTranslations>", () => {
       expect(await screen.findByText("English changed")).toBeInTheDocument()
     })
 
+    it("keeps a stale override by saving its text unchanged", async () => {
+      let written: unknown = null
+      respondWithOverrides([override(FIRST_BASE_KEY, "Your settings", { stale: true })])
+      server.use(
+        rest.put(
+          "http://localhost/api/adapter/translations/jurisdictions/:jurisdictionId/raw/:site/:language",
+          async (req, res, ctx) => {
+            written = await req.json()
+            return res(ctx.json({ success: true }))
+          }
+        )
+      )
+      renderPage()
+
+      await userEvent.click(await screen.findByRole("button", { name: "Keep translation" }))
+      expect(screen.queryByRole("button", { name: "Keep translation" })).toBeNull()
+      await userEvent.click(screen.getByRole("button", { name: /Save/ }))
+
+      await waitFor(() =>
+        expect(written).toEqual({
+          edits: [
+            {
+              key: FIRST_BASE_KEY,
+              value: "Your settings",
+              lastUpdatedAt: new Date("2026-01-01").toISOString(),
+            },
+          ],
+        })
+      )
+    })
+
     // The API cannot flag this one: there is no row in the edited language to carry the flag, so
     // without the derived check the key reads as "Using base" while the English has moved on.
     it("marks a key overridden in English but not in the language being edited", async () => {

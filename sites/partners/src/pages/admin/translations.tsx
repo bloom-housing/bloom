@@ -24,6 +24,7 @@ import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
   applyEdit,
+  keepTranslation,
   buildConflicts,
   buildEdits,
   buildTranslationRows,
@@ -270,27 +271,41 @@ const AdminTranslations = () => {
       {
         headerName: t("t.actions"),
         pinned: "right",
-        maxWidth: 140,
+        maxWidth: 260,
         resizable: false,
-        cellRendererFramework: ({ data }: { data: TranslationGridRow }) =>
-          data.overrideValue === null ? null : (
-            <Button
-              variant="text"
-              size="sm"
-              disabled={isReverting || isSaving}
-              onClick={() => {
-                if (data.hasBase) {
-                  void runRevert(data.key)
-                  return
-                }
-                setWarnings({ hidingKeys: [data.key], tokenIssues: [] })
-                setWarningRevertKey(data.key)
-              }}
-              id={`revert-${data.key}`}
-            >
-              {t("translations.revert")}
-            </Button>
-          ),
+        cellRendererFramework: ({ data }: { data: TranslationGridRow }) => (
+          <>
+            {data.stale && data.editedValue === null && (
+              <Button
+                variant="text"
+                size="sm"
+                disabled={isReverting || isSaving}
+                onClick={() => setEdits((previous) => keepTranslation(previous, data))}
+                id={`keep-${data.key}`}
+              >
+                {t("translations.keepTranslation")}
+              </Button>
+            )}
+            {data.overrideValue !== null && (
+              <Button
+                variant="text"
+                size="sm"
+                disabled={isReverting || isSaving}
+                onClick={() => {
+                  if (data.hasBase) {
+                    void runRevert(data.key)
+                    return
+                  }
+                  setWarnings({ hidingKeys: [data.key], tokenIssues: [] })
+                  setWarningRevertKey(data.key)
+                }}
+                id={`revert-${data.key}`}
+              >
+                {t("translations.revert")}
+              </Button>
+            )}
+          </>
+        ),
       },
     ],
     [dataLoaded, isReverting, isSaving, runRevert]
