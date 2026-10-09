@@ -1,4 +1,8 @@
-import { sanitize } from '../../../src/decorators/sanitize-html.decorator';
+import { Expose, plainToInstance } from 'class-transformer';
+import {
+  sanitize,
+  SanitizeHtml,
+} from '../../../src/decorators/sanitize-html.decorator';
 
 describe('sanitize()', () => {
   it('should keep text content', () => {
@@ -84,5 +88,39 @@ describe('sanitize()', () => {
     ).toEqual(
       `Header<br /><strong>Content</strong><br />Button<br /><a href=\"https://www.exygy.com\">Link</a>`,
     );
+  });
+});
+
+class ListingBody {
+  @Expose()
+  @SanitizeHtml()
+  body?: string | null;
+}
+
+class ContentBody {
+  @Expose()
+  @SanitizeHtml({ keepEmpty: true })
+  body?: string | null;
+}
+
+describe('SanitizeHtml()', () => {
+  it('stores an empty value as null by default', () => {
+    expect(plainToInstance(ListingBody, { body: '' }).body).toBeNull();
+  });
+
+  // Content uses an empty value to hide a section, so it must survive the transform.
+  it('keeps an empty value with keepEmpty', () => {
+    expect(plainToInstance(ContentBody, { body: '' }).body).toEqual('');
+  });
+
+  it('stores null as null either way', () => {
+    expect(plainToInstance(ListingBody, { body: null }).body).toBeNull();
+    expect(plainToInstance(ContentBody, { body: null }).body).toBeNull();
+  });
+
+  it('sanitizes a value either way', () => {
+    expect(
+      plainToInstance(ContentBody, { body: '<p onclick="x()">hi</p>' }).body,
+    ).toEqual('<p>hi</p>');
   });
 });

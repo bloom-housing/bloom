@@ -501,6 +501,32 @@ describe('Jurisdiction Content Controller Tests', () => {
       );
     });
 
+    // An emptied formatted field hides its section for the language, so it is stored as empty.
+    it('keeps an emptied formatted field empty, apart from an unset one', async () => {
+      await request(app.getHttpServer())
+        .put(adminScope('hy'))
+        .set('Cookie', adminCookies)
+        .set(passkey)
+        .send({ disclaimers: { privacyHtml: '' } })
+        .expect(200);
+
+      const stored = await prisma.jurisdictionContent.findFirst({
+        where: { jurisdictionId, language: LanguagesEnum.hy },
+        select: { disclaimers: true },
+      });
+      expect(stored.disclaimers).toEqual({
+        privacyHtml: '',
+        disclaimerHtml: null,
+      });
+
+      const res = await request(app.getHttpServer())
+        .get(`/jurisdictionContent/byName/${jurisdictionName}?language=hy`)
+        .set(passkey)
+        .expect(200);
+      expect(res.body.disclaimers.privacyHtml).toEqual('');
+      expect(res.body.disclaimers.disclaimerHtml).toBeNull();
+    });
+
     it('records what a translation was translated from and flags it when the source changes', async () => {
       // Its own jurisdiction, so each write below is the first for its language and needs no lock.
       const jurisdiction = await prisma.jurisdictions.create({

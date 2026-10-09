@@ -22,7 +22,7 @@ export class ContactContentDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @SanitizeHtml()
+  @SanitizeHtml({ keepEmpty: true })
   @ApiPropertyOptional()
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   addressHtml?: string;

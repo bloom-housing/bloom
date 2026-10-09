@@ -61,7 +61,7 @@ export class ResourceCardDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @SanitizeHtml()
+  @SanitizeHtml({ keepEmpty: true })
   @ApiProperty()
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   contentHtml: string;

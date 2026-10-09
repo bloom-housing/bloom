@@ -432,9 +432,15 @@ describe("storedPageBody", () => {
     expect(storedPageBody(content({ privacyHtml: "   " }), "privacyHtml", bundled)).toBeNull()
   })
 
-  // The seed stores an untranslated field this way, so it is the shape a language row really has.
-  it("renders nothing when the field is null", () => {
-    expect(storedPageBody(content({ privacyHtml: null }), "privacyHtml", bundled)).toBeNull()
+  // The API returns null for an unset field whenever the other one is stored.
+  it("falls back to the bundled page when the field is null", () => {
+    expect(
+      storedPageBody(
+        content({ privacyHtml: null, disclaimerHtml: "<p>Ours</p>" }),
+        "privacyHtml",
+        bundled
+      )
+    ).toEqual(bundled)
   })
 
   it("falls back to the bundled page when the document leaves the field out", () => {
