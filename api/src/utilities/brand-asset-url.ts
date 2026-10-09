@@ -10,7 +10,7 @@ export const isUsableFileId = (fileId: string): boolean =>
 
 export const brandAssetUrl = (
   fileId: string | null | undefined,
-  kind: keyof typeof WIDTH,
+  kind: keyof typeof WIDTH | 'original',
 ): string | undefined => {
   if (!fileId) return undefined;
 
@@ -30,5 +30,8 @@ export const brandAssetUrl = (
     return `https://${bucket}.s3.${region}.amazonaws.com/${fileId}`;
   }
 
-  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/w_${WIDTH[kind]},c_limit,q_90,f_png/${fileId}`;
+  const cloudinary = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`;
+  return kind === 'original'
+    ? `${cloudinary}/${fileId}`
+    : `${cloudinary}/w_${WIDTH[kind]},c_limit,q_90,f_png/${fileId}`;
 };

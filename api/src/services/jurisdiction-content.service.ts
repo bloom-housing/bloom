@@ -24,7 +24,7 @@ import { permissionActions } from '../enums/permissions/permission-actions-enum'
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
-const CONTENT_FIELDS = [
+export const CONTENT_FIELDS = [
   'footer',
   'faq',
   'resources',
@@ -35,13 +35,13 @@ const CONTENT_FIELDS = [
 
 type ContentField = (typeof CONTENT_FIELDS)[number];
 
-const CONTENT_SELECT = Object.fromEntries(
+export const CONTENT_SELECT = Object.fromEntries(
   CONTENT_FIELDS.map((field) => [field, true] as const),
 ) as Record<ContentField, true> satisfies Prisma.JurisdictionContentSelect;
 
 type FooterLogo = { logoSrc?: string; logoFileId?: string };
 
-const footerLogo = (footer: unknown): FooterLogo | undefined =>
+export const footerLogo = (footer: unknown): FooterLogo | undefined =>
   (footer as { logo?: FooterLogo } | null | undefined)?.logo;
 
 const withLogo = <T extends { footer?: unknown }>(
@@ -58,7 +58,9 @@ const withLogoSrc = <T extends { footer?: unknown }>(row: T): T => {
   });
 };
 
-const withoutDerivedLogoSrc = <T extends { footer?: unknown }>(row: T): T => {
+export const withoutDerivedLogoSrc = <T extends { footer?: unknown }>(
+  row: T,
+): T => {
   const logo = footerLogo(row.footer);
   if (!logo?.logoFileId) return row;
   const { logoSrc, ...stored } = logo;
