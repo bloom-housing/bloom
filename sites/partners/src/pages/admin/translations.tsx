@@ -275,12 +275,13 @@ const AdminTranslations = () => {
         resizable: false,
         cellRendererFramework: ({ data }: { data: TranslationGridRow }) => (
           <>
-            {data.stale && data.editedValue === null && (
+            {/* Without an override the row shows default text, which may be the English fallback. */}
+            {data.stale && data.editedValue === null && data.overrideValue !== null && (
               <Button
                 variant="text"
                 size="sm"
                 disabled={isReverting || isSaving}
-                onClick={() => setEdits((previous) => keepTranslation(previous, data))}
+                onClick={() => updateEdits((previous) => keepTranslation(previous, data))}
                 id={`keep-${data.key}`}
               >
                 {t("translations.keepTranslation")}
@@ -308,7 +309,7 @@ const AdminTranslations = () => {
         ),
       },
     ],
-    [dataLoaded, isReverting, isSaving, runRevert]
+    [dataLoaded, isReverting, isSaving, runRevert, updateEdits]
   )
 
   const saveEdits = (pending: PendingEdits) => {

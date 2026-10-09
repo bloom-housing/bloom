@@ -819,6 +819,7 @@ describe("<AdminTranslations>", () => {
       await selectLanguage("Español")
 
       expect(await screen.findByText("English changed")).toBeInTheDocument()
+      expect(screen.queryByRole("button", { name: "Keep translation" })).toBeNull()
     })
 
     it("leaves a key alone when neither language overrides it", async () => {
