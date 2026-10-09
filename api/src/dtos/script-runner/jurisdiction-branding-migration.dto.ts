@@ -1,24 +1,22 @@
 import {
-  ArrayNotEmpty,
-  IsArray,
   IsBoolean,
   IsDefined,
-  IsEnum,
   IsString,
   Matches,
   MaxLength,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
-import { Expose } from 'class-transformer';
-import { LanguagesEnum } from '@prisma/client';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { Expose, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import {
   IsTranslationSourceUrl,
   SAFE_SOURCE_PATH,
 } from '../../decorators/is-translation-source-url.decorator';
+import { BrandDTO } from '../jurisdictions/brand.dto';
 
-export class TranslationOverrideMigrationDTO {
+export class JurisdictionBrandingMigrationDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -37,30 +35,6 @@ export class TranslationOverrideMigrationDTO {
     example: false,
   })
   commit: boolean;
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({
-    type: Boolean,
-    example: false,
-  })
-  skipExisting: boolean;
-
-  @Expose()
-  @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  @ArrayNotEmpty({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(LanguagesEnum, {
-    each: true,
-    groups: [ValidationsGroupsEnum.default],
-  })
-  @ApiPropertyOptional({
-    enum: LanguagesEnum,
-    enumName: 'LanguagesEnum',
-    isArray: true,
-    example: ['es'],
-  })
-  languages?: LanguagesEnum[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -87,9 +61,21 @@ export class TranslationOverrideMigrationDTO {
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
-    example: 'sites/public/page_content/locale_overrides',
+    example: 'sites/public/styles/overrides.scss',
   })
-  publicPath?: string;
+  overridesPath?: string;
+
+  // Each fork names its logo differently and references it from its own layout, so the paths are
+  // given.
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({
+    type: String,
+    example: 'sites/public/public/images/logo.png',
+  })
+  logoPath?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -97,7 +83,15 @@ export class TranslationOverrideMigrationDTO {
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
-    example: 'sites/partners/page_content/overrides',
+    example: 'sites/public/public/favicon.png',
   })
-  partnersPath?: string;
+  faviconPath?: string;
+
+  // Wins over whatever the stylesheet parse found, field by field. A font family needs a fontUrl
+  // supplied here: a fork's self-hosted font has no google fonts url to read.
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => BrandDTO)
+  @ApiPropertyOptional({ type: BrandDTO })
+  brand?: BrandDTO;
 }
