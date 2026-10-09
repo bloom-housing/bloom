@@ -18,6 +18,8 @@ import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)
@@ -27,12 +29,28 @@ const ApplicationAddMembers = () => {
   const householdSize = parseInt(application.householdMember.length) + 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, handleSubmit, register, clearErrors } = useForm()
+  const { errors, handleSubmit, register, clearErrors, getValues } = useForm()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "addMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "addMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = () => {
-    conductor.currentStep.save({
-      householdSize: parseInt(application.householdMember.length) + 1,
+    const pendingSave = { householdSize: parseInt(application.householdMember.length) + 1 }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.routeToNextOrReturnUrl()
   }
 
   const onError = () => {
@@ -87,7 +105,7 @@ const ApplicationAddMembers = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.addMembers.title")}
@@ -104,6 +122,7 @@ const ApplicationAddMembers = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <HouseholdSizeField
             assistanceUrl={t("application.household.assistanceUrl")}

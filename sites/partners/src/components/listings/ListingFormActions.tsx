@@ -24,7 +24,7 @@ import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
 import { createDate } from "../../lib/helpers"
-import { getValidFutureScheduledDate } from "./helpers"
+import { getValidFutureScheduledDate, publishesLandUseToClosed } from "./helpers"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -115,6 +115,28 @@ const ListingFormActions = ({
     FeatureFlagEnum.enableAutopublish,
     listingJurisdiction?.id
   )
+  const enableLandUse = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableLandUse,
+    listingJurisdiction?.id
+  )
+  const enableApproveAndPublishOnEdit = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApproveAndPublishOnEdit,
+    listingJurisdiction?.id
+  )
+
+  const approvalPublishesToClosed = publishesLandUseToClosed({
+    listingType: listing?.listingType,
+    enableLandUse,
+    enableAutopublish,
+    scheduledPublishAt: listing?.scheduledPublishAt,
+  })
+
+  const savePublishesToClosed = publishesLandUseToClosed({
+    listingType: listing?.listingType,
+    enableLandUse,
+    enableAutopublish,
+    scheduledPublishAt,
+  })
 
   const isEditPublicListingRestricted =
     !!profile?.userRoles?.isPartner &&
@@ -130,36 +152,40 @@ const ListingFormActions = ({
   }, [listing])
 
   const getApprovedStatus = useCallback((): ListingsStatusEnum => {
-    return getValidFutureScheduledDate(listing?.scheduledPublishAt)
-      ? ListingsStatusEnum.scheduled
-      : ListingsStatusEnum.active
-  }, [listing?.scheduledPublishAt])
+    if (getValidFutureScheduledDate(listing?.scheduledPublishAt)) {
+      return ListingsStatusEnum.scheduled
+    }
+    if (approvalPublishesToClosed) {
+      return ListingsStatusEnum.closed
+    }
+    return ListingsStatusEnum.active
+  }, [approvalPublishesToClosed, listing?.scheduledPublishAt])
 
   const approveAndSetStatus = useCallback(
     async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
       try {
-        const result = await listingsService.update({
-          id: listing.id,
-          body: {
-            ...(listing as unknown as ListingUpdate),
-            // account for type mismatch between ListingMultiSelectQuestionType and IdDto
-            listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
-              (multiselectQuestions) => ({
-                ordinal: multiselectQuestions.ordinal,
-                id: multiselectQuestions.multiselectQuestions?.id,
-              })
-            ),
-            status,
-          },
-        })
-        if (result) {
-          addToast(
-            status === ListingsStatusEnum.scheduled
-              ? t("listings.approval.listingScheduled")
-              : t("listings.approval.listingPublished"),
-            { variant: "success" }
-          )
-          await router.push(`/`)
+        if (type === ListingFormActionsType.edit) {
+          submitFormWithStatus("redirect", ListingsStatusEnum.active)
+        } else {
+          // If not in edit mode, we only update the listing status so use the alternative update method
+          const result = await listingsService.updateListingStatus({
+            body: {
+              id: listing.id,
+              jurisdictions: listing.jurisdictions,
+              status,
+            },
+          })
+          if (result) {
+            addToast(
+              status === ListingsStatusEnum.scheduled
+                ? t("listings.approval.listingScheduled")
+                : status === ListingsStatusEnum.closed
+                ? t("listings.approval.listingClosed")
+                : t("listings.approval.listingPublished"),
+              { variant: "success" }
+            )
+            await router.push(`/`)
+          }
         }
       } catch (err) {
         if (err.response?.status === 400) {
@@ -173,7 +199,7 @@ const ListingFormActions = ({
         )
       }
     },
-    [addToast, listing, listingsService, router, setErrorAlert]
+    [addToast, listing, listingsService, router, setErrorAlert, type]
   )
 
   const unapproveAndSetStatus = useCallback(async () => {
@@ -557,9 +583,13 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.pendingReview &&
       type === ListingFormActionsType.edit
     ) {
-      if (isListingApprover && !profile?.userRoles.isPartner) {
-        elements.push(requestChangesButton)
-      } else if (profile?.userRoles.isSupportAdmin) {
+      if (
+        (isListingApprover && !profile?.userRoles.isPartner) ||
+        profile?.userRoles.isSupportAdmin
+      ) {
+        if (enableApproveAndPublishOnEdit) {
+          elements.push(approveAndPublishButton)
+        }
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {
@@ -718,6 +748,7 @@ const ListingFormActions = ({
               await approveAndSetStatus(getApprovedStatus())
             }}
             scheduledPublishAt={listing?.scheduledPublishAt}
+            publishesToClosed={approvalPublishesToClosed}
           />
           <UnapproveListingDialog
             isOpen={unapproveDialogOpen}
@@ -742,11 +773,14 @@ const ListingFormActions = ({
               setSaveScheduledDialogOpen(false)
               if (getValidFutureScheduledDate(scheduledPublishAt)) {
                 submitFormWithStatus("continue", ListingsStatusEnum.scheduled)
+              } else if (savePublishesToClosed) {
+                submitFormWithStatus("redirect", ListingsStatusEnum.closed)
               } else {
                 submitFormWithStatus("redirect", ListingsStatusEnum.active)
               }
             }}
             currentScheduledPublishAt={scheduledPublishAt}
+            publishesToClosed={savePublishesToClosed}
           />
         </>
       )}

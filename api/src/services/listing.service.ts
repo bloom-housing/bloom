@@ -69,6 +69,7 @@ import {
   summarizeUnits,
   summarizeByPriorityType,
 } from '../utilities/unit-utilities';
+import { ListingUpdateStatus } from '../dtos/listings/listing-status-update.dto';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -1568,7 +1569,7 @@ export class ListingService implements OnModuleInit {
       dto.unitGroups,
     );
 
-    // Remove requiredFields and minimumImagesRequired properties before saving to database
+    // Remove the validation-only meta fields before saving to database
     const {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       requiredFields,
@@ -1576,6 +1577,8 @@ export class ListingService implements OnModuleInit {
       minimumImagesRequired,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       listingFeaturesConfiguration,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      publishesToClosed,
       ...listingData
     } = dto;
 
@@ -2322,7 +2325,7 @@ export class ListingService implements OnModuleInit {
     update a listing
   */
   async update(dto: ListingUpdate, requestingUser: User): Promise<Listing> {
-    // Remove requiredFields and minimumImagesRequired properties before saving to database
+    // Remove the validation-only meta fields before saving to database
     const {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       requiredFields,
@@ -2330,6 +2333,8 @@ export class ListingService implements OnModuleInit {
       minimumImagesRequired,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       listingFeaturesConfiguration,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      publishesToClosed,
       ...incomingDto
     } = dto;
     const storedListing = await this.findOrThrow(
@@ -3465,6 +3470,22 @@ export class ListingService implements OnModuleInit {
     if (incomingStatus === ListingsStatusEnum.pending) {
       return null;
     }
+    // A listing can go live as closed without ever being active (land use listings published with
+    // no scheduled publish date), so entering closed from a never-published status is a publish.
+    if (
+      incomingStatus === ListingsStatusEnum.closed &&
+      !storedPublishedAt &&
+      (
+        [
+          ListingsStatusEnum.pending,
+          ListingsStatusEnum.pendingReview,
+          ListingsStatusEnum.changesRequested,
+          ListingsStatusEnum.scheduled,
+        ] as ListingsStatusEnum[]
+      ).includes(storedStatus)
+    ) {
+      return new Date();
+    }
     return storedPublishedAt ?? null;
   }
 
@@ -3871,5 +3892,204 @@ export class ListingService implements OnModuleInit {
         lng: Number(mapMarker.listingsBuildingAddress.longitude),
       } as ListingMapMarker;
     });
+  }
+
+  async updateStatus(
+    dto: ListingUpdateStatus,
+    requestingUser: User,
+  ): Promise<Listing> {
+    const storedListing = await this.findOrThrow(dto.id, ListingViews.full);
+
+    await this.permissionService.canOrThrow(
+      requestingUser,
+      'listing',
+      permissionActions.update,
+      {
+        id: storedListing.id,
+        jurisdictionId: storedListing.jurisdictionId,
+      },
+    );
+    const rawJurisdiction = await this.prisma.jurisdictions.findUnique({
+      select: {
+        featureFlags: true,
+        listingApprovalPermissions: true,
+        id: true,
+      },
+      where: {
+        id: storedListing.jurisdictions.id,
+      },
+    });
+
+    const enableAutoOpenDate = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableAutoOpenDate,
+    );
+
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      rawJurisdiction as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+
+    const listingApprovalPermissions =
+      rawJurisdiction.listingApprovalPermissions;
+
+    if (
+      listingApprovalPermissions?.length &&
+      dto.status === ListingsStatusEnum.active
+    ) {
+      let isForbidden = true;
+      const approvingRoles: string[] = [];
+      if (listingApprovalPermissions.includes(UserRoleEnum.admin))
+        approvingRoles.push('isAdmin');
+      if (listingApprovalPermissions.includes(UserRoleEnum.supportAdmin))
+        approvingRoles.push('isSupportAdmin');
+      if (listingApprovalPermissions.includes(UserRoleEnum.partner))
+        approvingRoles.push('isPartner');
+      if (listingApprovalPermissions.includes(UserRoleEnum.jurisdictionAdmin)) {
+        approvingRoles.push('isJurisdictionalAdmin');
+      }
+      if (
+        listingApprovalPermissions.includes(
+          UserRoleEnum.limitedJurisdictionAdmin,
+        )
+      ) {
+        approvingRoles.push('isLimitedJurisdictionalAdmin');
+      }
+      approvingRoles.forEach((elem) => {
+        if (requestingUser.userRoles[elem]) {
+          isForbidden = false;
+        }
+      });
+      if (isForbidden) {
+        throw new ForbiddenException(
+          `User does not have permissions to approve listing ${dto.id}`,
+        );
+      }
+    }
+
+    if (enableAutoOpenDate && storedListing.scheduledApplicationOpenAt) {
+      storedListing.scheduledApplicationOpenAt =
+        this.normalizeScheduledApplicationOpenAt(
+          storedListing.scheduledApplicationOpenAt,
+        );
+      this.checkScheduledDateIsInFuture(
+        storedListing.scheduledApplicationOpenAt,
+        'scheduledApplicationOpenAt',
+      );
+      this.checkScheduledApplicationOpenAtIsAfterPublish(
+        storedListing.scheduledApplicationOpenAt,
+        storedListing.scheduledPublishAt,
+      );
+    }
+
+    const sendPublishNotificationEmail =
+      dto.status === ListingsStatusEnum.active &&
+      storedListing.status !== ListingsStatusEnum.active;
+
+    await this.snapshotCreateService.createListingSnapshot(dto.id);
+
+    const rawListing = await this.prisma.listings.update({
+      data: {
+        contentUpdatedAt: new Date(),
+        lastUpdatedByUser: requestingUser
+          ? {
+              connect: {
+                id: requestingUser.id,
+              },
+            }
+          : undefined,
+        publishedAt: ListingService.resolvePublishedAt(
+          dto.status,
+          storedListing.status,
+          storedListing.publishedAt,
+        ),
+        closedAt:
+          storedListing.status !== ListingsStatusEnum.closed &&
+          dto.status === ListingsStatusEnum.closed
+            ? new Date()
+            : storedListing.closedAt,
+        status: dto.status,
+      },
+      include: includeViews.full,
+      where: {
+        id: dto.id,
+      },
+    });
+
+    const mappedListing = mapTo(Listing, rawListing);
+
+    if (listingApprovalPermissions?.length > 0)
+      await this.listingApprovalNotify({
+        user: requestingUser,
+        listingInfo: { id: mappedListing.id, name: mappedListing.name },
+        listingFileNumber: mappedListing.listingFileNumber,
+        approvingRoles: listingApprovalPermissions,
+        status: dto.status,
+        previousStatus: storedListing.status,
+        jurisId: rawJurisdiction.id,
+        scheduledPublishAt: storedListing.scheduledPublishAt,
+      });
+    else if (
+      dto.status === ListingsStatusEnum.active &&
+      storedListing.status === ListingsStatusEnum.pending
+    ) {
+      const userInfo = await this.getUserEmailInfo(
+        [
+          UserRoleEnum.partner,
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+          UserRoleEnum.limitedJurisdictionAdmin,
+          UserRoleEnum.supportAdmin,
+        ],
+        mappedListing.id,
+        rawJurisdiction.id,
+      );
+      const jurisdiction = await this.prisma.jurisdictions.findUnique({
+        select: { publicUrl: true },
+        where: { id: rawJurisdiction.id },
+      });
+      await this.emailService.listingPublished(
+        { id: rawJurisdiction.id },
+        { id: mappedListing.id, name: mappedListing.name },
+        userInfo.emails,
+        jurisdiction.publicUrl || '',
+      );
+    }
+
+    if (sendPublishNotificationEmail) {
+      const useComingSoon =
+        !!mappedListing.scheduledApplicationOpenAt &&
+        dayjs(mappedListing.scheduledApplicationOpenAt).isAfter(new Date());
+      await this.sendListingPublishNotification(
+        mappedListing,
+        useComingSoon ? 'comingSoon' : 'standard',
+      );
+      if (
+        doJurisdictionHaveFeatureFlagSet(
+          rawJurisdiction as unknown as Jurisdiction,
+          FeatureFlagEnum.enableListingOpportunity,
+        )
+      ) {
+        await this.emailService.listingPublishNotificationViaGovDelivery(
+          { id: rawJurisdiction.id },
+          mappedListing,
+          [],
+          useComingSoon ? 'comingSoon' : 'standard',
+        );
+      }
+    }
+
+    if (enableV2MSQ && mappedListing.status === ListingsStatusEnum.active) {
+      const multiselectQuestions =
+        mappedListing.listingMultiselectQuestions.map(
+          (listingMultiselectQuestion) =>
+            listingMultiselectQuestion.multiselectQuestions,
+        );
+      void this.multiselectQuestionService.activateMany(multiselectQuestions);
+    }
+
+    await this.cachePurge(storedListing.status, dto.status, mappedListing.id);
+
+    return mappedListing;
   }
 }

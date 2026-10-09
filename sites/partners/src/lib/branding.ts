@@ -9,6 +9,7 @@ import {
   completeRamp,
   HEX_COLOR,
 } from "@bloom-housing/shared-helpers/src/utilities/brandRamp"
+import { radiusStepOnly } from "@bloom-housing/shared-helpers/src/utilities/brandRadius"
 
 export const RAMP_SHADES = ["dark", "darker", "light", "lighter"] as const
 export type RampShade = (typeof RAMP_SHADES)[number]
@@ -29,11 +30,28 @@ export interface BrandFormValues {
   headingFontFamily: string
   serifFontFamily: string
   fontUrl: string
-  buttonRadius: string
+  buttonRadius: BrandRadiusEnum | ""
 }
 
-export const fieldName = (ramp: RampName, shade: RampShade | "base"): keyof BrandFormValues =>
-  `${ramp}${shade.charAt(0).toUpperCase()}${shade.slice(1)}` as keyof BrandFormValues
+export type ColorFieldName = `${RampName}${Capitalize<RampShade | "base">}`
+
+export const fieldName = (ramp: RampName, shade: RampShade | "base"): ColorFieldName =>
+  `${ramp}${shade.charAt(0).toUpperCase()}${shade.slice(1)}` as ColorFieldName
+
+const rampFields = (ramp: RampName): ColorFieldName[] => [
+  fieldName(ramp, "base"),
+  ...RAMP_SHADES.map((shade) => fieldName(ramp, shade)),
+]
+
+export const PREVIEW_FIELDS: (keyof BrandFormValues)[] = [
+  ...rampFields("primary"),
+  ...rampFields("secondary"),
+  "buttonRadius",
+  "fontFamily",
+  "headingFontFamily",
+  "serifFontFamily",
+  "fontUrl",
+]
 
 const FONT_FIELDS = ["fontFamily", "headingFontFamily", "serifFontFamily", "fontUrl"] as const
 
@@ -87,7 +105,7 @@ export const brandToFormValues = (jurisdiction?: Jurisdiction): BrandFormValues 
   FONT_FIELDS.forEach((field) => {
     values[field] = brand[field] ?? ""
   })
-  values.buttonRadius = brand.buttonRadius ?? ""
+  values.buttonRadius = radiusStepOnly(brand.buttonRadius) ?? ""
   return values
 }
 
@@ -121,7 +139,7 @@ export const brandFromValues = (values: BrandFormValues): BrandDTO | undefined =
     const value = values[field]?.trim()
     if (value) brand[field] = value
   })
-  if (values.buttonRadius) brand.buttonRadius = values.buttonRadius as BrandRadiusEnum
+  if (values.buttonRadius) brand.buttonRadius = values.buttonRadius
   return brand
 }
 

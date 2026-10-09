@@ -152,6 +152,7 @@ const ListingForm = ({
   const marketingTypeChoice = watch("marketingType")
   const scheduledListingPublishDateField = watch("scheduledListingPublishDateField")
   const scheduledPublishAtFromForm = createDate(scheduledListingPublishDateField, true)
+  const listingTypeFromForm = watch("listingType")
 
   const { listingsService, profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
@@ -876,6 +877,10 @@ const ListingForm = ({
                               FeatureFlagEnum.disableCommonApplication,
                               jurisdictionId
                             )}
+                            disableReferralOpportunity={doJurisdictionsHaveFeatureFlagOn(
+                              FeatureFlagEnum.disableReferralOpportunity,
+                              jurisdictionId
+                            )}
                             enableReferralQuestionUnits={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableReferralQuestionUnits,
                               jurisdictionId
@@ -988,6 +993,9 @@ const ListingForm = ({
         setOpen={setPublishDialog}
         submitFormWithStatus={triggerSubmitWithStatus}
         enableAutopublish={enableAutopublish}
+        enableLandUse={enableLandUse}
+        listingType={listingTypeFromForm}
+        listingStatus={listing?.status}
         scheduledPublishAt={scheduledPublishAtFromForm}
       />
 

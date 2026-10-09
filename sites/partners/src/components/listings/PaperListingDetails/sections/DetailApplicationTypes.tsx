@@ -19,6 +19,11 @@ const DetailApplicationTypes = () => {
     listing?.jurisdictions?.id
   )
 
+  const disableReferralOpportunity = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableReferralOpportunity,
+    listing?.jurisdictions?.id
+  )
+
   const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableReferralQuestionUnits,
     listing?.jurisdictions?.id
@@ -108,34 +113,36 @@ const DetailApplicationTypes = () => {
         </Grid.Row>
       )}
 
-      <Grid.Row columns={2}>
-        <Grid.Cell>
-          <FieldValue
-            id="referralOpportunity"
-            label={t(
-              enableReferralQuestionUnits
-                ? "listings.applicationType.referralUnit"
-                : "listings.applicationType.referral"
-            )}
-          >
-            {getDetailBoolean(listing.referralOpportunity)}
-          </FieldValue>
-        </Grid.Cell>
-        {referralMethod && (
-          <>
-            <Grid.Cell>
-              <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
-                {getDetailFieldString(referralMethod.phoneNumber)}
-              </FieldValue>
-            </Grid.Cell>
-            <Grid.Cell>
-              <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
-                {getDetailFieldString(referralMethod.externalReference)}
-              </FieldValue>
-            </Grid.Cell>
-          </>
-        )}
-      </Grid.Row>
+      {!disableReferralOpportunity && (
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <FieldValue
+              id="referralOpportunity"
+              label={t(
+                enableReferralQuestionUnits
+                  ? "listings.applicationType.referralUnit"
+                  : "listings.applicationType.referral"
+              )}
+            >
+              {getDetailBoolean(listing.referralOpportunity)}
+            </FieldValue>
+          </Grid.Cell>
+          {referralMethod && (
+            <>
+              <Grid.Cell>
+                <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
+                  {getDetailFieldString(referralMethod.phoneNumber)}
+                </FieldValue>
+              </Grid.Cell>
+              <Grid.Cell>
+                <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
+                  {getDetailFieldString(referralMethod.externalReference)}
+                </FieldValue>
+              </Grid.Cell>
+            </>
+          )}
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }

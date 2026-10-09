@@ -18,3 +18,17 @@
   align-items: center;
   gap: var(--seeds-s3);
 }
+
+.shades-note {
+  color: var(--seeds-text-color-secondary);
+  font-size: var(--seeds-font-size-sm);
+  padding-block-end: var(--seeds-s2);
+}
+
+.shades-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--seeds-s2);
+}

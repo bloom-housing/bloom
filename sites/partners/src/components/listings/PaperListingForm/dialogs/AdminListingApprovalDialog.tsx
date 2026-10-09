@@ -8,6 +8,7 @@ type AdminListingApprovalDialogProps = {
   onClose: () => void
   onConfirm: () => void | Promise<void>
   scheduledPublishAt?: Date | string | null
+  publishesToClosed?: boolean
 }
 
 const AdminListingApprovalDialog = ({
@@ -15,6 +16,7 @@ const AdminListingApprovalDialog = ({
   onClose,
   onConfirm,
   scheduledPublishAt,
+  publishesToClosed,
 }: AdminListingApprovalDialogProps) => {
   const getAdminListingApprovalModalBody = (): string => {
     const scheduledAtDate = getValidFutureScheduledDate(scheduledPublishAt)
@@ -25,6 +27,10 @@ const AdminListingApprovalDialog = ({
 
     if (scheduledPublishAt != null) {
       return t("listings.approval.adminApproveScheduledPast")
+    }
+
+    if (publishesToClosed) {
+      return t("listings.approval.landUseNoScheduledDate")
     }
 
     return t("listings.approval.adminApproveNoScheduledDate")

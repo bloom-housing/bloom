@@ -5,6 +5,7 @@ export interface FormProps {
   className?: string
   id?: string
   method?: "get" | "post"
+  onBlur?: (event: React.FocusEvent<HTMLFormElement>) => void
   onSubmit?: () => unknown
   suppressSubmitOnEnter?: boolean
 }
@@ -15,6 +16,7 @@ export const Form = ({
   className,
   method = "post",
   suppressSubmitOnEnter = true,
+  onBlur,
   onSubmit,
 }: FormProps) => {
   const onKeyDown = useCallback(
@@ -34,6 +36,7 @@ export const Form = ({
     <form
       id={id}
       className={className}
+      onBlur={onBlur}
       onSubmit={onSubmit}
       onKeyDown={onKeyDown}
       noValidate

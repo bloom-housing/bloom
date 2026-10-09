@@ -2405,8 +2405,10 @@ export const realisticAddressesForOtherStatuses = [
 const featureFlags = [
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableHowToContact,
+  FeatureFlagEnum.disableReferralOpportunity,
   FeatureFlagEnum.disableWorkInRegion,
   FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+  FeatureFlagEnum.enableApproveAndPublishOnEdit,
   FeatureFlagEnum.enableDuplicatesDetailsInEmail,
   FeatureFlagEnum.enableExportTerms,
   FeatureFlagEnum.enableFaq,
