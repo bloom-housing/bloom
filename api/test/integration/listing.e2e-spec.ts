@@ -2193,6 +2193,69 @@ describe('Listing Controller Tests', () => {
       );
       expect(multiselectQuestions[2].ordinal).toEqual(3);
     });
+
+    describe('status filtering', () => {
+      let statusJurisdictionId: string;
+      const listingIdsByStatus: Partial<Record<ListingsStatusEnum, string>> =
+        {};
+
+      beforeAll(async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(`filterableList status ${randomName()}`),
+        });
+        statusJurisdictionId = jurisdiction.id;
+
+        for (const status of [
+          ListingsStatusEnum.active,
+          ListingsStatusEnum.closed,
+        ]) {
+          const listing = await prisma.listings.create({
+            data: await listingFactory(statusJurisdictionId, prisma, {
+              status,
+            }),
+          });
+          listingIdsByStatus[status] = listing.id;
+        }
+      });
+
+      const postList = (filter: ListingsQueryBody['filter']) =>
+        request(app.getHttpServer())
+          .post(`/listings/list`)
+          .send({ page: 1, view: ListingViews.base, filter })
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .expect(201);
+
+      it('should return only closed listings when filtering by closed status', async () => {
+        const res = await postList([
+          {
+            $comparison: Compare['='],
+            jurisdiction: statusJurisdictionId,
+          },
+          {
+            $comparison: Compare['='],
+            status: ListingsStatusEnum.closed,
+          },
+        ]);
+
+        const ids = res.body.items.map((item) => item.id);
+        expect(ids).toEqual([listingIdsByStatus.closed]);
+      });
+
+      it('should return listings of every status when no status filter is sent', async () => {
+        const res = await postList([
+          {
+            $comparison: Compare['='],
+            jurisdiction: statusJurisdictionId,
+          },
+        ]);
+
+        const ids = res.body.items.map((item) => item.id);
+        expect(ids).toHaveLength(2);
+        expect(ids).toEqual(
+          expect.arrayContaining(Object.values(listingIdsByStatus)),
+        );
+      });
+    });
   });
 
   describe('retrieve listings endpoint', () => {
@@ -3448,7 +3511,7 @@ describe('Listing Controller Tests', () => {
   });
 
   describe('mapMarkers endpoint', () => {
-    it('should find all active listings', async () => {
+    it('should find active listings when the active status is requested', async () => {
       const listingData = await listingFactory(jurisdictionAId, prisma);
       const listing = await prisma.listings.create({
         data: listingData,
@@ -3464,7 +3527,11 @@ describe('Listing Controller Tests', () => {
       const res = await request(app.getHttpServer())
         .post('/listings/mapMarkers')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({})
+        .send({
+          filter: [
+            { $comparison: Compare['='], status: ListingsStatusEnum.active },
+          ],
+        })
         .expect(201);
 
       expect(res.body.length).toBeGreaterThanOrEqual(1);
@@ -3478,6 +3545,91 @@ describe('Listing Controller Tests', () => {
         id: ids[0],
         lat: expect.any(Number),
         lng: expect.any(Number),
+      });
+    });
+
+    describe('status filtering', () => {
+      let statusJurisdictionId: string;
+      let activeListingId: string;
+      let closedListingId: string;
+
+      const createListing = async (
+        jurisdictionId: string,
+        status: ListingsStatusEnum,
+        unitsAvailable = 0,
+      ) => {
+        const listing = await prisma.listings.create({
+          data: await listingFactory(jurisdictionId, prisma, {
+            status,
+            unitsAvailable,
+          }),
+        });
+        return listing.id;
+      };
+
+      beforeAll(async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(`mapMarkers status ${randomName()}`),
+        });
+        statusJurisdictionId = jurisdiction.id;
+        activeListingId = await createListing(
+          statusJurisdictionId,
+          ListingsStatusEnum.active,
+        );
+        closedListingId = await createListing(
+          statusJurisdictionId,
+          ListingsStatusEnum.closed,
+        );
+      });
+
+      const jurisdictionFilter = () => ({
+        $comparison: Compare.IN,
+        jurisdiction: statusJurisdictionId,
+      });
+
+      const postMapMarkers = async (body: ListingsQueryBody | object) => {
+        const res = await request(app.getHttpServer())
+          .post('/listings/mapMarkers')
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .send(body)
+          .expect(201);
+        res.body.forEach((marker) =>
+          expect(marker).toEqual({
+            id: expect.any(String),
+            lat: expect.any(Number),
+            lng: expect.any(Number),
+          }),
+        );
+        return res.body.map((marker) => marker.id);
+      };
+
+      it('should return listings of every status when no status filter is sent', async () => {
+        const ids = await postMapMarkers({ filter: [jurisdictionFilter()] });
+
+        expect(ids).toContain(activeListingId);
+        expect(ids).toContain(closedListingId);
+      });
+
+      it('should return only closed listings when the closed status is requested', async () => {
+        const ids = await postMapMarkers({
+          filter: [
+            { $comparison: Compare['='], status: ListingsStatusEnum.closed },
+          ],
+        });
+
+        expect(ids).toContain(closedListingId);
+        expect(ids).not.toContain(activeListingId);
+      });
+
+      it('should return only active listings when the active status is requested', async () => {
+        const ids = await postMapMarkers({
+          filter: [
+            jurisdictionFilter(),
+            { $comparison: Compare['='], status: ListingsStatusEnum.active },
+          ],
+        });
+
+        expect(ids).toEqual([activeListingId]);
       });
     });
   });

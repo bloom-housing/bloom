@@ -1,15 +1,24 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
+import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  ListingsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingsList } from "../../../../src/components/browse/map/ListingsList"
 import { useListingsMapContext } from "../../../../src/components/browse/map/ListingsMapContext"
 import { getMapListings } from "../../../../src/lib/helpers"
 
 const paginationMock = jest.fn()
 const tIfExistsMock = jest.fn()
+const pushMock = jest.fn()
 
 // These mocks enable us to just test the branching logic in ListingsList without worrying about the internal implementation of the children, which are tested separately
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}))
+
 jest.mock("../../../../src/components/browse/map/ListingsMapContext", () => ({
   useListingsMapContext: jest.fn(),
 }))
@@ -42,9 +51,9 @@ jest.mock("@bloom-housing/ui-components", () => {
 
   return {
     ...actual,
-    t: (key: string) => {
+    t: (key: string, options?: Record<string, unknown>) => {
       const result = tIfExistsMock(key)
-      return result !== null && result !== undefined ? result : actual.t(key)
+      return result !== null && result !== undefined ? result : actual.t(key, options)
     },
     LoadingOverlay: ({ isLoading, children }) => (
       <div data-testid="loading-overlay" data-loading={String(isLoading)}>
@@ -76,6 +85,7 @@ describe("ListingsList", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(useRouter as jest.Mock).mockReturnValue({ query: {}, push: pushMock })
     delete process.env.notificationsSignUpUrl
     tIfExistsMock.mockReturnValue(null)
     ;(useListingsMapContext as jest.Mock).mockReturnValue(baseContext)
@@ -102,6 +112,53 @@ describe("ListingsList", () => {
 
     expect(screen.getByRole("heading", { name: t("t.noVisibleListings") })).toBeInTheDocument()
     expect(screen.getByText(t("t.tryChangingArea"))).toBeInTheDocument()
+  })
+
+  it("shows the status filter no-matching-listings state with a search open button when viewing closed listings", () => {
+    ;(useListingsMapContext as jest.Mock).mockReturnValue({
+      ...baseContext,
+      activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+      listingStatus: ListingsStatusEnum.closed,
+      searchResults: {
+        ...baseContext.searchResults,
+        listings: [],
+        markers: [],
+      },
+    })
+
+    render(<ListingsList />)
+
+    expect(
+      screen.getByRole("heading", { name: t("listingFilters.noMatchingListingsTitle") })
+    ).toBeInTheDocument()
+    expect(screen.getByText(t("listingFilters.noMatchingListingsDescription"))).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: t("listingFilters.searchForOpen") })
+    ).toBeInTheDocument()
+    expect(screen.queryByText(t("t.tryChangingArea"))).toBeNull()
+  })
+
+  it("shows the status filter no-matching-listings state with a search closed button when viewing open listings", () => {
+    ;(useListingsMapContext as jest.Mock).mockReturnValue({
+      ...baseContext,
+      activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+      listingStatus: ListingsStatusEnum.active,
+      searchResults: {
+        ...baseContext.searchResults,
+        listings: [],
+        markers: [],
+      },
+    })
+
+    render(<ListingsList />)
+
+    expect(
+      screen.getByRole("heading", { name: t("listingFilters.noMatchingListingsTitle") })
+    ).toBeInTheDocument()
+    expect(screen.getByText(t("listingFilters.noMatchingListingsDescription"))).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: t("listingFilters.searchForClosed") })
+    ).toBeInTheDocument()
   })
 
   it("shows no-matching-listings state when both list and markers are empty", () => {

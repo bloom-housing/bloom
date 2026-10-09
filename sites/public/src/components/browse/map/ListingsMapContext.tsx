@@ -5,6 +5,7 @@ import type {
   Listing,
   ListingFeaturesConfiguration,
   ListingMapMarker,
+  ListingsStatusEnum,
   MultiselectQuestion,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import type { MapMarkerData } from "./ListingsMap"
@@ -30,6 +31,7 @@ export type ListingsMapContextValue = {
   multiselectData: MultiselectQuestion[]
   regions?: string[]
   listingFeaturesConfiguration?: ListingFeaturesConfiguration
+  listingStatus?: ListingsStatusEnum
   searchResults: ListingsSearchResults
   listView: boolean
   setListView: React.Dispatch<React.SetStateAction<boolean>>

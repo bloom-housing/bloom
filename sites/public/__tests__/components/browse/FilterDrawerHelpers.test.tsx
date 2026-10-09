@@ -6,6 +6,7 @@ import {
   FilterAvailabilityEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  ListingsStatusEnum,
   RegionEnum,
   UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
@@ -418,6 +419,14 @@ describe("filter drawer helpers", () => {
         { $comparison: "IN", accessibilityPriorityTypes: ["mobility", "hearing"] },
       ])
     })
+    it("should return correct backend filters for closed status", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: "=", status: "closed" }])
+    })
   })
 
   describe("isFiltered", () => {
@@ -556,6 +565,27 @@ describe("filter drawer helpers", () => {
         "accessibilityPriorityTypes=mobility,hearing"
       )
     })
+    it("should return correct filter query with closed status filter", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("status=closed")
+    })
+    it("should not add active status to the filter query as it is the default", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.active,
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("")
+    })
+    it("should return correct filter query with closed status combined with other filters", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+        [ListingFilterKeys.name]: "Listing Name",
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual(
+        "status=closed&name=Listing Name"
+      )
+    })
   })
 
   describe("decodeQueryToFilterData", () => {
@@ -648,6 +678,19 @@ describe("filter drawer helpers", () => {
           [UnitAccessibilityPriorityTypeEnum.hearing]: true,
         },
       })
+    })
+    it("should return correct filter data with closed status query", () => {
+      expect(decodeQueryToFilterData({ status: "closed" })).toStrictEqual({
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      })
+    })
+    it("should drop active status from the query as it is the default", () => {
+      expect(decodeQueryToFilterData({ status: "active" })).toStrictEqual({})
+    })
+    it("should drop non public statuses from the query", () => {
+      expect(decodeQueryToFilterData({ status: "pendingReview" })).toStrictEqual({})
+      expect(decodeQueryToFilterData({ status: "pending" })).toStrictEqual({})
+      expect(decodeQueryToFilterData({ status: "not-a-status" })).toStrictEqual({})
     })
   })
 
@@ -759,6 +802,26 @@ describe("filter drawer helpers", () => {
 
       expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({
         [ListingFilterKeys.bathrooms]: "2",
+      })
+    })
+
+    it("should not include status when active is selected", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.status]: ListingsStatusEnum.active,
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({})
+    })
+
+    it("should include status when closed is selected", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
       })
     })
 

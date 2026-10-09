@@ -9,7 +9,10 @@ import { MapMarkerData } from "./ListingsMap"
 import { searchListings, searchMapMarkers } from "../../../lib/hooks"
 import {
   EnumListingFilterParamsComparison,
+  FeatureFlagEnum,
+  ListingFilterKeys,
   ListingFilterParams,
+  ListingsStatusEnum,
   ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FilterDrawer } from "../FilterDrawer"
@@ -49,6 +52,11 @@ function ListingsSearchCombined() {
 
   const jurisdictionIds = props.jurisdictions.map((jurisdiction) => jurisdiction.id)
   const filterQuery = getFilterQueryFromURL(router.query)
+  const listingStatus = drawerFilters.some(
+    (filter) => filter[ListingFilterKeys.status] === ListingsStatusEnum.closed
+  )
+    ? ListingsStatusEnum.closed
+    : ListingsStatusEnum.active
 
   const [searchResults, setSearchResults] = useState({
     listings: [],
@@ -132,8 +140,9 @@ function ListingsSearchCombined() {
     }
 
     const genericQb = new ListingQueryBuilder()
-    // All searches should only look for "active" listings
-    genericQb.whereEqual("status", "active")
+    if (listingStatus === ListingsStatusEnum.active) {
+      genericQb.whereEqual(ListingFilterKeys.status, ListingsStatusEnum.active)
+    }
     // Include external listings
     genericQb.whereEqual("includeExternal", true)
 
@@ -243,6 +252,9 @@ function ListingsSearchCombined() {
 
   useEffect(() => {
     const filterData = decodeQueryToFilterData(router.query)
+    if (filterData[ListingFilterKeys.status] === ListingsStatusEnum.closed) {
+      delete filterData[ListingFilterKeys.availabilities]
+    }
     const backendFilters = encodeFilterDataToBackendFilters(filterData).filter(
       (filter) => filter.name !== ""
     )
@@ -341,6 +353,7 @@ function ListingsSearchCombined() {
     regions: props.regions,
     listingFeaturesConfiguration: props.listingFeaturesConfiguration,
     searchResults,
+    listingStatus,
     listView,
     setListView,
     isDesktop,
