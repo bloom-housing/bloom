@@ -41,6 +41,7 @@ const selectViews: Partial<
     },
     id: true,
     name: true,
+    updatedAt: true,
     languages: true,
     notificationsSignUpUrl: true,
     raceEthnicityConfiguration: true,
@@ -319,7 +320,12 @@ export class JurisdictionService {
         where: {
           id: jurisdictionId,
           ...(incomingData.lastUpdatedAt
-            ? { updatedAt: incomingData.lastUpdatedAt }
+            ? {
+                updatedAt: {
+                  gte: incomingData.lastUpdatedAt,
+                  lt: new Date(incomingData.lastUpdatedAt.getTime() + 1),
+                },
+              }
             : {}),
         },
         include: view,
@@ -333,6 +339,11 @@ export class JurisdictionService {
           where: { id: jurisdictionId },
           include: view,
         });
+        if (!current) {
+          throw new NotFoundException(
+            `jurisdictionId ${jurisdictionId} was requested but not found`,
+          );
+        }
         throw new ConflictException({
           message: 'brandConflict',
           current: mapTo(Jurisdiction, withResponseBrand(current)),

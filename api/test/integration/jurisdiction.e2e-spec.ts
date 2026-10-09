@@ -417,6 +417,24 @@ describe('Jurisdiction Controller Tests', () => {
         expect(stored.brand).toEqual({ primary: { base: '#773E98' } });
       });
 
+      it('accepts the version read from a row whose time has microseconds', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+        await prisma.$executeRaw`UPDATE jurisdictions SET updated_at = '2024-03-01 10:00:00.123456' WHERE id = ${jurisdiction.id}::uuid`;
+
+        const read = await request(app.getHttpServer())
+          .get(`/jurisdictions/${jurisdiction.id}`)
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .expect(200);
+        expect(read.body.updatedAt).toEqual('2024-03-01T10:00:00.123Z');
+
+        await putBrand(jurisdiction.id, {
+          brand: { primary: { base: '#773E98' } },
+          lastUpdatedAt: read.body.updatedAt,
+        }).expect(200);
+      });
+
       it('changes nothing else on the jurisdiction', async () => {
         const jurisdiction = await prisma.jurisdictions.create({
           data: jurisdictionFactory(),

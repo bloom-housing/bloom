@@ -1,5 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { JurisdictionService } from '../../../src/services/jurisdiction.service';
@@ -101,6 +105,7 @@ describe('Testing jurisdiction service', () => {
         subJurisdictions: {
           select: { id: true, name: true },
         },
+        updatedAt: true,
         visibleAccessibilityPriorityTypes: true,
         visibleApplicationAccessibilityFeatures: true,
         visibleHouseholdMemberRelationships: true,
@@ -151,6 +156,7 @@ describe('Testing jurisdiction service', () => {
         subJurisdictions: {
           select: { id: true, name: true },
         },
+        updatedAt: true,
         visibleAccessibilityPriorityTypes: true,
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
@@ -198,6 +204,7 @@ describe('Testing jurisdiction service', () => {
         subJurisdictions: {
           select: { id: true, name: true },
         },
+        updatedAt: true,
         visibleAccessibilityPriorityTypes: true,
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
@@ -245,6 +252,7 @@ describe('Testing jurisdiction service', () => {
         subJurisdictions: {
           select: { id: true, name: true },
         },
+        updatedAt: true,
         visibleAccessibilityPriorityTypes: true,
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
@@ -666,6 +674,81 @@ describe('Testing jurisdiction service', () => {
 
       const writtenData = () =>
         (prisma.jurisdictions.update as jest.Mock).mock.calls[0][0].data;
+
+      const notFound = () =>
+        new Prisma.PrismaClientKnownRequestError('not found', {
+          code: 'P2025',
+          clientVersion: 'test',
+        });
+
+      it('writes without a version check when no version is sent', async () => {
+        givenExistingJurisdiction();
+
+        await service.updateBrand(jurisdictionId, { brand: null });
+
+        expect(
+          (prisma.jurisdictions.update as jest.Mock).mock.calls[0][0].where,
+        ).toEqual({ id: jurisdictionId });
+      });
+
+      it('matches the sent version to the millisecond', async () => {
+        givenExistingJurisdiction();
+        const loaded = new Date('2026-10-09T12:00:00.123Z');
+
+        await service.updateBrand(jurisdictionId, {
+          brand: null,
+          lastUpdatedAt: loaded,
+        });
+
+        expect(
+          (prisma.jurisdictions.update as jest.Mock).mock.calls[0][0].where,
+        ).toEqual({
+          id: jurisdictionId,
+          updatedAt: {
+            gte: loaded,
+            lt: new Date('2026-10-09T12:00:00.124Z'),
+          },
+        });
+      });
+
+      it('returns a conflict with the stored jurisdiction when the version is older', async () => {
+        givenExistingJurisdiction();
+        prisma.jurisdictions.update = jest.fn().mockRejectedValue(notFound());
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue(row());
+
+        const error = await service
+          .updateBrand(jurisdictionId, {
+            brand: null,
+            lastUpdatedAt: new Date(),
+          })
+          .catch((caught) => caught);
+
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(error.getResponse().current.id).toEqual(jurisdictionId);
+      });
+
+      it('returns not found when the jurisdiction is deleted during the save', async () => {
+        givenExistingJurisdiction();
+        prisma.jurisdictions.update = jest.fn().mockRejectedValue(notFound());
+        prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue(null);
+
+        await expect(
+          service.updateBrand(jurisdictionId, {
+            brand: null,
+            lastUpdatedAt: new Date(),
+          }),
+        ).rejects.toThrow(NotFoundException);
+      });
+
+      it('passes on any other write error', async () => {
+        givenExistingJurisdiction();
+        const failure = new Error('connection lost');
+        prisma.jurisdictions.update = jest.fn().mockRejectedValue(failure);
+
+        await expect(
+          service.updateBrand(jurisdictionId, { brand: null }),
+        ).rejects.toBe(failure);
+      });
 
       it('creates the asset row, since nothing else will', async () => {
         givenExistingJurisdiction();
