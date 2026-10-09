@@ -115,8 +115,11 @@ const load = (page: string): any => require(`../../src/pages/${page}`)
 describe("pages pass the stored overrides through", () => {
   beforeEach(() => {
     jest.restoreAllMocks()
-    // Not the 30 second default, so a page that hardcoded the default would fail below.
+    // Neither is a default, so a page that hardcoded one would fail below.
     process.env.cacheRevalidate = "45"
+    // Listing detail paths cannot be named for an on-demand rebuild, so that page reads its own,
+    // shorter window.
+    process.env.listingCacheRevalidate = "15"
     jest.spyOn(hooks, "fetchSharedPageProps").mockResolvedValue(shared as never)
     jest.spyOn(hooks, "fetchLimitedUnderConstructionListings").mockResolvedValue({} as never)
     jest.spyOn(hooks, "fetchOpenListings").mockResolvedValue({} as never)
@@ -130,13 +133,15 @@ describe("pages pass the stored overrides through", () => {
     expect(pagesOnDisk().sort()).toEqual([...GENERATED, ...PER_REQUEST, ...NO_SHARED_PROPS].sort())
   })
 
+  const LISTING_PAGE = "listing/[id]/[slug]"
+
   it.each(GENERATED)("%s is generated with the overrides and a revalidate", async (page) => {
     const result = await load(page).getStaticProps(context)
 
     expect(result.props.jurisdiction).toEqual(shared.jurisdiction)
     expect(result.props.publicOverrides).toEqual(overrides)
     expect(result.props.jurisdictionContent).toEqual(content)
-    expect(result.revalidate).toEqual(45)
+    expect(result.revalidate).toEqual(page === LISTING_PAGE ? 15 : 45)
   })
 
   it.each(PER_REQUEST)("%s is rendered per request with the overrides", async (page) => {

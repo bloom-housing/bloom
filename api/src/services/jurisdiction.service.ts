@@ -16,6 +16,7 @@ import { BrandDTO } from '../dtos/jurisdictions/brand.dto';
 import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { completeRamp, HEX_COLOR } from '../utilities/brand-ramp';
 import { assertFontIsAvailable } from '../utilities/font-availability';
+import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 import { HttpService } from '@nestjs/axios';
 
 // TODO: convert this to the selectViews
@@ -289,6 +290,9 @@ export class JurisdictionService {
       },
       include: view,
     });
+
+    await revalidatePublicSite(this.httpService);
+
     return mapTo(Jurisdiction, withResponseBrand(rawResults));
   }
 
@@ -316,6 +320,9 @@ export class JurisdictionService {
       where: { id: jurisdictionId },
       include: view,
     });
+
+    await revalidatePublicSite(this.httpService);
+
     return mapTo(Jurisdiction, withResponseBrand(rawResult));
   }
 

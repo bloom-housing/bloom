@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
   ConflictException,
@@ -21,6 +22,7 @@ import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
+import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
 export const CONTENT_FIELDS = [
   'footer',
@@ -71,6 +73,7 @@ export class JurisdictionContentService {
   constructor(
     private prisma: PrismaService,
     private readonly permissionService: PermissionService,
+    private readonly httpService: HttpService,
   ) {}
 
   // Public read: the jurisdiction's content for a language
@@ -240,6 +243,9 @@ export class JurisdictionContentService {
     if (!row) {
       throw new ConflictException({ message: 'jurisdictionContentConflict' });
     }
+
+    await revalidatePublicSite(this.httpService);
+
     return mapTo(
       JurisdictionContent,
       this.withStaleFields(row, language === LanguagesEnum.en ? row : english),

@@ -14,6 +14,9 @@ describe("fetchPublicOverrides", () => {
     const axios = require("axios") as typeof axiosType
     mockedGet = jest.spyOn(axios, "get")
     const hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchPublicOverrides = hooks.fetchPublicOverrides
     API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
@@ -67,16 +70,72 @@ describe("fetchPublicOverrides", () => {
     )
   })
 
+  describe("with a revalidate secret", () => {
+    beforeEach(() => {
+      process.env.PUBLIC_SITE_REVALIDATE_SECRET = "test-secret"
+    })
+
+    afterEach(() => {
+      delete process.env.PUBLIC_SITE_REVALIDATE_SECRET
+    })
+
+    // The API exempts these reads from its rate limit, since a rebuild repeats them for every page.
+    it("sends the secret on a read made without a visitor's request", async () => {
+      await fetchPublicOverrides("en")
+
+      expect(mockedGet).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: { passkey: process.env.API_PASS_KEY, "revalidate-secret": "test-secret" },
+        })
+      )
+    })
+
+    it("does not send the secret on a visitor's read", async () => {
+      await fetchPublicOverrides("en", {
+        headers: { "x-forwarded-for": "203.0.113.9" },
+        socket: {},
+      })
+
+      expect(mockedGet).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: { passkey: process.env.API_PASS_KEY, "x-forwarded-for": "203.0.113.9" },
+        })
+      )
+    })
+  })
+
   it("returns the layers the API supplies", async () => {
     expect(await fetchPublicOverrides("en")).toEqual({ en: { "a.key": "Override" } })
   })
 
   // The site has to build on its bundled strings rather than fail the page.
-  it("returns null when the request fails, which Next can serialize", async () => {
+  it("returns null when the request fails during the build, which Next can serialize", async () => {
     jest.spyOn(console, "log").mockImplementation()
+    process.env.NEXT_PHASE = "phase-production-build"
     mockedGet.mockRejectedValue(new Error("api down"))
 
     expect(await fetchPublicOverrides("en")).toBeNull()
+    delete process.env.NEXT_PHASE
+  })
+
+  it("returns null when a visitor's read fails", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    mockedGet.mockRejectedValue(new Error("api down"))
+
+    expect(
+      await fetchPublicOverrides("en", { headers: {}, socket: { remoteAddress: "198.51.100.4" } })
+    ).toBeNull()
+  })
+
+  // Next keeps the page it already has when a regeneration throws, rather than replacing an admin's
+  // edit with the bundled strings.
+  it("throws when a rebuild's read fails", async () => {
+    jest.spyOn(console, "log").mockImplementation()
+    mockedGet.mockRejectedValue(new Error("api down"))
+
+    await expect(fetchPublicOverrides("en")).rejects.toThrow("api down")
   })
 
   // A cached result would survive an ISR regeneration and hide an edit made since the last one.
