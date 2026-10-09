@@ -101,8 +101,8 @@ const walkPairs = (
 
 /**
  * Returns the language document with each translated field's `_sourceHashes` entry set to a hash of
- * the English value it was translated from. A field with no English counterpart has no baseline and
- * is left without one. An unchanged field keeps its stored hash unless its path is in `confirmed`.
+ * the English value it was translated from. A field with no English counterpart, or one left unset
+ * (null), has no baseline and is left without one. An unchanged field keeps its stored hash unless its path is in `confirmed`.
  */
 export const stampSourceHashes = <T>(
   english: unknown,
@@ -132,7 +132,9 @@ export const stampSourceHashes = <T>(
       JSON.stringify(priorValues.get(path)) ===
         JSON.stringify(languageObject[field]);
     const hash =
-      unchanged && typeof prior === 'string' && !confirmed.has(path)
+      languageObject[field] == null
+        ? null
+        : unchanged && typeof prior === 'string' && !confirmed.has(path)
         ? prior
         : hashOf(englishValue);
     const hashes = isPlainObject(languageObject[HASHES])
@@ -167,7 +169,7 @@ export const staleFieldPaths = (
 
   walkPairs(english, language, (languageObject, field, englishValue, path) => {
     const hashes = languageObject[HASHES];
-    if (!isPlainObject(hashes)) {
+    if (!isPlainObject(hashes) || languageObject[field] == null) {
       return;
     }
     const stored = hashes[field];

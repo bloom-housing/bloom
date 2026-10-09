@@ -114,6 +114,17 @@ describe('stampSourceHashes', () => {
     expect(stamped.contact._sourceHashes).toBeUndefined();
   });
 
+  it('takes no baseline for a field the language leaves unset', () => {
+    const stamped = stampSourceHashes(
+      { privacyHtml: '<p>Privacy</p>', disclaimerHtml: '<p>Terms</p>' },
+      { privacyHtml: null, disclaimerHtml: '<p>Condiciones</p>' },
+    ) as Record<string, unknown>;
+
+    expect(stamped._sourceHashes).toEqual({
+      disclaimerHtml: sourceHash('<p>Terms</p>'),
+    });
+  });
+
   it('keeps the baseline of a field this write does not change', () => {
     const englishBefore = { phone: '(415) 555-0100', hours: 'Nine to five' };
     const englishNow = { phone: '(415) 555-0199', hours: 'Nine to five' };
@@ -297,6 +308,18 @@ describe('a translated item whose English original is gone', () => {
 });
 
 describe('staleFieldPaths', () => {
+  it('skips an unset field, which shows the English', () => {
+    expect(
+      staleFieldPaths(
+        { privacyHtml: '<p>Privacy, updated</p>' },
+        {
+          privacyHtml: null,
+          _sourceHashes: { privacyHtml: sourceHash('<p>Privacy</p>') },
+        },
+      ),
+    ).toEqual([]);
+  });
+
   it('reports a field whose English source has changed', () => {
     const stamped = stampSourceHashes(englishFaq, spanishFaq);
     const changedEnglish = {
