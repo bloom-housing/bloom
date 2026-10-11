@@ -45,6 +45,7 @@ import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { assertFontIsAvailable } from '../utilities/font-availability';
 import { mapTo } from '../utilities/mapTo';
+import { assertSuperAdmin } from '../utilities/assert-super-admin';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
@@ -184,6 +185,7 @@ export class ContentTransferService {
     jurisdictionId: string,
     user: User,
   ): Promise<ContentTransferFile> {
+    assertSuperAdmin(user);
     await Promise.all(
       ['translation', 'jurisdictionContent'].map((type) =>
         this.permissionService.canOrThrow(user, type, permissionActions.read, {
@@ -252,6 +254,7 @@ export class ContentTransferService {
   }
 
   async exportGlobal(user: User): Promise<ContentTransferFile> {
+    assertSuperAdmin(user);
     await this.permissionService.canOrThrow(
       user,
       'translation',
@@ -308,6 +311,7 @@ export class ContentTransferService {
     dto: ContentTransferImport,
     user: User,
   ): Promise<PreparedImport> {
+    assertSuperAdmin(user);
     if (
       dto.format !== CONTENT_TRANSFER_FORMAT ||
       dto.version !== CONTENT_TRANSFER_VERSION

@@ -19,6 +19,7 @@ describe('Jurisdiction Content Controller Tests', () => {
   let jurisdictionBId: string;
   let adminCookies = '';
   let jurisAdminCookies = '';
+  let adminOnlyCookies = '';
   let publicUserCookies = '';
 
   const passkey = { passkey: process.env.API_PASS_KEY || '' };
@@ -75,7 +76,7 @@ describe('Jurisdiction Content Controller Tests', () => {
 
     const admin = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isAdmin: true },
+        roles: { isAdmin: true, isSuperAdmin: true },
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
@@ -85,6 +86,21 @@ describe('Jurisdiction Content Controller Tests', () => {
         .post('/auth/login')
         .set(passkey)
         .send({ email: admin.email, password: 'Abcdef12345!' } as Login)
+        .expect(201)
+    ).headers['set-cookie'];
+
+    const adminOnly = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    adminOnlyCookies = (
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminOnly.email, password: 'Abcdef12345!' } as Login)
         .expect(201)
     ).headers['set-cookie'];
 
@@ -602,8 +618,8 @@ describe('Jurisdiction Content Controller Tests', () => {
     });
 
     it('forbids a jurisdictional admin', async () => {
-      // Editing content is limited to the admin role, which has access to every jurisdiction in
-      // the system. A jurisdictional admin is denied its own jurisdiction and any other.
+      // Editing content is limited to superadmins, who have access to every jurisdiction in the
+      // system. A jurisdictional admin is denied its own jurisdiction and any other.
       await request(app.getHttpServer())
         .put(adminScope('tl'))
         .set('Cookie', jurisAdminCookies)
@@ -617,6 +633,21 @@ describe('Jurisdiction Content Controller Tests', () => {
         .set(passkey)
         .send({ contact: { phone: '555-0000' } })
         .expect(403);
+    });
+
+    it('forbids an admin who is not a superadmin', async () => {
+      await request(app.getHttpServer())
+        .put(adminScope('tl'))
+        .set('Cookie', adminOnlyCookies)
+        .set(passkey)
+        .send({ contact: { phone: '555-0000' } })
+        .expect(403);
+
+      const stored = await prisma.jurisdictionContent.findFirst({
+        where: { jurisdictionId, language: LanguagesEnum.tl },
+        select: { contact: true },
+      });
+      expect(stored?.contact?.['phone']).not.toEqual('555-0000');
     });
 
     it('forbids an anonymous request', async () => {

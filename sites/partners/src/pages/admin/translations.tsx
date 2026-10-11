@@ -16,7 +16,7 @@ import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabV
 import { ColDef, ColGroupDef, GridApi } from "ag-grid-community"
 import Layout from "../../layouts"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useAdminTabs, AdminIndexEnum } from "../../components/admin/AdminViewHelpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import { translations } from "../../lib/translations"
 import { NO_JURISDICTION, useTranslationScope } from "../../lib/useTranslationScope"
@@ -43,7 +43,6 @@ import {
 import { TranslationConflictDialog } from "../../components/settings/TranslationConflictDialog"
 import { TranslationWarningDialog } from "../../components/settings/TranslationWarningDialog"
 
-// Above this the inline editor is too cramped to work in, so the textarea opens instead.
 const INLINE_EDITOR_MAX_CHARACTERS = 60
 // Matches the cap the API enforces on a translation value.
 const MAX_VALUE_LENGTH = 5000
@@ -54,7 +53,7 @@ const FILTER_DEBOUNCE_MS = 500
 const ignoreAgTableSearch = () => undefined
 const ignoreAgTableSelection = () => undefined
 
-const SettingsTranslations = () => {
+const AdminTranslations = () => {
   const router = useRouter()
   const tableOptions = useAgTable()
   const { mutate } = useSWRConfig()
@@ -62,9 +61,7 @@ const SettingsTranslations = () => {
   const { mutate: saveOverrides, isLoading: isSaving } = useMutate()
   const { mutate: revertOverride, isLoading: isReverting } = useMutate()
   const { profile } = useContext(AuthContext)
-  const { enableTranslations, hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.translations)
-
-  const authorized = enableTranslations && !!profile?.userRoles?.isAdmin
+  const { authorized, hideTabs, tabs } = useAdminTabs(AdminIndexEnum.translations)
 
   const jurisdictions = useMemo(
     () =>
@@ -374,10 +371,10 @@ const SettingsTranslations = () => {
     <Layout>
       <Head>
         <title>
-          {`${t("t.settings")} - ${t("settings.translations")} - ${t("nav.siteTitlePartners")}`}
+          {`${t("nav.admin")} - ${t("settings.translations")} - ${t("nav.siteTitlePartners")}`}
         </title>
       </Head>
-      <NavigationHeader className="relative" title={t("t.settings")} />
+      <NavigationHeader className="relative" title={t("nav.admin")} />
       <TabView hideTabs={hideTabs} tabs={tabs}>
         <div className={styles["toolbar"]}>
           <div className={styles["scope-controls"]}>
@@ -550,4 +547,4 @@ const SettingsTranslations = () => {
   )
 }
 
-export default SettingsTranslations
+export default AdminTranslations

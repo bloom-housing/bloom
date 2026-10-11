@@ -19,6 +19,7 @@ describe('Content Transfer Controller Tests', () => {
   let targetName: string;
   let adminCookies = '';
   let jurisAdminCookies = '';
+  let adminOnlyCookies = '';
 
   const passkey = { passkey: process.env.API_PASS_KEY || '' };
 
@@ -134,12 +135,21 @@ describe('Content Transfer Controller Tests', () => {
 
     const admin = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isAdmin: true },
+        roles: { isAdmin: true, isSuperAdmin: true },
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
     });
     adminCookies = await login(admin.email);
+
+    const adminOnly = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    adminOnlyCookies = await login(adminOnly.email);
 
     const jurisAdmin = await prisma.userAccounts.create({
       data: await userFactory({
@@ -179,6 +189,19 @@ describe('Content Transfer Controller Tests', () => {
         privacyHtml: sourceHash('<p>Privacy</p>'),
         disclaimerHtml: sourceHash('<p>Disclaimer</p>'),
       });
+    });
+
+    it('refuses an admin who is not a superadmin', async () => {
+      await request(app.getHttpServer())
+        .get(`/contentTransfer/jurisdictions/${sourceId}/export`)
+        .set(passkey)
+        .set('Cookie', adminOnlyCookies)
+        .expect(403);
+      await request(app.getHttpServer())
+        .get('/contentTransfer/global/export')
+        .set(passkey)
+        .set('Cookie', adminOnlyCookies)
+        .expect(403);
     });
 
     it('refuses a request without a user', async () => {
@@ -387,6 +410,41 @@ describe('Content Transfer Controller Tests', () => {
         .set('Cookie', jurisAdminCookies)
         .send(asImport(file, targetName))
         .expect(403);
+    });
+
+    it('refuses an admin who is not a superadmin and leaves the target unchanged', async () => {
+      const file = await exportSource();
+      const targetState = () =>
+        Promise.all([
+          prisma.jurisdictions.findUnique({
+            where: { id: targetId },
+            select: { brand: true },
+          }),
+          prisma.translationStrings.findMany({
+            where: { jurisdictionId: targetId },
+            orderBy: { id: 'asc' },
+          }),
+          prisma.jurisdictionContent.findMany({
+            where: { jurisdictionId: targetId },
+            orderBy: { id: 'asc' },
+          }),
+        ]);
+      const before = await targetState();
+
+      await request(app.getHttpServer())
+        .post('/contentTransfer/import/preview')
+        .set(passkey)
+        .set('Cookie', adminOnlyCookies)
+        .send(asImport(file, targetName))
+        .expect(403);
+      await request(app.getHttpServer())
+        .post('/contentTransfer/import')
+        .set(passkey)
+        .set('Cookie', adminOnlyCookies)
+        .send(asImport(file, targetName))
+        .expect(403);
+
+      expect(await targetState()).toEqual(before);
     });
   });
 });

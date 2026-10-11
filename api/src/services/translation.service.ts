@@ -25,6 +25,7 @@ import { flattenTranslationRows } from '../utilities/translation-merge';
 import { baseTranslationRows } from '../locales/email-translations';
 import { sourceHash } from '../utilities/translation-source-hash';
 import { mapTo } from '../utilities/mapTo';
+import { assertSuperAdmin } from '../utilities/assert-super-admin';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 
@@ -349,6 +350,7 @@ export class TranslationService {
     jurisdictionId: string | null,
     action: permissionActions,
   ): Promise<void> {
+    assertSuperAdmin(user);
     await this.permissionService.canOrThrow(user, 'translation', action, {
       jurisdictionId: jurisdictionId ?? undefined,
     });
