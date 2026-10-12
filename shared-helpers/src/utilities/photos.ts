@@ -1,6 +1,7 @@
 import { Asset, Listing } from "../types/backend-swagger"
 
 export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
+export const BUILDING_LABEL = "building"
 export const IMAGE_FALLBACK_URL = "/images/listing-fallback.png"
 
 export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
@@ -37,7 +38,7 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
   let imageUrls = imageAssets
   if (cloudinaryCloudName) {
     imageUrls = imageUrls.filter(
-      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
+      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === BUILDING_LABEL
     )
   }
   const assets = imageUrls?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")

@@ -8,8 +8,7 @@ import {
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { application, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { act, fireEvent, screen, within } from "@testing-library/react"
-import { mockNextRouter, render } from "../../../testUtils"
+import { act, fireEvent, mockNextRouter, render, screen, within } from "../../../testUtils"
 import ApplicationsList from "../../../../src/pages/listings/[id]/applications/index"
 
 const server = setupServer()
@@ -116,10 +115,8 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
-
-    expect(screen.getAllByText("Archer Studios").length).toBeGreaterThan(0)
+    const listingName = await screen.findAllByText("Archer Studios")
+    expect(listingName.length).toBeGreaterThan(0)
     expect(screen.getByText("Add application")).toBeInTheDocument()
     expect(screen.getByText("Export")).toBeInTheDocument()
     expect(screen.getAllByText("All applications").length).toBeGreaterThan(0)
@@ -249,10 +246,8 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
-
-    fireEvent.click(screen.getByText("Add application"))
+    const addApplicationButton = await screen.findByRole("button", { name: "Add application" })
+    fireEvent.click(addApplicationButton)
     expect(pushMock).toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
   })
 
@@ -301,10 +296,8 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
-
-    fireEvent.click(screen.getByText("Add application"))
+    const addApplicationButton = await screen.findByRole("button", { name: "Add application" })
+    fireEvent.click(addApplicationButton)
     const modalHeader = await screen.findByText("Confirmation needed")
     expect(modalHeader).toBeInTheDocument()
     expect(pushMock).not.toHaveBeenCalledWith("/listings/Uvbk5qurpB2WI9V6WnNdH/applications/add")
@@ -361,10 +354,7 @@ describe("applications", () => {
       </ConfigProvider>
     )
 
-    const header = await screen.findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
-
-    const exportButton = screen.getByRole("button", { name: "Export" })
+    const exportButton = await screen.findByRole("button", { name: "Export" })
     expect(exportButton).toBeInTheDocument()
     act(() => {
       fireEvent.click(exportButton)

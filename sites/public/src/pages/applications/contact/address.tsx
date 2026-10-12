@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { Field, FieldGroup, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -30,6 +31,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -49,7 +52,7 @@ const ApplicationAddress = () => {
   )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
+  const { control, register, handleSubmit, setValue, watch, errors, trigger, getValues } = useForm<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
@@ -67,51 +70,89 @@ const ApplicationAddress = () => {
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "primaryApplicantAddress",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "primaryApplicantAddress",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
+
+  const applyAnswers = (target, data, verifiedAddress?: FoundAddress["newAddress"]) => {
+    mergeDeep(target, data)
+    if (verifiedAddress) {
+      target.applicant.applicantAddress.street = verifiedAddress.street
+      target.applicant.applicantAddress.street2 = verifiedAddress.street2
+      target.applicant.applicantAddress.city = verifiedAddress.city
+      target.applicant.applicantAddress.zipCode = verifiedAddress.zipCode
+      target.applicant.applicantAddress.state = verifiedAddress.state
+      target.applicant.applicantAddress.longitude = verifiedAddress.longitude
+      target.applicant.applicantAddress.latitude = verifiedAddress.latitude
+    }
+
+    if (target.applicant.noPhone) {
+      target.applicant.phoneNumber = ""
+      target.applicant.phoneNumberType = ""
+    }
+    if (!target.additionalPhone) {
+      target.additionalPhoneNumber = ""
+      target.additionalPhoneNumberType = ""
+    }
+    if (!target.sendMailToMailingAddress) {
+      target.applicationsMailingAddress = blankApplication.applicationsMailingAddress
+    }
+    if (!target.applicant.workInRegion) {
+      target.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
+    }
+  }
+
+  const buildPendingSave = (data, verifiedAddress?: FoundAddress["newAddress"]) => {
+    const draft = JSON.parse(JSON.stringify(application))
+    applyAnswers(draft, JSON.parse(JSON.stringify(data)), verifiedAddress)
+    return draft
+  }
+
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
     if (!verifyAddress) {
-      setFoundAddress({})
-      setVerifyAddress(true)
-      void findValidatedAddress(
-        data.applicant.applicantAddress,
-        setFoundAddress,
-        setNewAddressSelected
-      )
-      window.scrollTo({ top: 0 })
+      guardSubmit(buildPendingSave(data), () => {
+        setFoundAddress({})
+        setVerifyAddress(true)
+        void findValidatedAddress(
+          data.applicant.applicantAddress,
+          setFoundAddress,
+          setNewAddressSelected
+        )
+        window.scrollTo({ top: 0 })
+      })
 
       return // Skip rest of the submit process
     }
 
-    mergeDeep(application, data)
-    if (newAddressSelected && foundAddress.newAddress) {
-      application.applicant.applicantAddress.street = foundAddress.newAddress.street
-      application.applicant.applicantAddress.street2 = foundAddress.newAddress.street2
-      application.applicant.applicantAddress.city = foundAddress.newAddress.city
-      application.applicant.applicantAddress.zipCode = foundAddress.newAddress.zipCode
-      application.applicant.applicantAddress.state = foundAddress.newAddress.state
-      application.applicant.applicantAddress.longitude = foundAddress.newAddress.longitude
-      application.applicant.applicantAddress.latitude = foundAddress.newAddress.latitude
+    const verifiedAddress = newAddressSelected ? foundAddress.newAddress : undefined
+    const proceed = () => {
+      applyAnswers(application, data, verifiedAddress)
+      conductor.sync()
+
+      conductor.routeToNextOrReturnUrl()
     }
 
-    if (application.applicant.noPhone) {
-      application.applicant.phoneNumber = ""
-      application.applicant.phoneNumberType = ""
+    if (verifiedAddress) {
+      guardSubmit(buildPendingSave(data, verifiedAddress), proceed)
+    } else {
+      proceed()
     }
-    if (!application.additionalPhone) {
-      application.additionalPhoneNumber = ""
-      application.additionalPhoneNumberType = ""
-    }
-    if (!application.sendMailToMailingAddress) {
-      application.applicationsMailingAddress = blankApplication.applicationsMailingAddress
-    }
-    if (!application.applicant.workInRegion) {
-      application.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
-    }
-    conductor.sync()
-
-    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
     onFormError()
@@ -152,7 +193,11 @@ const ApplicationAddress = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form
+        id="applications-address"
+        onSubmit={handleSubmit(onSubmit, onError)}
+        onBlur={onFieldBlur}
+      >
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -177,6 +222,7 @@ const ApplicationAddress = () => {
               : undefined,
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <div style={{ display: verifyAddress ? "none" : "block" }}>

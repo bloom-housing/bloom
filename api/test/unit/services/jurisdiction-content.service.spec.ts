@@ -1,4 +1,8 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LanguagesEnum, Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
@@ -605,6 +609,152 @@ describe('Testing jurisdiction content service', () => {
         where: { jurisdictionId },
         orderBy: { language: 'asc' },
       });
+    });
+  });
+
+  describe('footer logo upload', () => {
+    const uploadedLogoSrc =
+      'https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_90,f_png/footer-logo';
+
+    beforeEach(() => {
+      process.env.CLOUDINARY_CLOUD_NAME = 'exygy';
+      delete process.env.S3_PUBLIC_BUCKET;
+      delete process.env.S3_REGION;
+    });
+
+    it('derives the public logo image from the uploaded file', async () => {
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          language: LanguagesEnum.en,
+          footer: { logo: { logoFileId: 'footer-logo', logoAltText: 'Seal' } },
+        },
+        {
+          language: LanguagesEnum.es,
+          footer: { logo: { logoAltText: 'Sello' } },
+        },
+      ]);
+
+      const merged = await service.getMergedContent(
+        randomUUID(),
+        LanguagesEnum.es,
+      );
+
+      expect(merged.footer.logo.logoSrc).toEqual(uploadedLogoSrc);
+      expect(merged.footer.logo.logoAltText).toEqual('Sello');
+    });
+
+    // Resolving the logo after the merge instead of per row would let the English upload win here.
+    it("uses a language row's own logo over the English upload", async () => {
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          language: LanguagesEnum.en,
+          footer: { logo: { logoFileId: 'footer-logo' } },
+        },
+        {
+          language: LanguagesEnum.es,
+          footer: { logo: { logoSrc: 'https://example.test/logo-es.png' } },
+        },
+      ]);
+
+      const merged = await service.getMergedContent(
+        randomUUID(),
+        LanguagesEnum.es,
+      );
+
+      expect(merged.footer.logo.logoSrc).toEqual(
+        'https://example.test/logo-es.png',
+      );
+    });
+
+    it('derives the logo image for every row the editor lists', async () => {
+      prisma.jurisdictionContent.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          id: 'row-en',
+          language: 'en',
+          footer: { logo: { logoFileId: 'footer-logo' } },
+        },
+      ]);
+
+      const rows = await service.listContent(randomUUID(), adminUser);
+
+      expect(rows[0].footer.logo.logoSrc).toEqual(uploadedLogoSrc);
+    });
+
+    it('returns the file id and the derived image to the editor', async () => {
+      prisma.jurisdictionContent.findFirst = jest.fn().mockResolvedValueOnce({
+        id: 'row',
+        language: 'en',
+        footer: { logo: { logoFileId: 'footer-logo' } },
+      });
+
+      const row = await service.getContent(
+        randomUUID(),
+        LanguagesEnum.en,
+        adminUser,
+      );
+
+      expect(row.footer.logo).toEqual({
+        logoFileId: 'footer-logo',
+        logoSrc: uploadedLogoSrc,
+      });
+    });
+
+    it('stores the file id without the derived image', async () => {
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValueOnce({});
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'row' });
+
+      await service.updateContent(
+        randomUUID(),
+        LanguagesEnum.en,
+        {
+          footer: {
+            logo: { logoFileId: 'footer-logo', logoSrc: uploadedLogoSrc },
+          },
+        },
+        adminUser,
+      );
+
+      expect(prisma.jurisdictionContent.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          footer: { logo: { logoFileId: 'footer-logo' } },
+        }),
+      });
+    });
+
+    it('stores a typed logo image when there is no upload', async () => {
+      prisma.jurisdictionContent.create = jest.fn().mockResolvedValueOnce({});
+      prisma.jurisdictionContent.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'row' });
+
+      await service.updateContent(
+        randomUUID(),
+        LanguagesEnum.en,
+        { footer: { logo: { logoSrc: '/images/logo.svg' } } },
+        adminUser,
+      );
+
+      expect(prisma.jurisdictionContent.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          footer: { logo: { logoSrc: '/images/logo.svg' } },
+        }),
+      });
+    });
+
+    it('refuses a file id that is not a usable storage key', async () => {
+      prisma.jurisdictionContent.create = jest.fn();
+
+      await expect(
+        service.updateContent(
+          randomUUID(),
+          LanguagesEnum.en,
+          { footer: { logo: { logoFileId: '../secret' } } },
+          adminUser,
+        ),
+      ).rejects.toThrow(BadRequestException);
+      expect(prisma.jurisdictionContent.create).not.toHaveBeenCalled();
     });
   });
 });

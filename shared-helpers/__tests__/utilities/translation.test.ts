@@ -20,6 +20,30 @@ describe("tIfExists", () => {
     expect(tIfExists("fork.emptyString")).toBeNull()
   })
 
+  it("finds a key when global.Translator is another copy of the translator", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const globalScope = global as any
+    const translator = globalScope.Translator
+    globalScope.Translator = {}
+    try {
+      expect(tIfExists("account.accountSettings")).toBe("Account settings")
+    } finally {
+      globalScope.Translator = translator
+    }
+  })
+
+  it("does not warn about a missing key", () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation()
+    const error = jest.spyOn(console, "error").mockImplementation()
+
+    tIfExists("fork.anotherMissingKey")
+
+    expect(warn).not.toHaveBeenCalled()
+    expect(error).not.toHaveBeenCalled()
+    warn.mockRestore()
+    error.mockRestore()
+  })
+
   it("passes options through to t() for interpolation", () => {
     addTranslation({ "fork.greeting": "Hello, %{name}!" })
     expect(tIfExists("fork.greeting", { name: "World" })).toBe("Hello, World!")

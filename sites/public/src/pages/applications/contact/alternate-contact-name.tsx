@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -20,6 +21,8 @@ import ApplicationFormLayout, {
   LockIcon,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAlternateContactName = () => {
   const { profile } = useContext(AuthContext)
@@ -31,20 +34,48 @@ const ApplicationAlternateContactName = () => {
     FeatureFlagEnum.enableHousingAdvocate
   )
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, trigger, getValues } = useForm<Record<string, any>>({
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "alternateContactName",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "alternateContactName",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    if (!isAdvocate) {
-      application.alternateContact.firstName = data.firstName
-      application.alternateContact.lastName = data.lastName
-      application.alternateContact.agency = data.agency
-    }
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+    const pendingSave = isAdvocate
+      ? {}
+      : {
+          alternateContact: {
+            ...application.alternateContact,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            agency: data.agency,
+          },
+        }
+    guardSubmit(pendingSave, () => {
+      if (!isAdvocate) {
+        application.alternateContact.firstName = data.firstName
+        application.alternateContact.lastName = data.lastName
+        application.alternateContact.agency = data.agency
+      }
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
   const onError = () => {
     onFormError()
@@ -72,7 +103,11 @@ const ApplicationAlternateContactName = () => {
         listing?.name
       }`}
     >
-      <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form
+        id="applications-contact-alternate-name"
+        onSubmit={handleSubmit(onSubmit, onError)}
+        onBlur={onFieldBlur}
+      >
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.alternateContact.name.title")}
@@ -86,6 +121,7 @@ const ApplicationAlternateContactName = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
