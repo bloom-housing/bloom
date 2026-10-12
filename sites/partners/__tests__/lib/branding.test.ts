@@ -7,6 +7,7 @@ import {
   brandFromValues,
   brandToFormValues,
   brandUpdateFrom,
+  DEFAULT_RADIUS,
   derivedShades,
   hasBrandValues,
 } from "../../src/lib/branding"
@@ -155,6 +156,14 @@ describe("brandFromValues", () => {
     expect(brand.fontFamily).toEqual("Inter")
   })
 
+  it("sends no button radius for the design system default", () => {
+    const brand = brandFromValues(
+      valuesWith({ primaryBase: "#773E98", buttonRadius: DEFAULT_RADIUS })
+    )
+
+    expect("buttonRadius" in brand).toBe(false)
+  })
+
   it("sends the button radius", () => {
     const brand = brandFromValues(valuesWith({ buttonRadius: "3xl" }))
 
@@ -221,6 +230,10 @@ describe("hasBrandValues", () => {
 
   it("is false for untouched fields", () => {
     expect(hasBrandValues(valuesWith())).toBe(false)
+  })
+
+  it("starts the radius on the design system default", () => {
+    expect(valuesWith().buttonRadius).toEqual(DEFAULT_RADIUS)
   })
 })
 

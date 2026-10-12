@@ -874,7 +874,7 @@
   "branding.previewBody": "Body text sample, in the font a visitor will read.",
   "branding.previewHeading": "Heading sample",
   "branding.primary": "Primary color",
-  "branding.radius.": "Design system default",
+  "branding.radius.default": "Design system default",
   "branding.radius.2xl": "2xl",
   "branding.radius.3xl": "3xl",
   "branding.radius.base": "Base",

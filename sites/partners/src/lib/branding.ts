@@ -30,8 +30,13 @@ export interface BrandFormValues {
   headingFontFamily: string
   serifFontFamily: string
   fontUrl: string
-  buttonRadius: BrandRadiusEnum | ""
+  buttonRadius: BrandRadiusEnum | typeof DEFAULT_RADIUS
 }
+
+export const DEFAULT_RADIUS = "default"
+
+export const chosenRadius = (value?: string): BrandRadiusEnum | undefined =>
+  value && value !== DEFAULT_RADIUS ? (value as BrandRadiusEnum) : undefined
 
 export type ColorFieldName = `${RampName}${Capitalize<RampShade | "base">}`
 
@@ -70,7 +75,7 @@ const blank = (): BrandFormValues => ({
   headingFontFamily: "",
   serifFontFamily: "",
   fontUrl: "",
-  buttonRadius: "",
+  buttonRadius: DEFAULT_RADIUS,
 })
 
 export const derivedShades = (base?: string): Partial<Record<RampShade, string>> => {
@@ -105,7 +110,7 @@ export const brandToFormValues = (jurisdiction?: Jurisdiction): BrandFormValues 
   FONT_FIELDS.forEach((field) => {
     values[field] = brand[field] ?? ""
   })
-  values.buttonRadius = radiusStepOnly(brand.buttonRadius) ?? ""
+  values.buttonRadius = radiusStepOnly(brand.buttonRadius) ?? DEFAULT_RADIUS
   return values
 }
 
@@ -124,7 +129,7 @@ const rampFromValues = (values: BrandFormValues, ramp: RampName): BrandRamp | un
 export const hasBrandValues = (values: BrandFormValues): boolean =>
   !!rampFromValues(values, "primary") ||
   !!rampFromValues(values, "secondary") ||
-  !!values.buttonRadius ||
+  !!chosenRadius(values.buttonRadius) ||
   FONT_FIELDS.some((field) => !!values[field]?.trim())
 
 export const brandFromValues = (values: BrandFormValues): BrandDTO | undefined => {
@@ -139,7 +144,8 @@ export const brandFromValues = (values: BrandFormValues): BrandDTO | undefined =
     const value = values[field]?.trim()
     if (value) brand[field] = value
   })
-  if (values.buttonRadius) brand.buttonRadius = values.buttonRadius
+  const radius = chosenRadius(values.buttonRadius)
+  if (radius) brand.buttonRadius = radius
   return brand
 }
 

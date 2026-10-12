@@ -3,6 +3,7 @@ import { t } from "@bloom-housing/ui-components"
 import { Button, Card, Heading, Tag } from "@bloom-housing/ui-seeds"
 import {
   BrandFormValues,
+  chosenRadius,
   derivedShades,
   fieldName,
   RampName,
@@ -66,7 +67,8 @@ export const previewVariables = (values: PreviewValues): Record<string, string> 
     ...rampVariables(values, "secondary"),
     ...fontVariables(values),
   }
-  if (values.buttonRadius) variables["--brand-button-radius"] = radiusVariable(values.buttonRadius)
+  const radius = chosenRadius(values.buttonRadius)
+  if (radius) variables["--brand-button-radius"] = radiusVariable(radius)
   return variables
 }
 
