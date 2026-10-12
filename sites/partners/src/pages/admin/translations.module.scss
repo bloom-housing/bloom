@@ -40,6 +40,11 @@
   gap: var(--seeds-s2);
 }
 
+.row-actions {
+  display: inline-flex;
+  gap: var(--seeds-s4);
+}
+
 .editing-hint {
   color: var(--seeds-text-color-secondary);
   font-size: var(--seeds-font-size-sm);

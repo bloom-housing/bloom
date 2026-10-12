@@ -56,6 +56,7 @@ const CONTENT_STRINGS = {
   "content.contactHours": "test:contactHours",
   "content.alertSaved": "test:alertSaved",
   "content.stale": "test:stale",
+  "content.keepTranslation": "test:keepTranslation",
   "content.footerLink": "test:footerLink",
   "content.notSet": "test:notSet",
   "content.textSection": "test:textSection",
@@ -230,6 +231,60 @@ describe("<AdminContent>", () => {
       await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
 
       expect(await screen.findByText("test:stale")).toBeInTheDocument()
+    })
+
+    it("keeps a stale field by saving it with the field confirmed", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, { disclaimers: { privacyHtml: "<p>Updated</p>" } }),
+        row(LanguagesEnum.es, {
+          disclaimers: { privacyHtml: "<p>Privacidad</p>" },
+          staleFields: ["disclaimers.privacyHtml"],
+        }),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.click(await screen.findByRole("button", { name: "test:keepTranslation" }))
+
+      expect(screen.queryByText("test:stale")).toBeNull()
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      expect(bodies[0]).toEqual(
+        expect.objectContaining({
+          disclaimers: { privacyHtml: "<p>Privacidad</p>" },
+          confirmedSourcePaths: ["disclaimers.privacyHtml"],
+        })
+      )
+    })
+
+    it("brings back a kept field's stale mark when the changes are discarded", async () => {
+      respondWithRows([
+        row(LanguagesEnum.en, { disclaimers: { privacyHtml: "<p>Updated</p>" } }),
+        row(LanguagesEnum.es, {
+          disclaimers: { privacyHtml: "<p>Privacidad</p>" },
+          staleFields: ["disclaimers.privacyHtml"],
+        }),
+      ])
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await userEvent.click(await screen.findByRole("button", { name: "test:keepTranslation" }))
+      await userEvent.click(screen.getByRole("button", { name: "test:discardChanges" }))
+
+      expect(await screen.findByText("test:stale")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "test:discardChanges" })).toBeDisabled()
     })
 
     it("lists FAQ categories and the questions inside them", async () => {
@@ -481,6 +536,41 @@ describe("<AdminContent>", () => {
       await waitFor(() => expect(document.querySelectorAll(".section-row")).toHaveLength(3))
       expect(screen.getByText("Added in English")).toBeInTheDocument()
       expect(within(sectionRow("Added in English")).queryByText("test:usingEnglish")).toBeNull()
+    })
+
+    it("translates a later text section first by copying the English ones before it", async () => {
+      const bodies: Record<string, unknown>[] = []
+      respondWithRows([
+        row(LanguagesEnum.en, {
+          footer: { textSectionsHtml: ["<p>First</p>", "<p>Second</p>"] },
+        }),
+        row(LanguagesEnum.es),
+      ])
+      server.use(
+        ...SAVE_PATHS.map((path) =>
+          rest.put(path, async (req, res, ctx) => {
+            bodies.push(await req.json())
+            return res(ctx.json({}))
+          })
+        )
+      )
+      renderPage()
+
+      await screen.findByRole("heading", { level: 1, name: "Admin" })
+      await userEvent.selectOptions(screen.getByLabelText("test:document"), "footer")
+      await userEvent.selectOptions(screen.getByLabelText("Language"), LanguagesEnum.es)
+      await screen.findByText("Second")
+
+      await userEvent.click(within(sectionRow("Second")).getByRole("button", { name: "Edit" }))
+      await typeInEditor("footer.textSectionsHtml.1", " segunda")
+      await userEvent.click(screen.getByRole("button", { name: "Done" }))
+      await userEvent.click(screen.getByRole("button", { name: "Save" }))
+
+      await waitFor(() => expect(bodies).toHaveLength(1))
+      const sections = (bodies[0].footer as { textSectionsHtml: string[] }).textSectionsHtml
+      expect(sections).toHaveLength(2)
+      expect(sections[0]).toEqual("<p>First</p>")
+      expect(sections[1]).toContain("segunda")
     })
 
     it("says that footer text sections are replaced as a set for a language", async () => {

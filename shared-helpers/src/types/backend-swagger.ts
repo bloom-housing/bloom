@@ -8777,6 +8777,9 @@ export interface JurisdictionBrandUpdate {
 
   /**  */
   faviconFileId?: string
+
+  /**  */
+  lastUpdatedAt?: Date
 }
 
 /** FeatureFlag */
@@ -11492,6 +11495,9 @@ export interface JurisdictionContentUpdate {
 
   /**  */
   lastUpdatedAt?: Date
+
+  /**  */
+  confirmedSourcePaths?: string[]
 }
 
 /** ContentTransferTranslation */

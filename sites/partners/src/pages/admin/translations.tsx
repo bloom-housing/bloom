@@ -24,9 +24,11 @@ import styles from "./translations.module.scss"
 import {
   applyConflictChoices,
   applyEdit,
+  keepTranslation,
   buildConflicts,
   buildEdits,
   buildTranslationRows,
+  siteBases,
   ConflictChoice,
   conflictKeysFrom,
   editsForKeys,
@@ -157,17 +159,17 @@ const AdminTranslations = () => {
     }
 
     const siteOverrides = scope.baseOverrides
-    const englishLayer = flattenTranslations(siteOverrides.en)
-    const languageLayer = siteOverrides[activeLanguage]
-      ? { ...englishLayer, ...flattenTranslations(siteOverrides[activeLanguage]) }
-      : englishLayer
+    const isEnglish = activeLanguage === LanguagesEnum.en
+    const { englishBase, languageBase } = siteBases({
+      general: flattenTranslations(translations.general),
+      englishOverrides: flattenTranslations(siteOverrides.en),
+      language: isEnglish ? undefined : flattenTranslations(translations[activeLanguage]),
+      languageOverrides: isEnglish ? undefined : flattenTranslations(siteOverrides[activeLanguage]),
+    })
 
     return buildTranslationRows({
-      englishBase: { ...flattenTranslations(translations.general), ...englishLayer },
-      languageBase:
-        activeLanguage === LanguagesEnum.en
-          ? undefined
-          : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
+      englishBase,
+      languageBase,
       overrides: overrides ?? [],
       englishOverrideKeys,
     })
@@ -222,19 +224,19 @@ const AdminTranslations = () => {
       {
         headerName: t("translations.keyPath"),
         field: "key",
-        minWidth: 220,
+        minWidth: 180,
         flex: 1,
       },
       {
         headerName: t("translations.baseValue"),
         field: "baseValue",
-        minWidth: 220,
+        minWidth: 180,
         flex: 2,
         valueFormatter: ({ value }) => (value === null ? t("t.none") : value),
       },
       {
         headerName: t("translations.currentValue"),
-        minWidth: 220,
+        minWidth: 180,
         flex: 2,
         editable: dataLoaded && !isSaving,
         singleClickEdit: true,
@@ -259,7 +261,7 @@ const AdminTranslations = () => {
       },
       {
         headerName: t("t.status"),
-        minWidth: 140,
+        minWidth: 230,
         valueGetter: ({ data }: { data: TranslationGridRow }) => {
           if (data.editedValue !== null) return t("translations.statusEdited")
           if (data.stale) return t("translations.statusStale")
@@ -270,30 +272,45 @@ const AdminTranslations = () => {
       {
         headerName: t("t.actions"),
         pinned: "right",
-        maxWidth: 140,
+        maxWidth: 260,
         resizable: false,
-        cellRendererFramework: ({ data }: { data: TranslationGridRow }) =>
-          data.overrideValue === null ? null : (
-            <Button
-              variant="text"
-              size="sm"
-              disabled={isReverting || isSaving}
-              onClick={() => {
-                if (data.hasBase) {
-                  void runRevert(data.key)
-                  return
-                }
-                setWarnings({ hidingKeys: [data.key], tokenIssues: [] })
-                setWarningRevertKey(data.key)
-              }}
-              id={`revert-${data.key}`}
-            >
-              {t("translations.revert")}
-            </Button>
-          ),
+        cellRendererFramework: ({ data }: { data: TranslationGridRow }) => (
+          <div className={styles["row-actions"]}>
+            {/* Without an override the row shows default text, which may be the English fallback. */}
+            {data.stale && data.editedValue === null && data.overrideValue !== null && (
+              <Button
+                variant="text"
+                size="sm"
+                disabled={isReverting || isSaving}
+                onClick={() => updateEdits((previous) => keepTranslation(previous, data))}
+                id={`keep-${data.key}`}
+              >
+                {t("translations.keepTranslation")}
+              </Button>
+            )}
+            {data.overrideValue !== null && (
+              <Button
+                variant="text"
+                size="sm"
+                disabled={isReverting || isSaving}
+                onClick={() => {
+                  if (data.hasBase) {
+                    void runRevert(data.key)
+                    return
+                  }
+                  setWarnings({ hidingKeys: [data.key], tokenIssues: [] })
+                  setWarningRevertKey(data.key)
+                }}
+                id={`revert-${data.key}`}
+              >
+                {t("translations.revert")}
+              </Button>
+            )}
+          </div>
+        ),
       },
     ],
-    [dataLoaded, isReverting, isSaving, runRevert]
+    [dataLoaded, isReverting, isSaving, runRevert, updateEdits]
   )
 
   const saveEdits = (pending: PendingEdits) => {
@@ -444,7 +461,9 @@ const AdminTranslations = () => {
               onClick={handleSave}
               id="saveTranslations"
             >
-              {hasUnsavedChanges ? t("translations.saveCount", { count: editCount }) : t("t.save")}
+              {hasUnsavedChanges
+                ? t("translations.saveCount", { smart_count: editCount })
+                : t("t.save")}
             </Button>
             <Button
               variant="secondary"

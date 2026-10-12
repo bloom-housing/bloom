@@ -26,6 +26,7 @@ type ContentItemDrawerProps = {
   onChange: (draft: ContentDraft) => void
   onConfirm: () => void
   onClose: () => void
+  onKeep?: (path: string) => void
 }
 
 export const ContentItemDrawer = ({
@@ -41,6 +42,7 @@ export const ContentItemDrawer = ({
   onChange,
   onConfirm,
   onClose,
+  onKeep,
 }: ContentItemDrawerProps) => {
   if (!basePath) return null
 
@@ -66,6 +68,7 @@ export const ContentItemDrawer = ({
               direction={direction}
               resetKey={basePath}
               onChange={onChange}
+              onKeep={onKeep ? () => onKeep(path) : undefined}
             />
           )
         })}

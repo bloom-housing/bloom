@@ -8,7 +8,7 @@ export class DisclaimersContentDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @SanitizeHtml()
+  @SanitizeHtml({ keepEmpty: true })
   @ApiPropertyOptional()
   @MaxLength(20000, { groups: [ValidationsGroupsEnum.default] })
   privacyHtml?: string;
@@ -16,7 +16,7 @@ export class DisclaimersContentDTO {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @SanitizeHtml()
+  @SanitizeHtml({ keepEmpty: true })
   @ApiPropertyOptional()
   @MaxLength(20000, { groups: [ValidationsGroupsEnum.default] })
   disclaimerHtml?: string;

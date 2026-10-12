@@ -54,7 +54,7 @@ describe('Script Runner Controller Tests', () => {
 
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isAdmin: true },
+        roles: { isAdmin: true, isSuperAdmin: true },
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
@@ -121,6 +121,28 @@ describe('Script Runner Controller Tests', () => {
           commit: false,
           skipExisting: false,
         })
+        .expect(403);
+    });
+
+    it('refuses an admin who is not a superadmin', async () => {
+      const adminOnly = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isAdmin: true },
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const logIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminOnly.email, password: 'Abcdef12345!' } as Login)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .put('/scriptRunner/migrateTranslationOverridesToKeyRows')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', logIn.headers['set-cookie'])
+        .send(valid)
         .expect(403);
     });
 

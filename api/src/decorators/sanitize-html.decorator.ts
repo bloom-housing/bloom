@@ -13,8 +13,10 @@ export const sanitize = (content: string) => {
   });
 };
 
-export function SanitizeHtml() {
+// keepEmpty stores an emptied field as "" rather than null, so content can hide a section.
+export function SanitizeHtml({ keepEmpty = false } = {}) {
   return Transform((params: TransformFnParams) => {
-    return params.value ? sanitize(params.value) : null;
+    if (typeof params.value !== 'string') return null;
+    return params.value || keepEmpty ? sanitize(params.value) : null;
   });
 }

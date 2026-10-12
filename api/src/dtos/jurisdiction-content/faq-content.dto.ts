@@ -29,7 +29,7 @@ export class FaqItemDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @SanitizeHtml()
+  @SanitizeHtml({ keepEmpty: true })
   @ApiProperty()
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   answerHtml: string;

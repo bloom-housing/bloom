@@ -103,15 +103,15 @@ export const getStoredResourcesContent = (
   return stored
 }
 
-// A field the document leaves out falls back to the bundled page. A field it sets and empties
-// renders nothing, which is how a jurisdiction removes the page for one language.
+// An unset field falls back to the bundled page. A field set to empty renders nothing, which is
+// how a jurisdiction removes the page for one language.
 export const storedPageBody = (
   content: JurisdictionContentFields | null | undefined,
   field: "privacyHtml" | "disclaimerHtml",
   bundled: React.ReactNode
 ): React.ReactNode => {
   const disclaimers = content?.disclaimers
-  if (!disclaimers || !(field in disclaimers)) return bundled
+  if (disclaimers?.[field] === undefined || disclaimers[field] === null) return bundled
 
   const html = disclaimers[field]
   return hasText(html) ? <StoredHtml html={html} /> : null

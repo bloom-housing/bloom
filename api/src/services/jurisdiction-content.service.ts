@@ -271,9 +271,20 @@ export class JurisdictionContentService {
       value == null
         ? Prisma.DbNull
         : (JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue);
+    const confirmedIn = (field: ContentField) =>
+      new Set(
+        (dto.confirmedSourcePaths ?? [])
+          .filter((path) => path.startsWith(`${field}.`))
+          .map((path) => path.slice(field.length + 1)),
+      );
     const stamped = (field: ContentField) =>
       english
-        ? stampSourceHashes(english[field], dto[field], stored?.[field])
+        ? stampSourceHashes(
+            english[field],
+            dto[field],
+            stored?.[field],
+            confirmedIn(field),
+          )
         : dto[field];
     return Object.fromEntries(
       CONTENT_FIELDS.map((field) => [field, asJson(stamped(field))] as const),

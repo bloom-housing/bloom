@@ -16,6 +16,18 @@ import styles from "./ContentFieldCard.module.scss"
 
 export type ContentFieldType = "text" | "html"
 
+export const StaleMark = ({ stale, onKeep }: { stale: boolean; onKeep?: () => void }) =>
+  stale ? (
+    <>
+      <Tag variant="highlight-warm">{t("content.stale")}</Tag>
+      {onKeep && (
+        <Button variant="text" size="sm" onClick={onKeep}>
+          {t("content.keepTranslation")}
+        </Button>
+      )}
+    </>
+  ) : null
+
 type RichTextControlProps = {
   path: string
   labelKey: string
@@ -59,6 +71,7 @@ type ContentFieldCardProps = {
   resetKey: string
   className?: string
   onChange: (draft: ContentDraft) => void
+  onKeep?: () => void
 }
 
 export const ContentFieldCard = ({
@@ -74,6 +87,7 @@ export const ContentFieldCard = ({
   resetKey,
   className,
   onChange,
+  onKeep,
 }: ContentFieldCardProps) => {
   const value = valueAt(draft, path)
   const state = fieldState(value)
@@ -93,7 +107,7 @@ export const ContentFieldCard = ({
             </>
           )}
           {state === "hidden" && <Tag variant="secondary">{t("content.hidden")}</Tag>}
-          {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
+          <StaleMark stale={stale} onKeep={onKeep} />
         </div>
 
         {!isEnglish && (
@@ -172,6 +186,7 @@ type ContentImageCardProps = {
   progress: number
   onUpdate: (apply: (current: ContentDraft) => ContentDraft) => void
   onProgress: (progress: number) => void
+  onKeep?: () => void
 }
 
 export const ContentImageCard = ({
@@ -186,6 +201,7 @@ export const ContentImageCard = ({
   progress,
   onUpdate,
   onProgress,
+  onKeep,
 }: ContentImageCardProps) => {
   const value = valueAt(draft, path)
   const englishValue = valueAt(englishDraft, path)
@@ -215,7 +231,7 @@ export const ContentImageCard = ({
               {isEnglish ? t("content.notSet") : t("content.usingEnglish")}
             </Tag>
           )}
-          {stale && <Tag variant="highlight-warm">{t("content.stale")}</Tag>}
+          <StaleMark stale={stale} onKeep={onKeep} />
         </div>
 
         {!isEnglish && (

@@ -36,7 +36,11 @@ import {
   valueAt,
 } from "../../lib/contentEditor"
 import { ContentConflictDialog } from "../../components/settings/ContentConflictDialog"
-import { ContentFieldCard, ContentImageCard } from "../../components/settings/ContentFieldCard"
+import {
+  ContentFieldCard,
+  ContentImageCard,
+  StaleMark,
+} from "../../components/settings/ContentFieldCard"
 import { ContentItemDrawer, ItemField } from "../../components/settings/ContentItemDrawer"
 import { ContentList } from "../../components/settings/ContentList"
 import { ContentWarningDialog } from "../../components/settings/ContentWarningDialog"
@@ -256,7 +260,11 @@ const AdminContent = () => {
   const [jurisdictionId, setJurisdictionId] = useState("")
   const [language, setLanguage] = useState<LanguagesEnum>(LanguagesEnum.en)
   const [document, setDocument] = useState<ContentDocument>("disclaimers")
-  const [draftState, setDraftState] = useState<{ scope: string; draft: ContentDraft } | null>(null)
+  const [draftState, setDraftState] = useState<{
+    scope: string
+    draft: ContentDraft
+    confirmed: string[]
+  } | null>(null)
   const [conflict, setConflict] = useState(false)
   const [resetCount, setResetCount] = useState(0)
   const [hidingPaths, setHidingPaths] = useState<string[]>([])
@@ -294,14 +302,37 @@ const AdminContent = () => {
   const isEnglish = activeLanguage === LanguagesEnum.en
   const direction = RIGHT_TO_LEFT_LANGUAGES.includes(activeLanguage) ? "rtl" : "ltr"
   const scope = `${activeJurisdictionId}|${activeLanguage}`
-  const draft = draftState?.scope === scope ? draftState.draft : savedDraft
-  const setDraft = (apply: (current: ContentDraft) => ContentDraft) =>
+  const scoped = draftState?.scope === scope ? draftState : null
+  const draft = scoped?.draft ?? savedDraft
+  const confirmedPaths = scoped?.confirmed ?? []
+  const updateDraftState = (
+    apply: (current: { draft: ContentDraft; confirmed: string[] }) => {
+      draft: ContentDraft
+      confirmed: string[]
+    }
+  ) =>
     setDraftState((current) => ({
       scope,
-      draft: apply(current?.scope === scope ? current.draft : savedDraft),
+      ...apply(current?.scope === scope ? current : { draft: savedDraft, confirmed: [] }),
+    }))
+  const setDraft = (apply: (current: ContentDraft) => ContentDraft) =>
+    updateDraftState((current) => ({ ...current, draft: apply(current.draft) }))
+
+  const staleFields = (languageRow?.staleFields ?? []).filter(
+    (path) => !confirmedPaths.includes(path)
+  )
+  const keep = (paths: string[]) =>
+    updateDraftState((current) => ({
+      ...current,
+      confirmed: [
+        ...new Set([
+          ...current.confirmed,
+          ...paths.filter((path) => isStale(languageRow?.staleFields, path)),
+        ]),
+      ],
     }))
 
-  const hasUnsavedChanges = hasDraftChanges(draft, savedDraft)
+  const hasUnsavedChanges = hasDraftChanges(draft, savedDraft) || confirmedPaths.length > 0
   useUnsavedChangesWarning(hasUnsavedChanges, t("content.unsavedChangesWarning"))
 
   const changeScope = (apply: () => void) => {
@@ -350,7 +381,7 @@ const AdminContent = () => {
         await jurisdictionContentService.updateJurisdictionContent({
           jurisdictionId: activeJurisdictionId,
           language: activeLanguage,
-          body: buildUpdate(toSave, languageRow?.updatedAt),
+          body: buildUpdate(toSave, languageRow?.updatedAt, confirmedPaths),
         })
         await mutate(cacheKey)
         setConflict(false)
@@ -493,15 +524,13 @@ const AdminContent = () => {
                 draft={draft}
                 englishDraft={englishDraft}
                 isEnglish={isEnglish}
-                stale={
-                  isStale(languageRow?.staleFields, field.path) ||
-                  isStale(languageRow?.staleFields, field.fileIdPath)
-                }
+                stale={isStale(staleFields, field.path) || isStale(staleFields, field.fileIdPath)}
                 progress={uploadProgress[field.fileIdPath] ?? 0}
                 onUpdate={setDraft}
                 onProgress={(progress) =>
                   setUploadProgress((current) => ({ ...current, [field.fileIdPath]: progress }))
                 }
+                onKeep={() => keep([field.path, field.fileIdPath])}
               />
             ) : (
               <ContentFieldCard
@@ -514,7 +543,8 @@ const AdminContent = () => {
                 draft={draft}
                 englishDraft={englishDraft}
                 isEnglish={isEnglish}
-                stale={isStale(languageRow?.staleFields, field.path)}
+                stale={isStale(staleFields, field.path)}
+                onKeep={() => keep([field.path])}
                 direction={direction}
                 resetKey={`${scope}|${resetCount}`}
                 onChange={(next) => setDraft(() => next)}
@@ -538,9 +568,10 @@ const AdminContent = () => {
                 <Card.Section>
                   <div className={styles["field-header"]}>
                     <span className={styles["field-label"]}>{t(config.labelKey)}</span>
-                    {isStale(languageRow?.staleFields, config.path) && (
-                      <Tag variant="highlight-warm">{t("content.stale")}</Tag>
-                    )}
+                    <StaleMark
+                      stale={isStale(staleFields, config.path)}
+                      onKeep={() => keep([config.path])}
+                    />
                     <Button
                       variant="primary-outlined"
                       size="sm"
@@ -573,19 +604,29 @@ const AdminContent = () => {
                         <Button
                           variant="text"
                           size="sm"
-                          onClick={() =>
-                            setDrawer({
+                          onClick={() => {
+                            const opened = {
                               basePath: config.path,
                               titleKey: config.labelKey,
                               fields: [
                                 {
                                   name: String(index),
                                   labelKey: "content.textSection",
-                                  type: "html",
+                                  type: "html" as const,
                                 },
                               ],
-                            })
-                          }
+                            }
+                            // Sections are positional, so a gap before this one would be saved as
+                            // null.
+                            if (sections.some((section) => section.usingEnglish)) {
+                              openPending(
+                                setTextSections(draft, config.path, sectionValues),
+                                opened
+                              )
+                            } else {
+                              setDrawer(opened)
+                            }
+                          }}
                         >
                           {t("t.edit")}
                         </Button>
@@ -624,7 +665,7 @@ const AdminContent = () => {
               draft={draft}
               englishDraft={englishDraft}
               isEnglish={isEnglish}
-              staleFields={languageRow?.staleFields}
+              staleFields={staleFields}
               onEdit={(itemPath) =>
                 setDrawer({
                   basePath: itemPath,
@@ -650,7 +691,7 @@ const AdminContent = () => {
                           draft={draft}
                           englishDraft={englishDraft}
                           isEnglish={isEnglish}
-                          staleFields={languageRow?.staleFields}
+                          staleFields={staleFields}
                           onEdit={(itemPath) =>
                             setDrawer({
                               basePath: itemPath,
@@ -671,13 +712,14 @@ const AdminContent = () => {
       </TabView>
 
       <ContentItemDrawer
+        onKeep={(path) => keep([path])}
         basePath={drawer?.basePath ?? null}
         titleKey={drawer?.titleKey ?? "content.document"}
         fields={drawer?.fields ?? []}
         draft={pending?.draft ?? draft}
         englishDraft={englishDraft}
         isEnglish={isEnglish}
-        staleFields={languageRow?.staleFields}
+        staleFields={staleFields}
         direction={direction}
         confirmDisabled={!!pending && !hasDraftChanges(pending.draft, pending.start)}
         onChange={(next) =>

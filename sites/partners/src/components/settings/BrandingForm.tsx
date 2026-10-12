@@ -11,6 +11,7 @@ import { fileUploader, FileUploadData } from "../../lib/helpers"
 import { useUnsavedChangesWarning } from "../../lib/hooks"
 import {
   BrandFormValues,
+  DEFAULT_RADIUS,
   derivedShades,
   fieldName,
   PREVIEW_FIELDS,
@@ -303,7 +304,7 @@ const BrandingForm = ({
                   label={t("branding.buttonRadius")}
                   register={register}
                   keyPrefix="branding.radius"
-                  options={["", ...Object.values(BrandRadiusEnum)]}
+                  options={[DEFAULT_RADIUS, ...Object.values(BrandRadiusEnum)]}
                 />
               </Grid.Cell>
             </Grid.Row>

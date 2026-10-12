@@ -154,10 +154,12 @@ export const hasDraftChanges = (draft: ContentDraft, saved: ContentDraft) =>
 
 export const buildUpdate = (
   draft: ContentDraft,
-  lastUpdatedAt?: Date
+  lastUpdatedAt?: Date,
+  confirmedSourcePaths: string[] = []
 ): JurisdictionContentUpdate => ({
   ...draft,
   lastUpdatedAt,
+  ...(confirmedSourcePaths.length ? { confirmedSourcePaths } : {}),
 })
 
 export const isConflict = (error: unknown) => {

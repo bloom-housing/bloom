@@ -46,6 +46,12 @@ describe("previewVariables", () => {
     expect(variables["--seeds-color-primary"]).toBeUndefined()
   })
 
+  it("sets no radius for the design system default", () => {
+    expect(previewVariables(valuesWith({ buttonRadius: "default" }))).not.toHaveProperty(
+      "--brand-button-radius"
+    )
+  })
+
   it("maps the radius step to the seeds variable", () => {
     expect(previewVariables(valuesWith({ buttonRadius: "3xl" }))["--brand-button-radius"]).toEqual(
       "var(--seeds-rounded-3xl)"

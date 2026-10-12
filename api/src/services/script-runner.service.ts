@@ -28,6 +28,7 @@ import { PrismaService } from './prisma.service';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
+import { assertSuperAdmin } from '../utilities/assert-super-admin';
 import { BulkApplicationResendDTO } from '../dtos/script-runner/bulk-application-resend.dto';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationMultiselectQuestion } from '../dtos/applications/application-multiselect-question.dto';
@@ -359,6 +360,7 @@ export class ScriptRunnerService {
     dto: TranslationOverrideMigrationDTO,
   ): Promise<SuccessDTO> {
     const requestingUser = mapTo(User, req['user']);
+    assertSuperAdmin(requestingUser);
     const scriptName = `migrate translation overrides to key rows for ${dto.jurisdictionName}`;
 
     const jurisdiction = await this.prisma.jurisdictions.findFirst({

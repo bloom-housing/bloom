@@ -26,6 +26,23 @@ export type TranslationEditorRow = {
 const hasKey = (source: Record<string, unknown>, key: string) =>
   Object.prototype.hasOwnProperty.call(source, key)
 
+// Layers the bases in the order the sites apply them, so a language's own file wins over the
+// English override file.
+export const siteBases = ({
+  general,
+  englishOverrides,
+  language,
+  languageOverrides,
+}: {
+  general: FlatTranslations
+  englishOverrides: FlatTranslations
+  language?: FlatTranslations
+  languageOverrides?: FlatTranslations
+}): { englishBase: FlatTranslations; languageBase?: FlatTranslations } => ({
+  englishBase: { ...general, ...englishOverrides },
+  languageBase: language && { ...language, ...languageOverrides },
+})
+
 /**
  * Builds one row per key from the bundled locale files and the jurisdiction's override rows.
  *
@@ -126,6 +143,12 @@ export const applyEdit = (
   next[row.key] = { value, version }
   return next
 }
+
+// Records the current text unchanged, so saving it records the current English as its source.
+export const keepTranslation = (edits: PendingEdits, row: TranslationEditorRow): PendingEdits => ({
+  ...edits,
+  [row.key]: { value: effectiveValue(row) ?? "", version: row.updatedAt },
+})
 
 /**
  * The keys a batch save rejected because someone else changed them first.

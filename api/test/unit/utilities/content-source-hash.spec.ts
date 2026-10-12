@@ -114,6 +114,17 @@ describe('stampSourceHashes', () => {
     expect(stamped.contact._sourceHashes).toBeUndefined();
   });
 
+  it('takes no baseline for a field the language leaves unset', () => {
+    const stamped = stampSourceHashes(
+      { privacyHtml: '<p>Privacy</p>', disclaimerHtml: '<p>Terms</p>' },
+      { privacyHtml: null, disclaimerHtml: '<p>Condiciones</p>' },
+    ) as Record<string, unknown>;
+
+    expect(stamped._sourceHashes).toEqual({
+      disclaimerHtml: sourceHash('<p>Terms</p>'),
+    });
+  });
+
   it('keeps the baseline of a field this write does not change', () => {
     const englishBefore = { phone: '(415) 555-0100', hours: 'Nine to five' };
     const englishNow = { phone: '(415) 555-0199', hours: 'Nine to five' };
@@ -133,6 +144,61 @@ describe('stampSourceHashes', () => {
       hours: sourceHash('Nine to five'),
     });
     expect(staleFieldPaths(englishNow, stamped)).toEqual(['phone']);
+  });
+
+  it('takes a new baseline for an unchanged field a reviewer confirmed', () => {
+    const englishBefore = { phone: '(415) 555-0100', hours: 'Nine to five' };
+    const englishNow = { phone: '(415) 555-0199', hours: 'Nine to six' };
+    const language = { phone: '(415) 555-0100 ext 2', hours: 'Nueve a cinco' };
+    const stored = stampSourceHashes(englishBefore, language);
+
+    const stamped = stampSourceHashes(
+      englishNow,
+      language,
+      stored,
+      new Set(['phone']),
+    ) as Record<string, unknown>;
+
+    expect(staleFieldPaths(englishNow, stamped)).toEqual(['hours']);
+  });
+
+  it('takes a new baseline for a confirmed field nested in a list item', () => {
+    const englishNow = {
+      categories: [
+        {
+          id: 'c1',
+          items: [{ id: 'i1', question: 'Q', answerHtml: '<p>New</p>' }],
+        },
+      ],
+    };
+    const language = {
+      categories: [
+        {
+          id: 'c1',
+          items: [{ id: 'i1', question: 'P', answerHtml: '<p>Vieja</p>' }],
+        },
+      ],
+    };
+    const stored = stampSourceHashes(
+      {
+        categories: [
+          {
+            id: 'c1',
+            items: [{ id: 'i1', question: 'Q', answerHtml: '<p>Old</p>' }],
+          },
+        ],
+      },
+      language,
+    );
+
+    const stamped = stampSourceHashes(
+      englishNow,
+      language,
+      stored,
+      new Set(['categories[c1].items[i1].answerHtml']),
+    );
+
+    expect(staleFieldPaths(englishNow, stamped)).toEqual([]);
   });
 
   it('takes a new baseline for a field this write does change', () => {
@@ -242,6 +308,18 @@ describe('a translated item whose English original is gone', () => {
 });
 
 describe('staleFieldPaths', () => {
+  it('skips an unset field, which shows the English', () => {
+    expect(
+      staleFieldPaths(
+        { privacyHtml: '<p>Privacy, updated</p>' },
+        {
+          privacyHtml: null,
+          _sourceHashes: { privacyHtml: sourceHash('<p>Privacy</p>') },
+        },
+      ),
+    ).toEqual([]);
+  });
+
   it('reports a field whose English source has changed', () => {
     const stamped = stampSourceHashes(englishFaq, spanishFaq);
     const changedEnglish = {
