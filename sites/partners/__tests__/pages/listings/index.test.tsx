@@ -136,8 +136,9 @@ describe("listings", () => {
         <ListingsList />
       </QueryClientProvider>
     )
-    const header = await findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
+
+    const listingHeading = await screen.findByRole("heading", { name: "Listings" })
+    expect(listingHeading).toBeInTheDocument()
     const exportButton = queryByText("Export to CSV")
     expect(exportButton).not.toBeInTheDocument()
   })
@@ -605,8 +606,8 @@ describe("listings", () => {
     )
 
     const { findByText, getByText } = render(<ListingsList />)
-    const header = await findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
+    const listingHeading = await screen.findByRole("heading", { name: "Listings" })
+    expect(listingHeading).toBeInTheDocument()
     const exportButton = getByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     act(() => {
@@ -651,8 +652,8 @@ describe("listings", () => {
         <ListingsList />
       </MessageProvider>
     )
-    const header = await findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
+    const listingHeading = await screen.findByRole("heading", { name: "Listings" })
+    expect(listingHeading).toBeInTheDocument()
     const exportButton = getByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     act(() => {

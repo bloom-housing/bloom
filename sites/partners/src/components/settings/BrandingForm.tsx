@@ -141,7 +141,10 @@ const BrandingForm = ({
               type="button"
               variant="alert-outlined"
               size="sm"
-              onClick={() => setChange({ fileId: null })}
+              onClick={() => {
+                setChange({ fileId: null })
+                if (progress === 100) setProgress(0)
+              }}
               id={`${id}-delete`}
             >
               {t("t.delete")}
