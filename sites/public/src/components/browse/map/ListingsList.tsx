@@ -42,10 +42,9 @@ const ListingsList = (props: ListingsListProps) => {
         ? ListingsStatusEnum.closed
         : ListingsStatusEnum.active
 
-    void router.push(`/listings`, {
-      query: {
-        ...router.query,
-      },
+    void router.push({
+      pathname: `/listings`,
+      query: newQuery,
     })
   }, [listingStatus, router])
 
