@@ -1383,7 +1383,7 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
-                featureFlag !== FeatureFlagEnum.enableReferralQuestionUnits,
+                featureFlag === FeatureFlagEnum.disableCommonApplication,
             }}
           >
             <ListingContext.Provider
@@ -1473,8 +1473,6 @@ describe("listing data", () => {
               ...listing,
               listingsApplicationMailingAddress: {
                 id: "mailing_adress_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
                 city: "Warrensville Heights",
                 state: "Ohio",
                 street: "1598 Peaceful Lane",
@@ -1483,8 +1481,6 @@ describe("listing data", () => {
               applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
               listingsApplicationPickUpAddress: {
                 id: "mailing_adress_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
                 city: "Doral",
                 state: "Florida",
                 street: "2560 Barnes Street",
@@ -1494,8 +1490,6 @@ describe("listing data", () => {
               applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
               listingsApplicationDropOffAddress: {
                 id: "mailing_adress_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
                 city: "Zurich",
                 state: "Montana",
                 street: "3897 Benson Street",

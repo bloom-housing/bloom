@@ -12,9 +12,6 @@ export const tIfExists = (
   key: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: Record<string, any>
-): string | null => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const polyglot = (global as any).Translator?.polyglot
-  if (!polyglot?.has(key)) return null
-  return t(key, options) || null
-}
+): string | null =>
+  // Asks t()'s own instance: on the server, global.Translator can be another copy of the module.
+  t(key, { ...options, _: "" }) || null

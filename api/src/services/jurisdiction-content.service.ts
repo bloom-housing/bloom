@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -16,6 +17,7 @@ import {
   stampSourceHashes,
   staleFieldPaths,
 } from '../utilities/content-source-hash';
+import { brandAssetUrl, isUsableFileId } from '../utilities/brand-asset-url';
 import { mapTo } from '../utilities/mapTo';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
@@ -34,6 +36,33 @@ type ContentField = (typeof CONTENT_FIELDS)[number];
 const CONTENT_SELECT = Object.fromEntries(
   CONTENT_FIELDS.map((field) => [field, true] as const),
 ) as Record<ContentField, true> satisfies Prisma.JurisdictionContentSelect;
+
+type FooterLogo = { logoSrc?: string; logoFileId?: string };
+
+const footerLogo = (footer: unknown): FooterLogo | undefined =>
+  (footer as { logo?: FooterLogo } | null | undefined)?.logo;
+
+const withLogo = <T extends { footer?: unknown }>(
+  row: T,
+  logo: FooterLogo,
+): T => ({ ...row, footer: { ...(row.footer as object), logo } } as T);
+
+const withLogoSrc = <T extends { footer?: unknown }>(row: T): T => {
+  const logo = footerLogo(row.footer);
+  if (!logo?.logoFileId) return row;
+  return withLogo(row, {
+    ...logo,
+    logoSrc: brandAssetUrl(logo.logoFileId, 'logo'),
+  });
+};
+
+const withoutDerivedLogoSrc = <T extends { footer?: unknown }>(row: T): T => {
+  const logo = footerLogo(row.footer);
+  if (!logo?.logoFileId) return row;
+  const { logoSrc, ...stored } = logo;
+  void logoSrc;
+  return withLogo(row, stored);
+};
 
 @Injectable()
 export class JurisdictionContentService {
@@ -63,12 +92,14 @@ export class JurisdictionContentService {
     }
 
     // Return only the content fields for a language row (not `language`), so the merge folds the
-    // documents and nothing else.
+    // documents and nothing else. The logo is resolved per row so a language's own logo wins.
     const contentFor = (lang: LanguagesEnum): MergeableContent => {
       const match = rows.find((row) => row.language === lang);
       return match
-        ? Object.fromEntries(
-            CONTENT_FIELDS.map((field) => [field, match[field]] as const),
+        ? withLogoSrc(
+            Object.fromEntries(
+              CONTENT_FIELDS.map((field) => [field, match[field]] as const),
+            ),
           )
         : {};
     };
@@ -153,6 +184,13 @@ export class JurisdictionContentService {
       permissionActions.update,
     );
 
+    const logoFileId = footerLogo(dto.footer)?.logoFileId;
+    if (logoFileId && !isUsableFileId(logoFileId)) {
+      throw new BadRequestException(
+        `file id ${logoFileId} is not a usable storage key`,
+      );
+    }
+
     const where = { jurisdictionId, language };
     const english =
       language === LanguagesEnum.en
@@ -167,7 +205,11 @@ export class JurisdictionContentService {
           select: CONTENT_SELECT,
         })
       : null;
-    const data = this.contentData(dto, english, storedRow);
+    const data = this.contentData(
+      withoutDerivedLogoSrc(dto),
+      english,
+      storedRow,
+    );
 
     if (dto.lastUpdatedAt) {
       const result = await this.prisma.jurisdictionContent.updateMany({
@@ -214,7 +256,7 @@ export class JurisdictionContentService {
           ),
         )
       : [];
-    return { ...row, staleFields };
+    return withLogoSrc({ ...row, staleFields });
   }
 
   private contentData(
