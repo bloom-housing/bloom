@@ -26,6 +26,23 @@ export type TranslationEditorRow = {
 const hasKey = (source: Record<string, unknown>, key: string) =>
   Object.prototype.hasOwnProperty.call(source, key)
 
+// Layers the bases in the order the sites apply them, so a language's own file wins over the
+// English override file.
+export const siteBases = ({
+  general,
+  englishOverrides,
+  language,
+  languageOverrides,
+}: {
+  general: FlatTranslations
+  englishOverrides: FlatTranslations
+  language?: FlatTranslations
+  languageOverrides?: FlatTranslations
+}): { englishBase: FlatTranslations; languageBase?: FlatTranslations } => ({
+  englishBase: { ...general, ...englishOverrides },
+  languageBase: language && { ...language, ...languageOverrides },
+})
+
 /**
  * Builds one row per key from the bundled locale files and the jurisdiction's override rows.
  *

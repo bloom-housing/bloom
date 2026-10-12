@@ -28,6 +28,7 @@ import {
   buildConflicts,
   buildEdits,
   buildTranslationRows,
+  siteBases,
   ConflictChoice,
   conflictKeysFrom,
   editsForKeys,
@@ -158,17 +159,17 @@ const AdminTranslations = () => {
     }
 
     const siteOverrides = scope.baseOverrides
-    const englishLayer = flattenTranslations(siteOverrides.en)
-    const languageLayer = siteOverrides[activeLanguage]
-      ? { ...englishLayer, ...flattenTranslations(siteOverrides[activeLanguage]) }
-      : englishLayer
+    const isEnglish = activeLanguage === LanguagesEnum.en
+    const { englishBase, languageBase } = siteBases({
+      general: flattenTranslations(translations.general),
+      englishOverrides: flattenTranslations(siteOverrides.en),
+      language: isEnglish ? undefined : flattenTranslations(translations[activeLanguage]),
+      languageOverrides: isEnglish ? undefined : flattenTranslations(siteOverrides[activeLanguage]),
+    })
 
     return buildTranslationRows({
-      englishBase: { ...flattenTranslations(translations.general), ...englishLayer },
-      languageBase:
-        activeLanguage === LanguagesEnum.en
-          ? undefined
-          : { ...flattenTranslations(translations[activeLanguage]), ...languageLayer },
+      englishBase,
+      languageBase,
       overrides: overrides ?? [],
       englishOverrideKeys,
     })

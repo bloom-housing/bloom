@@ -3,6 +3,7 @@ import {
   applyConflictChoices,
   applyEdit,
   keepTranslation,
+  siteBases,
   buildConflicts,
   buildEdits,
   buildTranslationRows,
@@ -28,6 +29,37 @@ const override = (key: string, value: string, extra = {}) => ({
 })
 
 const edit = (value: string, version: Date | null = null) => ({ value, version })
+
+describe("siteBases", () => {
+  it("puts the language's own text over the English override file, as the sites do", () => {
+    const { englishBase, languageBase } = siteBases({
+      general: { "t.cancel": "Cancel", "t.save": "Save" },
+      englishOverrides: { "t.cancel": "Stop" },
+      language: { "t.cancel": "Cancelar" },
+      languageOverrides: { "t.save": "Guardar cambios" },
+    })
+
+    expect(englishBase).toEqual({ "t.cancel": "Stop", "t.save": "Save" })
+    expect(languageBase).toEqual({ "t.cancel": "Cancelar", "t.save": "Guardar cambios" })
+  })
+
+  it("leaves a key the language lacks to the English base", () => {
+    const rows = buildTranslationRows({
+      ...siteBases({
+        general: { "a.key": "Base" },
+        englishOverrides: { "a.key": "Fork wording" },
+        language: {},
+      }),
+      overrides: [],
+    })
+
+    expect(rows[0].baseValue).toEqual("Fork wording")
+  })
+
+  it("has no language base for English", () => {
+    expect(siteBases({ general: {}, englishOverrides: {} }).languageBase).toBeUndefined()
+  })
+})
 
 describe("buildTranslationRows", () => {
   it("returns one row per base key, sorted, with no override", () => {
