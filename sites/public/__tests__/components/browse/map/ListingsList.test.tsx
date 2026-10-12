@@ -1,9 +1,11 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import {
   FeatureFlagEnum,
+  ListingFilterKeys,
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingsList } from "../../../../src/components/browse/map/ListingsList"
@@ -175,6 +177,199 @@ describe("ListingsList", () => {
 
     expect(screen.getByRole("heading", { name: t("t.noMatchingListings") })).toBeInTheDocument()
     expect(screen.getByText(t("t.tryRemovingFilters"))).toBeInTheDocument()
+  })
+
+  describe("status filter search button", () => {
+    const emptyResultsContext = (overrides = {}) => ({
+      ...baseContext,
+      searchResults: { ...baseContext.searchResults, listings: [], markers: [] },
+      ...overrides,
+    })
+
+    describe("visibility", () => {
+      it("hides the button when enableFilterByStatus is off", () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({ activeFeatureFlags: [], listingStatus: ListingsStatusEnum.active })
+        )
+
+        render(<ListingsList />)
+
+        expect(screen.queryByRole("button", { name: t("listingFilters.searchForOpen") })).toBeNull()
+        expect(
+          screen.queryByRole("button", { name: t("listingFilters.searchForClosed") })
+        ).toBeNull()
+        expect(screen.getByText(t("t.tryRemovingFilters"))).toBeInTheDocument()
+        expect(screen.queryByText(t("listingFilters.noMatchingListingsDescription"))).toBeNull()
+      })
+
+      it("hides the button when the flag is on but there are markers on the map", () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({
+            activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+            listingStatus: ListingsStatusEnum.active,
+            searchResults: {
+              ...baseContext.searchResults,
+              listings: [],
+              markers: [{ id: "marker-1" }],
+            },
+          })
+        )
+
+        render(<ListingsList />)
+
+        expect(
+          screen.getByRole("heading", { name: t("listingFilters.noMatchingListingsTitle") })
+        ).toBeInTheDocument()
+        expect(screen.getByText(t("t.tryChangingArea"))).toBeInTheDocument()
+        expect(screen.queryByText(t("listingFilters.noMatchingListingsDescription"))).toBeNull()
+        expect(screen.queryByRole("button", { name: t("listingFilters.searchForOpen") })).toBeNull()
+        expect(
+          screen.queryByRole("button", { name: t("listingFilters.searchForClosed") })
+        ).toBeNull()
+      })
+
+      it("shows the no-visible-listings heading when the flag is off and there are markers on the map", () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({
+            searchResults: {
+              ...baseContext.searchResults,
+              listings: [],
+              markers: [{ id: "marker-1" }],
+            },
+          })
+        )
+
+        render(<ListingsList />)
+
+        expect(screen.getByRole("heading", { name: t("t.noVisibleListings") })).toBeInTheDocument()
+        expect(
+          screen.queryByRole("heading", { name: t("listingFilters.noMatchingListingsTitle") })
+        ).toBeNull()
+        expect(screen.queryByRole("button", { name: t("listingFilters.searchForOpen") })).toBeNull()
+        expect(
+          screen.queryByRole("button", { name: t("listingFilters.searchForClosed") })
+        ).toBeNull()
+      })
+
+      it("hides the button when the flag is on and listings exist", () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue({
+          ...baseContext,
+          activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+          listingStatus: ListingsStatusEnum.active,
+        })
+
+        render(<ListingsList />)
+
+        expect(screen.getByTestId("map-listings")).toBeInTheDocument()
+        expect(screen.queryByRole("button", { name: t("listingFilters.searchForOpen") })).toBeNull()
+        expect(
+          screen.queryByRole("button", { name: t("listingFilters.searchForClosed") })
+        ).toBeNull()
+      })
+
+      it("shows the search open button when the listing status is not set", () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({ activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus] })
+        )
+
+        render(<ListingsList />)
+
+        expect(
+          screen.getByRole("button", { name: t("listingFilters.searchForOpen") })
+        ).toBeInTheDocument()
+        expect(
+          screen.queryByRole("button", { name: t("listingFilters.searchForClosed") })
+        ).toBeNull()
+      })
+    })
+
+    describe("onSearchClick", () => {
+      it("navigates to closed listings when viewing open listings", async () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({
+            activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+            listingStatus: ListingsStatusEnum.active,
+          })
+        )
+
+        render(<ListingsList />)
+        await userEvent.click(
+          screen.getByRole("button", { name: t("listingFilters.searchForClosed") })
+        )
+
+        expect(pushMock).toHaveBeenCalledTimes(1)
+        expect(pushMock).toHaveBeenCalledWith({
+          pathname: "/listings",
+          query: { [ListingFilterKeys.status]: ListingsStatusEnum.closed },
+        })
+      })
+
+      it("navigates to open listings when viewing closed listings", async () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({
+            activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+            listingStatus: ListingsStatusEnum.closed,
+          })
+        )
+
+        render(<ListingsList />)
+        await userEvent.click(
+          screen.getByRole("button", { name: t("listingFilters.searchForOpen") })
+        )
+
+        expect(pushMock).toHaveBeenCalledTimes(1)
+        expect(pushMock).toHaveBeenCalledWith({
+          pathname: "/listings",
+          query: { [ListingFilterKeys.status]: ListingsStatusEnum.active },
+        })
+      })
+
+      it("navigates to open listings when the listing status is not set", async () => {
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({ activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus] })
+        )
+
+        render(<ListingsList />)
+        await userEvent.click(
+          screen.getByRole("button", { name: t("listingFilters.searchForOpen") })
+        )
+
+        expect(pushMock).toHaveBeenCalledWith({
+          pathname: "/listings",
+          query: { [ListingFilterKeys.status]: ListingsStatusEnum.active },
+        })
+      })
+
+      it("keeps the other query params and overrides the existing status without mutating router.query", async () => {
+        const query = {
+          [ListingFilterKeys.bedrooms]: "2",
+          [ListingFilterKeys.city]: "Detroit",
+          [ListingFilterKeys.status]: ListingsStatusEnum.active,
+        }
+        ;(useRouter as jest.Mock).mockReturnValue({ query, push: pushMock })
+        ;(useListingsMapContext as jest.Mock).mockReturnValue(
+          emptyResultsContext({
+            activeFeatureFlags: [FeatureFlagEnum.enableFilterByStatus],
+            listingStatus: ListingsStatusEnum.active,
+          })
+        )
+
+        render(<ListingsList />)
+        await userEvent.click(
+          screen.getByRole("button", { name: t("listingFilters.searchForClosed") })
+        )
+
+        expect(pushMock).toHaveBeenCalledWith({
+          pathname: "/listings",
+          query: {
+            [ListingFilterKeys.bedrooms]: "2",
+            [ListingFilterKeys.city]: "Detroit",
+            [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+          },
+        })
+        expect(query[ListingFilterKeys.status]).toBe(ListingsStatusEnum.active)
+      })
+    })
   })
 
   it("renders pagination when lastPage is non-zero", () => {
