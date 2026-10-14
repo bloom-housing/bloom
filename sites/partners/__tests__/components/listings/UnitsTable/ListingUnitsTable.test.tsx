@@ -141,11 +141,11 @@ describe("ListingUnitsTable", () => {
     expect(columnValues(NUMBER_COLUMN)).toEqual(["10", "2", "4A"])
   })
 
-  it("sorts rent numerically with empty values last in both directions", () => {
+  it("sorts rent numerically with empty values first ascending and last descending", () => {
     renderTable()
 
     fireEvent.click(screen.getByTestId("sort-button-monthlyRent"))
-    expect(columnValues(RENT_COLUMN)).toEqual(["$900", "$1200", ""])
+    expect(columnValues(RENT_COLUMN)).toEqual(["", "$900", "$1200"])
     fireEvent.click(screen.getByTestId("sort-button-monthlyRent"))
     expect(columnValues(RENT_COLUMN)).toEqual(["$1200", "$900", ""])
   })

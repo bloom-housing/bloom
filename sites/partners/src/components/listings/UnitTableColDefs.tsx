@@ -145,7 +145,7 @@ const sortByAccessibilityText: SortingFn<TableDataRow> = (rowA, rowB, columnId) 
 const unitTypeRank = (names: string[]): number => {
   const ranks = names.map((name) => UnitTypeSort.indexOf(name)).filter((rank) => rank !== -1)
 
-  return ranks.length ? Math.min(...ranks) : Number.POSITIVE_INFINITY
+  return ranks.length ? Math.min(...ranks) : -1
 }
 
 const sortByUnitTypeOrder: SortingFn<TableDataRow> = (rowA, rowB, columnId) => {
@@ -186,7 +186,7 @@ const textColumn = (
     enableSorting: sortable,
     sortDescFirst: false,
     sortingFn,
-    sortUndefined: "last",
+    sortUndefined: -1,
     size,
     minSize: size,
     meta: {
