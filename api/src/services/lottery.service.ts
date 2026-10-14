@@ -790,7 +790,13 @@ export class LotteryService {
           },
           where: {
             lotteryLastPublishedAt: null,
-            lotteryStatus: LotteryStatusEnum.ran,
+            lotteryStatus: {
+              in: [
+                LotteryStatusEnum.ran,
+                LotteryStatusEnum.approved,
+                LotteryStatusEnum.releasedToPartners,
+              ],
+            },
             OR: [...publishCutoffMap].map(([cutoffTime, ids]) => ({
               jurisdictionId: { in: ids },
               lotteryLastRunAt: { lt: new Date(cutoffTime) },

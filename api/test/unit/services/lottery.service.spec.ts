@@ -1402,7 +1402,13 @@ describe('Testing lottery service', () => {
         },
         where: {
           lotteryLastPublishedAt: null,
-          lotteryStatus: LotteryStatusEnum.ran,
+          lotteryStatus: {
+            in: [
+              LotteryStatusEnum.ran,
+              LotteryStatusEnum.approved,
+              LotteryStatusEnum.releasedToPartners,
+            ],
+          },
           OR: [
             {
               jurisdictionId: { in: [jurisAId] },
@@ -1468,7 +1474,13 @@ describe('Testing lottery service', () => {
           jurisdictions: true,
         });
         expect(where.lotteryLastPublishedAt).toBeNull();
-        expect(where.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+        expect(where.lotteryStatus).toEqual({
+          in: [
+            LotteryStatusEnum.ran,
+            LotteryStatusEnum.approved,
+            LotteryStatusEnum.releasedToPartners,
+          ],
+        });
       });
 
       it.each([
