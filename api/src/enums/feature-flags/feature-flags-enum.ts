@@ -18,6 +18,7 @@ export enum FeatureFlagEnum {
   enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
   enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableApproveAndPublishOnEdit = 'enableApproveAndPublishOnEdit',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
@@ -187,6 +188,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableApplicationStatus,
     description:
       'When true, the application status and notifications feature is enabled on public and partners',
+  },
+  {
+    name: FeatureFlagEnum.enableApproveAndPublishOnEdit,
+    description:
+      'When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving',
   },
   {
     name: FeatureFlagEnum.enableAutoOpenDate,

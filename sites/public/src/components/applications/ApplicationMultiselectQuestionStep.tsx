@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -23,6 +24,7 @@ import {
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import {
+  Application,
   ApplicationSelectionCreate,
   MultiselectOption,
   MultiselectQuestionsApplicationSectionEnum,
@@ -34,6 +36,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../layouts/application-form"
+import { useStopLightGate } from "../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../lib/applications/stopLights/useStopLightBanners"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
 
 export interface ApplicationMultiselectQuestionStepProps {
@@ -107,6 +111,22 @@ const ApplicationMultiselectQuestionStep = ({
       ? mapApiToMultiselectForm(applicationQuestions, questions, applicationSection)
       : mapApiToMultiselectFormV1(applicationQuestions, questions, applicationSection),
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    applicationStep,
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    applicationStep,
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues as () => Partial<Application>
+  )
 
   const [exclusiveKeys, setExclusiveKeys] = useState(
     getExclusiveKeys(question, applicationSection, enableV2MSQ)
@@ -162,6 +182,27 @@ const ApplicationMultiselectQuestionStep = ({
     }
   }
 
+  const buildPendingSave = () => {
+    if (enableV2MSQ) {
+      return {
+        applicationSelections: [
+          ...conductor.application.applicationSelections.filter(
+            (selection: ApplicationSelectionCreate) =>
+              selection.multiselectQuestion.id !== body.current.multiselectQuestion.id
+          ),
+          ...(body.current.selections.length > 0 ? [body.current] : []),
+        ],
+      }
+    }
+    const otherQuestions =
+      questions.length > 1
+        ? (conductor.application[applicationSection] ?? []).filter(
+            (question) => question.key !== body.current.key
+          )
+        : []
+    return { [applicationSection]: [...otherQuestions, body.current] }
+  }
+
   const onSubmit = (data) => {
     if (verifyAddressStep === 0) {
       body.current = enableV2MSQ
@@ -202,38 +243,41 @@ const ApplicationMultiselectQuestionStep = ({
       }
     }
 
-    if (questions.length > 1 && body.current) {
-      // If there is more than one question, save the data in segments
-      const currentQuestions = enableV2MSQ
-        ? conductor.application.applicationSelections.filter(
-            (selection: ApplicationSelectionCreate) =>
-              questions.find(
-                (question) => question.multiselectQuestions.id === selection.multiselectQuestion.id
-              ) && selection.multiselectQuestion.id != body.current.multiselectQuestion.id
-          )
-        : conductor.application[applicationSection].filter(
-            (question) => question.key !== body.current.key
-          )
+    guardSubmit(buildPendingSave(), () => {
+      if (questions.length > 1 && body.current) {
+        // If there is more than one question, save the data in segments
+        const currentQuestions = enableV2MSQ
+          ? conductor.application.applicationSelections.filter(
+              (selection: ApplicationSelectionCreate) =>
+                questions.find(
+                  (question) =>
+                    question.multiselectQuestions.id === selection.multiselectQuestion.id
+                ) && selection.multiselectQuestion.id != body.current.multiselectQuestion.id
+            )
+          : conductor.application[applicationSection].filter(
+              (question) => question.key !== body.current.key
+            )
 
-      conductor.currentStep.save([...currentQuestions, body.current])
-      setApplicationQuestions([...currentQuestions, body.current])
-    } else {
-      // Otherwise, submit all at once
-      conductor.currentStep.save([body.current])
-    }
-    // Update to the next page if we have more pages
-    if (page !== questions.length && !conductor.returnToReview) {
-      setVerifyAddressStep(0)
-      setVerifyAddress(false)
-      setPage(page + 1)
-      body.current = null
-      window.scrollTo({ top: 0 })
-      return
-    }
-    // Otherwise complete the section and move to the next URL
-    conductor.completeSection(applicationSectionNumber)
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+        conductor.currentStep.save([...currentQuestions, body.current])
+        setApplicationQuestions([...currentQuestions, body.current])
+      } else {
+        // Otherwise, submit all at once
+        conductor.currentStep.save([body.current])
+      }
+      // Update to the next page if we have more pages
+      if (page !== questions.length && !conductor.returnToReview) {
+        setVerifyAddressStep(0)
+        setVerifyAddress(false)
+        setPage(page + 1)
+        body.current = null
+        window.scrollTo({ top: 0 })
+        return
+      }
+      // Otherwise complete the section and move to the next URL
+      conductor.completeSection(applicationSectionNumber)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
 
   const onError = () => {
@@ -313,7 +357,7 @@ const ApplicationMultiselectQuestionStep = ({
         swapCommunityTypeWithPrograms
       )} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -346,6 +390,7 @@ const ApplicationMultiselectQuestionStep = ({
               : null
           }
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
 
