@@ -372,6 +372,14 @@ export const translations = (
             help: 'Các hồ sơ trước dòng bị lỗi đã được cập nhật. Nếu tải lại tệp của bạn không khắc phục được sự cố, vui lòng liên hệ với nhóm hỗ trợ.',
           },
         },
+        register: {
+          welcome: 'Chào mừng',
+          welcomeMessage:
+            'Cảm ơn bạn đã tạo tài khoản trên %{appUrl}. Giờ đây bạn sẽ dễ dàng hơn trong việc bắt đầu, lưu và gửi đơn đăng ký trực tuyến cho các danh sách xuất hiện trên trang web.',
+          confirmMyAccount: 'Xác nhận tài khoản của tôi',
+          toConfirmAccountMessage:
+            'Để hoàn tất việc tạo tài khoản của bạn, vui lòng nhấp vào liên kết bên dưới:',
+        },
         advocateApproved: {
           subject: 'Tài khoản của bạn đã được phê duyệt',
           hello: 'Xin chào',
@@ -637,6 +645,13 @@ export const translations = (
             help: '失败行之前的记录已更新。如果重新上传文件仍无法解决问题，请联系支持团队。',
           },
         },
+        register: {
+          welcome: '欢迎',
+          welcomeMessage:
+            '感谢您在 %{appUrl} 创建账户。现在您可以更轻松地开始、保存和提交网站上展示房源的在线申请。',
+          confirmMyAccount: '确认我的账户',
+          toConfirmAccountMessage: '要完成您的账户创建，请点击下面的链接：',
+        },
         advocateApproved: {
           subject: '您的账户已被批准',
           hello: '您好',
@@ -894,6 +909,14 @@ export const translations = (
               'Nakaranas ng error ang iyong bulk na pag-update at hindi ito makumpleto.',
             help: 'Ang mga talaan bago ang row na nabigo ay na-update na. Kung hindi maaayos ng muling pag-upload ng iyong file ang isyu, mangyaring makipag-ugnayan sa support team.',
           },
+        },
+        register: {
+          welcome: 'Maligayang pagdating',
+          welcomeMessage:
+            'Salamat sa paglikha ng iyong account sa %{appUrl}. Magiging mas madali na ngayon para sa iyo na magsimula, mag-save, at magsumite ng mga online na aplikasyon para sa mga listahan na lumalabas sa site.',
+          confirmMyAccount: 'Kumpirmahin ang aking account',
+          toConfirmAccountMessage:
+            'Upang makumpleto ang paglikha ng iyong account, mangyaring i-click ang link sa ibaba:',
         },
         advocateApproved: {
           subject: 'Ang iyong account ay na-apruba na',
@@ -1181,6 +1204,14 @@ export const translations = (
             help: 'ব্যর্থ সারির আগের রেকর্ডগুলো আপডেট করা হয়েছে। আপনার ফাইল পুনরায় আপলোড করলে সমস্যাটি সমাধান না হলে, অনুগ্রহ করে সহায়তা দলের সাথে যোগাযোগ করুন।',
           },
         },
+        register: {
+          welcome: 'স্বাগতম',
+          welcomeMessage:
+            '%{appUrl}-এ আপনার অ্যাকাউন্ট তৈরি করার জন্য ধন্যবাদ। এখন সাইটে প্রদর্শিত তালিকাগুলোর জন্য অনলাইনে আবেদন শুরু করা, সংরক্ষণ করা এবং জমা দেওয়া আপনার জন্য আরও সহজ হবে।',
+          confirmMyAccount: 'আমার অ্যাকাউন্ট নিশ্চিত করুন',
+          toConfirmAccountMessage:
+            'আপনার অ্যাকাউন্ট তৈরি সম্পূর্ণ করতে, দয়া করে নীচের লিঙ্কে ক্লিক করুন:',
+        },
         advocateApproved: {
           subject: 'আপনার অ্যাকাউন্ট অনুমোদিত হয়েছে',
           hello: 'হ্যালো',
@@ -1451,6 +1482,14 @@ export const translations = (
             help: 'تم تحديث السجلات السابقة للصف الذي فشل. إذا لم تؤدِّ إعادة رفع الملف إلى حل المشكلة، فيُرجى التواصل مع فريق الدعم.',
           },
         },
+        register: {
+          welcome: 'مرحباً',
+          welcomeMessage:
+            'شكراً لإنشاء حسابك على %{appUrl}. سيكون من الأسهل الآن عليك بدء وحفظ وتقديم الطلبات عبر الإنترنت للقوائم المعروضة على الموقع.',
+          confirmMyAccount: 'تأكيد حسابي',
+          toConfirmAccountMessage:
+            'لإكمال إنشاء حسابك، يرجى النقر على الرابط أدناه:',
+        },
         advocateApproved: {
           subject: 'تم الموافقة على حسابك',
           hello: 'مرحبا',
@@ -1682,6 +1721,14 @@ export const translations = (
             message: '일괄 업데이트 중 오류가 발생하여 완료할 수 없었습니다.',
             help: '실패한 행 이전의 기록은 업데이트되었습니다. 파일을 다시 업로드해도 문제가 해결되지 않으면 지원팀에 문의하세요.',
           },
+        },
+        register: {
+          welcome: '환영합니다',
+          welcomeMessage:
+            '%{appUrl}에서 계정을 생성해 주셔서 감사합니다. 이제 사이트에 게시된 목록에 대한 온라인 신청서를 더 쉽게 시작, 저장 및 제출할 수 있습니다.',
+          confirmMyAccount: '내 계정 확인',
+          toConfirmAccountMessage:
+            '계정 생성을 완료하려면 아래 링크를 클릭하세요:',
         },
         advocateApproved: {
           subject: '계정이 승인되었습니다',
@@ -1952,6 +1999,14 @@ export const translations = (
               'Ձեր զանգվածային թարմացումը հանդիպեց սխալի և չհաջողվեց ավարտել։',
             help: 'Ձախողված տողից առաջ գրառումները թարմացվել են։ Եթե Ձեր ֆայլի կրկնակի վերբեռնումը չլուծի խնդիրը, խնդրում ենք կապվել աջակցման թիմի հետ։',
           },
+        },
+        register: {
+          welcome: 'Բարի գալուստ',
+          welcomeMessage:
+            'Շնորհակալություն %{appUrl}-ում Ձեր հաշիվը ստեղծելու համար: Այժմ Ձեզ համար ավելի հեշտ կլինի սկսել, պահպանել և ներկայացնել առցանց դիմումներ կայքում հրապարակված ցուցակների համար:',
+          confirmMyAccount: 'Հաստատել իմ հաշիվը',
+          toConfirmAccountMessage:
+            'Ձեր հաշվի ստեղծումն ավարտելու համար, խնդրում ենք սեղմել ստորև բերված հղումը:',
         },
         advocateApproved: {
           subject: 'Ձեր հաշիվը հաստատվել է',
@@ -2224,6 +2279,14 @@ export const translations = (
             message: 'به‌روزرسانی گروهی شما با خطا مواجه شد و قابل تکمیل نبود.',
             help: 'سوابق پیش از ردیف ناموفق به‌روزرسانی شده‌اند. اگر بارگذاری مجدد فایل شما مشکل را برطرف نکرد، لطفاً با تیم پشتیبانی تماس بگیرید.',
           },
+        },
+        register: {
+          welcome: 'خوش آمدید',
+          welcomeMessage:
+            'از اینکه حساب خود را در %{appUrl} ایجاد کردید سپاسگزاریم. اکنون شروع، ذخیره و ارسال درخواست‌های آنلاین برای آگهی‌های موجود در سایت برای شما آسان‌تر خواهد بود.',
+          confirmMyAccount: 'تأیید حساب من',
+          toConfirmAccountMessage:
+            'برای تکمیل ایجاد حساب خود، لطفاً روی پیوند زیر کلیک کنید:',
         },
         advocateApproved: {
           subject: 'حساب شما تأیید شد',
