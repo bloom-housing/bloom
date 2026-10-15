@@ -1383,7 +1383,7 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
-                featureFlag !== FeatureFlagEnum.enableReferralQuestionUnits,
+                featureFlag === FeatureFlagEnum.disableCommonApplication,
             }}
           >
             <ListingContext.Provider
