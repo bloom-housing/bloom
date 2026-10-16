@@ -185,7 +185,7 @@ export class JurisdictionContentService {
     );
 
     const logoFileId = footerLogo(dto.footer)?.logoFileId;
-    if (logoFileId && !isUsableFileId(logoFileId)) {
+    if (typeof logoFileId === 'string' && !isUsableFileId(logoFileId)) {
       throw new BadRequestException(
         `file id ${logoFileId} is not a usable storage key`,
       );
