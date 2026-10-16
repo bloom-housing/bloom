@@ -2403,6 +2403,7 @@ export const realisticAddressesForOtherStatuses = [
 ];
 
 const featureFlags = [
+  FeatureFlagEnum.disableAccessibilityFeaturesTag,
   FeatureFlagEnum.disableEthnicityQuestion,
   FeatureFlagEnum.disableHowToContact,
   FeatureFlagEnum.disableReferralOpportunity,
