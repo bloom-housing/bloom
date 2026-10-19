@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
   cpu    = var.bloom_api_resource_limits.vcpu
   memory = var.bloom_api_resource_limits.memory_mib
 
-  container_definitions = jsonencode([
+  container_definitions = jsonencode(concat([
     {
       Name        = "bloom-api"
       essential   = true
@@ -90,7 +90,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
     }
   ],
   local.otel_sidecar_container
-  )
+  ))
 }
 resource "aws_ecs_service" "bloom_api" {
   depends_on = [
