@@ -1,9 +1,3 @@
-variable "observability_collection_enabled" {
-  type    = bool
-  default = true
-}
-
-
 locals {
   otel_env_vars = var.observability_collection_enabled ? {
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
