@@ -16,7 +16,7 @@ locals {
     OTEL_SDK_DISABLED = true // needed or the app will keep trying to export and spam logs with errors
   }
 
-  otel_sidecar_container = observability_collection_enabled ? [
+  otel_sidecar_container = var.observability_collection_enabled ? [
     {
       name      = "otel-sidecar"
       image     = var.bloom_otel_collector_image
@@ -50,11 +50,11 @@ locals {
 }
 
 output "otel_sidecar_container" {
-  value = otel_sidecar_container
+  value = local.otel_sidecar_container
 }
 
 output "otel_env_vars" {
-  value = otel_env_vars
+  value = local.otel_env_vars
 }
 
 resource "aws_prometheus_workspace" "bloom" {
@@ -214,8 +214,8 @@ data "external" "grafana_token" {
 
 
 provider "grafana" {
-  url  = var.grafana_config_enabled ? "https://${aws_grafana_workspace.bloom[0].endpoint}" : "https://localhost"
-  auth = var.grafana_config_enabled ? data.external.grafana_token[0].result.key : "unused"
+  url  = var.grafana_config_enabled ? "https://${aws_grafana_workspace.bloom.endpoint}" : "https://localhost"
+  auth = var.grafana_config_enabled ? data.external.grafana_token.result.key : "unused"
 }
 
 resource "grafana_data_source" "prometheus" {
@@ -238,6 +238,7 @@ resource "grafana_data_source" "prometheus" {
     sigV4Region   = var.aws_region
   })
 }
+
 resource "grafana_dashboard" "bloom" {
   for_each    = fileset(path.module, "dashboards/*.json")
   config_json = file("${path.module}/${each.value}")
