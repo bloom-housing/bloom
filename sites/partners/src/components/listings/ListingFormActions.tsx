@@ -23,7 +23,7 @@ import {
 import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
-import { createDate } from "../../lib/helpers"
+import { createDate, isAdminRole } from "../../lib/helpers"
 import { getValidFutureScheduledDate, publishesLandUseToClosed } from "./helpers"
 
 export enum ListingFormActionsType {
@@ -89,8 +89,7 @@ const ListingFormActions = ({
 
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
-    profile?.userRoles?.isAdmin ||
-    profile?.userRoles?.isSupportAdmin ||
+    isAdminRole(profile?.userRoles) ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
       duplicateListingPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
     (profile?.userRoles?.isLimitedJurisdictionalAdmin &&

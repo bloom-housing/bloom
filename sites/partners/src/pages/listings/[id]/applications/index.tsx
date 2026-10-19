@@ -34,6 +34,7 @@ import {
   useSSE,
   useZipExport,
 } from "../../../../lib/hooks"
+import { isAdminRole } from "../../../../lib/helpers"
 
 interface BulkUploadJobNotification {
   jobId: string
@@ -152,11 +153,10 @@ const ApplicationsList = () => {
 
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
-  const allowNewApps = !(
+  const disallowNewApps =
     listingDto?.status === "closed" &&
     enableOnlyAdminCanAddAppsAfterClose &&
-    (!profile.userRoles?.isAdmin || !profile.userRoles?.isSuperAdmin)
-  )
+    !isAdminRole(profile.userRoles)
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -346,7 +346,7 @@ const ApplicationsList = () => {
                           }}
                           headerContent={
                             <div className="flex gap-2 items-center">
-                              {allowNewApps && (
+                              {!disallowNewApps && (
                                 <Button
                                   onClick={() => {
                                     if (

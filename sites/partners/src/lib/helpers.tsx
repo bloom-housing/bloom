@@ -18,6 +18,7 @@ import {
   Application,
   AssetsService,
   IncomePeriodEnum,
+  UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import * as styles from "../components/listings/PaperListingForm/ListingForm.module.scss"
 
@@ -505,4 +506,8 @@ export const mergeApplicationNames = (applications: Application[]) => {
   }, [])
 
   return `${names.join(", ")}`
+}
+
+export const isAdminRole = (userRoles: UserRole) => {
+  return userRoles?.isAdmin || userRoles?.isSuperAdmin || userRoles?.isSupportAdmin
 }
