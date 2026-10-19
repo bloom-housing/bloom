@@ -3,11 +3,6 @@ variable "observability_collection_enabled" {
   default = true
 }
 
-variable "grafana_config_enabled" {
-  type    = bool
-  default = true
-  description = "Manage in-Grafana resources. Must be false whenever the workspace is being created or destroyed"
-}
 
 locals {
   otel_env_vars = var.observability_collection_enabled ? {
@@ -214,8 +209,8 @@ data "external" "grafana_token" {
 
 
 provider "grafana" {
-  url  = var.grafana_config_enabled ? "https://${aws_grafana_workspace.bloom.endpoint}" : "https://localhost"
-  auth = var.grafana_config_enabled ? data.external.grafana_token.result.key : "unused"
+  url  = try("https://${aws_grafana_workspace.bloom.endpoint}","https://localhost")
+  auth = try(data.external.grafana_token.result.key, "unused")
 }
 
 resource "grafana_data_source" "prometheus" {
@@ -225,7 +220,6 @@ resource "grafana_data_source" "prometheus" {
   type       = "prometheus"
   name       = "Prometheus"
   is_default = true
-  count       = var.grafana_config_enabled ? 1 : 0
   url        = aws_prometheus_workspace.bloom.prometheus_endpoint
   # The prometheus API returns a 'Warning: Deprecated authentication method' message for this, but
   # these are the jsonData settings that are used when adding an aws managed prometheus data source
