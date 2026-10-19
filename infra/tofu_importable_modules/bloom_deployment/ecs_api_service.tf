@@ -13,12 +13,12 @@ locals {
     S3_REGION                   = var.aws_region
     S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
     S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
-    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
     SMS_PROVIDER                = var.bloom_api_sms_config == null ? "" : "aws"
     AWS_SMS_REGION              = var.bloom_api_sms_config == null ? "" : var.aws_region
     AWS_SMS_ORIGINATION_NUMBER  = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
   }
 }
+
 resource "aws_ecs_task_definition" "bloom_api" {
   region                   = var.aws_region
   family                   = "bloom-api"
@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
       Name        = "bloom-api"
       essential   = true
       image       = var.bloom_api_image
-      environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
+      environment = [for k, v in merge(local.api_default_env_vars, local.otel_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
       entryPoint  = ["bash"]
       # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash
       # hack for the prisma migrate command.
@@ -87,37 +87,10 @@ resource "aws_ecs_task_definition" "bloom_api" {
           "awslogs-stream-prefix" = "bloom-api"
         }
       }
-    },
-    {
-      name      = "otel-sidecar"
-      image     = var.bloom_otel_collector_image
-      essential = false
-      command   = ["--config", "/etc/api-ecs-sidecar-config.yaml"]
-      environment = [
-        {
-          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
-          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
-        }
-      ]
-      portMappings = [
-        {
-          containerPort = 4317
-          appProtocol   = "grpc"
-        }
-      ]
-      restartPolicy = {
-        enabled = true
-      }
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
-          "awslogs-stream-prefix" = "otel-sidecar"
-        }
-      }
     }
-  ])
+  ],
+  local.otel_sidecar_container
+  )
 }
 resource "aws_ecs_service" "bloom_api" {
   depends_on = [
