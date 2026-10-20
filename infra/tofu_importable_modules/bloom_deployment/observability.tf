@@ -38,6 +38,8 @@ locals {
   ] : []
 }
 
+
+
 output "otel_sidecar_container" {
   value = local.otel_sidecar_container
 }
