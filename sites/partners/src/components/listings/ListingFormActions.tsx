@@ -23,7 +23,7 @@ import {
 import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
-import { createDate } from "../../lib/helpers"
+import { createDate, isAdminRole } from "../../lib/helpers"
 import { getValidFutureScheduledDate, publishesLandUseToClosed } from "./helpers"
 
 export enum ListingFormActionsType {
@@ -89,8 +89,7 @@ const ListingFormActions = ({
 
   const duplicateListingPermissions = jurisdiction?.duplicateListingPermissions
   const isListingCopier =
-    profile?.userRoles?.isAdmin ||
-    profile?.userRoles?.isSupportAdmin ||
+    isAdminRole(profile?.userRoles) ||
     (profile?.userRoles?.isJurisdictionalAdmin &&
       duplicateListingPermissions?.includes(UserRoleEnum.jurisdictionAdmin)) ||
     (profile?.userRoles?.isLimitedJurisdictionalAdmin &&
@@ -117,6 +116,10 @@ const ListingFormActions = ({
   )
   const enableLandUse = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableLandUse,
+    listingJurisdiction?.id
+  )
+  const enableApproveAndPublishOnEdit = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApproveAndPublishOnEdit,
     listingJurisdiction?.id
   )
 
@@ -160,30 +163,28 @@ const ListingFormActions = ({
   const approveAndSetStatus = useCallback(
     async (status: ListingsStatusEnum = ListingsStatusEnum.active) => {
       try {
-        const result = await listingsService.update({
-          id: listing.id,
-          body: {
-            ...(listing as unknown as ListingUpdate),
-            // account for type mismatch between ListingMultiSelectQuestionType and IdDto
-            listingMultiselectQuestions: listing.listingMultiselectQuestions?.map(
-              (multiselectQuestions) => ({
-                ordinal: multiselectQuestions.ordinal,
-                id: multiselectQuestions.multiselectQuestions?.id,
-              })
-            ),
-            status,
-          },
-        })
-        if (result) {
-          addToast(
-            status === ListingsStatusEnum.scheduled
-              ? t("listings.approval.listingScheduled")
-              : status === ListingsStatusEnum.closed
-              ? t("listings.approval.listingClosed")
-              : t("listings.approval.listingPublished"),
-            { variant: "success" }
-          )
-          await router.push(`/`)
+        if (type === ListingFormActionsType.edit) {
+          submitFormWithStatus("redirect", ListingsStatusEnum.active)
+        } else {
+          // If not in edit mode, we only update the listing status so use the alternative update method
+          const result = await listingsService.updateListingStatus({
+            body: {
+              id: listing.id,
+              jurisdictions: listing.jurisdictions,
+              status,
+            },
+          })
+          if (result) {
+            addToast(
+              status === ListingsStatusEnum.scheduled
+                ? t("listings.approval.listingScheduled")
+                : status === ListingsStatusEnum.closed
+                ? t("listings.approval.listingClosed")
+                : t("listings.approval.listingPublished"),
+              { variant: "success" }
+            )
+            await router.push(`/`)
+          }
         }
       } catch (err) {
         if (err.response?.status === 400) {
@@ -197,7 +198,7 @@ const ListingFormActions = ({
         )
       }
     },
-    [addToast, listing, listingsService, router, setErrorAlert]
+    [addToast, listing, listingsService, router, setErrorAlert, type]
   )
 
   const unapproveAndSetStatus = useCallback(async () => {
@@ -581,9 +582,13 @@ const ListingFormActions = ({
       listing.status === ListingsStatusEnum.pendingReview &&
       type === ListingFormActionsType.edit
     ) {
-      if (isListingApprover && !profile?.userRoles.isPartner) {
-        elements.push(requestChangesButton)
-      } else if (profile?.userRoles.isSupportAdmin) {
+      if (
+        (isListingApprover && !profile?.userRoles.isPartner) ||
+        profile?.userRoles.isSupportAdmin
+      ) {
+        if (enableApproveAndPublishOnEdit) {
+          elements.push(approveAndPublishButton)
+        }
         elements.push(requestChangesButton)
       }
       if (profile?.userRoles.isPartner) {

@@ -58,6 +58,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
+import { ListingUpdateStatus } from '../dtos/listings/listing-status-update.dto';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -224,6 +225,24 @@ export class ListingController {
   @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async closeListings(): Promise<SuccessDTO> {
     return await this.listingService.closeListings();
+  }
+
+  @Put('updateListingStatus')
+  @ApiOperation({
+    summary: 'Update listing status by id',
+    operationId: 'updateListingStatus',
+  })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
+  @UseGuards(ApiKeyGuard)
+  async updateListingStatus(
+    @Request() req: ExpressRequest,
+    @Body() dto: ListingUpdateStatus,
+  ): Promise<Listing> {
+    return await this.listingService.updateStatus(
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put(':id')

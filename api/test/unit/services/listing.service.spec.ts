@@ -8899,4 +8899,183 @@ describe('Testing listing service', () => {
       expect(result).toBe(storedDate);
     });
   });
+
+  describe('Test updateStatus endpoint', () => {
+    it('should update status on a simple listing', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await service.updateStatus(
+        {
+          id: randomUUID(),
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.active,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          closedAt: undefined,
+          contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: undefined,
+            },
+          },
+          publishedAt: expect.anything(),
+          status: 'active',
+        },
+        include: includeViews.full,
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
+    });
+
+    it('should fail to update status on a simple listing', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        listingApprovalPermissions: [UserRoleEnum.supportAdmin],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await expect(
+        async () =>
+          await service.updateStatus(
+            {
+              id: 'example id',
+              jurisdictions: {
+                id: randomUUID(),
+              },
+              status: ListingsStatusEnum.active,
+            } as ListingUpdate,
+            { ...user, userRoles: { isAdmin: true } },
+          ),
+      ).rejects.toThrowError(
+        `User does not have permissions to approve listing example id`,
+      );
+
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        { ...user, userRoles: { isAdmin: true } },
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listingSnapshot.create).not.toHaveBeenCalled();
+    });
+
+    it('should update status on a simple listing when approval perms are used', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        listingApprovalPermissions: [UserRoleEnum.admin],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await service.updateStatus(
+        {
+          id: randomUUID(),
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.active,
+        } as ListingUpdate,
+        { ...user, userRoles: { isAdmin: true } },
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          closedAt: undefined,
+          contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: undefined,
+            },
+          },
+          publishedAt: expect.anything(),
+          status: 'active',
+        },
+        include: includeViews.full,
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        { ...user, userRoles: { isAdmin: true } },
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
+    });
+  });
 });
