@@ -1,21 +1,21 @@
 locals {
   api_default_env_vars = {
-    PORT                        = "3100"
-    NODE_ENV                    = "production"
-    DB_HOST                     = aws_db_instance.bloom.address
-    DB_PORT                     = "5432"
-    DB_USER                     = "bloom_api"
-    DB_DATABASE                 = "bloom_prisma"
-    DB_USE_RDS_IAM_AUTH         = "1"
-    USE_AWS_SES                 = "1"
-    GOOGLE_API_ID               = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
-    GOOGLE_API_EMAIL            = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
-    S3_REGION                   = var.aws_region
-    S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
-    S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
-    SMS_PROVIDER                = var.bloom_api_sms_config == null ? "" : "aws"
-    AWS_SMS_REGION              = var.bloom_api_sms_config == null ? "" : var.aws_region
-    AWS_SMS_ORIGINATION_NUMBER  = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
+    PORT                       = "3100"
+    NODE_ENV                   = "production"
+    DB_HOST                    = aws_db_instance.bloom.address
+    DB_PORT                    = "5432"
+    DB_USER                    = "bloom_api"
+    DB_DATABASE                = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH        = "1"
+    USE_AWS_SES                = "1"
+    GOOGLE_API_ID              = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
+    GOOGLE_API_EMAIL           = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
+    S3_REGION                  = var.aws_region
+    S3_PRIVATE_BUCKET          = aws_s3_bucket.private.id
+    S3_PUBLIC_BUCKET           = aws_s3_bucket.public.id
+    SMS_PROVIDER               = var.bloom_api_sms_config == null ? "" : "aws"
+    AWS_SMS_REGION             = var.bloom_api_sms_config == null ? "" : var.aws_region
+    AWS_SMS_ORIGINATION_NUMBER = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
   }
 }
 
