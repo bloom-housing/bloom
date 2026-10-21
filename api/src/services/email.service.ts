@@ -1414,7 +1414,7 @@ export class EmailService {
       void (await this.loadTranslations(jurisdiction, 'en'));
 
       this.logger.log(
-        `Sending lottery published govDelivery email for listing ${listing.name}`,
+        `Sending listing published govDelivery email for listing ${listing.name}`,
       );
 
       const listingDetails = this.buildListingDetails(
