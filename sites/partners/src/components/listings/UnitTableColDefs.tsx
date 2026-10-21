@@ -110,7 +110,7 @@ const unitCellText: Record<string, (value: unknown) => string> = {
   unitType: formatUnitTypes,
   amiChart: formatPlain,
   amiPercentage: formatPlain,
-  monthlyRent: formatPlain,
+  monthlyRent: formatRent,
   sqFeet: formatPlain,
   accessibilityPriorityType: formatAccessibility,
 }
@@ -142,8 +142,10 @@ const sortByAccessibilityText: SortingFn<TableDataRow> = (rowA, rowB, columnId) 
     formatAccessibility(rowB.getValue(columnId))
   )
 
-const unitTypeRank = (names: string[]): number => {
-  const ranks = names.map((name) => UnitTypeSort.indexOf(name)).filter((rank) => rank !== -1)
+const unitTypeRank = (names: string[] | undefined): number => {
+  const ranks = (names ?? [])
+    .map((name) => UnitTypeSort.indexOf(name))
+    .filter((rank) => rank !== -1)
 
   return ranks.length ? Math.min(...ranks) : -1
 }
@@ -195,9 +197,14 @@ const textColumn = (
     },
   })
 
+const unitColumn = (id: string, headerKey: string, options: TextColumnOptions = {}) =>
+  textColumn(id, headerKey, {
+    cell: (props) => unitCellText[id](props.getValue()),
+    ...options,
+  })
+
 const unitTypeColumn = () =>
-  textColumn("unitType", "listings.unit.type", {
-    cell: (props) => formatUnitTypes(props.getValue()),
+  unitColumn("unitType", "listings.unit.type", {
     sortable: true,
     sortingFn: sortByUnitTypeOrder,
   })
@@ -231,30 +238,28 @@ export const getUnitColumns = ({
         textColumn("bath", "listings.unit.bath", { size: 70 }),
       ]
     : [
-        textColumn("number", "listings.unit.number", {
+        unitColumn("number", "listings.unit.number", {
           sortable: true,
           sortingFn: sortNaturally,
         }),
         unitTypeColumn(),
-        textColumn("amiChart", "listings.unit.amiChart", {
+        unitColumn("amiChart", "listings.unit.amiChart", {
           sortable: true,
           sortingFn: sortNaturally,
         }),
-        textColumn("amiPercentage", "t.ami", {
+        unitColumn("amiPercentage", "t.ami", {
           sortable: true,
           sortingFn: sortNumerically,
         }),
-        textColumn("monthlyRent", "listings.unit.rent", {
-          cell: (props) => formatRent(props.getValue()),
+        unitColumn("monthlyRent", "listings.unit.rent", {
           sortable: true,
           sortingFn: sortNumerically,
         }),
-        textColumn("sqFeet", "listings.unit.sqft", {
+        unitColumn("sqFeet", "listings.unit.sqft", {
           sortable: true,
           sortingFn: sortNumerically,
         }),
-        textColumn("accessibilityPriorityType", "listings.unit.accessibilityPriorityType", {
-          cell: (props) => formatAccessibility(props.getValue()),
+        unitColumn("accessibilityPriorityType", "listings.unit.accessibilityPriorityType", {
           sortable: true,
           sortingFn: sortByAccessibilityText,
           wrapHeader: true,
