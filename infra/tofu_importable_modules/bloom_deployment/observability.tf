@@ -1,7 +1,7 @@
 locals {
   otel_env_vars = var.observability_collection_enabled ? {
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
-  } : {
+    } : {
     OTEL_SDK_DISABLED = true // needed or the app will keep trying to export and spam logs with errors
   }
 
@@ -205,7 +205,7 @@ data "external" "grafana_token" {
 
 
 provider "grafana" {
-  url  = try("https://${aws_grafana_workspace.bloom.endpoint}","https://localhost")
+  url  = try("https://${aws_grafana_workspace.bloom.endpoint}", "https://localhost")
   auth = try(data.external.grafana_token.result.key, "unused")
 }
 

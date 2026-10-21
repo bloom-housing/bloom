@@ -56,8 +56,8 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
         }
       }
     }
-  ],
-  local.otel_sidecar_container
+    ],
+    local.otel_sidecar_container
   ))
 }
 resource "aws_ecs_service" "bloom_site_partners" {
