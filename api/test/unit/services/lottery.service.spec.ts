@@ -716,6 +716,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryLastRunAt: expect.anything(),
+          lotteryLastPublishedAt: null,
           lotteryStatus: LotteryStatusEnum.ran,
         },
         where: {
@@ -1285,6 +1286,7 @@ describe('Testing lottery service', () => {
       expect(prisma.listings.update).toHaveBeenCalledWith({
         data: {
           lotteryLastRunAt: expect.anything(),
+          lotteryLastPublishedAt: null,
           lotteryStatus: LotteryStatusEnum.ran,
         },
         where: {

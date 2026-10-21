@@ -372,7 +372,11 @@ export class LotteryService {
   ): Promise<SuccessDTO> {
     let updateData: any;
     if (status === LotteryStatusEnum.ran) {
-      updateData = { lotteryStatus: status, lotteryLastRunAt: new Date() };
+      updateData = {
+        lotteryStatus: status,
+        lotteryLastRunAt: new Date(),
+        lotteryLastPublishedAt: null,
+      };
     } else if (status === LotteryStatusEnum.publishedToPublic) {
       updateData = {
         lotteryStatus: status,
