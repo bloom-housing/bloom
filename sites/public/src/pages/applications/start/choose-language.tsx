@@ -95,8 +95,14 @@ const ApplicationChooseLanguage = () => {
     })
   }, [profile])
 
+  // Separate from the effect below, which reruns on each _app render and would clear sessionStorage.
   useEffect(() => {
     conductor.reset()
+    context.syncApplication(conductor.application)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingId])
+
+  useEffect(() => {
     if (!router.isReady && !listingId) return
     if (router.isReady) {
       if (!listingId || (process.env.showMandatedAccounts && initialStateLoaded && !profile)) {
@@ -165,6 +171,7 @@ const ApplicationChooseLanguage = () => {
         jurisdictionsService,
         profile?.isAdvocate ?? false
       ).then(() => {
+        conductor.sync()
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
