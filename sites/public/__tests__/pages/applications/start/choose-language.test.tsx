@@ -51,23 +51,21 @@ const AppSubmissionProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-const renderChooseLanguage = () =>
-  render(
+const renderChooseLanguage = () => {
+  const listingsRetrieve = jest.fn().mockImplementation(({ id }, options) =>
+    Promise.resolve({
+      ...listing,
+      id,
+      name: `${listing.name} (${options.headers.language})`,
+      jurisdictions: { id: jurisdiction.id },
+    })
+  )
+  const page = (
     <AuthContext.Provider
       value={{
         initialStateLoaded: true,
-        listingsService: {
-          retrieve: jest.fn().mockImplementation((_params, options) =>
-            Promise.resolve({
-              ...listing,
-              name: `${listing.name} (${options.headers.language})`,
-              jurisdictions: { id: jurisdiction.id },
-            })
-          ),
-        },
-        jurisdictionsService: {
-          retrieve: jest.fn().mockResolvedValue(jurisdiction),
-        },
+        listingsService: { retrieve: listingsRetrieve },
+        jurisdictionsService: { retrieve: jest.fn().mockResolvedValue(jurisdiction) },
       }}
     >
       <AppSubmissionProvider>
@@ -75,6 +73,10 @@ const renderChooseLanguage = () =>
       </AppSubmissionProvider>
     </AuthContext.Provider>
   )
+  const result = render(page)
+
+  return { ...result, listingsRetrieve, rerenderPage: () => result.rerender(page) }
+}
 
 beforeAll(() => {
   server.listen()
@@ -89,6 +91,15 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
 describe("choose language step", () => {
+  it("loads the listing once before a language is chosen", async () => {
+    mockNextRouter({ listingId: listing.id })
+    const { findByText, listingsRetrieve } = renderChooseLanguage()
+
+    await findByText("Español")
+
+    expect(listingsRetrieve).toHaveBeenCalledTimes(1)
+  })
+
   it("saves the application and the listing when a language is chosen", async () => {
     const { pushMock } = mockNextRouter({ listingId: listing.id })
     const { findByText } = renderChooseLanguage()
@@ -119,5 +130,21 @@ describe("choose language step", () => {
 
     const savedApplication = JSON.parse(window.sessionStorage.getItem("bloom-app-autosave"))
     expect(savedApplication.applicant.firstName).toBe("")
+  })
+
+  it("starts a new application when the listing changes", async () => {
+    const { pushMock } = mockNextRouter({ listingId: listing.id })
+    const { findByText, listingsRetrieve, rerenderPage } = renderChooseLanguage()
+
+    fireEvent.click(await findByText("Español"))
+    await waitFor(() => expect(pushMock).toHaveBeenCalled())
+
+    mockNextRouter({ listingId: "other-listing" })
+    rerenderPage()
+
+    await waitFor(() =>
+      expect(listingsRetrieve).toHaveBeenLastCalledWith({ id: "other-listing" }, expect.anything())
+    )
+    expect(window.sessionStorage.getItem("bloom-app-autosave")).toBeNull()
   })
 })

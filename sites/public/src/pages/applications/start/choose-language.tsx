@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { ImageCard, t } from "@bloom-housing/ui-components"
@@ -86,6 +86,7 @@ const ApplicationChooseLanguage = () => {
   const { conductor } = context
 
   const listingId = router.query.listingId
+  const loadingListingId = useRef<typeof listingId>(undefined)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -110,6 +111,8 @@ const ApplicationChooseLanguage = () => {
       }
     }
     if (!context.listing || context.listing.id !== listingId) {
+      if (loadingListingId.current === listingId) return
+      loadingListingId.current = listingId
       void loadListing(
         listingId,
         setListing,
