@@ -944,11 +944,15 @@ export class ApplicationService {
                       ...dto.applicant.applicantAddress,
                     },
                   },
-                  applicantWorkAddress: {
-                    create: {
-                      ...dto.applicant.applicantWorkAddress,
-                    },
-                  },
+                  applicantWorkAddress:
+                    !disableWorkInRegion &&
+                    dto.applicant.workInRegion === YesNoEnum.yes
+                      ? {
+                          create: {
+                            ...dto.applicant.applicantWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: dto.applicant.firstName?.trim(),
                   lastName: dto.applicant.lastName?.trim(),
                   birthDay: dto.applicant.birthDay
@@ -1437,11 +1441,15 @@ export class ApplicationService {
                       ...dto.applicant.applicantAddress,
                     },
                   },
-                  applicantWorkAddress: {
-                    create: {
-                      ...dto.applicant.applicantWorkAddress,
-                    },
-                  },
+                  applicantWorkAddress:
+                    !disableWorkInRegion &&
+                    dto.applicant.workInRegion === YesNoEnum.yes
+                      ? {
+                          create: {
+                            ...dto.applicant.applicantWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: dto.applicant.firstName?.trim(),
                   lastName: dto.applicant.lastName?.trim(),
                   birthDay: dto.applicant.birthDay
