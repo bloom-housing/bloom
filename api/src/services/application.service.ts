@@ -1501,6 +1501,7 @@ export class ApplicationService {
                       ? {
                           create: {
                             ...member.householdMemberAddress,
+                            id: undefined,
                           },
                         }
                       : undefined,
@@ -1511,6 +1512,7 @@ export class ApplicationService {
                       ? {
                           create: {
                             ...member.householdMemberWorkAddress,
+                            id: undefined,
                           },
                         }
                       : undefined,
