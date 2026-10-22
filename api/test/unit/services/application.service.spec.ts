@@ -188,6 +188,7 @@ export const mockCreateApplicationData = (
   exampleAddress: AddressCreate,
   submissionDate: Date,
   multiselectQuestionId?: string,
+  disableWorkInRegion?: boolean,
 ): ApplicationCreate => {
   return {
     acceptedTerms: true,
@@ -262,10 +263,12 @@ export const mockCreateApplicationData = (
         birthMonth: '12',
         birthDay: '17',
         birthYear: '1993',
-        sameAddress: YesNoEnum.yes,
+        sameAddress: YesNoEnum.no,
         relationship: HouseholdMemberRelationship.other,
-        workInRegion: YesNoEnum.yes,
-        householdMemberWorkAddress: exampleAddress,
+        workInRegion: !disableWorkInRegion ? YesNoEnum.yes : undefined,
+        householdMemberWorkAddress: !disableWorkInRegion
+          ? exampleAddress
+          : undefined,
         householdMemberAddress: exampleAddress,
       },
     ],
@@ -335,12 +338,13 @@ const buildExpectedApplicationData = ({
   dto,
   submissionDate,
   preferredUnitTypesMode = 'connect',
+  disableWorkInRegion,
 }: {
   exampleAddress: AddressCreate;
   dto: { listings: { id: string } };
   submissionDate: any;
   preferredUnitTypesMode?: 'connect' | 'set';
-  includeApplicationSelections?: boolean;
+  disableWorkInRegion?: boolean;
 }) => {
   const preferredUnitTypes =
     preferredUnitTypesMode === 'set'
@@ -455,19 +459,21 @@ const buildExpectedApplicationData = ({
           birthMonth: 12,
           birthDay: 17,
           birthYear: 1993,
-          sameAddress: YesNoEnum.yes,
+          sameAddress: YesNoEnum.no,
           relationship: HouseholdMemberRelationship.other,
-          workInRegion: YesNoEnum.yes,
+          workInRegion: !disableWorkInRegion ? YesNoEnum.yes : undefined,
           householdMemberAddress: {
             create: {
               ...exampleAddress,
             },
           },
-          householdMemberWorkAddress: {
-            create: {
-              ...exampleAddress,
-            },
-          },
+          householdMemberWorkAddress: !disableWorkInRegion
+            ? {
+                create: {
+                  ...exampleAddress,
+                },
+              }
+            : undefined,
         },
       ],
     },
@@ -2219,6 +2225,86 @@ describe('Testing application service', () => {
                 },
               },
               multiselectOption: true,
+            },
+          },
+        },
+      });
+
+      expect(canOrThrowMock).not.toHaveBeenCalled();
+    });
+
+    it('should create an application from public site with disableWorkInRegion enabled', async () => {
+      const multiselectQuestionId = randomUUID();
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        applicationDueDate: dayjs(new Date()).add(5, 'days').toDate(),
+        commonDigitalApplication: true,
+        digitalApplication: true,
+        jurisdictions: {
+          id: randomUUID(),
+          featureFlags: [
+            { name: FeatureFlagEnum.disableWorkInRegion, active: true },
+            { name: FeatureFlagEnum.enableV2MSQ, active: true },
+          ],
+        },
+
+        listingMultiselectQuestions: [
+          { multiselectQuestionId: multiselectQuestionId },
+        ],
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+
+      prisma.applications.updateMany = jest.fn().mockResolvedValue({});
+      prisma.applications.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.$transaction = jest
+        .fn()
+        .mockResolvedValue([
+          prisma.applications.updateMany,
+          { id: randomUUID() },
+        ]);
+
+      prisma.address.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.applicationSelections.create = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+      });
+      prisma.applicationSelectionOptions.update = jest
+        .fn()
+        .mockResolvedValue(null);
+
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto = mockCreateApplicationData(
+        exampleAddress,
+        new Date(),
+        multiselectQuestionId,
+        true,
+      );
+
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: randomUUID() });
+
+      await service.create(dto, true, requestingUser);
+
+      expect(prisma.applications.create).toHaveBeenCalledWith({
+        include: { ...detailView },
+        data: {
+          isNewest: true,
+          confirmationCode: expect.anything(),
+          ...buildExpectedApplicationData({
+            exampleAddress,
+            dto,
+            submissionDate: expect.any(Date),
+            disableWorkInRegion: true,
+          }),
+          userAccounts: {
+            connect: {
+              id: requestingUser.id,
             },
           },
         },
