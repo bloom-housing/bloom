@@ -224,8 +224,8 @@ export const mockCreateApplicationData = (
       phoneNumber: '111-111-1111',
       phoneNumberType: 'Cell',
       noPhone: false,
-      workInRegion: YesNoEnum.yes,
-      applicantWorkAddress: exampleAddress,
+      workInRegion: !disableWorkInRegion ? YesNoEnum.yes : undefined,
+      applicantWorkAddress: !disableWorkInRegion ? exampleAddress : undefined,
       applicantAddress: exampleAddress,
     },
     applicationSelections: multiselectQuestionId
@@ -384,17 +384,19 @@ const buildExpectedApplicationData = ({
         phoneNumber: '111-111-1111',
         phoneNumberType: 'Cell',
         noPhone: false,
-        workInRegion: YesNoEnum.yes,
+        workInRegion: !disableWorkInRegion ? YesNoEnum.yes : undefined,
         applicantAddress: {
           create: {
             ...exampleAddress,
           },
         },
-        applicantWorkAddress: {
-          create: {
-            ...exampleAddress,
-          },
-        },
+        applicantWorkAddress: !disableWorkInRegion
+          ? {
+              create: {
+                ...exampleAddress,
+              },
+            }
+          : undefined,
       },
     },
     accessibility: {
