@@ -438,7 +438,7 @@ describe("helpers", () => {
     it("should return correctly under with construction and marketing disabled", () => {
       const result = getListingStatusMessageContent(
         ListingsStatusEnum.active,
-        dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+        new Date("2030-07-15T17:30:00.000Z"),
         false,
         false,
         MarketingTypeEnum.comingSoon,
@@ -453,7 +453,7 @@ describe("helpers", () => {
     it("should return date but hide time", () => {
       const result = getListingStatusMessageContent(
         ListingsStatusEnum.active,
-        dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+        new Date("2030-07-15T17:30:00.000Z"),
         false,
         false,
         MarketingTypeEnum.comingSoon,
@@ -552,7 +552,7 @@ describe("helpers", () => {
       getListingStatusMessage(
         {
           ...listing,
-          applicationDueDate: dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+          applicationDueDate: new Date("2030-07-15T17:30:00.000Z"),
           status: ListingsStatusEnum.active,
         },
         jurisdiction,
@@ -561,7 +561,7 @@ describe("helpers", () => {
         false
       )
     )
-    expect(view.getByText("10:30AM", { exact: false })).toBeDefined()
+    expect(view.getByText(/10:30AM/)).toBeDefined()
   })
   it("should show short applications open copy in the status bar for future scheduled open date", () => {
     const view = render(
@@ -587,7 +587,7 @@ describe("helpers", () => {
       getListingStatusMessage(
         {
           ...listing,
-          applicationDueDate: dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+          applicationDueDate: new Date("2030-07-15T17:30:00.000Z"),
           status: ListingsStatusEnum.active,
         },
         jurisdiction,
