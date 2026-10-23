@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useCallback, useContext, useMemo } from "react"
 import { t } from "@bloom-housing/ui-components"
 import { Button, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -9,8 +9,9 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
-import { DataTable } from "../../../shared/DataTable"
-import { getUnitColumns, unitGroupToRow, unitToRow } from "../../UnitTableColDefs"
+import { DataTable, TableDataRow } from "../../../shared/DataTable"
+import { ListingUnitsTable } from "../../UnitsTable/ListingUnitsTable"
+import { getUnitColumns, unitGroupToRow } from "../../UnitTableColDefs"
 import unitTableStyles from "../../UnitTableColDefs.module.scss"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 
@@ -45,35 +46,31 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const showNonRegulated =
     enableNonRegulatedListings && listing.listingType === EnumListingListingType.nonRegulated
 
-  const unitColumns = useMemo(
-    () =>
-      getUnitColumns({
-        enableUnitGroups,
-        showNonRegulated,
-        disableSorting: true,
-        actionsCell: enableUnitGroups
-          ? undefined
-          : (row) => (
-              <Button
-                type="button"
-                variant="text"
-                size="sm"
-                className={"font-semibold darker-link"}
-                onClick={() => setUnitDrawer(listing.units.find((unit) => unit.id === row.id))}
-              >
-                {t("t.view")}
-              </Button>
-            ),
-      }),
-    [enableUnitGroups, showNonRegulated, listing.units, setUnitDrawer]
+  const viewUnitCell = useCallback(
+    (row: TableDataRow) => (
+      <Button
+        type="button"
+        variant="text"
+        size="sm"
+        className={"font-semibold darker-link"}
+        onClick={() => setUnitDrawer(listing.units.find((unit) => unit.id === row.id))}
+      >
+        {t("t.view")}
+      </Button>
+    ),
+    [listing.units, setUnitDrawer]
   )
 
-  const unitRows = useMemo(() => {
-    if (enableUnitGroups) {
-      return listing.unitGroups.map((unitGroup) => unitGroupToRow(unitGroup, showNonRegulated))
-    }
-    return listing.units.map(unitToRow)
-  }, [listing.units, listing.unitGroups, enableUnitGroups, showNonRegulated])
+  const unitGroupColumns = useMemo(
+    () => getUnitColumns({ enableUnitGroups: true, showNonRegulated, disableSorting: true }),
+    [showNonRegulated]
+  )
+
+  const unitGroupRows = useMemo(
+    () =>
+      (listing.unitGroups ?? []).map((unitGroup) => unitGroupToRow(unitGroup, showNonRegulated)),
+    [listing.unitGroups, showNonRegulated]
+  )
 
   const listingAvailabilityText = useMemo(() => {
     switch (listing?.reviewOrderType) {
@@ -123,15 +120,17 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       )}
       <Grid.Row>
         <Grid.Cell>
-          {(enableUnitGroups ? !!listing.unitGroups : !!listing.units.length) ? (
+          {enableUnitGroups && listing.unitGroups ? (
             <DataTable
               description={t("listings.units")}
-              columns={unitColumns}
-              data={unitRows}
+              columns={unitGroupColumns}
+              data={unitGroupRows}
               disablePagination
               id={"unitTable"}
               tableClassName={unitTableStyles["unit-table"]}
             />
+          ) : !enableUnitGroups && listing.units.length ? (
+            <ListingUnitsTable id={"unitTable"} units={listing.units} actionsCell={viewUnitCell} />
           ) : (
             <>
               <hr className="spacer-header" />
