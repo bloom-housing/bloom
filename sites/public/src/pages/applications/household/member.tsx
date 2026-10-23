@@ -105,6 +105,13 @@ const ApplicationMember = () => {
   if (router.query?.memberId) {
     memberId = parseInt(router.query?.memberId.toString())
     member = application.householdMember[memberId]
+    if (disableWorkInRegion) {
+      member.householdMemberWorkAddress = undefined
+      member.workInRegion = undefined
+    }
+    if (!enableFullTimeStudentQuestion) {
+      member.fullTimeStudent = undefined
+    }
     saveText = t("application.household.member.updateHouseholdMember")
     cancelText = t("application.household.member.deleteThisPerson")
   } else {
