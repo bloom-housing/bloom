@@ -253,8 +253,8 @@ locals {
           "rds",            # to generate an auth token for bloom_api DB user.
           "aps-workspaces", # to write metrics.
         ]
-        nat             = true # to download container image from GitHub.
-        security_groups = ["db"]
+        nat             = true                  # to download container image from GitHub.
+        security_groups = ["db", "site-public"] # site-public: to ask it to rebuild an edited page.
       }
     }
     "site-partners" : {

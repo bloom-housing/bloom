@@ -12,6 +12,7 @@ jest.mock('../../../src/locales/email-translations', () => ({
   baseTranslationRows: (language: string) => TEST_BASE[language] ?? [],
 }));
 
+import { HttpService } from '@nestjs/axios';
 import {
   ConflictException,
   ForbiddenException,
@@ -28,6 +29,7 @@ import {
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import dayjs from 'dayjs';
+import { of, throwError } from 'rxjs';
 import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { User } from '../../../src/dtos/users/user.dto';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
@@ -213,6 +215,7 @@ describe('Testing translations service', () => {
   let prisma: PrismaService;
   let googleTranslateServiceMock;
   let permissionServiceMock;
+  let httpServiceMock;
   let mockConsoleWarn;
   const adminUser = { id: 'admin-user' } as User;
 
@@ -222,6 +225,7 @@ describe('Testing translations service', () => {
       fetch: jest.fn(),
     };
     permissionServiceMock = { canOrThrow: jest.fn() };
+    httpServiceMock = { post: jest.fn().mockReturnValue(of({ data: {} })) };
     mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -235,6 +239,7 @@ describe('Testing translations service', () => {
           provide: PermissionService,
           useValue: permissionServiceMock,
         },
+        { provide: HttpService, useValue: httpServiceMock },
       ],
     }).compile();
 
@@ -244,10 +249,15 @@ describe('Testing translations service', () => {
     prisma.jurisdictions.findFirst = jest
       .fn()
       .mockResolvedValue({ id: 'jurisdiction' });
+    // revalidatePublicSite does nothing without a secret and a target, and CI has no api/.env.
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = 'test-secret';
+    process.env.PUBLIC_SITE_REVALIDATE_URLS = 'http://site';
   });
 
   afterEach(() => {
     mockConsoleWarn.mockRestore();
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET;
+    delete process.env.PUBLIC_SITE_REVALIDATE_URLS;
   });
 
   describe('listRawOverrides', () => {
@@ -411,6 +421,128 @@ describe('Testing translations service', () => {
       // both were attempted; key a was written despite key b conflicting
       expect(prisma.translationStrings.updateMany).toHaveBeenCalledTimes(2);
       expect(prisma.translationStrings.create).not.toHaveBeenCalled();
+    });
+
+    it('asks the public site to rebuild after a public override is saved', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        randomUUID(),
+        SiteEnum.public,
+        LanguagesEnum.en,
+        { edits: [{ key: 'test.translated', value: 'Edited' }] },
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
+    // The public site never reads the partners or email scopes, so rebuilding it would be work
+    // with no effect.
+    it('leaves the public site alone for the other scopes', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValue({});
+
+      await service.updateOverrides(
+        randomUUID(),
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        { edits: [{ key: 'test.translated', value: 'Edited' }] },
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).not.toHaveBeenCalled();
+    });
+
+    // The edits are applied independently, so the rows that did not conflict are already written.
+    it('rebuilds when only some of the edits conflicted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 })
+        .mockResolvedValueOnce({ count: 0 });
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'b-row' });
+
+      await expect(
+        service.updateOverrides(
+          randomUUID(),
+          SiteEnum.public,
+          LanguagesEnum.en,
+          {
+            edits: [
+              { key: 'a', value: 'A', lastUpdatedAt: new Date() },
+              { key: 'b', value: 'B', lastUpdatedAt: new Date() },
+            ],
+          },
+          adminUser,
+        ),
+      ).rejects.toThrow(ConflictException);
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
+    it('does not rebuild when every edit conflicted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 0 });
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'a-row' });
+
+      await expect(
+        service.updateOverrides(
+          randomUUID(),
+          SiteEnum.public,
+          LanguagesEnum.en,
+          { edits: [{ key: 'a', value: 'A', lastUpdatedAt: new Date() }] },
+          adminUser,
+        ),
+      ).rejects.toThrow(ConflictException);
+
+      expect(httpServiceMock.post).not.toHaveBeenCalled();
+    });
+
+    it('saves the override even when the public site cannot be reached', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+      httpServiceMock.post = jest
+        .fn()
+        .mockReturnValue(throwError(() => ({ message: 'ECONNREFUSED' })));
+
+      const result = await service.updateOverrides(
+        randomUUID(),
+        SiteEnum.public,
+        LanguagesEnum.en,
+        { edits: [{ key: 'test.translated', value: 'Edited' }] },
+        adminUser,
+      );
+
+      expect(result).toEqual({ success: true });
     });
 
     it('records the shipped english as the source for an email translation', async () => {
@@ -585,6 +717,49 @@ describe('Testing translations service', () => {
   });
 
   describe('deleteOverride', () => {
+    // Reverting to the shipped string changes the rendered page as much as setting an override.
+    it('asks the public site to rebuild after a public override is deleted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.deleteOverride(
+        randomUUID(),
+        SiteEnum.public,
+        LanguagesEnum.en,
+        'test.translated',
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).toHaveBeenCalledWith(
+        'http://site/api/revalidate',
+        {},
+        expect.anything(),
+      );
+    });
+
+    it('leaves the public site alone when another scope is deleted', async () => {
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValue({ id: 'jurisdiction' });
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.deleteOverride(
+        randomUUID(),
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        'test.translated',
+        adminUser,
+      );
+
+      expect(httpServiceMock.post).not.toHaveBeenCalled();
+    });
+
     it('deletes a key override after a permission check', async () => {
       const jurisdictionId = randomUUID();
       prisma.translationStrings.deleteMany = jest
