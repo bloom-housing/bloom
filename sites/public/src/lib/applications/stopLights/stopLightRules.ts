@@ -1,4 +1,3 @@
-import dayjs from "dayjs"
 import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type StopLightColor = "red" | "yellow"
@@ -14,30 +13,5 @@ export interface StopLightRule {
   editFieldAnchor?: string // element id to scroll/focus on "Update my answer", red light only
 }
 
-// Example for test purposes
-// ok to remove when not needed anymore
-const seniorBuildingAgeExample: StopLightRule = {
-  key: "seniorBuildingMinimumAge",
-  step: "primaryApplicantName",
-  light: "red",
-  evaluate: (application, listing) => {
-    const minimumAge = listing.reservedCommunityMinAge
-    if (!minimumAge) return false
-
-    const { birthYear, birthMonth, birthDay } = application.applicant
-    if (!birthYear || !birthMonth || !birthDay) return false
-
-    const dateOfBirth = dayjs(`${birthYear}-${birthMonth}-${birthDay}`)
-    if (!dateOfBirth.isValid()) return false
-
-    const applicantAge = dayjs().diff(dateOfBirth, "year")
-    return applicantAge < minimumAge
-  },
-  modalTitle: "stopLights.seniorBuildingMinimumAge.modalTitle",
-  alertTitle: "stopLights.seniorBuildingMinimumAge.alertTitle",
-  body: "stopLights.seniorBuildingMinimumAge.body",
-  editFieldAnchor: "applicant.dateOfBirth",
-}
-
 // For each new rule make sure to add `StopLightBanner` for a field that triggers the rule.
-export const stopLightRules: StopLightRule[] = [seniorBuildingAgeExample]
+export const stopLightRules: StopLightRule[] = []
