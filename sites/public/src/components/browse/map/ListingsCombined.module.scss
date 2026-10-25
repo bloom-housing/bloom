@@ -170,6 +170,11 @@
   min-height: var(--seeds-s32);
 }
 
+.listings-subheader {
+  font-family: var(--seeds-font-alt-sans);
+  color: var(--seeds-text-color-light);
+}
+
 .info-window {
   max-width: var(--seeds-s64);
 }
