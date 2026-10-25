@@ -35,6 +35,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [disableJurisdictionalAdmin](./feature-flags/disableJurisdictionalAdmin.md) | When true, jurisdictional admins cannot be created |
 | [disableListingPreferences](./feature-flags/disableListingPreferences.md) | When true, listings will no longer support preferences section |
 | [disablePartnerPublicListingEdits](./feature-flags/disablePartnerPublicListingEdits.md) | When true, partner users cannot edit open or closed listings, or unpublish open listings |
+| [disableReferralOpportunity](./feature-flags/disableReferralOpportunity.md) | When true, disables the referral opportunity question on the listing edit and detail pages on partner site |
 | [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
 | [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true, the "Work in Region" question will be removed from the application process |
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
@@ -42,6 +43,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
 | [enableApplicationExpirationNonAdmins](./feature-flags/enableApplicationExpirationNonAdmins.md) | When true, application data in the partner site will expire for non-admin users after 45 days |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
+| [enableApproveAndPublishOnEdit](./feature-flags/enableApproveAndPublishOnEdit.md) | When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving |
 | [enableAutoOpenDate](./feature-flags/enableAutoOpenDate.md) | When true, partners can set an optional scheduled listing applications open date |
 | [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
@@ -55,6 +57,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFilterByCounty](./feature-flags/enableFilterByCounty.md) | When true, the filter drawer on the public site includes the option to filter listings by county |
+| [enableFilterByStatus](./feature-flags/enableFilterByStatus.md) | When true, the filter drawer on the public site includes the option to filter listings by their status |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
@@ -100,7 +103,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enablePublicTermsOfUse](./feature-flags/enablePublicTermsOfUse.md) | When true, creating a user account on the public site will require the user to review and accept terms of use |
 | [enableReasonableAccommodations](./feature-flags/enableReasonableAccommodations.md) | When true, the reasonable accommodations question is shown in the public and partner application flow |
 | [enableReceivedAtAndByFields](./feature-flags/enableReceivedAtAndByFields.md) | When true, partners can view/edit paper application received at/by fields and include them in application exports |
-| [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | when true, updates the the referral details question labels |
+| [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | When true, updates the the referral opportunity question to be specifically about units |
 | [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
 | [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
 | [enableResourcesCard](./feature-flags/enableResourcesCard.md) | When true, a resource card will appear on the homepage to link to the additional resources page |

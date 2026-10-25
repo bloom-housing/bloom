@@ -8496,7 +8496,7 @@ describe('Testing listing service', () => {
   });
 
   describe('Test mapMarkers endpoint', () => {
-    it('should find all active listings', async () => {
+    it('should not add a status filter when none is requested', async () => {
       prisma.listings.findMany = jest.fn().mockResolvedValue([
         {
           id: 'random id',
@@ -8523,13 +8523,6 @@ describe('Testing listing service', () => {
                 equals: null,
               },
             },
-            {
-              OR: [
-                {
-                  status: { equals: ListingsStatusEnum.active },
-                },
-              ],
-            },
           ],
           buildingAddressId: {
             not: null,
@@ -8543,6 +8536,77 @@ describe('Testing listing service', () => {
             },
           },
         },
+      });
+    });
+
+    describe('status filtering', () => {
+      const getWhereAnd = () =>
+        (prisma.listings.findMany as jest.Mock).mock.calls[0][0].where.AND;
+
+      const getStatusClauses = () =>
+        getWhereAnd().filter((clause) =>
+          clause.OR?.some((condition) => condition.status !== undefined),
+        );
+
+      beforeEach(() => {
+        prisma.listings.findMany = jest.fn().mockResolvedValue([
+          {
+            id: 'random id',
+            listingsBuildingAddress: exampleAddress,
+          },
+        ]);
+      });
+
+      it('should find closed listings when the closed status is requested', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.closed,
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.closed } }] },
+        ]);
+      });
+
+      it('should find active listings when the active status is requested', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.active,
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.active } }] },
+        ]);
+      });
+
+      it('should keep non status filters alongside the closed status', async () => {
+        await service.mapMarkers({
+          filter: [
+            {
+              $comparison: Compare['='],
+              status: ListingsStatusEnum.closed,
+            },
+            {
+              $comparison: Compare.IN,
+              jurisdiction: 'jurisdiction id',
+            },
+          ],
+        });
+
+        expect(getStatusClauses()).toEqual([
+          { OR: [{ status: { equals: ListingsStatusEnum.closed } }] },
+        ]);
+        expect(getWhereAnd()).toContainEqual({
+          OR: [{ jurisdictionId: { in: ['jurisdiction id'] } }],
+        });
       });
     });
   });
@@ -8897,6 +8961,185 @@ describe('Testing listing service', () => {
         storedDate,
       );
       expect(result).toBe(storedDate);
+    });
+  });
+
+  describe('Test updateStatus endpoint', () => {
+    it('should update status on a simple listing', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await service.updateStatus(
+        {
+          id: randomUUID(),
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.active,
+        } as ListingUpdate,
+        user,
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          closedAt: undefined,
+          contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: undefined,
+            },
+          },
+          publishedAt: expect.anything(),
+          status: 'active',
+        },
+        include: includeViews.full,
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        user,
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
+    });
+
+    it('should fail to update status on a simple listing', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        listingApprovalPermissions: [UserRoleEnum.supportAdmin],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await expect(
+        async () =>
+          await service.updateStatus(
+            {
+              id: 'example id',
+              jurisdictions: {
+                id: randomUUID(),
+              },
+              status: ListingsStatusEnum.active,
+            } as ListingUpdate,
+            { ...user, userRoles: { isAdmin: true } },
+          ),
+      ).rejects.toThrowError(
+        `User does not have permissions to approve listing example id`,
+      );
+
+      expect(prisma.listings.update).not.toHaveBeenCalled();
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        { ...user, userRoles: { isAdmin: true } },
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listingSnapshot.create).not.toHaveBeenCalled();
+    });
+
+    it('should update status on a simple listing when approval perms are used', async () => {
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        id: 'jurisdiction-id',
+        listingApprovalPermissions: [UserRoleEnum.admin],
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({
+        id: 'example id',
+        name: 'example name',
+        jurisdictions: {
+          id: 'jurisdiction-id',
+        },
+      });
+      prisma.listingSnapshot.create = jest
+        .fn()
+        .mockResolvedValue({ id: 'example snapshot id' });
+
+      await service.updateStatus(
+        {
+          id: randomUUID(),
+          jurisdictions: {
+            id: randomUUID(),
+          },
+          status: ListingsStatusEnum.active,
+        } as ListingUpdate,
+        { ...user, userRoles: { isAdmin: true } },
+      );
+
+      expect(prisma.listings.update).toHaveBeenCalledWith({
+        data: {
+          closedAt: undefined,
+          contentUpdatedAt: expect.anything(),
+          lastUpdatedByUser: {
+            connect: {
+              id: undefined,
+            },
+          },
+          publishedAt: expect.anything(),
+          status: 'active',
+        },
+        include: includeViews.full,
+        where: {
+          id: expect.anything(),
+        },
+      });
+
+      expect(canOrThrowMock).toHaveBeenCalledWith(
+        { ...user, userRoles: { isAdmin: true } },
+        'listing',
+        permissionActions.update,
+        {
+          id: 'example id',
+        },
+      );
+      expect(prisma.listingSnapshot.create).toHaveBeenCalled();
     });
   });
 });

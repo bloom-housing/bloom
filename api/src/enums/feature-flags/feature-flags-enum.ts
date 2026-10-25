@@ -10,6 +10,7 @@ export enum FeatureFlagEnum {
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
   disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
+  disableReferralOpportunity = 'disableReferralOpportunity',
   disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
@@ -17,6 +18,7 @@ export enum FeatureFlagEnum {
   enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
   enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableApproveAndPublishOnEdit = 'enableApproveAndPublishOnEdit',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
@@ -30,6 +32,7 @@ export enum FeatureFlagEnum {
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFilterByCounty = 'enableFilterByCounty',
+  enableFilterByStatus = 'enableFilterByStatus',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -148,6 +151,11 @@ export const featureFlagMap: {
       'When true, partner users cannot edit open or closed listings, or unpublish open listings',
   },
   {
+    name: FeatureFlagEnum.disableReferralOpportunity,
+    description:
+      'When true, disables the referral opportunity question on the listing edit and detail pages on partner site',
+  },
+  {
     name: FeatureFlagEnum.disableReservedCommunityTypeEdit,
     description:
       'When true, disables editing of reserved community type description in the partners site (shows as plaintext only).',
@@ -181,6 +189,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableApplicationStatus,
     description:
       'When true, the application status and notifications feature is enabled on public and partners',
+  },
+  {
+    name: FeatureFlagEnum.enableApproveAndPublishOnEdit,
+    description:
+      'When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving',
   },
   {
     name: FeatureFlagEnum.enableAutoOpenDate,
@@ -244,6 +257,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFilterByCounty,
     description:
       'When true, the filter drawer on the public site includes the option to filter listings by county',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByStatus,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by their status',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
@@ -457,7 +475,8 @@ export const featureFlagMap: {
   },
   {
     name: FeatureFlagEnum.enableReferralQuestionUnits,
-    description: 'when true, updates the the referral details question labels',
+    description:
+      'When true, updates the the referral opportunity question to be specifically about units',
   },
   {
     name: FeatureFlagEnum.enableRegions,

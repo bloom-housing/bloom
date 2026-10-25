@@ -26,6 +26,7 @@ import Layout from "../layouts"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 import { DataTable, TableDataRow } from "../components/shared/DataTable"
 import styles from "./index.module.scss"
+import { isAdminRole } from "../lib/helpers"
 
 export const getFlagInAllJurisdictions = (
   flagName: FeatureFlagEnum,
@@ -51,8 +52,7 @@ type CreateListingFormFields = {
 export default function ListingsList() {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
   const isAdmin =
-    profile?.userRoles?.isAdmin ||
-    profile?.userRoles?.isSupportAdmin ||
+    isAdminRole(profile?.userRoles) ||
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     false

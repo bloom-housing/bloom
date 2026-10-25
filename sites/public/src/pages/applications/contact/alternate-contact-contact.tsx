@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { Field, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -20,6 +21,8 @@ import ApplicationFormLayout, {
   onFormError,
 } from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
@@ -28,28 +31,66 @@ const ApplicationAlternateContactContact = () => {
   const isAdvocate = !!conductor.config?.isAdvocate
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, errors, trigger } = useForm<Record<string, any>>({
+  const { control, register, handleSubmit, errors, trigger, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Record<string, any>
+  >({
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "alternateContactInfo",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "alternateContactInfo",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    if (!isAdvocate) {
-      application.alternateContact.phoneNumber = data.phoneNumber
-      application.alternateContact.emailAddress = data.emailAddress || null
-      if (!application.alternateContact.address) {
-        application.alternateContact.address = {} as typeof application.alternateContact.address
+    const pendingSave = isAdvocate
+      ? {}
+      : {
+          alternateContact: {
+            ...application.alternateContact,
+            phoneNumber: data.phoneNumber,
+            emailAddress: data.emailAddress || null,
+            address: {
+              ...application.alternateContact.address,
+              street: data.mailingAddress.street,
+              street2: data.mailingAddress.street2,
+              state: data.mailingAddress.state,
+              zipCode: data.mailingAddress.zipCode,
+              city: data.mailingAddress.city,
+            },
+          },
+        }
+    guardSubmit(pendingSave, () => {
+      if (!isAdvocate) {
+        application.alternateContact.phoneNumber = data.phoneNumber
+        application.alternateContact.emailAddress = data.emailAddress || null
+        if (!application.alternateContact.address) {
+          application.alternateContact.address = {} as typeof application.alternateContact.address
+        }
+        application.alternateContact.address.street = data.mailingAddress.street
+        application.alternateContact.address.street2 = data.mailingAddress.street2
+        application.alternateContact.address.state = data.mailingAddress.state
+        application.alternateContact.address.zipCode = data.mailingAddress.zipCode
+        application.alternateContact.address.city = data.mailingAddress.city
       }
-      application.alternateContact.address.street = data.mailingAddress.street
-      application.alternateContact.address.street2 = data.mailingAddress.street2
-      application.alternateContact.address.state = data.mailingAddress.state
-      application.alternateContact.address.zipCode = data.mailingAddress.zipCode
-      application.alternateContact.address.city = data.mailingAddress.city
-    }
-    conductor.completeSection(1)
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+      conductor.completeSection(1)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
   const onError = () => {
     onFormError()
@@ -88,7 +129,11 @@ const ApplicationAlternateContactContact = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form
+        id="applications-contact-alternate-contact"
+        onSubmit={handleSubmit(onSubmit, onError)}
+        onBlur={onFieldBlur}
+      >
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.alternateContact.contact.title")}
@@ -103,6 +148,7 @@ const ApplicationAlternateContactContact = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
