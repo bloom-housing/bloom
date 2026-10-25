@@ -11,6 +11,7 @@ import {
   isFeatureFlagOn,
 } from "../../../../src/lib/helpers"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 // These mocks enable us to just test the branching logic in MapListingCard without worrying about the internal implementation of the children, which are tested separately
 jest.mock("@bloom-housing/shared-helpers", () => {
@@ -44,6 +45,7 @@ describe("MapListingCard", () => {
     jurisdictions: [],
     multiselectData: [],
     searchResults: { listings: [], markers: [], currentPage: 1, lastPage: 1, totalItems: 0 },
+    listingStatus: ListingsStatusEnum.active,
     listView: false,
     setListView: jest.fn(),
     isDesktop: true,
