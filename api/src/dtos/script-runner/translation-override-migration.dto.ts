@@ -13,9 +13,10 @@ import { Expose } from 'class-transformer';
 import { LanguagesEnum } from '@prisma/client';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsTranslationSourceUrl } from '../../decorators/is-translation-source-url.decorator';
-
-const SAFE_PATH = /^(?!.*\.\.)[\w][\w.\-/]*$/;
+import {
+  IsTranslationSourceUrl,
+  SAFE_SOURCE_PATH,
+} from '../../decorators/is-translation-source-url.decorator';
 
 export class TranslationOverrideMigrationDTO {
   @Expose()
@@ -72,7 +73,7 @@ export class TranslationOverrideMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
@@ -82,7 +83,7 @@ export class TranslationOverrideMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
@@ -92,7 +93,7 @@ export class TranslationOverrideMigrationDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(SAFE_PATH, { groups: [ValidationsGroupsEnum.default] })
+  @Matches(SAFE_SOURCE_PATH, { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(255, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional({
     type: String,
