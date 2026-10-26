@@ -111,6 +111,7 @@ export const getStaticProps: GetStaticProps = async (context: {
     return { notFound: true }
   }
   const shared = fetchSharedPageProps(context.locale)
+  shared.catch(() => undefined)
 
   if (response.data.externalURL) {
     try {
@@ -131,6 +132,6 @@ export const getStaticProps: GetStaticProps = async (context: {
       listing: response.data,
       ...(await shared),
     },
-    revalidate: Number(process.env.cacheRevalidate),
+    revalidate: Number(process.env.listingCacheRevalidate),
   }
 }

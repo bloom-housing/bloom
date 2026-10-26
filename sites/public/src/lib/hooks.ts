@@ -229,7 +229,7 @@ export async function fetchBaseListingData(
     listings = response.data.items
     pagination = enablePagination ? response.data.meta : null
   } catch (e) {
-    console.log("fetchBaseListingData error: ", e)
+    console.log("fetchBaseListingData error: ", e.message)
   }
 
   return {
@@ -297,49 +297,92 @@ export async function fetchClosedListings(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchLimitedUnderConstructionListings(req?: any, limit?: number) {
-  return await fetchBaseListingData(
-    {
-      additionalFilters: [
+  const count = limit ? limit.toString() : "3"
+
+  return await cachedRead(
+    caches.underConstructionListingsByLimit,
+    count,
+    () =>
+      fetchBaseListingData(
         {
-          $comparison: EnumListingFilterParamsComparison["="],
-          status: ListingsStatusEnum.active,
-          availability: FilterAvailabilityEnum.comingSoon,
+          additionalFilters: [
+            {
+              $comparison: EnumListingFilterParamsComparison["="],
+              status: ListingsStatusEnum.active,
+              availability: FilterAvailabilityEnum.comingSoon,
+            },
+          ],
+          orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+          orderDir: [OrderByEnum.desc],
+          limit: count,
         },
-      ],
-      orderBy: [ListingOrderByKeys.mostRecentlyPublished],
-      orderDir: [OrderByEnum.desc],
-      limit: limit ? limit.toString() : "3",
-    },
-    req
+        req
+      ),
+    // items is left undefined when the read failed, and is an array when it succeeded.
+    (value) => value?.items !== undefined
   )
 }
 
 export const API_TIMEOUT_MS = 5000
 
-let jurisdiction: Jurisdiction | null = null
-let jurisdictionUntil = 0
-let jurisdictionPhase: string | undefined
+/*
+  Next gives each server entry its own instance of this module, so a cache in module scope cannot be
+  cleared from the revalidation route: the pages would keep reading their own copy and a rebuild
+  would regenerate the same content. globalThis is shared across every entry in the process.
+*/
+type ApiReadCaches = {
+  generation: number
+  jurisdiction: Jurisdiction | null
+  jurisdictionUntil: number
+  jurisdictionPhase?: string
+  publicOverridesByLanguage: Map<string, Cached<Record<string, Record<string, string>>>>
+  jurisdictionContentByLanguage: Map<string, Cached<JurisdictionContentFields>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  underConstructionListingsByLimit: Map<string, Cached<any>>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  multiselectProgramsByJurisdiction: Map<string, Cached<any>>
+}
+
+const CACHE_KEY = "__bloomPublicApiReadCaches"
+
+const caches: ApiReadCaches = ((globalThis as Record<string, unknown>)[CACHE_KEY] ??= {
+  generation: 0,
+  jurisdiction: null,
+  jurisdictionUntil: 0,
+  jurisdictionPhase: undefined,
+  publicOverridesByLanguage: new Map(),
+  jurisdictionContentByLanguage: new Map(),
+  underConstructionListingsByLimit: new Map(),
+  multiselectProgramsByJurisdiction: new Map(),
+}) as ApiReadCaches
 
 // A failed read is held for this long so an unreachable API is not re-hit on every render.
 export const JURISDICTION_RETRY_MS = 5000
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const sharedReadHeaders = (req?: any): Record<string, string> => {
+  const headers: Record<string, string> = { passkey: process.env.API_PASS_KEY }
+  if (req) {
+    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+  } else if (process.env.PUBLIC_SITE_REVALIDATE_SECRET) {
+    headers["revalidate-secret"] = process.env.PUBLIC_SITE_REVALIDATE_SECRET
+  }
+  return headers
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
   const phase = process.env.NEXT_PHASE
 
   try {
-    if (jurisdictionPhase === phase && jurisdictionUntil > Date.now()) {
-      return jurisdiction
+    if (caches.jurisdictionPhase === phase && caches.jurisdictionUntil > Date.now()) {
+      return caches.jurisdiction
     }
 
     const jurisdictionName = process.env.jurisdictionName
 
-    const headers = {
-      passkey: process.env.API_PASS_KEY,
-    }
-    if (req) {
-      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
-    }
+    const headers = sharedReadHeaders(req)
+    const generation = caches.generation
     const jurisdictionRes = await axios.get(
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
@@ -347,29 +390,64 @@ export async function fetchJurisdictionByName(req?: any) {
         timeout: API_TIMEOUT_MS,
       }
     )
-    jurisdiction = jurisdictionRes?.data
-    jurisdictionUntil = Date.now() + cacheWindowMs(phase)
-    jurisdictionPhase = phase
+    if (generation !== caches.generation) return jurisdictionRes?.data
+    caches.jurisdiction = jurisdictionRes?.data
+    caches.jurisdictionUntil = Date.now() + cacheWindowMs(phase)
+    caches.jurisdictionPhase = phase
   } catch (error) {
     console.log("error fetching jurisdiction = ", error.message)
-    jurisdictionUntil = Date.now() + JURISDICTION_RETRY_MS
-    jurisdictionPhase = phase
+    caches.jurisdictionUntil = Date.now() + JURISDICTION_RETRY_MS
+    caches.jurisdictionPhase = phase
   }
 
-  return jurisdiction
+  return caches.jurisdiction
 }
 
 type Cached<T> = { value: T; until: number; phase?: string }
 
-const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<string, string>>>>()
-const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
-
 const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contact"] as const
+
+// Neither of these reads depends on the language, so one entry serves every locale a rebuild
+// regenerates. Without them a save costs two API reads per locale rather than two in total.
+
+/*
+  Drops cached API reads, so the next one goes to the API. Every cache is cleared together.
+*/
+export const clearCachedApiReads = (): void => {
+  caches.generation = (caches.generation ?? 0) + 1
+  caches.jurisdiction = null
+  caches.jurisdictionUntil = 0
+  caches.jurisdictionPhase = undefined
+  caches.publicOverridesByLanguage.clear()
+  caches.jurisdictionContentByLanguage.clear()
+  caches.underConstructionListingsByLimit.clear()
+  caches.multiselectProgramsByJurisdiction.clear()
+}
 
 const cacheWindowMs = (phase?: string) => {
   if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
   const revalidate = Number(process.env.cacheRevalidate)
   return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 30000
+}
+
+const cachedRead = async <T>(
+  cache: Map<string, Cached<T>>,
+  key: string,
+  read: () => Promise<T>,
+  isUsable: (value: T) => boolean
+): Promise<T> => {
+  const phase = process.env.NEXT_PHASE
+  const cached = cache.get(key)
+  if (cached && cached.phase === phase && cached.until > Date.now()) {
+    return cached.value
+  }
+
+  const generation = caches.generation
+  const value = await read()
+  if (isUsable(value) && generation === caches.generation) {
+    cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
+  }
+  return value
 }
 
 const fetchJurisdictionScoped = async <T>(
@@ -388,12 +466,8 @@ const fetchJurisdictionScoped = async <T>(
     return cached.value
   }
 
-  const headers = {
-    passkey: process.env.API_PASS_KEY,
-  }
-  if (req) {
-    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
-  }
+  const headers = sharedReadHeaders(req)
+  const generation = caches.generation
 
   try {
     const response = await axios.get(`${process.env.backendApiBase}${path}`, {
@@ -402,12 +476,14 @@ const fetchJurisdictionScoped = async <T>(
       timeout: API_TIMEOUT_MS,
     })
     const value = (response?.data ?? null) as T | null
-    if (value) {
+    if (value && generation === caches.generation) {
       cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
     }
     return value
   } catch (error) {
     console.log(`error fetching ${label} = `, error.message)
+    // A failed rebuild keeps the page Next already has, rather than replacing it with bundled copy.
+    if (!req && phase !== "phase-production-build") throw error
     return null
   }
 }
@@ -417,7 +493,7 @@ export async function fetchPublicOverrides(language?: string, req?: any) {
   return fetchJurisdictionScoped<Record<string, Record<string, string>>>(
     `/translations/byName/${process.env.jurisdictionName}`,
     { site: "public" },
-    publicOverridesByLanguage,
+    caches.publicOverridesByLanguage,
     "public translation overrides",
     language,
     req
@@ -429,7 +505,7 @@ export async function fetchJurisdictionContent(language?: string, req?: any) {
   const content = await fetchJurisdictionScoped<JurisdictionContentFields>(
     `/jurisdictionContent/byName/${process.env.jurisdictionName}`,
     {},
-    jurisdictionContentByLanguage,
+    caches.jurisdictionContentByLanguage,
     "jurisdiction content",
     language,
     req
@@ -452,6 +528,11 @@ export async function fetchJurisdictionContent(language?: string, req?: any) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchSharedPageProps(language?: string, req?: any) {
   const jurisdiction = await fetchJurisdictionByName(req)
+
+  if (!jurisdiction && !req && process.env.NEXT_PHASE !== "phase-production-build") {
+    throw new Error("could not read the jurisdiction, keeping the page already generated")
+  }
+
   const storedContentOn =
     !!jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenContent)
 
@@ -490,15 +571,18 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
 
     const paramsString = qs.stringify(params)
 
-    const multiselectDataResponse = await axios.get(
-      `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
-      {
-        headers,
-      }
+    const multiselectDataResponse = await cachedRead(
+      caches.multiselectProgramsByJurisdiction,
+      jurisdictionId ?? "",
+      () =>
+        axios.get(`${process.env.backendApiBase}/multiselectQuestions?${paramsString}`, {
+          headers,
+        }),
+      (value) => !!value?.data
     )
     return multiselectDataResponse?.data
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error = ", error.message)
   }
 }
 
@@ -532,7 +616,7 @@ export async function fetchAgencies(req: any, jurisdictionId: string) {
     )
     return agencyDataResponse?.data
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error = ", error.message)
   }
 }
 

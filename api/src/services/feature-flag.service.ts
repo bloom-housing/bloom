@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import {
   Injectable,
   BadRequestException,
@@ -13,6 +14,7 @@ import { FeatureFlagCreate } from '../dtos/feature-flags/feature-flag-create.dto
 import { FeatureFlagUpdate } from '../dtos/feature-flags/feature-flag-update.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { mapTo } from '../utilities/mapTo';
+import { revalidatePublicSite } from '../utilities/revalidate-public-site';
 import { featureFlagMap } from '../enums/feature-flags/feature-flags-enum';
 
 /**
@@ -24,6 +26,7 @@ export class FeatureFlagService {
   constructor(
     private prisma: PrismaService,
     private jurisdictionService: JurisdictionService,
+    private readonly httpService: HttpService,
     @Inject(Logger)
     private readonly logger = new Logger(FeatureFlagService.name),
   ) {}
@@ -207,6 +210,11 @@ export class FeatureFlagService {
         id: dto.id,
       },
     });
+
+    if (idsToAssociate.length || dto.remove.length) {
+      await revalidatePublicSite(this.httpService);
+    }
+
     return mapTo(FeatureFlag, rawResults);
   }
 
