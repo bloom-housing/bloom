@@ -177,6 +177,7 @@ export class ScriptRunnerService {
       jurisdictions: {
         id: amiChartImportDTO.jurisdictionId,
       },
+      ordinal: amiChartImportDTO.ordinal,
     };
 
     const rows = amiChartImportDTO.values.split('\n');
@@ -232,10 +233,12 @@ export class ScriptRunnerService {
     );
 
     // parse incoming string into an amichart create dto
+    // an omitted ordinal stays undefined, which prisma skips, so the stored value is kept
     const updateDTO: AmiChartUpdate = {
       id: amiChartUpdateImportDTO.amiId,
       items: [],
       name: ami.name,
+      ordinal: amiChartUpdateImportDTO.ordinal,
     };
 
     const rows = amiChartUpdateImportDTO.values.split('\n');

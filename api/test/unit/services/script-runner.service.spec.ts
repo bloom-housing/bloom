@@ -562,6 +562,86 @@ describe('Testing script runner service', () => {
     });
   });
 
+  it('should pass ordinal through on ami chart import', async () => {
+    const id = randomUUID();
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.create = jest.fn().mockResolvedValue(null);
+
+    await service.amiChartImport(
+      {
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest,
+      {
+        values: '15 18400',
+        name: 'ordinal import',
+        jurisdictionId: 'example jurisdictionId',
+        ordinal: 5,
+      },
+    );
+
+    const createArgs = (prisma.amiChart.create as jest.Mock).mock.calls[0][0];
+    expect(createArgs.data.ordinal).toEqual(5);
+  });
+
+  it('should pass ordinal through on ami chart update import', async () => {
+    const id = randomUUID();
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue({
+      id,
+      name: 'example name',
+    });
+    prisma.amiChart.update = jest.fn().mockResolvedValue(null);
+
+    await service.amiChartUpdateImport(
+      {
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest,
+      {
+        amiId: id,
+        values: '15 18400',
+        ordinal: 7,
+      },
+    );
+
+    const updateArgs = (prisma.amiChart.update as jest.Mock).mock.calls[0][0];
+    expect(updateArgs.data.ordinal).toEqual(7);
+  });
+
+  it('should not overwrite ordinal on ami chart update import when omitted', async () => {
+    const id = randomUUID();
+    prisma.scriptRuns.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.create = jest.fn().mockResolvedValue(null);
+    prisma.scriptRuns.update = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue({
+      id,
+      name: 'example name',
+    });
+    prisma.amiChart.update = jest.fn().mockResolvedValue(null);
+
+    await service.amiChartUpdateImport(
+      {
+        user: {
+          id,
+        } as unknown as User,
+      } as unknown as ExpressRequest,
+      {
+        amiId: id,
+        values: '15 18400',
+      },
+    );
+
+    const updateArgs = (prisma.amiChart.update as jest.Mock).mock.calls[0][0];
+    expect(updateArgs.data.ordinal).toBeUndefined();
+  });
+
   it('should transfer data', async () => {
     prisma.listings.updateMany = jest.fn().mockResolvedValue({ count: 1 });
 
