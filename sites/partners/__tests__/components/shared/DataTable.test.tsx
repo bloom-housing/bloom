@@ -1,7 +1,16 @@
 import React from "react"
-import { render, cleanup, screen, within, fireEvent } from "@testing-library/react"
+import {
+  render,
+  cleanup,
+  screen,
+  within,
+  fireEvent,
+  waitFor,
+  createEvent,
+} from "@testing-library/react"
 import { DataTable, TableDataRow } from "../../../src/components/shared/DataTable"
-import { createColumnHelper } from "@tanstack/react-table"
+import { FilterFn, createColumnHelper } from "@tanstack/react-table"
+import { t } from "@bloom-housing/ui-components"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 afterEach(cleanup)
@@ -785,5 +794,120 @@ describe("DataTable", () => {
     expect(screen.queryByRole("button", { name: "Next" })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "Previous" })).not.toBeInTheDocument()
     expect(screen.queryByRole("combobox", { name: "Show" })).not.toBeInTheDocument()
+  })
+
+  it("should use a custom global filter function on client-side data", async () => {
+    const tagColumns = [
+      ...defaultColumns,
+      columnHelper.accessor("tags", {
+        id: "tags",
+        cell: (props) => (props.getValue() as string[]).join(", "),
+        header: () => "Tags",
+        enableColumnFilter: false,
+      }),
+    ]
+    const globalFilterFn: FilterFn<TableDataRow> = (row, columnId, filterValue) =>
+      columnId === "tags" &&
+      row.getValue<string[]>(columnId).some((tag) => tag.includes(filterValue))
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={tagColumns}
+          data={[
+            { firstName: "Ann", lastName: "Lee", tags: ["alpha"] },
+            { firstName: "Bob", lastName: "Ray", tags: ["beta"] },
+          ]}
+          description={"Table caption"}
+          filterType={"global"}
+          minSearchCharacters={1}
+          globalFilterFn={globalFilterFn}
+          disablePagination
+        />
+      </QueryClientProvider>
+    )
+
+    fireEvent.change(screen.getByTestId("column-search-global-search"), {
+      target: { value: "bet" },
+    })
+    await waitFor(() => expect(screen.queryByText("Ann")).not.toBeInTheDocument())
+    expect(screen.getByText("Bob")).toBeInTheDocument()
+  })
+
+  it("should show the no data message when the global search matches nothing", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={defaultColumns}
+          data={[{ firstName: "Ann", lastName: "Lee" }]}
+          description={"Table caption"}
+          filterType={"global"}
+          minSearchCharacters={1}
+          disablePagination
+        />
+      </QueryClientProvider>
+    )
+
+    fireEvent.change(screen.getByTestId("column-search-global-search"), {
+      target: { value: "zzz" },
+    })
+    expect(await screen.findByText("No data available")).toBeInTheDocument()
+  })
+
+  it("should not show the minimum characters hint when one character is enough", () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={defaultColumns}
+          data={[{ firstName: "Ann", lastName: "Lee" }]}
+          description={"Table caption"}
+          filterType={"global"}
+          minSearchCharacters={1}
+          disablePagination
+        />
+      </QueryClientProvider>
+    )
+
+    expect(screen.queryByText("Enter at least 1 characters")).not.toBeInTheDocument()
+    expect(screen.getByTestId("column-search-global-search")).toHaveAccessibleDescription(
+      t("listings.table.searchByGeneric")
+    )
+  })
+
+  it("should render content between the header and the table", () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DataTable
+          columns={defaultColumns}
+          data={[{ firstName: "Ann", lastName: "Lee" }]}
+          description={"Table caption"}
+          headerBottomContent={<p>Filters are on</p>}
+          disablePagination
+        />
+      </QueryClientProvider>
+    )
+
+    expect(screen.getByText("Filters are on")).toBeInTheDocument()
+  })
+
+  it("should prevent Enter in the search input from submitting a surrounding form", () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <form>
+          <DataTable
+            columns={defaultColumns}
+            data={[{ firstName: "Ann", lastName: "Lee" }]}
+            description={"Table caption"}
+            filterType={"global"}
+            disablePagination
+          />
+        </form>
+      </QueryClientProvider>
+    )
+
+    const input = screen.getByTestId("column-search-global-search")
+    const event = createEvent.keyDown(input, { key: "Enter" })
+    fireEvent(input, event)
+    expect(event.defaultPrevented).toBe(true)
   })
 })
