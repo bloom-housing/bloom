@@ -94,7 +94,7 @@ const ApplicationSummary = () => {
             : application.householdMember?.map((member) => {
                 return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
               }),
-          listing: {
+          listings: {
             id: listing.id,
           },
           reviewStatus: ApplicationReviewStatusEnum.pending,
