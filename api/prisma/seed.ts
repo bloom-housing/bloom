@@ -10,14 +10,13 @@ import { reservedCommunityTypeFactoryAll } from './seed-helpers/reserved-communi
 const options: { [name: string]: { type: 'string' | 'boolean' } } = {
   environment: { type: 'string' },
   jurisdictionName: { type: 'string' },
-  msqV2: { type: 'boolean' },
   asRegion: { type: 'boolean' },
 };
 
 const prisma = new PrismaService();
 async function main() {
   const {
-    values: { environment, jurisdictionName, msqV2, asRegion },
+    values: { environment, jurisdictionName, asRegion },
   } = parseArgs({ options });
   const publicSiteBaseURL = env.DBSEED_PUBLIC_SITE_BASE_URL;
   const seedJurisdiction = env.DBSEED_JURISDICTION;
@@ -40,7 +39,6 @@ async function main() {
       stagingSeed(prisma, {
         jurisdictionName: seedJurisdictionName as string,
         publicSiteBaseURL: publicSiteBaseURL,
-        msqV2: msqV2 as boolean,
         asRegion: asRegion as boolean,
         jurisdiction: seedJurisdiction,
       });
