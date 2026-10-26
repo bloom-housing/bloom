@@ -4019,7 +4019,7 @@ export interface ListingFilterParams {
   availability?: FilterAvailabilityEnum
 
   /**  */
-  bathrooms?: number
+  bathrooms?: []
 
   /**  */
   bedrooms?: number
