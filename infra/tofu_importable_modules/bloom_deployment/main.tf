@@ -284,7 +284,7 @@ variable "grafana_editor_group_ids" {
 
 variable "observability_collection_enabled" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "bloom_api_sms_config" {
