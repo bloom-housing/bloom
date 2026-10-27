@@ -1,5 +1,11 @@
 import React from "react"
-import { CellContext, ColumnDef, SortingFn, createColumnHelper } from "@tanstack/react-table"
+import {
+  CellContext,
+  ColumnDef,
+  FilterFn,
+  SortingFn,
+  createColumnHelper,
+} from "@tanstack/react-table"
 import { t } from "@bloom-housing/ui-components"
 import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
@@ -11,18 +17,19 @@ import {
 import { UnitTypeSort } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 import { TableDataRow } from "../shared/DataTable"
 import { formatRange, formatRentRange, minMaxFinder } from "./helpers"
+import { parseNumber } from "./UnitsTable/unitFilterHelpers"
+import styles from "./UnitTableColDefs.module.scss"
 
 export const unitToRow = (unit: Unit & { tempId?: number }): TableDataRow => ({
   id: unit.id,
   tempId: unit.tempId,
-  number: unit.number,
-  unitType: unit.unitTypes ? [unit.unitTypes.name] : [],
-  amiPercentage: unit.amiPercentage,
-  monthlyRent: unit.monthlyRent,
-  sqFeet: unit.sqFeet,
-  accessibilityPriorityType: unit.accessibilityPriorityType
-    ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
-    : t("t.n/a"),
+  number: unit.number || undefined,
+  unitType: unit.unitTypes ? [unit.unitTypes.name] : undefined,
+  amiChart: unit.amiChart?.name || undefined,
+  amiPercentage: unit.amiPercentage || undefined,
+  monthlyRent: unit.monthlyRent || undefined,
+  sqFeet: unit.sqFeet || undefined,
+  accessibilityPriorityType: unit.accessibilityPriorityType || undefined,
 })
 
 export const unitGroupToRow = (
@@ -85,10 +92,62 @@ export const unitGroupToRow = (
 
 const columnHelper = createColumnHelper<TableDataRow>()
 
-const unitTypeRank = (names: string[]): number => {
-  const ranks = names.map((name) => UnitTypeSort.indexOf(name)).filter((rank) => rank !== -1)
+const formatPlain = (value: unknown) => (value == null ? "" : String(value))
 
-  return ranks.length ? Math.min(...ranks) : Number.POSITIVE_INFINITY
+const formatUnitTypes = (value: unknown) =>
+  ((value as string[] | undefined) ?? []).map((name) => t(`listings.unitTypes.${name}`)).join(", ")
+
+const formatRent = (value: unknown) => {
+  const rent = formatPlain(value)
+  return rent ? `$${rent}` : ""
+}
+
+const formatAccessibility = (value: unknown) =>
+  value ? t(`listings.unit.accessibilityType.${value as string}`) : t("t.n/a")
+
+const unitCellText: Record<string, (value: unknown) => string> = {
+  number: formatPlain,
+  unitType: formatUnitTypes,
+  amiChart: formatPlain,
+  amiPercentage: formatPlain,
+  monthlyRent: formatRent,
+  sqFeet: formatPlain,
+  accessibilityPriorityType: formatAccessibility,
+}
+
+export const unitGlobalFilterFn: FilterFn<TableDataRow> = (row, columnId, filterValue) => {
+  const format = unitCellText[columnId]
+  if (!format) return false
+  return format(row.getValue(columnId))
+    .toLowerCase()
+    .includes(String(filterValue).trim().toLowerCase())
+}
+
+const compareText = (a: string, b: string) =>
+  a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+
+const sortNaturally: SortingFn<TableDataRow> = (rowA, rowB, columnId) =>
+  compareText(formatPlain(rowA.getValue(columnId)), formatPlain(rowB.getValue(columnId)))
+
+const sortNumerically: SortingFn<TableDataRow> = (rowA, rowB, columnId) => {
+  const a = parseNumber(rowA.getValue<string>(columnId))
+  const b = parseNumber(rowB.getValue<string>(columnId))
+  if (a === undefined || b === undefined) return sortNaturally(rowA, rowB, columnId)
+  return a - b
+}
+
+const sortByAccessibilityText: SortingFn<TableDataRow> = (rowA, rowB, columnId) =>
+  compareText(
+    formatAccessibility(rowA.getValue(columnId)),
+    formatAccessibility(rowB.getValue(columnId))
+  )
+
+const unitTypeRank = (names: string[] | undefined): number => {
+  const ranks = (names ?? [])
+    .map((name) => UnitTypeSort.indexOf(name))
+    .filter((rank) => rank !== -1)
+
+  return ranks.length ? Math.min(...ranks) : -1
 }
 
 const sortByUnitTypeOrder: SortingFn<TableDataRow> = (rowA, rowB, columnId) => {
@@ -111,21 +170,25 @@ type TextColumnOptions = {
   sortable?: boolean
   sortingFn?: SortingFn<TableDataRow>
   size?: number
+  wrapHeader?: boolean
 }
 
 const textColumn = (
   id: string,
   headerKey: string,
-  { cell, sortable = false, sortingFn, size }: TextColumnOptions = {}
+  { cell, sortable = false, sortingFn, size, wrapHeader = false }: TextColumnOptions = {}
 ) =>
   columnHelper.accessor(id, {
     id,
     cell: cell ?? ((props) => props.getValue()),
-    header: () => t(headerKey),
+    header: () => (
+      <span className={styles[wrapHeader ? "wrap-header" : "no-wrap-header"]}>{t(headerKey)}</span>
+    ),
     enableColumnFilter: false,
     enableSorting: sortable,
     sortDescFirst: false,
     sortingFn,
+    sortUndefined: -1,
     size,
     minSize: size,
     meta: {
@@ -134,16 +197,16 @@ const textColumn = (
     },
   })
 
+const unitColumn = (id: string, headerKey: string, options: TextColumnOptions = {}) =>
+  textColumn(id, headerKey, {
+    cell: (props) => unitCellText[id](props.getValue()),
+    ...options,
+  })
+
 const unitTypeColumn = () =>
-  textColumn("unitType", "listings.unit.type", {
-    cell: (props) =>
-      props
-        .getValue<string[]>()
-        .map((name) => t(`listings.unitTypes.${name}`))
-        .join(", "),
+  unitColumn("unitType", "listings.unit.type", {
     sortable: true,
     sortingFn: sortByUnitTypeOrder,
-    size: 150,
   })
 
 const actionColumn = (actionsCell: (row: TableDataRow) => React.ReactNode) =>
@@ -153,8 +216,8 @@ const actionColumn = (actionsCell: (row: TableDataRow) => React.ReactNode) =>
     cell: (props) => actionsCell(props.row.original),
     enableColumnFilter: false,
     enableSorting: false,
-    size: 90,
-    minSize: 90,
+    size: 80,
+    minSize: 80,
     meta: { disableTruncate: true },
   })
 
@@ -175,13 +238,31 @@ export const getUnitColumns = ({
         textColumn("bath", "listings.unit.bath", { size: 70 }),
       ]
     : [
-        textColumn("number", "listings.unit.number", { size: 90 }),
+        unitColumn("number", "listings.unit.number", {
+          sortable: true,
+          sortingFn: sortNaturally,
+        }),
         unitTypeColumn(),
-        textColumn("amiPercentage", "t.ami", { size: 70 }),
-        textColumn("monthlyRent", "listings.unit.rent", { size: 100 }),
-        textColumn("sqFeet", "listings.unit.sqft", { size: 80 }),
-        textColumn("accessibilityPriorityType", "listings.unit.accessibilityPriorityType", {
-          size: 230,
+        unitColumn("amiChart", "listings.unit.amiChart", {
+          sortable: true,
+          sortingFn: sortNaturally,
+        }),
+        unitColumn("amiPercentage", "t.ami", {
+          sortable: true,
+          sortingFn: sortNumerically,
+        }),
+        unitColumn("monthlyRent", "listings.unit.rent", {
+          sortable: true,
+          sortingFn: sortNumerically,
+        }),
+        unitColumn("sqFeet", "listings.unit.sqft", {
+          sortable: true,
+          sortingFn: sortNumerically,
+        }),
+        unitColumn("accessibilityPriorityType", "listings.unit.accessibilityPriorityType", {
+          sortable: true,
+          sortingFn: sortByAccessibilityText,
+          wrapHeader: true,
         }),
       ]
 

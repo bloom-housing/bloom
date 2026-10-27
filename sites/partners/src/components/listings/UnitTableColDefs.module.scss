@@ -1,5 +1,15 @@
 .unit-table {
   --data-table-header-padding-block: var(--seeds-s3);
   --data-table-cell-padding-block: var(--seeds-s3);
+  --data-table-header-vertical-align: middle;
   font-size: var(--seeds-font-size-xs);
+}
+
+.no-wrap-header {
+  white-space: nowrap;
+}
+
+.wrap-header {
+  display: block;
+  min-width: 7em;
 }
