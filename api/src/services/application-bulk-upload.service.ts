@@ -873,7 +873,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       throw new BadRequestException(
         `Upload Failed: One or more rows beginning on row ${
           index + 2
-        } have incorrect application details (Applicant first name, last name or submission date)`,
+        } have incorrect application details (Applicant First Name, Applicant Last Name, Primary DOB, Application Submission Date, Household size, Declared annual income, Declared monthly income, Request ADA or Subsidy/Voucher)`,
       );
     }
   }
