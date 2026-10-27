@@ -46,6 +46,7 @@ resource "aws_acm_certificate" "bloom" {
     create_before_destroy = true
   }
 }
+
 output "certificate_details" {
   value = {
     certificate_arn    = aws_acm_certificate.bloom.arn
@@ -62,7 +63,7 @@ output "certificate_details" {
 
 # Deploy bloom into the account.
 module "bloom_deployment" {
-  source = "git::https://github.com/bloom-housing/bloom.git//infra/tofu_importable_modules/bloom_deployment?ref=bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
+  source = "git::https://github.com/bloom-housing/bloom.git//infra/tofu_importable_modules/bloom_deployment?ref=f11d43277bc26ccc02125b289918b2e764dcd2d2"
 
   aws_profile        = local.sso_profile_id
   aws_account_number = local.bloom_aws_account_number
@@ -90,35 +91,41 @@ module "bloom_deployment" {
   #  allowed_cidr_range        = "172.31.0.0/16"         # default
   #}
 
-  bloom_dbinit_image = "ghcr.io/bloom-housing/bloom/dbinit:gitsha-bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
-  bloom_dbseed_image = "ghcr.io/bloom-housing/bloom/dbseed:gitsha-bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
+  bloom_dbinit_image = "ghcr.io/bloom-housing/bloom/dbinit:gitsha-f11d43277bc26ccc02125b289918b2e764dcd2d2"
+  bloom_dbseed_image = "ghcr.io/bloom-housing/bloom/dbseed:gitsha-f11d43277bc26ccc02125b289918b2e764dcd2d2"
 
-  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
-  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
-  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
+  bloom_api_image           = "ghcr.io/bloom-housing/bloom/api:gitsha-f11d43277bc26ccc02125b289918b2e764dcd2d2"
+  bloom_site_partners_image = "ghcr.io/bloom-housing/bloom/partners:gitsha-f11d43277bc26ccc02125b289918b2e764dcd2d2"
+  bloom_site_public_image   = "ghcr.io/bloom-housing/bloom/public:gitsha-f11d43277bc26ccc02125b289918b2e764dcd2d2"
   bloom_site_public_env_vars = {
     JURISDICTION_NAME = "Bloomington"
     LANGUAGES         = "en,es,zh,vi,tl,ko,hy"
     RTL_LANGUAGES     = "ar,fa"
   }
 
-  bloom_otel_collector_image = "ghcr.io/bloom-housing/bloom/aws-otel-collector:gitsha-bd69afe49ab8499263ed7ba6e0ee6da64fe4cccc"
+  bloom_otel_collector_image = "ghcr.io/bloom-housing/bloom/aws-otel-collector:gitsha-f11d43277bc26ccc02125b289918b2e764dcd2d2"
   grafana_editor_group_ids = [
     "f49854e8-4081-7033-9fd0-290a48f1a15a" # bloom-dev-deployers
   ]
+
+  observability_collection_enabled = var.observability_collection_enabled
 }
+
 output "aws_lb_dns_name" {
   value       = module.bloom_deployment.lb_dns_name
   description = "DNS name of the load balancer."
 }
+
 output "aws_db_dns_name" {
   value       = module.bloom_deployment.db_dns_name
   description = "DNS name of the database."
 }
+
 output "ses_details" {
   value       = module.bloom_deployment.ses_details
   description = "Details for the SES email address identity."
 }
+
 output "grafana_url" {
   value       = module.bloom_deployment.grafana_url
   description = "URL of the managed grafana workspace."
