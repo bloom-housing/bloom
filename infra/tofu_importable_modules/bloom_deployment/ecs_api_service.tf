@@ -1,24 +1,24 @@
 locals {
   api_default_env_vars = {
-    PORT                        = "3100"
-    NODE_ENV                    = "production"
-    DB_HOST                     = aws_db_instance.bloom.address
-    DB_PORT                     = "5432"
-    DB_USER                     = "bloom_api"
-    DB_DATABASE                 = "bloom_prisma"
-    DB_USE_RDS_IAM_AUTH         = "1"
-    USE_AWS_SES                 = "1"
-    GOOGLE_API_ID               = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
-    GOOGLE_API_EMAIL            = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
-    S3_REGION                   = var.aws_region
-    S3_PRIVATE_BUCKET           = aws_s3_bucket.private.id
-    S3_PUBLIC_BUCKET            = aws_s3_bucket.public.id
-    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
-    SMS_PROVIDER                = var.bloom_api_sms_config == null ? "" : "aws"
-    AWS_SMS_REGION              = var.bloom_api_sms_config == null ? "" : var.aws_region
-    AWS_SMS_ORIGINATION_NUMBER  = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
+    PORT                       = "3100"
+    NODE_ENV                   = "production"
+    DB_HOST                    = aws_db_instance.bloom.address
+    DB_PORT                    = "5432"
+    DB_USER                    = "bloom_api"
+    DB_DATABASE                = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH        = "1"
+    USE_AWS_SES                = "1"
+    GOOGLE_API_ID              = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
+    GOOGLE_API_EMAIL           = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
+    S3_REGION                  = var.aws_region
+    S3_PRIVATE_BUCKET          = aws_s3_bucket.private.id
+    S3_PUBLIC_BUCKET           = aws_s3_bucket.public.id
+    SMS_PROVIDER               = var.bloom_api_sms_config == null ? "" : "aws"
+    AWS_SMS_REGION             = var.bloom_api_sms_config == null ? "" : var.aws_region
+    AWS_SMS_ORIGINATION_NUMBER = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
   }
 }
+
 resource "aws_ecs_task_definition" "bloom_api" {
   region                   = var.aws_region
   family                   = "bloom-api"
@@ -35,12 +35,12 @@ resource "aws_ecs_task_definition" "bloom_api" {
   cpu    = var.bloom_api_resource_limits.vcpu
   memory = var.bloom_api_resource_limits.memory_mib
 
-  container_definitions = jsonencode([
+  container_definitions = jsonencode(concat([
     {
       Name        = "bloom-api"
       essential   = true
       image       = var.bloom_api_image
-      environment = [for k, v in merge(local.api_default_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
+      environment = [for k, v in merge(local.api_default_env_vars, local.otel_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
       entryPoint  = ["bash"]
       # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash
       # hack for the prisma migrate command.
@@ -87,37 +87,10 @@ resource "aws_ecs_task_definition" "bloom_api" {
           "awslogs-stream-prefix" = "bloom-api"
         }
       }
-    },
-    {
-      name      = "otel-sidecar"
-      image     = var.bloom_otel_collector_image
-      essential = false
-      command   = ["--config", "/etc/api-ecs-sidecar-config.yaml"]
-      environment = [
-        {
-          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
-          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
-        }
-      ]
-      portMappings = [
-        {
-          containerPort = 4317
-          appProtocol   = "grpc"
-        }
-      ]
-      restartPolicy = {
-        enabled = true
-      }
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
-          "awslogs-stream-prefix" = "otel-sidecar"
-        }
-      }
     }
-  ])
+    ],
+    local.otel_sidecar_container
+  ))
 }
 resource "aws_ecs_service" "bloom_api" {
   depends_on = [
