@@ -166,7 +166,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
     description:
-      "When true, the 'Accessible Unit Wait List Only' checkbox is displayed in the waitlist section of the listing form, on the partners listing details page, and in the listings CSV export",
+      "When true, the 'Is this listing open to all housing seekers?' question is displayed and required in the application types section of the listing form",
   },
   {
     name: FeatureFlagEnum.enableAdditionalResources,

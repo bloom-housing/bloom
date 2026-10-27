@@ -56,6 +56,7 @@ export type FormListing = Omit<
   paperApplicationChoice?: YesNoEnum
   referralOpportunityChoice?: YesNoEnum
   leasingAgentApplicationChoice?: YesNoEnum
+  openToAllHousingSeekersChoice?: YesNoEnum
   criteriaAttachType?: string
   marketingFlyerAttachType?: "upload" | "url"
   accessibleMarketingFlyerAttachType?: "upload" | "url"

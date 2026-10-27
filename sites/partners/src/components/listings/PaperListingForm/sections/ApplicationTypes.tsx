@@ -74,6 +74,7 @@ export const phoneMask = (incomingNewValue: string): string => {
 
 type ApplicationTypesProps = {
   disableCommonApplication: boolean
+  enableAccessibleUnitWaitlistOnly?: boolean
   enableReferralQuestionUnits: boolean
   jurisdiction: string
   listing: FormListing
@@ -83,6 +84,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({
   disableCommonApplication,
+  enableAccessibleUnitWaitlistOnly,
   enableReferralQuestionUnits,
   jurisdiction,
   listing,
@@ -134,6 +136,7 @@ const ApplicationTypes = ({
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
   const leasingAgentApplicationChoice = watch("leasingAgentApplicationChoice")
+  const openToAllHousingSeekersChoice = watch("openToAllHousingSeekersChoice")
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -653,6 +656,48 @@ const ApplicationTypes = ({
                     })
                   },
                 }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
+        {enableAccessibleUnitWaitlistOnly && (
+          <Grid.Row columns={1}>
+            <Grid.Cell
+              className={
+                fieldHasError(errors?.accessibleUnitWaitlistOnly) ? styles["label-error"] : ""
+              }
+            >
+              <FieldGroup
+                name="openToAllHousingSeekersChoice"
+                type="radio"
+                register={register}
+                groupLabel={getLabel(
+                  "accessibleUnitWaitlistOnly",
+                  requiredFields,
+                  t("listings.openToAllHousingSeekers")
+                )}
+                error={
+                  fieldHasError(errors?.accessibleUnitWaitlistOnly) &&
+                  openToAllHousingSeekersChoice === null
+                }
+                errorMessage={fieldMessage(errors?.accessibleUnitWaitlistOnly)}
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                fields={[
+                  {
+                    label: t("listings.openToAllHousingSeekersYes"),
+                    value: YesNoEnum.yes,
+                    id: "openToAllHousingSeekersYes",
+                    defaultChecked: listing?.accessibleUnitWaitlistOnly === false,
+                  },
+                  {
+                    label: t("listings.openToAllHousingSeekersNo"),
+                    value: YesNoEnum.no,
+                    id: "openToAllHousingSeekersNo",
+                    defaultChecked: listing?.accessibleUnitWaitlistOnly === true,
+                  },
+                ]}
               />
             </Grid.Cell>
           </Grid.Row>

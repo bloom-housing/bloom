@@ -449,4 +449,90 @@ describe("ApplicationTypes", () => {
     ).toBeInTheDocument()
     expect(screen.getByRole("group", { name: "Is there a paper application?" })).toBeInTheDocument()
   })
+
+  describe("open to all housing seekers question", () => {
+    const renderSection = (
+      enableAccessibleUnitWaitlistOnly: boolean,
+      accessibleUnitWaitlistOnly: boolean | undefined
+    ) =>
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            enableAccessibleUnitWaitlistOnly={enableAccessibleUnitWaitlistOnly}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={{ ...listing, accessibleUnitWaitlistOnly }}
+            requiredFields={["accessibleUnitWaitlistOnly"]}
+          />
+        </FormProviderWrapper>
+      )
+
+    it("should not show the question when the feature flag is off", () => {
+      renderSection(false, false)
+
+      expect(
+        screen.queryByRole("group", { name: /Is this listing open to all housing seekers\?/ })
+      ).not.toBeInTheDocument()
+    })
+
+    it("should show both options with nothing selected for a listing without a saved value", () => {
+      renderSection(true, undefined)
+
+      const group = screen.getByRole("group", {
+        name: "Is this listing open to all housing seekers? *",
+      })
+      expect(
+        within(group).getByRole("radio", { name: "Yes, keep it open to all housing seekers" })
+      ).not.toBeChecked()
+      expect(
+        within(group).getByRole("radio", {
+          name: "No, make this listing Accessible Unit Wait List only",
+        })
+      ).not.toBeChecked()
+    })
+
+    it("should select the option matching the saved value", () => {
+      renderSection(true, true)
+
+      expect(
+        screen.getByRole("radio", { name: "No, make this listing Accessible Unit Wait List only" })
+      ).toBeChecked()
+    })
+
+    it("should select the open to all option when the listing is not wait list only", () => {
+      renderSection(true, false)
+
+      expect(
+        screen.getByRole("radio", { name: "Yes, keep it open to all housing seekers" })
+      ).toBeChecked()
+    })
+
+    it("should mark the question as required when it is in the required fields", () => {
+      renderSection(true, undefined)
+
+      expect(
+        screen.getByRole("group", { name: "Is this listing open to all housing seekers? *" })
+      ).toBeInTheDocument()
+    })
+
+    it("should not mark the question as required when it is not in the required fields", () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            enableAccessibleUnitWaitlistOnly={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(
+        screen.getByRole("group", { name: "Is this listing open to all housing seekers?" })
+      ).toBeInTheDocument()
+    })
+  })
 })

@@ -9,6 +9,9 @@ class ListingPublishValidationTestDto {
 
   @ValidateListingPublish('units')
   units?: unknown[];
+
+  @ValidateListingPublish('accessibleUnitWaitlistOnly')
+  accessibleUnitWaitlistOnly?: boolean;
 }
 
 describe('ValidateListingPublish', () => {
@@ -80,5 +83,28 @@ describe('ValidateListingPublish', () => {
     const errors = validateSync(dto);
 
     expect(errors).toHaveLength(0);
+  });
+
+  it('should treat false as a value for a required boolean field', () => {
+    const dto = new ListingPublishValidationTestDto();
+    dto.status = ListingsStatusEnum.active;
+    dto.requiredFields = ['accessibleUnitWaitlistOnly'];
+    dto.accessibleUnitWaitlistOnly = false;
+
+    const errors = validateSync(dto);
+
+    expect(errors).toHaveLength(0);
+  });
+
+  it('should require a boolean field that is null when publishing', () => {
+    const dto = new ListingPublishValidationTestDto();
+    dto.status = ListingsStatusEnum.active;
+    dto.requiredFields = ['accessibleUnitWaitlistOnly'];
+    dto.accessibleUnitWaitlistOnly = null;
+
+    const errors = validateSync(dto);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].property).toBe('accessibleUnitWaitlistOnly');
   });
 });

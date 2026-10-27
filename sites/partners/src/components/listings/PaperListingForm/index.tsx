@@ -210,10 +210,20 @@ const ListingForm = ({
   const isLandUseListing =
     (listing?.listingType || listingTypeField) === EnumListingListingType.landUse
 
-  const rawRequiredFields = selectedJurisdictionData?.requiredListingFields || []
-  const requiredFields = isLandUseListing
+  const enableAccessibleUnitWaitlistOnly = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+    jurisdictionId
+  )
+
+  const rawRequiredFields: string[] = selectedJurisdictionData?.requiredListingFields || []
+  const jurisdictionRequiredFields = isLandUseListing
     ? rawRequiredFields.filter((field) => !LAND_USE_EXCLUDED_REQUIRED_FIELDS.includes(field))
     : rawRequiredFields
+  const requiredFields =
+    enableAccessibleUnitWaitlistOnly &&
+    !jurisdictionRequiredFields.includes("accessibleUnitWaitlistOnly")
+      ? [...jurisdictionRequiredFields, "accessibleUnitWaitlistOnly"]
+      : jurisdictionRequiredFields
 
   const whatToExpectEditor = useEditor({
     extensions: [...EditorExtensions, CharacterCountExtension.configure()],
@@ -846,10 +856,6 @@ const ListingForm = ({
                               enableOnlyAdminCanEditListingDates &&
                               !profile.userRoles.isAdmin
                             }
-                            enableAccessibleUnitWaitlistOnly={doJurisdictionsHaveFeatureFlagOn(
-                              FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
-                              jurisdictionId
-                            )}
                             enableUnitGroups={enableUnitGroups}
                             enableWaitlistAdditionalFields={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableWaitlistAdditionalFields,
@@ -881,6 +887,7 @@ const ListingForm = ({
                               FeatureFlagEnum.disableCommonApplication,
                               jurisdictionId
                             )}
+                            enableAccessibleUnitWaitlistOnly={enableAccessibleUnitWaitlistOnly}
                             enableReferralQuestionUnits={doJurisdictionsHaveFeatureFlagOn(
                               FeatureFlagEnum.enableReferralQuestionUnits,
                               jurisdictionId
