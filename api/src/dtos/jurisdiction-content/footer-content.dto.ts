@@ -56,11 +56,20 @@ export class FooterLinkDTO {
 
 export class FooterLogoDTO {
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsSafeUrl({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  logoSrc: string;
+  logoSrc?: string;
+
+  // An uploaded image's storage key. When set, logoSrc is derived from it on read and never stored.
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  logoFileId?: string;
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
