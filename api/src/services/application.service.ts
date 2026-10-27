@@ -826,6 +826,11 @@ export class ApplicationService {
       },
     });
 
+    const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
+      listing?.jurisdictions as unknown as Jurisdiction,
+      FeatureFlagEnum.disableWorkInRegion,
+    );
+
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       listing?.jurisdictions as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
@@ -939,11 +944,15 @@ export class ApplicationService {
                       ...dto.applicant.applicantAddress,
                     },
                   },
-                  applicantWorkAddress: {
-                    create: {
-                      ...dto.applicant.applicantWorkAddress,
-                    },
-                  },
+                  applicantWorkAddress:
+                    !disableWorkInRegion &&
+                    dto.applicant.workInRegion === YesNoEnum.yes
+                      ? {
+                          create: {
+                            ...dto.applicant.applicantWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: dto.applicant.firstName?.trim(),
                   lastName: dto.applicant.lastName?.trim(),
                   birthDay: dto.applicant.birthDay
@@ -988,17 +997,27 @@ export class ApplicationService {
                 create: dto.householdMember.map((member) => ({
                   ...member,
                   sameAddress: member.sameAddress || YesNoEnum.no,
-                  workInRegion: member.workInRegion || YesNoEnum.no,
-                  householdMemberAddress: {
-                    create: {
-                      ...member.householdMemberAddress,
-                    },
-                  },
-                  householdMemberWorkAddress: {
-                    create: {
-                      ...member.householdMemberWorkAddress,
-                    },
-                  },
+                  workInRegion: !disableWorkInRegion
+                    ? member.workInRegion || YesNoEnum.no
+                    : undefined,
+                  householdMemberAddress:
+                    member.sameAddress === YesNoEnum.no
+                      ? {
+                          create: {
+                            ...member.householdMemberAddress,
+                          },
+                        }
+                      : undefined,
+                  householdMemberWorkAddress:
+                    !disableWorkInRegion &&
+                    member.workInRegion === YesNoEnum.yes &&
+                    member.householdMemberWorkAddress
+                      ? {
+                          create: {
+                            ...member.householdMemberWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: member.firstName?.trim(),
                   lastName: member.lastName?.trim(),
                   birthDay: member.birthDay
@@ -1158,6 +1177,11 @@ export class ApplicationService {
     });
 
     await this.snapshotCreateService.createApplicationSnapshot(dto.id);
+
+    const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
+      listing?.jurisdictions as unknown as Jurisdiction,
+      FeatureFlagEnum.disableWorkInRegion,
+    );
 
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       listing?.jurisdictions as unknown as Jurisdiction,
@@ -1417,11 +1441,15 @@ export class ApplicationService {
                       ...dto.applicant.applicantAddress,
                     },
                   },
-                  applicantWorkAddress: {
-                    create: {
-                      ...dto.applicant.applicantWorkAddress,
-                    },
-                  },
+                  applicantWorkAddress:
+                    !disableWorkInRegion &&
+                    dto.applicant.workInRegion === YesNoEnum.yes
+                      ? {
+                          create: {
+                            ...dto.applicant.applicantWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: dto.applicant.firstName?.trim(),
                   lastName: dto.applicant.lastName?.trim(),
                   birthDay: dto.applicant.birthDay
@@ -1465,19 +1493,29 @@ export class ApplicationService {
                   ...member,
                   id: undefined,
                   sameAddress: member.sameAddress || YesNoEnum.no,
-                  workInRegion: member.workInRegion || YesNoEnum.no,
-                  householdMemberAddress: {
-                    create: {
-                      ...member.householdMemberAddress,
-                      id: undefined,
-                    },
-                  },
-                  householdMemberWorkAddress: {
-                    create: {
-                      ...member.householdMemberWorkAddress,
-                      id: undefined,
-                    },
-                  },
+                  workInRegion: !disableWorkInRegion
+                    ? member.workInRegion || YesNoEnum.no
+                    : undefined,
+                  householdMemberAddress:
+                    member.sameAddress === YesNoEnum.no
+                      ? {
+                          create: {
+                            ...member.householdMemberAddress,
+                            id: undefined,
+                          },
+                        }
+                      : undefined,
+                  householdMemberWorkAddress:
+                    !disableWorkInRegion &&
+                    member.workInRegion === YesNoEnum.yes &&
+                    member.householdMemberWorkAddress
+                      ? {
+                          create: {
+                            ...member.householdMemberWorkAddress,
+                            id: undefined,
+                          },
+                        }
+                      : undefined,
                   firstName: member.firstName?.trim(),
                   lastName: member.lastName?.trim(),
                   birthDay: member.birthDay

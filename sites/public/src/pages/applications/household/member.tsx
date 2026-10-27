@@ -105,6 +105,9 @@ const ApplicationMember = () => {
   if (router.query?.memberId) {
     memberId = parseInt(router.query?.memberId.toString())
     member = application.householdMember[memberId]
+    if (!enableFullTimeStudentQuestion) {
+      member.fullTimeStudent = undefined
+    }
     saveText = t("application.household.member.updateHouseholdMember")
     cancelText = t("application.household.member.deleteThisPerson")
   } else {
@@ -429,7 +432,6 @@ const ApplicationMember = () => {
                       id="householdMemberWorkAddress.street"
                       name="householdMemberWorkAddress.street"
                       label={t("application.contact.streetAddress")}
-                      defaultValue={member.householdMemberWorkAddress.street}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.householdMemberWorkAddress?.street}
                       errorMessage={
@@ -445,7 +447,6 @@ const ApplicationMember = () => {
                       id="householdMemberWorkAddress.street2"
                       name="householdMemberWorkAddress.street2"
                       label={t("application.contact.apt")}
-                      defaultValue={member.householdMemberWorkAddress.street2}
                       error={errors.householdMemberWorkAddress?.street2}
                       errorMessage={t("errors.maxLength", { length: 64 })}
                       validation={{ maxLength: 64 }}
@@ -458,7 +459,6 @@ const ApplicationMember = () => {
                         id="householdMemberWorkAddress.city"
                         name="householdMemberWorkAddress.city"
                         label={t("application.contact.city")}
-                        defaultValue={member.householdMemberWorkAddress.city}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.householdMemberWorkAddress?.city}
                         errorMessage={
@@ -474,7 +474,6 @@ const ApplicationMember = () => {
                         id="householdMemberWorkAddress.state"
                         name="householdMemberWorkAddress.state"
                         label={t("application.contact.state")}
-                        defaultValue={member.householdMemberWorkAddress.state}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.householdMemberWorkAddress?.state}
                         errorMessage={
@@ -494,7 +493,6 @@ const ApplicationMember = () => {
                       id="householdMemberWorkAddress.zipCode"
                       name="householdMemberWorkAddress.zipCode"
                       label={t("application.contact.zip")}
-                      defaultValue={member.householdMemberWorkAddress.zipCode}
                       validation={{ required: true, maxLength: 10 }}
                       error={errors.householdMemberWorkAddress?.zipCode}
                       errorMessage={

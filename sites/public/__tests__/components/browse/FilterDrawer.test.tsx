@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React from "react"
 import { screen } from "@testing-library/dom"
+import userEvent from "@testing-library/user-event"
+import { waitFor } from "@testing-library/react"
 import {
   FeatureFlagEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
@@ -907,5 +910,101 @@ describe("FilterDrawer", () => {
 
     expect(screen.getByRole("checkbox", { name: "Mobility" })).toBeChecked()
     expect(screen.getByRole("checkbox", { name: "Hearing" })).not.toBeChecked()
+  })
+
+  describe("listing status filter", () => {
+    const availabilityLabels = ["Units available", "Open waitlist", "Coming soon"]
+
+    const renderStatusDrawer = (
+      filterState: FilterData = {},
+      activeFeatureFlags: FeatureFlagEnum[] = [FeatureFlagEnum.enableFilterByStatus],
+      onSubmit: (data: FilterData) => void = () => {}
+    ) =>
+      render(
+        <FilterDrawer
+          isOpen={true}
+          onClose={() => {}}
+          onSubmit={onSubmit}
+          onClear={() => {}}
+          filterState={filterState}
+          multiselectData={[]}
+          activeFeatureFlags={activeFeatureFlags}
+          listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        />
+      )
+
+    const expectAvailabilityDisabled = (disabled: boolean) => {
+      availabilityLabels.forEach((label) => {
+        const checkbox = screen.getByRole("checkbox", { name: label })
+        if (disabled) {
+          expect(checkbox).toBeDisabled()
+        } else {
+          expect(checkbox).toBeEnabled()
+        }
+      })
+    }
+
+    it("should not show status section when enableFilterByStatus flag is off", () => {
+      renderStatusDrawer({}, [])
+
+      expect(screen.queryByRole("group", { name: "Listing status" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("radio", { name: "Open" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("radio", { name: "Closed" })).not.toBeInTheDocument()
+      expectAvailabilityDisabled(false)
+    })
+
+    it("should show status section with 'Open' selected when flag is on and no filter state", () => {
+      renderStatusDrawer()
+
+      expect(screen.getByRole("group", { name: "Listing status" })).toBeInTheDocument()
+      expect(screen.getByRole("radio", { name: "Open" })).toBeChecked()
+      expect(screen.getByRole("radio", { name: "Closed" })).not.toBeChecked()
+      expectAvailabilityDisabled(false)
+    })
+
+    it("should select 'Closed' and disable availability on first render when filterState is closed", () => {
+      renderStatusDrawer({ [ListingFilterKeys.status]: ListingsStatusEnum.closed })
+
+      expect(screen.getByRole("radio", { name: "Open" })).not.toBeChecked()
+      expect(screen.getByRole("radio", { name: "Closed" })).toBeChecked()
+      expectAvailabilityDisabled(true)
+    })
+
+    it("should toggle availability disabled state when switching between statuses", async () => {
+      renderStatusDrawer()
+
+      await userEvent.click(screen.getByRole("radio", { name: "Closed" }))
+      await waitFor(() => expectAvailabilityDisabled(true))
+
+      await userEvent.click(screen.getByRole("radio", { name: "Open" }))
+      await waitFor(() => expectAvailabilityDisabled(false))
+    })
+
+    it("should drop availabilities on submit when 'Closed' is selected", async () => {
+      const onSubmit = jest.fn()
+      renderStatusDrawer({}, undefined, onSubmit)
+
+      await userEvent.click(screen.getByRole("checkbox", { name: "Units available" }))
+      await userEvent.click(screen.getByRole("radio", { name: "Closed" }))
+      await userEvent.click(screen.getByRole("button", { name: "Show matching listings" }))
+
+      await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
+      const submitted = onSubmit.mock.calls[0][0]
+      expect(submitted[ListingFilterKeys.status]).toBe(ListingsStatusEnum.closed)
+      expect(submitted).not.toHaveProperty(ListingFilterKeys.availabilities)
+    })
+
+    it("should keep availabilities on submit when 'Open' is selected", async () => {
+      const onSubmit = jest.fn()
+      renderStatusDrawer({}, undefined, onSubmit)
+
+      await userEvent.click(screen.getByRole("checkbox", { name: "Units available" }))
+      await userEvent.click(screen.getByRole("button", { name: "Show matching listings" }))
+
+      await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
+      const submitted = onSubmit.mock.calls[0][0]
+      expect(submitted[ListingFilterKeys.status]).toBe(ListingsStatusEnum.active)
+      expect(submitted[ListingFilterKeys.availabilities]).toMatchObject({ unitsAvailable: true })
+    })
   })
 })
