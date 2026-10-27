@@ -854,7 +854,7 @@ describe("Resend confirmation flow", () => {
 
     expect(
       await findByText(
-        "If there is an account made with user@example.com, we’ll send a new code. Be aware, the code will expire in 10 minutes."
+        "If there is an account made with user@example.com, we'll send a new code. Be aware, the code will expire in 10 minutes."
       )
     ).toBeInTheDocument()
 
