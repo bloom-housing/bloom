@@ -1,25 +1,14 @@
-import React, { FunctionComponent, useContext, useEffect, useRef, useState } from "react"
+import React, { FunctionComponent, useContext, useEffect, useState } from "react"
 import { NavigationContext } from "@bloom-housing/ui-components"
-import { UserRole } from "../types/backend-swagger"
 import { AuthContext } from "./AuthContext"
 import { useToastyRef } from "../utilities/MessageContext"
+import { isPartnerPortalRole } from "../utilities/userRoles"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
 type XOR<T, U> = T | U extends Record<string, unknown>
   ? (Without<T, U> & U) | (Without<U, T> & T)
   : T | U
-
-const isPartnerPortalRole = (userRoles: UserRole) => {
-  return (
-    userRoles?.isAdmin ||
-    userRoles?.isSuperAdmin ||
-    userRoles?.isSupportAdmin ||
-    userRoles?.isJurisdictionalAdmin ||
-    userRoles?.isLimitedJurisdictionalAdmin ||
-    userRoles?.isPartner
-  )
-}
 
 type RequireLoginProps = {
   signInPath: string
@@ -44,9 +33,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   ...rest
 }) => {
   const { router } = useContext(NavigationContext)
-  const { initialStateLoaded, signOut, profile } = useContext(AuthContext)
-  const signOutRef = useRef(signOut)
-  signOutRef.current = signOut
+  const { initialStateLoaded, profile } = useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [hasTerms, setHasTerms] = useState(false)
 
@@ -79,13 +66,6 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
       initialStateLoaded &&
       (!profile || (partnersPortal && !isPartnerPortalRole(profile.userRoles || {})))
     ) {
-      // if (profile && partnersPortal && !isPartnerPortalRole(profile.userRoles || {})) {
-      //   console.log("hello")
-      //   console.log(signOut)
-      //   ;async () => {
-      //     await signOutRef.current?.()
-      //   }
-      // }
       addToast(signInMessage, { variant: "primary" })
       void router.push(signInPath)
     }
