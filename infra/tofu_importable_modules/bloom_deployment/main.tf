@@ -98,15 +98,15 @@ variable "google_translate_settings" {
 }
 
 variable "min_tasks" {
-  type = number
+  type        = number
   description = "The minimum number of tasks to run"
-  default = 2
+  default     = 2
 }
 
 variable "max_tasks" {
-  type = number
+  type        = number
   description = "The minimum number of tasks to run"
-  default = 4
+  default     = 4
 }
 
 variable "high_availability" {
