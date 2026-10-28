@@ -50,10 +50,10 @@ Before running OpenTofu with the passed in args, the script automatically:
 
 3. Toggles the terraform variable `observability_collection_enabled` (false by default)
 
-   `observability_collection_enabled` is used to enable/disable the opentelemetry sidecar being
-   deployed alongside the application containers. This won't destroy any managed resources such
-   as grafana, it only effects whether metrics are collected and moved.
-   To enable the collection, pass `--enable-metrics` or `-em`.
+   `observability_collection_enabled` is used to enable/disable the opentelemetry sidecar being 
+   deployed alongside the application containers. This won't destroy any managed resources such 
+   as grafana, it only effects whether metrics are collected and shipped to grafana.
+   To enable the collector, pass `--enable-metrics` or `-em`.
 
 All together:
 
@@ -63,7 +63,7 @@ docker container run --rm -it \
 -v ./infra:/bloom/infra:z \
 -v "${HOME}/.aws/cli":/home/.aws/cli:z \
 -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z \
-ghcr.io/bloom-housing/bloom/infra-dev:gitbranch-main-latest \
+ghcr.io/bloom-housing/bloom/infra-dev \
 [[--skip-sso] | [--skip-init] | [--enable-metrics]] <ROOT_MODULE_NAME> <OPEN_TOFU_ARGS>
 ```
 

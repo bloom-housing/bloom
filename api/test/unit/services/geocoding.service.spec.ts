@@ -20,8 +20,6 @@ describe('GeocodingService', () => {
   const date = new Date();
   const address: Address = {
     id: 'id',
-    createdAt: date,
-    updatedAt: date,
     city: 'Washington',
     county: null,
     state: 'DC',

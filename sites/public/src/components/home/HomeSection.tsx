@@ -7,6 +7,7 @@ interface HomeSectionProps {
   sectionTitle: string
   sectionIcon?: CustomIconType
   layoutClassName?: string
+  fullHeight?: boolean
 }
 
 export const HomeSection = ({
@@ -14,13 +15,14 @@ export const HomeSection = ({
   sectionTitle,
   children,
   layoutClassName,
+  fullHeight,
 }: React.PropsWithChildren<HomeSectionProps>) => {
   const customIcon = sectionIcon ? CustomIconMap[sectionIcon] : undefined
   const className = [styles["section-container"]]
   if (layoutClassName) className.push(layoutClassName)
 
   return (
-    <MaxWidthLayout className={`home-section ${className.join(" ")}`}>
+    <MaxWidthLayout className={`home-section ${className.join(" ")}`} fullHeight={fullHeight}>
       <div className={styles["section-header"]}>
         {customIcon && (
           <Icon outlined size="xl" className={styles["section-header-icon"]}>

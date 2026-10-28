@@ -39,10 +39,20 @@ describe("settings", () => {
     it("should render `none` when no preferences exist", async () => {
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([]))
+          return res(
+            ctx.json({
+              items: [],
+              meta: { totalItems: 0, totalPages: 0 },
+            })
+          )
         }),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [],
+              meta: { totalItems: 0, totalPages: 0 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -55,7 +65,7 @@ describe("settings", () => {
       const { getByText, findByText } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
-      expect(getByText("Preferences")).toBeInTheDocument()
+      expect(await findByText("Preferences")).toBeInTheDocument()
 
       await findByText("None")
       expect(getByText("None")).toBeInTheDocument()
@@ -66,10 +76,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -81,7 +101,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isJurisdictionalAdmin: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",
@@ -101,7 +121,7 @@ describe("settings", () => {
 
       render(<SettingsPreferences />)
       expect(screen.getByText("Settings")).toBeInTheDocument()
-      expect(await screen.findByRole("tablist")).toBeInTheDocument()
+      expect(await screen.findByLabelText("Settings pages")).toBeInTheDocument()
       expect(screen.getByRole("heading", { level: 2, name: "Preferences" })).toBeInTheDocument()
       expect(screen.getByText("Properties")).toBeInTheDocument()
     })
@@ -111,10 +131,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -126,7 +156,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isAdmin: false, isPartner: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",
@@ -156,10 +186,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -171,7 +211,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isAdmin: false, isPartner: true },
               jurisdictions: [
                 {
                   id: "jurisdiction1",
@@ -189,7 +229,7 @@ describe("settings", () => {
       const { getByText, findByText, findByRole } = render(<SettingsPreferences />)
 
       expect(getByText("Settings")).toBeInTheDocument()
-      expect(getByText("Preferences")).toBeInTheDocument()
+      expect(await findByText("Preferences")).toBeInTheDocument()
 
       await findByText("Name")
       const table = await findByRole("table")
@@ -217,7 +257,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions: [{ id: "id1" }],
             })
           )
@@ -229,10 +269,20 @@ describe("settings", () => {
           }
         ),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
           return res(ctx.json({}))
@@ -287,16 +337,26 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions: [{ id: "id1" }],
             })
           )
         }),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
@@ -339,16 +399,26 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: true, isPartner: false },
+              userRoles: { id: "user1", isAdmin: true, isPartner: false },
               jurisdictions: [{ id: "id1" }],
             })
           )
         }),
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -379,10 +449,20 @@ describe("settings", () => {
       document.cookie = "access-token-available=True"
       server.use(
         rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
-          return res(ctx.json([multiselectQuestionPreference]))
+          return res(
+            ctx.json({
+              items: [multiselectQuestionPreference],
+              meta: { totalItems: 1, totalPages: 1 },
+            })
+          )
         }),
         rest.get(
           "http://localhost/api/adapter/multiselectQuestions/listings/id1",
@@ -394,7 +474,7 @@ describe("settings", () => {
           return res(
             ctx.json({
               id: "user1",
-              roles: { id: "user1", isAdmin: false, isPartner: true },
+              userRoles: { id: "user1", isAdmin: false, isPartner: true },
               jurisdictions: [
                 { id: "jurisdiction1", enableGeocodingPreferences: true, name: "jurisdiction 1" },
               ],

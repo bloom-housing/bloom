@@ -7,11 +7,11 @@ import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
-import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override.dto';
 import { isEmpty } from 'class-validator';
 import UnitGroupAmiLevel from '../dtos/unit-groups/unit-group-ami-level.dto';
+import { UnitAccessibilityPriorityTypeEnum } from '../enums/units/accessibility-priority-type-enum';
 
 type AnyDict = { [key: string]: unknown };
 type UnitMap = {
@@ -26,6 +26,8 @@ export const UnitTypeSort = [
   UnitTypeEnum.threeBdrm,
   UnitTypeEnum.fourBdrm,
   UnitTypeEnum.fiveBdrm,
+  UnitTypeEnum.sixBdrm,
+  UnitTypeEnum.sevenBdrm,
 ];
 
 export const usd = new Intl.NumberFormat('en-US', {
@@ -33,6 +35,13 @@ export const usd = new Intl.NumberFormat('en-US', {
   currency: 'USD',
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
+});
+
+const usdTwoDecimal = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
 });
 
 export const minMax = (baseValue: MinMax, newValue: number): MinMax => {
@@ -57,7 +66,9 @@ export const minMaxCurrency = (
 };
 
 export const yearlyCurrencyStringToMonthly = (currency: string) => {
-  return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, '')) / 12);
+  return usdTwoDecimal.format(
+    parseFloat(currency.replace(/[^0-9.-]+/g, '')) / 12,
+  );
 };
 
 export const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {
@@ -167,6 +178,9 @@ export const generateHmiData = (
     'listings.unitTypes.twoBdrm',
     'listings.unitTypes.threeBdrm',
     'listings.unitTypes.fourBdrm',
+    'listings.unitTypes.fiveBdrm',
+    'listings.unitTypes.sixBdrm',
+    'listings.unitTypes.sevenBdrm',
   ];
   // this is to map currentHouseholdSize to a units max occupancy
   const unitOccupancy = [];
@@ -175,9 +189,15 @@ export const generateHmiData = (
     // Get all numbers between min and max
     // If min is more than the largest chart value, make sure we show the largest value
     const unitHouseholdSizes = [
-      ...Array(Math.min(minMax.max, maxAMIChartHouseholdSize) + 1).keys(),
+      ...Array(
+        (!!minMax.max
+          ? Math.min(minMax.max, maxAMIChartHouseholdSize)
+          : maxAMIChartHouseholdSize) + 1,
+      ).keys(),
     ].filter(
-      (value) => value >= Math.min(minMax.min, maxAMIChartHouseholdSize),
+      (value) =>
+        value >=
+        (!!minMax.min ? Math.min(minMax.min, maxAMIChartHouseholdSize) : 1),
     );
     return [...new Set([...validSizes, ...unitHouseholdSizes])].sort((a, b) =>
       a < b ? -1 : 1,
@@ -498,6 +518,18 @@ export const summarizeByAmi = (listing: Listing, amiPercentages: string[]) => {
   });
 };
 
+export const summarizeByPriorityType = (
+  listing: Listing,
+): UnitAccessibilityPriorityTypeEnum[] => {
+  const priorityTypes = new Set<UnitAccessibilityPriorityTypeEnum>();
+  for (const priorityType of listing.units
+    .map((unit) => unit.accessibilityPriorityType)
+    .filter((item) => item != null)) {
+    priorityTypes.add(priorityType);
+  }
+  return Array.from(priorityTypes.values());
+};
+
 export const getUnitTypes = (units: Unit[]): UnitType[] => {
   const unitTypes = new Map<string, UnitType>();
   for (const unitType of units
@@ -527,13 +559,7 @@ export const summarizeUnits = (
   }
   data.unitTypes = getUnitTypes(units);
 
-  const priorityTypes = new Map<string, UnitAccessibilityPriorityType>();
-  for (const priorityType of units
-    .map((unit) => unit.unitAccessibilityPriorityTypes)
-    .filter((item) => item != null)) {
-    priorityTypes.set(priorityType.id, priorityType);
-  }
-  data.priorityTypes = Array.from(priorityTypes.values());
+  data.priorityTypes = summarizeByPriorityType(listing);
 
   data.amiPercentages = Array.from(
     new Set(

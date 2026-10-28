@@ -1,14 +1,20 @@
 locals {
-  default_env_vars = {
-    NODE_ENV                    = "production"
-    DB_USER                     = aws_db_instance.bloom.username
-    DB_HOST                     = aws_db_instance.bloom.endpoint
-    DBSEED_PUBLIC_SITE_BASE_URL = "https://${var.domain_name}"
+  dbseed_env_vars = {
+    PORT                                      = "3100"
+    NODE_ENV                                  = "production"
+    DB_HOST                                   = aws_db_instance.bloom.address
+    DB_PORT                                   = "5432"
+    DB_USER                                   = "bloom_api"
+    DB_DATABASE                               = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH                       = "1"
+    DBSEED_PUBLIC_SITE_BASE_URL               = "https://${var.domain_name}"
+    DBSEED_USE_FULL_CLOUDINARY_URL_AS_FILE_ID = "1"
   }
 }
 
 resource "aws_ecs_task_definition" "bloom_dbseed" {
-  count                    = var.apply_seed ? 1 : 0
+  count = var.bloom_dbseed_image == "" ? 0 : 1
+
   region                   = var.aws_region
   family                   = "bloom-dbseed"
   network_mode             = "awsvpc"
@@ -19,66 +25,62 @@ resource "aws_ecs_task_definition" "bloom_dbseed" {
     cpu_architecture        = "X86_64"
   }
 
-  execution_role_arn = aws_iam_role.bloom_ecs["api"].arn
-  task_role_arn      = aws_iam_role.bloom_container["api"].arn
+  execution_role_arn = aws_iam_role.bloom_ecs["dbseed"].arn
+  task_role_arn      = aws_iam_role.bloom_container["dbseed"].arn
 
-  cpu    = 256
-  memory = 512
+  # Keep in sync with docker-compose.yml
+  cpu    = 1024     # 1 vCPU
+  memory = 4 * 1024 # 4 GiB in MiB
 
   container_definitions = jsonencode([
     {
-      name  = "bloom-dbseed"
-      image = var.bloom_dbseed_image
-
-      # TODO: replace with IAM authentication https://github.com/bloom-housing/bloom/issues/5451
-      command = [
-        "/bin/bash",
-        "-c",
-        "export DATABASE_URL=postgres://$DB_USER:$(node -e 'console.log(encodeURIComponent(process.argv[1]))' $DB_PASSWORD)@$DB_HOST/bloom_prisma && yarn db:seed:staging",
-      ]
-
-      secrets = [
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "${aws_db_instance.bloom.master_user_secret[0].secret_arn}:password::"
-        }
-      ]
-
-      environment = [
-        for k, v in local.default_env_vars : { name = k, value = v }
-      ]
+      name        = "bloom-dbseed"
+      image       = var.bloom_dbseed_image
+      environment = [for k, v in local.dbseed_env_vars : { name = k, value = v }]
 
       logConfiguration = {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-dbseed"].name
           "awslogs-stream-prefix" = "bloom-dbseed"
         }
       }
     }
   ])
-
-  depends_on = [
-    aws_db_instance.bloom,
-    aws_cloudwatch_log_group.task_logs,
-  ]
 }
 
+# Avoids the error:
+#
+# module.bloom_deployment.null_resource.bloom_dbseed_run (local-exec): An error occurred
+# (ClientException) when calling the RunTask operation: ECS was unable to assume the role
+# 'arn:aws:iam::x:role/bloom-dbseed-container' that was provided for this task.
+resource "time_sleep" "on_dbseed_container_role_creation" {
+  count = var.bloom_dbseed_image == "" ? 0 : 1
+
+  depends_on = [
+    aws_iam_role_policy.bloom_ecs["dbseed"],
+    aws_iam_role_policy.bloom_container["dbseed"],
+  ]
+  create_duration = "30s"
+}
+
+# TODO: remove local exec provisioner once
+# https://github.com/hashicorp/terraform-provider-aws/issues/29871 is implemented.
 resource "null_resource" "bloom_dbseed_run" {
-  count = var.apply_seed ? 1 : 0
+  count = var.bloom_dbseed_image == "" ? 0 : 1
 
   triggers = {
-    task_definition_arn = aws_ecs_task_definition.bloom_dbseed[0].arn
-    db_instance_id      = aws_db_instance.bloom.id
-    apply_seed          = var.apply_seed ? "true" : "false"
+    run_number     = var.bloom_dbseed_run_number
+    db_instance_id = aws_db_instance.bloom.id
   }
 
   depends_on = [
-    aws_db_instance.bloom,
-    aws_vpc_endpoint.secrets_manager,
+    aws_vpc_endpoint.aws_services["secretsmanager"],
     aws_route_table_association.private_subnet,
-    aws_ecs_service.bloom_api,
+    time_sleep.on_dbseed_container_role_creation,
+    null_resource.bloom_dbinit_run,
+    aws_ecs_service.bloom_api, # need API to apply migrations before seed can run.
   ]
 
   provisioner "local-exec" {
@@ -90,12 +92,12 @@ resource "null_resource" "bloom_dbseed_run" {
 
       task_arn="$(
         aws ecs run-task \
-          --profile ${var.aws_profile} \
+           ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
           --cluster ${aws_ecs_cluster.bloom.arn} \
           --launch-type FARGATE \
           --task-definition ${aws_ecs_task_definition.bloom_dbseed[0].arn} \
-          --network-configuration "awsvpcConfiguration={subnets=[${join(",", [for s in aws_subnet.private : s.id])}],securityGroups=[${aws_security_group.api.id}],assignPublicIp=DISABLED}" \
+          --network-configuration "awsvpcConfiguration={subnets=[${join(",", [for s in aws_subnet.private : s.id])}],securityGroups=[${aws_security_group.bloom["dbseed"].id}],assignPublicIp=DISABLED}" \
           --query 'tasks[0].taskArn' \
           --output text
       )"
@@ -108,14 +110,14 @@ resource "null_resource" "bloom_dbseed_run" {
       echo "Task ARN: $task_arn"
       echo "Waiting for task to stop..."
       aws ecs wait tasks-stopped \
-        --profile ${var.aws_profile} \
+        ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
         --region ${var.aws_region} \
         --cluster ${aws_ecs_cluster.bloom.arn} \
         --tasks "$task_arn"
 
       exit_code="$(
         aws ecs describe-tasks \
-          --profile ${var.aws_profile} \
+          ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
           --cluster ${aws_ecs_cluster.bloom.arn} \
           --tasks "$task_arn" \
@@ -126,7 +128,7 @@ resource "null_resource" "bloom_dbseed_run" {
       if [ "$exit_code" != "0" ]; then
         reason="$(
           aws ecs describe-tasks \
-            --profile ${var.aws_profile} \
+            ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
             --region ${var.aws_region} \
             --cluster ${aws_ecs_cluster.bloom.arn} \
             --tasks "$task_arn" \

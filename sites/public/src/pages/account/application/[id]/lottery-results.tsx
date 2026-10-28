@@ -18,6 +18,7 @@ import {
 } from "../../../../components/account/ApplicationCards"
 import styles from "../../../../../styles/lottery-results.module.scss"
 import Markdown from "markdown-to-jsx"
+import { sharedGetServerSideProps } from "../../../../lib/sharedPageProps"
 
 const LotteryResults = () => {
   const router = useRouter()
@@ -112,6 +113,7 @@ const LotteryResults = () => {
         <FormsLayout
           className={styles["lottery-results"]}
           pageTitle={`${t("listings.lotteryResults.header")} - ${listing?.name}`}
+          metaDescription={t("pageDescription.lotteryResults")}
         >
           {noApplication && (
             <ApplicationError error={t("account.application.noApplicationError")} />
@@ -131,7 +133,7 @@ const LotteryResults = () => {
                     >
                       {t("t.back")}
                     </Button>
-                    <Heading priority={2} size={"2xl"} className="mt-6">
+                    <Heading priority={2} size={"2xl"} className="mt-6 seeds-heading-large">
                       {lotteryResultHeaderText}
                     </Heading>
                     <p className="mt-4">
@@ -221,7 +223,9 @@ const LotteryResults = () => {
                       return result
                         ? preferenceRank(
                             result.ordinal,
-                            question.multiselectQuestions.text,
+                            question.multiselectQuestions.name
+                              ? question.multiselectQuestions.name
+                              : question.multiselectQuestions.text,
                             totals?.find(
                               (total) =>
                                 total.multiselectQuestionId === question.multiselectQuestions.id
@@ -248,3 +252,5 @@ const LotteryResults = () => {
 }
 
 export default LotteryResults
+
+export const getServerSideProps = sharedGetServerSideProps

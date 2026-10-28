@@ -1,8 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
 import cookieParser from 'cookie-parser';
+import { randomUUID } from 'crypto';
+import { of } from 'rxjs';
 import { stringify } from 'qs';
+import request from 'supertest';
+import { HttpService } from '@nestjs/axios';
+import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import {
   FlaggedSetStatusEnum,
   MultiselectQuestionsStatusEnum,
@@ -33,20 +36,14 @@ import {
 import { unitRentTypeFactory } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import {
-  unitAccessibilityPriorityTypeFactoryAll,
-  unitAccessibilityPriorityTypeFactorySingle,
-} from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
-import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { multiselectQuestionFactory } from '../../../prisma/seed-helpers/multiselect-question-factory';
-import { UserUpdate } from '../../../src/dtos/users/user-update.dto';
 import { EmailAndAppUrl } from '../../../src/dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../../../src/dtos/users/confirmation-request.dto';
 import { UserService } from '../../../src/services/user.service';
 import { EmailService } from '../../../src/services/email.service';
+import { CronJobService } from '../../../src/services/cron-job.service';
 import { permissionActions } from '../../../src/enums/permissions/permission-actions-enum';
 import { AfsResolve } from '../../../src/dtos/application-flagged-sets/afs-resolve.dto';
 import {
@@ -68,8 +65,13 @@ import {
   createSimpleApplication,
   createSimpleListing,
 } from './helpers';
-import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 import { featureFlagFactory } from '../../../prisma/seed-helpers/feature-flag-factory';
+import { PublicUserUpdate } from '../../../src/dtos/users/public-user-update.dto';
+
+const testCronJobService = {
+  startCronJob: jest.fn().mockResolvedValue(undefined),
+  markCronJobAsStarted: jest.fn().mockResolvedValue(undefined),
+};
 
 const testEmailService = {
   confirmation: jest.fn(),
@@ -80,13 +82,44 @@ const testEmailService = {
   sendMfaCode: jest.fn(),
   sendCSV: jest.fn(),
   applicationConfirmation: jest.fn(),
+  lotteryPublishedAdmin: jest.fn(),
+  lotteryPublishedApplicant: jest.fn(),
+  listingPublishNotification: jest.fn(),
+  listingPublished: jest.fn(),
 };
 
-describe('Testing Permissioning of endpoints as Admin User', () => {
+const testHttpService = {
+  pipe: jest.fn(),
+  get: jest.fn(() => {
+    const response = {
+      status: 200,
+      statusText: 'OK',
+      headers: {},
+      config: {
+        headers: undefined,
+      },
+      data: {
+        jurisdictions: [
+          {
+            id: 'externalJurisdictionId',
+            name: 'externalJurisdictionName',
+          },
+        ],
+        listings: [],
+        reservedCommunityTypes: [],
+        unitRentTypes: [],
+        unitTypes: [],
+      },
+    };
+
+    return of(response);
+  }),
+};
+
+describe('Testing Permission-ing of endpoints as Admin User', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
-  let applicationFlaggedSetService: ApplicationFlaggedSetService;
   let cookies = '';
   let jurisdictionId = '';
 
@@ -94,14 +127,14 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider(CronJobService)
+      .useValue(testCronJobService)
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(HttpService)
+      .useValue(testHttpService)
       .compile();
 
-    applicationFlaggedSetService =
-      moduleFixture.get<ApplicationFlaggedSetService>(
-        ApplicationFlaggedSetService,
-      );
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
@@ -131,7 +164,6 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
-    await unitAccessibilityPriorityTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -662,72 +694,6 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
     });
   });
 
-  describe('Testing unit accessibility priority types endpoints', () => {
-    it('should succeed for list endpoint', async () => {
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes?`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for retrieve endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-
-      await request(app.getHttpServer())
-        .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for create endpoint', async () => {
-      await request(app.getHttpServer())
-        .post('/unitAccessibilityPriorityTypes')
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          name: 'hearing And Visual',
-        } as UnitAccessibilityPriorityTypeCreate)
-        .set('Cookie', cookies)
-        .expect(201);
-    });
-
-    it('should succeed for update endpoint', async () => {
-      const unitTypeA = await unitAccessibilityPriorityTypeFactorySingle(
-        prisma,
-      );
-      await request(app.getHttpServer())
-        .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-          name: 'hearing And Visual',
-        } as UnitAccessibilityPriorityTypeUpdate)
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for delete endpoint', async () => {
-      await unitAccessibilityPriorityTypeFactoryAll(prisma);
-      const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-        data: {
-          name: 'unit type A',
-        },
-      });
-
-      await request(app.getHttpServer())
-        .delete(`/unitAccessibilityPriorityTypes`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          id: unitTypeA.id,
-        } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-  });
-
   describe('Testing unit types endpoints', () => {
     it('should succeed for list endpoint', async () => {
       await request(app.getHttpServer())
@@ -952,13 +918,13 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/user/${userA.id}`)
+        .put(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send({
           id: userA.id,
           firstName: 'New User First Name',
           lastName: 'New User Last Name',
-        } as UserUpdate)
+        } as PublicUserUpdate)
         .set('Cookie', cookies)
         .expect(200);
 
@@ -1079,7 +1045,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
       });
 
       await request(app.getHttpServer())
-        .post(`/user/`)
+        .post(`/user/public`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(buildUserCreateMock(jurisdictionId, 'publicUser+admin@email.com'))
         .set('Cookie', cookies)
@@ -1088,7 +1054,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for partner create endpoint & create an activity log entry', async () => {
       const res = await request(app.getHttpServer())
-        .post(`/user/invite`)
+        .post(`/user/partner`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .send(
           buildUserInviteMock(jurisdictionId, 'partnerUser+admin@email.com'),
@@ -1140,6 +1106,7 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .post(`/listings/list`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
+        .send({})
         .expect(201);
     });
 
@@ -1320,10 +1287,10 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
 
     it('should succeed for mapMarkers endpoint', async () => {
       await request(app.getHttpServer())
-        .get(`/listings/mapMarkers`)
+        .post(`/listings/mapMarkers`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
-        .expect(200);
+        .expect(201);
     });
   });
 
@@ -1439,21 +1406,6 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
         .send({
           id: afs.id,
         } as IdDTO)
-        .set('Cookie', cookies)
-        .expect(200);
-    });
-
-    it('should succeed for process endpoint', async () => {
-      /*
-        Because so many different iterations of the process endpoint were firing we were running into collisions. 
-        Since this is just testing the permissioning aspect I'm switching to mocking the process function
-      */
-      const mockProcess = jest.fn();
-      applicationFlaggedSetService.process = mockProcess;
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', cookies)
         .expect(200);
     });
@@ -1697,6 +1649,147 @@ describe('Testing Permissioning of endpoints as Admin User', () => {
           id: deleteId,
         } as IdDTO)
         .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+  });
+
+  describe('Testing agency endpoint', () => {
+    let agencyId: string;
+
+    beforeAll(async () => {
+      const agencyData = {
+        name: 'Test Agency',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.agency.create({
+        data: {
+          name: agencyData.name,
+          jurisdictions: {
+            connect: {
+              id: agencyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+
+      if (res.id) {
+        agencyId = res.id;
+      }
+    });
+
+    it('should succeed for list endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/agency`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for retrieve endpoint', async () => {
+      if (!agencyId) {
+        throw new Error('Agency ID not set up for test');
+      }
+
+      await request(app.getHttpServer())
+        .get(`/agency/${agencyId}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for create endpoint', async () => {
+      const agencyData = {
+        name: 'New Agency',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .post('/agency')
+        .send(agencyData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(201);
+    });
+
+    it('should succeed for update endpoint', async () => {
+      if (!agencyId) {
+        throw new Error('Agency ID not set up for test');
+      }
+
+      const agencyUpdateData = {
+        id: agencyId,
+        name: 'Updated Test Agency',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      await request(app.getHttpServer())
+        .put(`/agency`)
+        .send(agencyUpdateData)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for delete endpoint', async () => {
+      const agencyData = {
+        name: 'Agency to Delete',
+        jurisdictions: {
+          id: jurisdictionId,
+        },
+      };
+
+      const res = await prisma.agency.create({
+        data: {
+          name: agencyData.name,
+          jurisdictions: {
+            connect: {
+              id: agencyData.jurisdictions.id,
+            },
+          },
+        },
+      });
+
+      const deleteId = res.id;
+
+      await request(app.getHttpServer())
+        .delete(`/agency`)
+        .send({
+          id: deleteId,
+        } as IdDTO)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+  });
+
+  describe('Testing external listing endpoints', () => {
+    it('should succeed for externalize endpoint', async () => {
+      await request(app.getHttpServer())
+        .get(`/externalListings`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+    });
+
+    it('should succeed for ingest endpoint', async () => {
+      const body = {
+        externalURL: 'https://www.externalJurisdictionName.com',
+        jurisdictionId: randomUUID(),
+        targetName: 'externalJurisdictionName',
+      };
+
+      await request(app.getHttpServer())
+        .put(`/externalListings/ingest`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(body)
         .set('Cookie', cookies)
         .expect(200);
     });

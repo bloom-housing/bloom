@@ -1,5 +1,6 @@
 import { cleanup } from "@testing-library/react"
 import {
+  getLandUseMinOccupancy,
   getUniqueUnitTypes,
   getUniqueUnitGroupUnitTypes,
   sortUnitTypes,
@@ -21,6 +22,8 @@ describe("unit type: sortUnitTypes helper", () => {
         { id: "twoBdrm", name: "twoBdrm" },
         { id: "threeBdrm", name: "threeBdrm" },
         { id: "fourBdrm", name: "fourBdrm" },
+        { id: "sixBdrm", name: "sixBdrm" },
+        { id: "sevenBdrm", name: "sevenBdrm" },
       ])
     ).toStrictEqual([
       { id: "SRO", name: "sro" },
@@ -29,14 +32,18 @@ describe("unit type: sortUnitTypes helper", () => {
       { id: "twoBdrm", name: "twoBdrm" },
       { id: "threeBdrm", name: "threeBdrm" },
       { id: "fourBdrm", name: "fourBdrm" },
+      { id: "sixBdrm", name: "sixBdrm" },
+      { id: "sevenBdrm", name: "sevenBdrm" },
     ])
     expect(
       sortUnitTypes([
+        { id: "sevenBdrm", name: "sevenBdrm" },
         { id: "fourBdrm", name: "fourBdrm" },
         { id: "studio", name: "studio" },
         { id: "oneBdrm", name: "oneBdrm" },
         { id: "twoBdrm", name: "twoBdrm" },
         { id: "threeBdrm", name: "threeBdrm" },
+        { id: "sixBdrm", name: "sixBdrm" },
         { id: "SRO", name: "sro" },
       ])
     ).toStrictEqual([
@@ -46,6 +53,8 @@ describe("unit type: sortUnitTypes helper", () => {
       { id: "twoBdrm", name: "twoBdrm" },
       { id: "threeBdrm", name: "threeBdrm" },
       { id: "fourBdrm", name: "fourBdrm" },
+      { id: "sixBdrm", name: "sixBdrm" },
+      { id: "sevenBdrm", name: "sevenBdrm" },
     ])
   })
   it("should sort complex arrays", () => {
@@ -72,6 +81,31 @@ describe("unit type: sortUnitTypes helper", () => {
       { id: "fourBdrm", name: "fourBdrm" },
       { id: "fourBdrm", name: "fourBdrm" },
     ])
+  })
+})
+
+describe("unit type: getLandUseMinOccupancy helper", () => {
+  it.each([
+    [UnitTypeEnum.SRO, 1],
+    [UnitTypeEnum.studio, 1],
+    [UnitTypeEnum.oneBdrm, 1],
+    [UnitTypeEnum.twoBdrm, 2],
+    [UnitTypeEnum.threeBdrm, 4],
+    [UnitTypeEnum.fourBdrm, 6],
+    [UnitTypeEnum.fiveBdrm, 8],
+    [UnitTypeEnum.sixBdrm, 10],
+  ])("should return %s minimum occupancy of %s", (unitType, expected) => {
+    expect(getLandUseMinOccupancy(unitType)).toBe(expected)
+  })
+  it("should return undefined for sevenBdrm", () => {
+    expect(getLandUseMinOccupancy(UnitTypeEnum.sevenBdrm)).toBeUndefined()
+  })
+  it("should return undefined for an unknown unit type name", () => {
+    expect(getLandUseMinOccupancy("eightBdrm")).toBeUndefined()
+  })
+  it("should return undefined when no unit type name is passed in", () => {
+    expect(getLandUseMinOccupancy()).toBeUndefined()
+    expect(getLandUseMinOccupancy("")).toBeUndefined()
   })
 })
 

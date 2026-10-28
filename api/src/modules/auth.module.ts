@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '../controllers/auth.controller';
@@ -11,6 +11,7 @@ import { MfaStrategy } from '../passports/mfa.strategy';
 import { JwtStrategy } from '../passports/jwt.strategy';
 import { EmailModule } from './email.module';
 import { SingleUseCodeStrategy } from '../passports/single-use-code.strategy';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Module({
   imports: [
@@ -23,13 +24,15 @@ import { SingleUseCodeStrategy } from '../passports/single-use-code.strategy';
       secret: process.env.APP_SECRET,
     }),
     EmailModule,
+    SnapshotCreateModule,
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
-    PermissionService,
-    MfaStrategy,
     JwtStrategy,
+    Logger,
+    MfaStrategy,
+    PermissionService,
     SingleUseCodeStrategy,
   ],
   exports: [AuthService, PermissionService],

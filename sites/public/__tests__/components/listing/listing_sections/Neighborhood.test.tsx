@@ -28,7 +28,13 @@ describe("<Neighborhood>", () => {
         name={"Listing name"}
         neighborhood={"Westend"}
         region={"Downtown"}
-        neighborhoodAmenities={{ groceryStores: "Market", pharmacies: "Health store" }}
+        neighborhoodAmenities={{
+          groceryStores: "Market",
+          pharmacies: "Health store",
+          id: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }}
         visibleNeighborhoodAmenities={[
           NeighborhoodAmenitiesEnum.groceryStores,
           NeighborhoodAmenitiesEnum.pharmacies,
@@ -102,6 +108,9 @@ describe("<Neighborhood>", () => {
           publicTransportation: "Bus",
           schools: "School",
           healthCareResources: "Health center",
+          id: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
         }}
         visibleNeighborhoodAmenities={[
           NeighborhoodAmenitiesEnum.groceryStores,
@@ -135,7 +144,13 @@ describe("<Neighborhood>", () => {
         name={"Listing name"}
         neighborhood={"Westend"}
         region={"Downtown"}
-        neighborhoodAmenities={{ groceryStores: "Four blocks", pharmacies: "Two blocks" }}
+        neighborhoodAmenities={{
+          groceryStores: "Four blocks",
+          pharmacies: "Two blocks",
+          id: "1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }}
         visibleNeighborhoodAmenities={[
           NeighborhoodAmenitiesEnum.groceryStores,
           NeighborhoodAmenitiesEnum.pharmacies,

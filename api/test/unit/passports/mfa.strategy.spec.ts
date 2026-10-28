@@ -6,13 +6,14 @@ import { MfaStrategy } from '../../../src/passports/mfa.strategy';
 import { MfaType } from '../../../src/enums/mfa/mfa-type-enum';
 import { Login } from '../../../src/dtos/auth/login.dto';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
+import { SnapshotCreateService } from '../../../src/services/snapshot-create.service';
 
 describe('Testing mfa strategy', () => {
   let strategy: MfaStrategy;
   let prisma: PrismaService;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MfaStrategy, PrismaService],
+      providers: [MfaStrategy, PrismaService, SnapshotCreateService],
     }).compile();
 
     strategy = module.get<MfaStrategy>(MfaStrategy);
@@ -258,6 +259,7 @@ describe('Testing mfa strategy', () => {
         singleUseCodeUpdatedAt: null,
         phoneNumberVerified: null,
         lastLoginAt: expect.anything(),
+        wasWarnedOfDeletion: false,
         failedLoginAttemptsCount: 0,
       },
       where: {
@@ -475,6 +477,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -533,6 +536,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 1,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -555,6 +559,14 @@ describe('Testing mfa strategy', () => {
       phoneNumberVerified: false,
       singleUseCode: 'zyxwv',
       singleUseCodeUpdatedAt: new Date(),
+    });
+    prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+      id: id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    prisma.userAccountSnapshot.create = jest.fn().mockResolvedValue({
+      id: id,
     });
 
     prisma.userAccounts.update = jest.fn().mockResolvedValue({ id });
@@ -581,6 +593,13 @@ describe('Testing mfa strategy', () => {
       },
     });
 
+    expect(prisma.userAccountSnapshot.create).toHaveBeenCalledWith({
+      data: {
+        originalCreatedAt: expect.anything(),
+        originalId: id,
+        updatedAt: expect.anything(),
+      },
+    });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
       data: {
         singleUseCode: null,
@@ -588,6 +607,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: true,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,
@@ -643,6 +663,7 @@ describe('Testing mfa strategy', () => {
         phoneNumberVerified: false,
         lastLoginAt: expect.anything(),
         failedLoginAttemptsCount: 0,
+        wasWarnedOfDeletion: false,
       },
       where: {
         id,

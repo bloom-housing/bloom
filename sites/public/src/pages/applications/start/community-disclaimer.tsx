@@ -1,5 +1,11 @@
-import { AuthContext, OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { Form, t } from "@bloom-housing/ui-components"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import React, { useContext, useEffect } from "react"
 
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -10,6 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import { UserStatus } from "../../../lib/constants"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationCommunityDisclaimer = () => {
   const { profile } = useContext(AuthContext)
@@ -67,3 +74,5 @@ const ApplicationCommunityDisclaimer = () => {
 }
 
 export default ApplicationCommunityDisclaimer
+
+export const getStaticProps = sharedGetStaticProps

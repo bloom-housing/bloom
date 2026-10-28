@@ -6,24 +6,41 @@ import styles from "./Hero.module.scss"
 export interface HeroProps {
   /** A clear call to action, most typically a button */
   action: React.ReactNode
+  /** If the hero should take the full height of the viewport */
+  fullHeight?: boolean
+  image?: string
+  imageAlt?: string
   /** Optional text shown above the heading */
   note?: string
   /** Text shown beneath the heading */
   subtitle?: string
   /** Main heading text */
   title: string
+  titleSize?: "sm" | "md" | "lg"
 }
 
 export const Hero = (props: HeroProps) => {
+  const titleSize = props.titleSize || "lg"
+
   return (
-    <MaxWidthLayout className={styles["hero-container"]}>
-      <div className={styles["hero"]}>
-        {props.note && <p className={styles["note"]}>{props.note}</p>}
-        <Heading priority={1} className={styles["heading"]}>
-          {props.title}
-        </Heading>
-        {props.subtitle && <p className={styles["subtitle"]}>{props.subtitle}</p>}
-        <div className={styles["hero-buttons"]}>{props.action}</div>
+    <MaxWidthLayout className={styles["hero-container"]} fullHeight={props.fullHeight}>
+      <div className={styles["hero-with-image"]}>
+        <div className={`${styles["hero"]}`}>
+          {props.note && <p className={styles["note"]}>{props.note}</p>}
+          <Heading
+            priority={1}
+            className={`${styles["heading"]} ${styles[`heading-${titleSize}`]}`}
+          >
+            {props.title}
+          </Heading>
+          {props.subtitle && <p className={styles["subtitle"]}>{props.subtitle}</p>}
+          <div className={styles["hero-buttons"]}>{props.action}</div>
+        </div>
+        {props.image && (
+          <div className={styles["hero-image"]}>
+            <img src={props.image} alt={props.imageAlt} />
+          </div>
+        )}
       </div>
     </MaxWidthLayout>
   )

@@ -2,6 +2,9 @@
   --max-width-layout-desktop-margin-block: 0;
   --max-width-layout-mobile-margin-block: 0;
 
+  display: flex;
+  flex-direction: column;
+
   .layout-max-width-container {
     display: flex;
     align-items: center;
@@ -20,5 +23,17 @@
     max-width: var(--seeds-screen-lg);
     margin: auto;
     width: 100%;
+  }
+}
+
+.full-height {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  .layout-max-width-container {
+    align-items: flex-start;
+  }
+  .layout-max-width-content {
+    margin: initial;
   }
 }

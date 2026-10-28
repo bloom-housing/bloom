@@ -84,6 +84,9 @@ yarn-error.log
 .vscode
 *.code-workspace
 
+# Personal Claude Code settings (shared config lives in .claude/settings.json)
+.claude/settings.local.json
+
 # VS code debugger config
 launch.json
 
@@ -98,7 +101,6 @@ dump.rdb
 
 # Development planning files
 memory-bank/
-.github/copilot-instructions.md
 
 # Terraform providers
 .terraform
@@ -106,3 +108,4 @@ memory-bank/
 
 infra/local/*
 infra/data_to_import.sql
+tsconfig.tsbuildinfo

@@ -35,6 +35,7 @@
   "incomePeriod": "Month",
   "incomeMonth": "5000",
   "incomeVouchers": "No",
+  "vouchers": "No",
   "demographics.ethnicity": "Not Hispanic / Latino",
   "acceptedTerms": "Yes",
   "firstName": "HouseHold First Name",

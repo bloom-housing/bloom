@@ -1,15 +1,26 @@
 import React, { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationLiveAlone = () => {
   const { profile } = useContext(AuthContext)
@@ -19,12 +30,37 @@ const ApplicationLiveAlone = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors, trigger } = useForm()
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "liveAlone",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  // passing empty object as getValues because the form's householdSize is the radio string ("liveAlone"/"withOthers"),
+  // not the number;
+  // the radio's onChange already wrote the real householdSize onto application
+  const { onFieldBlur } = useStopLightBanners(
+    "liveAlone",
+    application,
+    listing,
+    enabledRuleKeys,
+    () => ({})
+  )
 
   const onSubmit = async () => {
     const validation = await trigger()
     if (!validation) return
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+    guardSubmit({}, () => {
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
+  }
+
+  const onError = () => {
+    onFormError()
   }
 
   useEffect(() => {
@@ -41,12 +77,14 @@ const ApplicationLiveAlone = () => {
       value: "liveAlone",
       label: t("application.household.liveAlone.willLiveAlone"),
       dataTestId: "app-household-live-alone",
+      defaultChecked: application.householdSize === 1,
     },
     {
       id: "householdSizeLiveWithOthers",
       value: "withOthers",
       label: t("application.household.liveAlone.liveWithOtherPeople"),
       dataTestId: "app-household-with-others",
+      defaultChecked: application.householdSize > 1,
     },
   ]
 
@@ -56,7 +94,7 @@ const ApplicationLiveAlone = () => {
         listing?.name
       }`}
     >
-      <Form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
+      <Form className="mb-4" onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.liveAlone.title")}
@@ -70,17 +108,9 @@ const ApplicationLiveAlone = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}
@@ -96,6 +126,7 @@ const ApplicationLiveAlone = () => {
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               onChange={(event: ChangeEvent<any>) => {
                 if (event.target.value === "liveAlone") {
                   application.householdSize = 1
@@ -107,7 +138,7 @@ const ApplicationLiveAlone = () => {
                 }
               }}
             >
-              <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
+              <legend className={`text__caps-spaced ${errors?.householdSize ? "text-alert" : ""}`}>
                 {t("application.household.householdMembers")}
               </legend>
               <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
@@ -131,3 +162,5 @@ const ApplicationLiveAlone = () => {
 }
 
 export default ApplicationLiveAlone
+
+export const getStaticProps = sharedGetStaticProps

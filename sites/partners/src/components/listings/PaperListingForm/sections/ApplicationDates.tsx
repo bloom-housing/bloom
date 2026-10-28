@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import {
   t,
   DateField,
@@ -21,24 +23,31 @@ import {
   MarketingTypeEnum,
   MarketingSeasonEnum,
   MonthEnum,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import styles from "../ListingForm.module.scss"
 
 type ApplicationDatesProps = {
+  disableDueDate?: boolean
   enableMarketingFlyer?: boolean
   enableMarketingStatus?: boolean
   enableMarketingStatusMonths?: boolean
+  enableAutoOpenDate?: boolean
+  enableAutopublish?: boolean
+  listing?: FormListing
   openHouseEvents: TempEvent[]
   requiredFields: string[]
-  listing?: FormListing
   setOpenHouseEvents: (events: TempEvent[]) => void
 }
 
 const ApplicationDates = ({
+  disableDueDate,
   enableMarketingFlyer,
   enableMarketingStatus,
   enableMarketingStatusMonths,
+  enableAutoOpenDate,
+  enableAutopublish,
   listing,
   openHouseEvents,
   requiredFields,
@@ -53,7 +62,7 @@ const ApplicationDates = ({
   }
 
   const openHouseTableData = useMemo(() => {
-    return openHouseEvents.map((event) => {
+    return openHouseEvents.map((event, index) => {
       const { startTime, endTime, url } = event
 
       return {
@@ -72,6 +81,7 @@ const ApplicationDates = ({
                 className={"font-semibold darker-link"}
                 onClick={() => setDrawerOpenHouse(event)}
                 variant="text"
+                id={`editOpenHouseButton-${index}`}
               >
                 {t("t.edit")}
               </Button>
@@ -136,6 +146,12 @@ const ApplicationDates = ({
 
   const hasDueDateError = errors?.applicationDueDate || errors?.applicationDueDateField
 
+  const hasScheduledPublishError =
+    errors?.scheduledPublishAt || errors?.scheduledListingPublishDateField
+
+  const hasScheduledApplicationOpenError =
+    errors?.scheduledApplicationOpenAt || errors?.scheduledApplicationOpenDateField
+
   const marketingTypeChoice = watch("marketingType")
 
   return (
@@ -145,6 +161,78 @@ const ApplicationDates = ({
         heading={t("listings.sections.applicationDatesTitle")}
         subheading={t("listings.sections.applicationDatesSubtitle")}
       >
+        {(enableAutopublish || enableAutoOpenDate) && (
+          <Grid.Row columns={2}>
+            {enableAutopublish && (
+              <Grid.Cell>
+                <DateField
+                  label={t("listings.scheduledListingPublishDate")}
+                  name={"scheduledListingPublishDateField"}
+                  id={"scheduledListingPublishDateField"}
+                  register={register}
+                  setValue={setValue}
+                  watch={watch}
+                  disabled={
+                    listing?.status === ListingsStatusEnum.active ||
+                    listing?.status === ListingsStatusEnum.closed
+                  }
+                  error={
+                    hasScheduledPublishError && {
+                      month: hasScheduledPublishError,
+                      day: hasScheduledPublishError,
+                      year: hasScheduledPublishError,
+                    }
+                  }
+                  errorMessage={fieldMessage(errors?.scheduledListingPublishDateField)}
+                  note={t("listings.scheduledListingPublishDateHelper")}
+                  defaultDate={{
+                    month: listing?.scheduledPublishAt
+                      ? dayjs.utc(listing.scheduledPublishAt).format("MM")
+                      : null,
+                    day: listing?.scheduledPublishAt
+                      ? dayjs.utc(listing.scheduledPublishAt).format("DD")
+                      : null,
+                    year: listing?.scheduledPublishAt
+                      ? dayjs.utc(listing.scheduledPublishAt).format("YYYY")
+                      : null,
+                  }}
+                />
+              </Grid.Cell>
+            )}
+            {enableAutoOpenDate && (
+              <Grid.Cell>
+                <DateField
+                  label={t("listings.scheduledApplicationOpenDate")}
+                  name={"scheduledApplicationOpenDateField"}
+                  id={"scheduledApplicationOpenDateField"}
+                  register={register}
+                  setValue={setValue}
+                  watch={watch}
+                  error={
+                    hasScheduledApplicationOpenError && {
+                      month: hasScheduledApplicationOpenError,
+                      day: hasScheduledApplicationOpenError,
+                      year: hasScheduledApplicationOpenError,
+                    }
+                  }
+                  errorMessage={fieldMessage(errors?.scheduledApplicationOpenDateField)}
+                  note={t("listings.scheduledApplicationOpenDateHelper")}
+                  defaultDate={{
+                    month: listing?.scheduledApplicationOpenAt
+                      ? dayjs.utc(listing.scheduledApplicationOpenAt).format("MM")
+                      : null,
+                    day: listing?.scheduledApplicationOpenAt
+                      ? dayjs.utc(listing.scheduledApplicationOpenAt).format("DD")
+                      : null,
+                    year: listing?.scheduledApplicationOpenAt
+                      ? dayjs.utc(listing.scheduledApplicationOpenAt).format("YYYY")
+                      : null,
+                  }}
+                />
+              </Grid.Cell>
+            )}
+          </Grid.Row>
+        )}
         <Grid.Row columns={2}>
           <Grid.Cell>
             <DateField
@@ -158,6 +246,7 @@ const ApplicationDates = ({
               register={register}
               setValue={setValue}
               watch={watch}
+              disabled={disableDueDate}
               error={
                 hasDueDateError && {
                   month: hasDueDateError,
@@ -165,7 +254,11 @@ const ApplicationDates = ({
                   year: hasDueDateError,
                 }
               }
-              note={t("listings.whenApplicationsClose")}
+              note={
+                enableAutopublish
+                  ? t("listings.listingWillAutomaticallyClose")
+                  : t("listings.whenApplicationsClose")
+              }
               defaultDate={{
                 month: listing?.applicationDueDate
                   ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -191,6 +284,7 @@ const ApplicationDates = ({
               register={register}
               setValue={setValue}
               watch={watch}
+              disabled={disableDueDate}
               error={errors?.applicationDueDate || errors?.applicationDueTimeField}
               defaultValues={{
                 hours: listing?.applicationDueDate
@@ -211,6 +305,7 @@ const ApplicationDates = ({
             />
           </Grid.Cell>
         </Grid.Row>
+
         {enableMarketingStatus && (
           <Grid.Row columns={2}>
             <Grid.Cell>

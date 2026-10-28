@@ -1,10 +1,11 @@
 import React from "react"
 import { Button } from "@bloom-housing/ui-seeds"
-import { Field, Form, t, AlertBox, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
+import { Field, t, AlertBox, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 import { BloomCard } from "../components/BloomCard"
+import { Form } from "../forms/Form"
 import { emailRegex } from "../../utilities/regex"
 import styles from "./FormForgotPassword.module.scss"
 import { useRouter } from "next/router"
@@ -13,6 +14,7 @@ export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
   onSubmit: (data: FormForgotPasswordValues) => void
   networkError: FormForgotPasswordNetworkError
+  loading?: boolean
 }
 
 export type FormForgotPasswordNetworkError = {
@@ -31,6 +33,7 @@ export type FormForgotPasswordValues = {
 }
 
 const FormForgotPassword = ({
+  loading,
   onSubmit,
   networkError,
   control: { errors, register, handleSubmit },
@@ -42,7 +45,12 @@ const FormForgotPassword = ({
   const router = useRouter()
 
   return (
-    <BloomCard title={t("authentication.forgotPassword.sendEmail")} iconSymbol={"profile"}>
+    <BloomCard
+      title={t("authentication.forgotPassword.sendEmail")}
+      iconSymbol={"userCircle"}
+      iconClass={"card-icon"}
+      headingClass={"seeds-large-heading"}
+    >
       <>
         {Object.entries(errors).length > 0 && !networkError.error && (
           <AlertBox type="alert" inverted closeable>
@@ -63,7 +71,11 @@ const FormForgotPassword = ({
         )}
 
         <CardSection>
-          <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
+          <Form
+            id="sign-in"
+            suppressSubmitOnEnter={false}
+            onSubmit={handleSubmit(onSubmit, onError)}
+          >
             <Field
               name="email"
               label={t("t.email")}
@@ -73,9 +85,13 @@ const FormForgotPassword = ({
               errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
               register={register}
               onChange={() => networkError.reset()}
-              labelClassName={"text__caps-spaced"}
+              labelClassName={`text__caps-spaced ${styles["field-weight"]}`}
             />
-            <Button type="submit" className={styles["forgot-password-submit-button"]}>
+            <Button
+              type="submit"
+              className={styles["forgot-password-submit-button"]}
+              loadingMessage={loading ? t("t.loading") : null}
+            >
               {t("authentication.forgotPassword.sendEmailButton")}
             </Button>
 

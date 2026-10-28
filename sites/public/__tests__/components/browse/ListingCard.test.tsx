@@ -7,6 +7,7 @@ import {
   FeatureFlagEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import dayjs from "dayjs"
 
@@ -36,7 +37,7 @@ describe("<ListingCard>", () => {
         }}
       />
     )
-    const tags = getListingTags(listing, true)
+    const tags = getListingTags(listing, { hideReviewTags: true })
     expect(view.getByText(listing.name)).toBeDefined()
     expect(view.getByText("98 Archer Street, San Jose, CA 95112")).toBeDefined()
     tags.forEach((tag) => {
@@ -46,12 +47,12 @@ describe("<ListingCard>", () => {
     expect(view.getByText("Minimum income")).toBeDefined()
     expect(view.getByText("Rent")).toBeDefined()
     expect(view.getByText("First come first serve", { exact: false })).toBeDefined()
-    expect(view.getByLabelText("A picture of the building")).toBeDefined()
+    expect(view.getByAltText("A picture of the building")).toBeDefined()
     expect(view.getByRole("link", { name: listing.name })).toHaveAttribute(
       "href",
       `/listing/${listing.id}/${listing.urlSlug}`
     )
-    expect(view.getByText("1 BR")).toBeDefined()
+    expect(view.getByText("1 Bedroom")).toBeDefined()
     expect(view.getByText("$150")).toBeDefined()
     expect(view.getByText("% of income, or up to $1,200")).toBeDefined()
   })
@@ -93,6 +94,7 @@ describe("<ListingCard>", () => {
                 text: "Seniors 62+",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
               },
             },
             {
@@ -104,6 +106,7 @@ describe("<ListingCard>", () => {
                 text: "Supportive Housing for the Homeless",
                 jurisdictions: [],
                 applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+                status: MultiselectQuestionsStatusEnum.active,
               },
             },
           ],

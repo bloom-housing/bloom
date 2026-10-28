@@ -1,31 +1,38 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { Field, FieldGroup, Form, PhoneField, Select, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Field, FieldGroup, PhoneField, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
-  contactPreferencesKeys,
-  phoneNumberKeys,
-  stateKeys,
-  blankApplication,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
+  blankApplication,
+  contactPreferencesKeys,
   mergeDeep,
+  phoneNumberKeys,
+  pushGtmEvent,
+  stateKeys,
 } from "@bloom-housing/shared-helpers"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { disableContactFormOption, isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import {
   FoundAddress,
   findValidatedAddress,
   AddressValidationSelection,
 } from "../../../components/applications/ValidateAddress"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -36,14 +43,17 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
+  const disableHowToContact = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableHowToContact)
+  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
+
   const enableFullTimeStudentQuestion = isFeatureFlagOn(
     conductor.config,
     FeatureFlagEnum.enableFullTimeStudentQuestion
   )
-  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { control, register, handleSubmit, setValue, watch, errors, trigger } = useForm<
+  const { control, register, handleSubmit, setValue, watch, errors, trigger, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
     defaultValues: {
@@ -51,59 +61,103 @@ const ApplicationAddress = () => {
       "applicant.noPhone": application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
       "applicant.phoneNumberType": application.applicant.phoneNumberType,
+      "applicant.applicantAddress.state": application.applicant?.applicantAddress?.state,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      "applicant.workInRegion": application.applicant.workInRegion,
+      ...(!disableWorkInRegion && {
+        "applicant.workInRegion": application.applicant.workInRegion,
+      }),
       ...(enableFullTimeStudentQuestion && {
         "applicant.fullTimeStudent": application.applicant.fullTimeStudent,
       }),
-      "applicant.applicantAddress.state": application.applicant.applicantAddress.state,
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "primaryApplicantAddress",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "primaryApplicantAddress",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
+
+  const applyAnswers = (target, data, verifiedAddress?: FoundAddress["newAddress"]) => {
+    mergeDeep(target, data)
+    if (verifiedAddress) {
+      target.applicant.applicantAddress.street = verifiedAddress.street
+      target.applicant.applicantAddress.street2 = verifiedAddress.street2
+      target.applicant.applicantAddress.city = verifiedAddress.city
+      target.applicant.applicantAddress.zipCode = verifiedAddress.zipCode
+      target.applicant.applicantAddress.state = verifiedAddress.state
+      target.applicant.applicantAddress.longitude = verifiedAddress.longitude
+      target.applicant.applicantAddress.latitude = verifiedAddress.latitude
+    }
+
+    if (target.applicant.noPhone) {
+      target.applicant.phoneNumber = ""
+      target.applicant.phoneNumberType = ""
+    }
+    if (!target.additionalPhone) {
+      target.additionalPhoneNumber = ""
+      target.additionalPhoneNumberType = ""
+    }
+    if (!target.sendMailToMailingAddress) {
+      target.applicationsMailingAddress = blankApplication.applicationsMailingAddress
+    }
+    if (!target.applicant.workInRegion) {
+      target.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
+    }
+  }
+
+  const buildPendingSave = (data, verifiedAddress?: FoundAddress["newAddress"]) => {
+    const draft = JSON.parse(JSON.stringify(application))
+    applyAnswers(draft, JSON.parse(JSON.stringify(data)), verifiedAddress)
+    return draft
+  }
+
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
     if (!verifyAddress) {
-      setFoundAddress({})
-      setVerifyAddress(true)
-      findValidatedAddress(data.applicant.applicantAddress, setFoundAddress, setNewAddressSelected)
-      window.scrollTo({ top: 0 })
+      guardSubmit(buildPendingSave(data), () => {
+        setFoundAddress({})
+        setVerifyAddress(true)
+        void findValidatedAddress(
+          data.applicant.applicantAddress,
+          setFoundAddress,
+          setNewAddressSelected
+        )
+        window.scrollTo({ top: 0 })
+      })
 
       return // Skip rest of the submit process
     }
 
-    mergeDeep(application, data)
-    if (newAddressSelected && foundAddress.newAddress) {
-      application.applicant.applicantAddress.street = foundAddress.newAddress.street
-      application.applicant.applicantAddress.street2 = foundAddress.newAddress.street2
-      application.applicant.applicantAddress.city = foundAddress.newAddress.city
-      application.applicant.applicantAddress.zipCode = foundAddress.newAddress.zipCode
-      application.applicant.applicantAddress.state = foundAddress.newAddress.state
-      application.applicant.applicantAddress.longitude = foundAddress.newAddress.longitude
-      application.applicant.applicantAddress.latitude = foundAddress.newAddress.latitude
+    const verifiedAddress = newAddressSelected ? foundAddress.newAddress : undefined
+    const proceed = () => {
+      applyAnswers(application, data, verifiedAddress)
+      conductor.sync()
+
+      conductor.routeToNextOrReturnUrl()
     }
 
-    if (application.applicant.noPhone) {
-      application.applicant.phoneNumber = ""
-      application.applicant.phoneNumberType = ""
+    if (verifiedAddress) {
+      guardSubmit(buildPendingSave(data, verifiedAddress), proceed)
+    } else {
+      proceed()
     }
-    if (!application.additionalPhone) {
-      application.additionalPhoneNumber = ""
-      application.additionalPhoneNumberType = ""
-    }
-    if (!application.sendMailToMailingAddress) {
-      application.applicationsMailingAddress = blankApplication.applicationsMailingAddress
-    }
-    if (!application.applicant.workInRegion) {
-      application.applicant.applicantWorkAddress = blankApplication.applicant.applicantWorkAddress
-    }
-    conductor.sync()
-
-    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const noPhone: boolean = watch("applicant.noPhone")
@@ -141,7 +195,11 @@ const ApplicationAddress = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form
+        id="applications-address"
+        onSubmit={handleSubmit(onSubmit, onError)}
+        onBlur={onFieldBlur}
+      >
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={
@@ -166,17 +224,9 @@ const ApplicationAddress = () => {
               : undefined,
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <div style={{ display: verifyAddress ? "none" : "block" }}>
             <CardSection divider={"inset"}>
               <fieldset>
@@ -306,7 +356,7 @@ const ApplicationAddress = () => {
                   id="addressStreet"
                   name="applicant.applicantAddress.street"
                   label={t("application.contact.streetAddress")}
-                  defaultValue={application.applicant.applicantAddress.street}
+                  defaultValue={application.applicant?.applicantAddress?.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
                     errors.applicant?.address?.street?.type === "maxLength"
@@ -322,7 +372,7 @@ const ApplicationAddress = () => {
                   id="addressStreet2"
                   name="applicant.applicantAddress.street2"
                   label={t("application.contact.apt")}
-                  defaultValue={application.applicant.applicantAddress.street2}
+                  defaultValue={application.applicant?.applicantAddress?.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
                   error={errors.applicant?.applicantAddress?.street2}
@@ -335,7 +385,7 @@ const ApplicationAddress = () => {
                     id="addressCity"
                     name="applicant.applicantAddress.city"
                     label={t("application.contact.cityName")}
-                    defaultValue={application.applicant.applicantAddress.city}
+                    defaultValue={application.applicant?.applicantAddress?.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
                       errors.applicant?.address?.city?.type === "maxLength"
@@ -369,7 +419,7 @@ const ApplicationAddress = () => {
                   id="addressZipCode"
                   name="applicant.applicantAddress.zipCode"
                   label={t("application.contact.zip")}
-                  defaultValue={application.applicant.applicantAddress.zipCode}
+                  defaultValue={application.applicant?.applicantAddress?.zipCode}
                   validation={{ required: true, maxLength: 10 }}
                   errorMessage={
                     errors.applicant?.applicantAddress?.zipCode?.type === "maxLength"
@@ -409,7 +459,7 @@ const ApplicationAddress = () => {
                   <Field
                     id="mailingAddressStreet"
                     name="applicationsMailingAddress.street"
-                    defaultValue={application.applicationsMailingAddress.street}
+                    defaultValue={application.applicationsMailingAddress?.street}
                     label={t("application.contact.streetAddress")}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.applicationsMailingAddress?.street}
@@ -426,7 +476,7 @@ const ApplicationAddress = () => {
                     id="mailingAddressStreet2"
                     name="applicationsMailingAddress.street2"
                     label={t("application.contact.apt")}
-                    defaultValue={application.applicationsMailingAddress.street2}
+                    defaultValue={application.applicationsMailingAddress?.street2}
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
                     validation={{ maxLength: 64 }}
@@ -439,7 +489,7 @@ const ApplicationAddress = () => {
                       id="mailingAddressCity"
                       name="applicationsMailingAddress.city"
                       label={t("application.contact.city")}
-                      defaultValue={application.applicationsMailingAddress.city}
+                      defaultValue={application.applicationsMailingAddress?.city}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicationsMailingAddress?.city}
                       errorMessage={
@@ -455,7 +505,7 @@ const ApplicationAddress = () => {
                       id="mailingAddressState"
                       name="applicationsMailingAddress.state"
                       label={t("application.contact.state")}
-                      defaultValue={application.applicationsMailingAddress.state}
+                      defaultValue={application.applicationsMailingAddress?.state}
                       validation={{ required: true, maxLength: 64 }}
                       errorMessage={
                         errors.applicationsMailingAddress?.state?.type === "maxLength"
@@ -475,7 +525,7 @@ const ApplicationAddress = () => {
                     id="mailingAddressZipCode"
                     name="applicationsMailingAddress.zipCode"
                     label={t("application.contact.zip")}
-                    defaultValue={application.applicationsMailingAddress.zipCode}
+                    defaultValue={application.applicationsMailingAddress?.zipCode}
                     validation={{ required: true, maxLength: 10 }}
                     error={errors.applicationsMailingAddress?.zipCode}
                     errorMessage={
@@ -490,25 +540,29 @@ const ApplicationAddress = () => {
               </CardSection>
             )}
 
-            <CardSection divider={"inset"}>
-              <fieldset>
-                <legend
-                  className={`text__caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
-                >
-                  {t("application.contact.contactPreference")}
-                </legend>
-                <FieldGroup
-                  name="contactPreferences"
-                  fields={contactPreferencesOptions}
-                  type="checkbox"
-                  validation={{ required: true }}
-                  error={errors?.contactPreferences}
-                  errorMessage={t("errors.selectAtLeastOne")}
-                  register={register}
-                  dataTestId={"app-primary-contact-preference"}
-                />
-              </fieldset>
-            </CardSection>
+            {!disableHowToContact && (
+              <CardSection divider={"inset"}>
+                <fieldset>
+                  <legend
+                    className={`text__caps-spaced ${
+                      errors?.contactPreferences ? "text-alert" : ""
+                    }`}
+                  >
+                    {t("application.contact.contactPreference")}
+                  </legend>
+                  <FieldGroup
+                    name="contactPreferences"
+                    fields={contactPreferencesOptions}
+                    type="checkbox"
+                    validation={{ required: true }}
+                    error={errors?.contactPreferences}
+                    errorMessage={t("errors.selectAtLeastOne")}
+                    register={register}
+                    dataTestId={"app-primary-contact-preference"}
+                  />
+                </fieldset>
+              </CardSection>
+            )}
 
             {!disableWorkInRegion && (
               <CardSection
@@ -580,7 +634,7 @@ const ApplicationAddress = () => {
                       <Field
                         id="applicantWorkAddressStreet"
                         name="applicant.applicantWorkAddress.street"
-                        defaultValue={application.applicant.applicantWorkAddress.street}
+                        defaultValue={application.applicant?.applicantWorkAddress?.street}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.applicantWorkAddress?.street}
                         errorMessage={
@@ -597,7 +651,7 @@ const ApplicationAddress = () => {
                         id="applicantWorkAddressStreet2"
                         name="applicant.applicantWorkAddress.street2"
                         label={t("application.contact.apt")}
-                        defaultValue={application.applicant.applicantWorkAddress.street2}
+                        defaultValue={application.applicant?.applicantWorkAddress?.street2}
                         register={register}
                         error={errors.applicant?.applicantWorkAddress?.street2}
                         validation={{ maxLength: 64 }}
@@ -610,7 +664,7 @@ const ApplicationAddress = () => {
                           id="applicantWorkAddressCity"
                           name="applicant.applicantWorkAddress.city"
                           label={t("application.contact.city")}
-                          defaultValue={application.applicant.applicantWorkAddress.city}
+                          defaultValue={application.applicant?.applicantWorkAddress?.city}
                           validation={{ required: true, maxLength: 64 }}
                           error={errors.applicant?.applicantWorkAddress?.city}
                           errorMessage={
@@ -626,7 +680,7 @@ const ApplicationAddress = () => {
                           id="applicantWorkAddressState"
                           name="applicant.applicantWorkAddress.state"
                           label={t("application.contact.state")}
-                          defaultValue={application.applicant.applicantWorkAddress.state}
+                          defaultValue={application.applicant?.applicantWorkAddress?.state}
                           validation={{ required: true, maxLength: 64 }}
                           error={errors.applicant?.applicantWorkAddress?.state}
                           errorMessage={
@@ -646,7 +700,7 @@ const ApplicationAddress = () => {
                         id="applicantWorkAddressZipCode"
                         name="applicant.applicantWorkAddress.zipCode"
                         label={t("application.contact.zip")}
-                        defaultValue={application.applicant.applicantWorkAddress.zipCode}
+                        defaultValue={application.applicant?.applicantWorkAddress?.zipCode}
                         validation={{ required: true, maxLength: 10 }}
                         error={errors.applicant?.applicantWorkAddress?.zipCode}
                         errorMessage={
@@ -727,3 +781,5 @@ const ApplicationAddress = () => {
 }
 
 export default ApplicationAddress
+
+export const getStaticProps = sharedGetStaticProps

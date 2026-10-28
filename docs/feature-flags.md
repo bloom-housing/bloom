@@ -1,0 +1,130 @@
+# Feature Flags
+
+## How it works
+
+Feature flags are on/off switches that control which features are enabled for each jurisdiction within the Bloom codebase. They are stored in the `feature_flag` table and associated with jurisdictions via the `_FeatureFlagsToJurisdictions` relation table.
+
+Feature flags are boolean only, meaning they are strictly used for toggling features on or off. Any jurisdiction configuration that requires non-boolean values must be handled separately. Each feature flag also has a global `active` field. When `active` is set to false, the flag is effectively disabled across all jurisdictions it is associated with.
+
+The source of truth for all feature flags is [feature-flags-enum.ts](../api/src/enums/feature-flags/feature-flags-enum.ts), which is shared across the API and both the public and partner frontends. Feature flags are not automatically added to the database. To add new flags, include them in the `featureFlagMap` and call the `featureFlags/addAllNew` API endpoint.
+
+### Managing jurisdiction relationship
+
+The easiest way to manage feature flags is through a hidden page on the partner site. If you are logged in as a super admin, navigate to the `/admin` endpoint to access it.
+
+From there you can:
+
+- **Add all feature flags to the database** using the "Add all new feature flags" button
+- **Assign feature flags to jurisdictions** using either the "view by jurisdiction" or "view by feature flag" table
+
+Changes to feature flag assignments take effect immediately. However, a redeploy of the public site may be required depending on which page(s) the affected feature flag is used on.
+
+## Feature flag list
+
+The following are all of the feature flags currently available in the Bloom platform.
+
+<!-- TABLE:START -->
+
+| Flag | Description |
+|------|-------------|
+| [disableAccessibilityFeaturesTag](./feature-flags/disableAccessibilityFeaturesTag.md) | When true, the listing 'accessibility features' tag is hidden on public listing cards and details |
+| [disableBuildingSelectionCriteria](./feature-flags/disableBuildingSelectionCriteria.md) | When true, building selection criteria is not displayed in the listing |
+| [disableCommonApplication](./feature-flags/disableCommonApplication.md) | When true, the digital common application is not an option for listings |
+| [disableEthnicityQuestion](./feature-flags/disableEthnicityQuestion.md) | When true, the ethnicity question is hidden in the application demographics section |
+| [disableHowToContact](./feature-flags/disableHowToContact.md) | When true, the "How do you prefer to be contacted?" question will be removed from the application process |
+| [disableJurisdictionalAdmin](./feature-flags/disableJurisdictionalAdmin.md) | When true, jurisdictional admins cannot be created |
+| [disableListingPreferences](./feature-flags/disableListingPreferences.md) | When true, listings will no longer support preferences section |
+| [disablePartnerPublicListingEdits](./feature-flags/disablePartnerPublicListingEdits.md) | When true, partner users cannot edit open or closed listings, or unpublish open listings |
+| [disableReferralOpportunity](./feature-flags/disableReferralOpportunity.md) | When true, disables the referral opportunity question on the listing edit and detail pages on partner site |
+| [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
+| [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true, the "Work in Region" question will be removed from the application process |
+| [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
+| [enableAdditionalResources](./feature-flags/enableAdditionalResources.md) | When true, the 'learn more' section is displayed on the home page |
+| [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
+| [enableApplicationExpirationNonAdmins](./feature-flags/enableApplicationExpirationNonAdmins.md) | When true, application data in the partner site will expire for non-admin users after 45 days |
+| [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
+| [enableApproveAndPublishOnEdit](./feature-flags/enableApproveAndPublishOnEdit.md) | When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving |
+| [enableAutoOpenDate](./feature-flags/enableAutoOpenDate.md) | When true, partners can set an optional scheduled listing applications open date |
+| [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |
+| [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
+| [enableConfigurableRegions](./feature-flags/enableConfigurableRegions.md) | When true, allows for configurable regions per jurisdiction enabled on partners and public |
+| [enableCreditScreeningFee](./feature-flags/enableCreditScreeningFee.md) | When true, credit screening fee is enabled for listings |
+| [enableCustomListingNotifications](./feature-flags/enableCustomListingNotifications.md) | When true, users have access to custom notification settings |
+| [enableDbDrivenBranding](./feature-flags/enableDbDrivenBranding.md) | When true, the public site renders the jurisdiction's brand colors, logo, favicon, and font from the database instead of the bundled static assets |
+| [enableDbDrivenContent](./feature-flags/enableDbDrivenContent.md) | When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files |
+| [enableDuplicatesDetailsInEmail](./feature-flags/enableDuplicatesDetailsInEmail.md) | When true, lottery published applicant email contains duplicates details section |
+| [enableExportTerms](./feature-flags/enableExportTerms.md) | When true, display terms of use before exporting applications and lotteries from the partner site |
+| [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
+| [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
+| [enableFilterByCounty](./feature-flags/enableFilterByCounty.md) | When true, the filter drawer on the public site includes the option to filter listings by county |
+| [enableFilterByStatus](./feature-flags/enableFilterByStatus.md) | When true, the filter drawer on the public site includes the option to filter listings by their status |
+| [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
+| [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
+| [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
+| [enableGeocodingRadiusMethod](./feature-flags/enableGeocodingRadiusMethod.md) | When true, preferences can be created with geocoding functionality that verifies via a mile radius |
+| [enableGetAssistanceCard](./feature-flags/enableGetAssistanceCard.md) | When true, a resource card will appear on the homepage to link to the get assistance page |
+| [enableGetAssistancePage](./feature-flags/enableGetAssistancePage.md) | When true, get assistance will appear in the nav header and page will be reachable |
+| [enableHomePageSearchHero](./feature-flags/enableHomePageSearchHero.md) | When true, the home page hero has a search form |
+| [enableHomeType](./feature-flags/enableHomeType.md) | When true, home type feature is turned on |
+| [enableHousingAdvocate](./feature-flags/enableHousingAdvocate.md) | When true, partners can view housing advocate users |
+| [enableHousingBasics](./feature-flags/enableHousingBasics.md) | When true, a link to the housing basics page is displayed on the get assistance page |
+| [enableHousingDeveloperOwner](./feature-flags/enableHousingDeveloperOwner.md) | When true, the 'Housing developer' field label becomes 'Housing developer / owner' |
+| [enableIsVerified](./feature-flags/enableIsVerified.md) | When true, the listing can ba have its contents manually verified by a user |
+| [enableLandUse](./feature-flags/enableLandUse.md) | When true, land use listings are displayed in listing creation/edit and public listing view |
+| [enableLeasingAgentAltText](./feature-flags/enableLeasingAgentAltText.md) | When true, shows alternative text for LA users |
+| [enableLimitedHowDidYouHear](./feature-flags/enableLimitedHowDidYouHear.md) | When true, the Radio Ad and Bus Ad options are removed from the how did you hear section. |
+| [enableListingFavoriting](./feature-flags/enableListingFavoriting.md) | When true, a Favorite button is shown for public listings and users can view their favorited listings |
+| [enableListingFileNumber](./feature-flags/enableListingFileNumber.md) | When true, partners can enter and export a listing file number |
+| [enableListingFiltering](./feature-flags/enableListingFiltering.md) | When true, a filter button is shown on listings browse and users can filter with the options in the drawer |
+| [enableListingImageAltText](./feature-flags/enableListingImageAltText.md) | When true, allows partners to add alt text to listing images |
+| [enableListingMap](./feature-flags/enableListingMap.md) | When true, a map is displayed on the listings page |
+| [enableListingOpportunity](./feature-flags/enableListingOpportunity.md) | When true, any newly published listing will send a gov delivery email to everyone that has signed up for the 'listing alerts' |
+| [enableListingPagination](./feature-flags/enableListingPagination.md) | When true, listings browser will display pagination controls section |
+| [enableListingUpdatedAt](./feature-flags/enableListingUpdatedAt.md) | When true, listings detail will display an updated at date |
+| [enableMarketingFlyer](./feature-flags/enableMarketingFlyer.md) | When true, the 'marketing flyer' sub-section is displayed in listing creation/edit and the public listing view |
+| [enableMarketingStatus](./feature-flags/enableMarketingStatus.md) | When true, the 'marketing status' sub-section is displayed in listing creation/edit and the public listing view |
+| [enableMarketingStatusMonths](./feature-flags/enableMarketingStatusMonths.md) | When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true) |
+| [enableMultiselectVoucherQuestion](./feature-flags/enableMultiselectVoucherQuestion.md) | When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options |
+| [enableNeighborhoodAmenities](./feature-flags/enableNeighborhoodAmenities.md) | When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view |
+| [enableNeighborhoodAmenitiesDropdown](./feature-flags/enableNeighborhoodAmenitiesDropdown.md) | When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas |
+| [enableNonAdminLotteries](./feature-flags/enableNonAdminLotteries.md) | When true, the lotteries can be published without the admin confirmation |
+| [enableNonRegulatedListings](./feature-flags/enableNonRegulatedListings.md) | When true, non-regulated listings are displayed in listing creation/edit and public listing view |
+| [enableOnlyAdminCanAddAppsAfterClose](./feature-flags/enableOnlyAdminCanAddAppsAfterClose.md) | When true, only admin level users are allowed to add paper apps after a listing has closed |
+| [enableOnlyAdminCanEditListingDates](./feature-flags/enableOnlyAdminCanEditListingDates.md) | When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing |
+| [enableOnlyAdminCanManageUsers](./feature-flags/enableOnlyAdminCanManageUsers.md) | When true, only admins can add/edit users on the partner site. Jurisdictional admins can view but not cannot create or edit users other than themselves |
+| [enableParkingFee](./feature-flags/enableParkingFee.md) | When true, the parking fee field should be visible |
+| [enableParkingType](./feature-flags/enableParkingType.md) | When true, the parking type field is visible in the listing form |
+| [enablePartnerDemographics](./feature-flags/enablePartnerDemographics.md) | When true, demographics data is included in application or lottery exports for partners |
+| [enablePartnerLotteryExport](./feature-flags/enablePartnerLotteryExport.md) | When true, partner can export lottery immediately after it is run. |
+| [enablePartnerSettings](./feature-flags/enablePartnerSettings.md) | When true, the 'settings' tab in the partner site is visible |
+| [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
+| [enableProfessionalPartnersPage](./feature-flags/enableProfessionalPartnersPage.md) | When true, the professional partners page will appear in the nav header of the public site and page will be reachable |
+| [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
+| [enablePublicTermsOfUse](./feature-flags/enablePublicTermsOfUse.md) | When true, creating a user account on the public site will require the user to review and accept terms of use |
+| [enableReasonableAccommodations](./feature-flags/enableReasonableAccommodations.md) | When true, the reasonable accommodations question is shown in the public and partner application flow |
+| [enableReceivedAtAndByFields](./feature-flags/enableReceivedAtAndByFields.md) | When true, partners can view/edit paper application received at/by fields and include them in application exports |
+| [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | When true, updates the the referral opportunity question to be specifically about units |
+| [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
+| [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
+| [enableResourcesCard](./feature-flags/enableResourcesCard.md) | When true, a resource card will appear on the homepage to link to the additional resources page |
+| [enableSection8Question](./feature-flags/enableSection8Question.md) | When true, the Section 8 listing data will be visible |
+| [enableSeeOurData](./feature-flags/enableSeeOurData.md) | When true, a see our data card with a link on the home page is displayed |
+| [enableSexualOrientationQuestion](./feature-flags/enableSexualOrientationQuestion.md) | When true, the sexual orientation question is displayed in the public and partner application demographics section |
+| [enableSingleUseCode](./feature-flags/enableSingleUseCode.md) | When true, the backend allows for logging into this jurisdiction using the single use code flow |
+| [enableSmokingPolicyRadio](./feature-flags/enableSmokingPolicyRadio.md) | When true, the listing 'Smoking policy' field is a radio group |
+| [enableSpokenLanguage](./feature-flags/enableSpokenLanguage.md) | When true, the application demographics section displays a spoken language question with options configured on the jurisdiction |
+| [enableStopLights](./feature-flags/enableStopLights.md) | When true, Stop Light eligibility rules enabled for the jurisdiction are evaluated on the public application, blocking (red) or warning (yellow) the applicant |
+| [enableSupportAdmin](./feature-flags/enableSupportAdmin.md) | When true, support admins can be created |
+| [enableUnderConstructionHome](./feature-flags/enableUnderConstructionHome.md) | When true, the 'under construction' section is displayed on the home page |
+| [enableUnitAccessibilityTypeTags](./feature-flags/enableUnitAccessibilityTypeTags.md) | When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details |
+| [enableUnitGroups](./feature-flags/enableUnitGroups.md) | When true, uses unit groups instead of units |
+| [enableUtilitiesIncluded](./feature-flags/enableUtilitiesIncluded.md) | When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view |
+| [enableV2MSQ](./feature-flags/enableV2MSQ.md) | When true, the new multiselect question logic will be used. |
+| [enableVerifyIncome](./feature-flags/enableVerifyIncome.md) | When true, the income question on the application will be validated against the income limits for the listing and an error message will be shown if income is outside limits |
+| [enableWaitlistAdditionalFields](./feature-flags/enableWaitlistAdditionalFields.md) | When true, the waitlist additional fields are displayed in the waitlist section of the listing form |
+| [enableWaitlistLottery](./feature-flags/enableWaitlistLottery.md) | When true, jurisdiction supports lotteries for waitlist opportunities |
+| [enableWhatToExpectAdditionalField](./feature-flags/enableWhatToExpectAdditionalField.md) | When true, the what to expect additional field is displayed in listing creation/edit form on the partner site |
+| [hideCloseListingButton](./feature-flags/hideCloseListingButton.md) | When true, close button is hidden on the listing edit form |
+| [swapCommunityTypeWithPrograms](./feature-flags/swapCommunityTypeWithPrograms.md) | When true, the programs section on the frontend is displayed as community types. |
+
+<!-- TABLE:END -->

@@ -8,6 +8,7 @@ const Settings = () => {
 
   const router = useRouter()
   const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+  const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
   const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableListingPreferences,
     null,
@@ -15,11 +16,25 @@ const Settings = () => {
   )
 
   useEffect(() => {
-    if (!enableProperties && !atLeastOneJurisdictionEnablesPreferences) void router.replace("/")
-    void router.replace(
-      atLeastOneJurisdictionEnablesPreferences ? "/settings/preferences" : "/settings/properties"
-    )
-  }, [router, atLeastOneJurisdictionEnablesPreferences, enableProperties])
+    if (!enableProperties && !atLeastOneJurisdictionEnablesPreferences && !enableAgencies) {
+      void router.replace("/")
+      return
+    }
+
+    if (atLeastOneJurisdictionEnablesPreferences) {
+      void router.replace("/settings/preferences")
+      return
+    }
+
+    if (enableProperties) {
+      void router.replace("/settings/properties")
+      return
+    }
+
+    if (enableAgencies) {
+      void router.replace("/settings/agencies")
+    }
+  }, [router, atLeastOneJurisdictionEnablesPreferences, enableProperties, enableAgencies])
 }
 
 export default Settings

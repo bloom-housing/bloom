@@ -7,10 +7,14 @@ import {
   UnitTypes,
 } from '@prisma/client';
 import { randomInt } from 'crypto';
-import { unitAccessibilityPriorityTypeFactorySingle } from './unit-accessibility-priority-type-factory';
 import { unitTypeFactorySingle } from './unit-type-factory';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 
 const unitTypes = Object.values(UnitTypeEnum);
+
+const unitAccessibilityPriorityTypeValues = Object.values(
+  UnitAccessibilityPriorityTypeEnum,
+);
 
 export const unitGroupFactorySingle = (
   unitType: UnitTypes,
@@ -19,6 +23,7 @@ export const unitGroupFactorySingle = (
     openWaitlist?: boolean;
     otherFields?: Prisma.UnitGroupCreateWithoutListingsInput;
     unitGroupAmiLevelsFlatRentValue?: number;
+    accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
   },
 ): Prisma.UnitGroupCreateWithoutListingsInput => {
   const bedrooms = unitType.numBedrooms || randomInt(6);
@@ -72,33 +77,29 @@ export const unitGroupFactoryMany = async (
   optionalParams?: {
     randomizePriorityType?: boolean;
     amiChart?: AmiChart;
-    unitAccessibilityPriorityTypeId?: string;
+    accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
   },
 ): Promise<Prisma.UnitGroupCreateWithoutListingsInput[]> => {
   const createArray: Promise<Prisma.UnitGroupCreateWithoutListingsInput>[] = [
     ...new Array(numberToMake),
-  ].map(async (_, index) => {
+  ].map(async () => {
     const unitType = await unitTypeFactorySingle(
       prismaClient,
       unitTypes[randomInt(unitTypes.length)],
     );
 
     // create a random priority type with roughly half being null
-    const unitAccessibilityPriorityTypes =
+    const accessibilityPriorityType =
       optionalParams?.randomizePriorityType && Math.random() > 0.5
-        ? await unitAccessibilityPriorityTypeFactorySingle(prismaClient)
+        ? unitAccessibilityPriorityTypeValues[
+            randomInt(unitAccessibilityPriorityTypeValues.length)
+          ]
         : undefined;
 
     return unitGroupFactorySingle(unitType, {
       ...optionalParams,
       otherFields: {
-        unitAccessibilityPriorityTypes: unitAccessibilityPriorityTypes
-          ? {
-              connect: {
-                id: unitAccessibilityPriorityTypes.id,
-              },
-            }
-          : undefined,
+        accessibilityPriorityType,
       },
     });
   });

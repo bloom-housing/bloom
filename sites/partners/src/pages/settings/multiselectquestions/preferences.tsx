@@ -1,0 +1,235 @@
+import React, { useContext, useMemo, useState } from "react"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
+import { Button, Tag } from "@bloom-housing/ui-seeds"
+import dayjs from "dayjs"
+import Head from "next/head"
+import EditMultiselectQuestion, {
+  DrawerType,
+} from "../../../components/settings/MultiselectQuestions/EditMultiselectQuestion"
+import {
+  useSettingsTabs,
+  SettingsIndexEnum,
+} from "../../../components/settings/SettingsViewHelpers"
+import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import Layout from "../../../layouts"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
+import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
+import styles from "./preferences.module.scss"
+
+const MultiselectQuestionsPreferences = () => {
+  const { profile } = useContext(AuthContext)
+  const { hideTabs, tabs } = useSettingsTabs(SettingsIndexEnum.preferences)
+  const tableOptions = useAgTable()
+
+  const [multiselectQuestionDrawerOpen, setMultiselectQuestionDrawerOpen] =
+    useState<DrawerType | null>(null)
+  const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
+
+  const columns = useMemo(() => {
+    return [
+      {
+        headerName: t("settings.preference"),
+        field: "name",
+        flex: 2,
+        sortable: true,
+        unSortIcon: true,
+        // disable frontend sorting
+        comparator: () => 0,
+        minWidth: 290,
+      },
+      {
+        headerName: t("application.status"),
+        field: "status",
+        flex: 1,
+        sortable: true,
+        unSortIcon: true,
+        // disable frontend sorting
+        comparator: () => 0,
+        cellRendererFramework: ({ data }) => {
+          let variant = null
+          switch (data.status) {
+            case MultiselectQuestionsStatusEnum.active:
+              variant = "success"
+              break
+            case MultiselectQuestionsStatusEnum.toRetire:
+            case MultiselectQuestionsStatusEnum.retired:
+              variant = "highlight-warm"
+              break
+          }
+          const statusText = t(`msq.status.${data.status}`)
+          return <Tag variant={variant}>{statusText}</Tag>
+        },
+        minWidth: 110,
+      },
+      {
+        headerName: t("t.jurisdiction"),
+        field: "jurisdiction",
+        flex: 1.5,
+        sortable: true,
+        unSortIcon: true,
+        // disable frontend sorting
+        comparator: () => 0,
+        minWidth: 150,
+      },
+      {
+        headerName: t("t.lastUpdated"),
+        field: "updatedAt",
+        sort: "desc",
+        sortable: true,
+        unSortIcon: true,
+        // disable frontend sorting
+        comparator: () => 0,
+        minWidth: 160,
+      },
+      {
+        headerName: "action",
+        field: "",
+        flex: 0.75,
+        minWidth: 100,
+        cellRendererFramework: ({ data }) => {
+          const { preference, id } = data
+
+          return preference.status === MultiselectQuestionsStatusEnum.draft ||
+            preference.status === MultiselectQuestionsStatusEnum.visible ? (
+            <Button
+              variant="text"
+              onClick={() => {
+                setQuestionData(preference)
+                setMultiselectQuestionDrawerOpen("edit")
+              }}
+              id={`preference-link-${id}`}
+            >
+              {t("t.edit")}
+            </Button>
+          ) : (
+            <Button
+              variant="text"
+              onClick={() => {
+                setQuestionData(preference)
+                setMultiselectQuestionDrawerOpen("view")
+              }}
+              id={`preference-link-${id}`}
+            >
+              {t("t.view")}
+            </Button>
+          )
+        },
+      },
+    ]
+  }, [])
+
+  const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
+    profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
+    MultiselectQuestionsApplicationSectionEnum.preferences,
+    [
+      MultiselectQuestionsStatusEnum.draft,
+      MultiselectQuestionsStatusEnum.visible,
+      MultiselectQuestionsStatusEnum.active,
+      MultiselectQuestionsStatusEnum.toRetire,
+    ],
+    {
+      sort: tableOptions.sort.sortOptions?.length
+        ? tableOptions.sort.sortOptions
+        : [{ orderBy: "updatedAt", orderDir: "DESC" }],
+      page: tableOptions.pagination.currentPage,
+      limit: tableOptions.pagination.itemsPerPage,
+      search: tableOptions.filter.filterValue,
+    }
+  )
+
+  const items = useMemo(
+    () =>
+      (data?.items || []).map((preference) => {
+        const { name, status, jurisdictions, updatedAt } = preference
+        return {
+          name,
+          status,
+          jurisdiction: jurisdictions.map((jurisdiction) => jurisdiction.name).join(", "),
+          updatedAt: dayjs(updatedAt).format("MM/DD/YYYY"),
+          preference,
+        }
+      }),
+    [data]
+  )
+
+  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin) {
+    window.location.href = "/unauthorized"
+  }
+
+  return (
+    <>
+      <Layout>
+        <Head>
+          <title>{`Preferences - ${t("nav.siteTitlePartners")}`}</title>
+        </Head>
+        <NavigationHeader className="relative" title={t("settings.preferences")} />
+        <TabView hideTabs={hideTabs} tabs={tabs}>
+          <section className={styles["preferences-section"]}>
+            <div className={styles["table-wrapper"]}>
+              <AgTable
+                id="preferences-table"
+                pagination={{
+                  perPage: tableOptions.pagination.itemsPerPage,
+                  setPerPage: tableOptions.pagination.setItemsPerPage,
+                  currentPage: tableOptions.pagination.currentPage,
+                  setCurrentPage: tableOptions.pagination.setCurrentPage,
+                }}
+                config={{
+                  columns,
+                  totalItemsLabel: "items",
+                }}
+                data={{
+                  items,
+                  loading: loading,
+                  totalItems: data?.meta?.totalItems,
+                  totalPages: data?.meta?.totalPages,
+                }}
+                search={{
+                  setSearch: tableOptions.filter.setFilterValue,
+                }}
+                sort={{
+                  setSort: tableOptions.sort.setSortOptions,
+                }}
+                headerContent={
+                  <>
+                    <span></span>
+                    <span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => {
+                          setQuestionData(null)
+                          setMultiselectQuestionDrawerOpen("add")
+                        }}
+                        id={"add-preference"}
+                      >
+                        {t("settings.preferenceAdd")}
+                      </Button>
+                    </span>
+                  </>
+                }
+              />
+            </div>
+          </section>
+        </TabView>
+      </Layout>
+
+      <EditMultiselectQuestion
+        cacheKey={cacheKey}
+        multiselectQuestionDrawerOpen={multiselectQuestionDrawerOpen}
+        setMultiselectQuestionDrawerOpen={setMultiselectQuestionDrawerOpen}
+        questionData={questionData}
+        setQuestionData={setQuestionData}
+      />
+    </>
+  )
+}
+
+export default MultiselectQuestionsPreferences

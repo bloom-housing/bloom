@@ -7,6 +7,7 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { yellowstoneAddress } from '../address-factory';
+import { assetFileId } from '../asset-file-id-helper';
 
 export const lakeviewVilla: Prisma.ListingsCreateInput = {
   additionalApplicationSubmissionNotes: null,
@@ -20,7 +21,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   },
   paperApplication: false,
   referralOpportunity: false,
-  assets: [],
+  assets: {},
   accessibility: null,
   amenities: null,
   buildingTotalUnits: 0,
@@ -48,8 +49,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   criminalBackground: null,
   depositMin: '0',
   depositMax: '0',
-  depositHelperText:
-    "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   leasingAgentEmail: 'bloom@exygy.com',
   leasingAgentName: 'Bloom Bloomington',
@@ -78,7 +78,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
   waitlistOpenSpots: null,
   customMapPin: false,
   contentUpdatedAt: new Date(),
-  publishedAt: new Date(),
+  publishedAt: dayjs(new Date()).subtract(22, 'minutes').toDate(),
   listingsBuildingAddress: {
     create: yellowstoneAddress,
   },
@@ -93,7 +93,7 @@ export const lakeviewVilla: Prisma.ListingsCreateInput = {
       assets: {
         create: {
           label: 'cloudinaryBuilding',
-          fileId: 'dev/unnamed_fkxrj2',
+          fileId: assetFileId('dev/unnamed_fkxrj2'),
         },
       },
     },

@@ -1,24 +1,33 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import {
-  createUnitTypeId,
-  getUniqueUnitTypes,
-  getUniqueUnitGroupUnitTypes,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
+  createUnitTypeId,
+  getUniqueUnitGroupUnitTypes,
+  getUniqueUnitTypes,
   pushGtmEvent,
-  AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Application,
+  FeatureFlagEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
-import styles from "../../../layouts/application-form.module.scss"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationPreferredUnits = () => {
   const { profile } = useContext(AuthContext)
@@ -26,7 +35,23 @@ const ApplicationPreferredUnits = () => {
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, trigger } = useForm()
+  const { register, handleSubmit, errors, trigger, getValues } = useForm()
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "preferredUnitSize",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "preferredUnitSize",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const enableUnitGroups = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)
 
@@ -36,21 +61,23 @@ const ApplicationPreferredUnits = () => {
     const { preferredUnit } = data
 
     // save units always as an array (when is only one option, react-hook-form stores an option as string)
-    if (Array.isArray(preferredUnit)) {
-      application.preferredUnitTypes = createUnitTypeId(preferredUnit)
-    } else {
-      application.preferredUnitTypes = createUnitTypeId([preferredUnit])
-    }
+    const preferredUnitTypes = createUnitTypeId(
+      Array.isArray(preferredUnit) ? preferredUnit : [preferredUnit]
+    )
 
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+    const pendingSave = { preferredUnitTypes } as Partial<Application>
+    guardSubmit(pendingSave, () => {
+      application.preferredUnitTypes = preferredUnitTypes
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const unitTypes = enableUnitGroups
-    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups)
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups, listing?.listingType)
     : getUniqueUnitTypes(listing?.units)
 
   const preferredUnitOptions = unitTypes?.map((item) => ({
@@ -75,7 +102,7 @@ const ApplicationPreferredUnits = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.preferredUnit.title")}
@@ -90,18 +117,9 @@ const ApplicationPreferredUnits = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.household.preferredUnit.legend")}</legend>
@@ -127,3 +145,5 @@ const ApplicationPreferredUnits = () => {
 }
 
 export default ApplicationPreferredUnits
+
+export const getStaticProps = sharedGetStaticProps

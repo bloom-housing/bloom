@@ -8,7 +8,12 @@ export default () => {
 
   return (
     <FormsLayout title={`${pageTitle} - ${t("nav.siteTitlePartners")}`}>
-      <BloomCard title={pageTitle} iconSymbol={"lockClosed"} iconClass="text-alert">
+      <BloomCard
+        title={pageTitle}
+        iconSymbol={"lockClosed"}
+        iconClass="text-alert"
+        headingClass={"seeds-large-heading"}
+      >
         <Card.Section>
           <p>{t("errors.unauthorized.message")}</p>
         </Card.Section>

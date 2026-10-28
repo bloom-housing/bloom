@@ -7,6 +7,5 @@ module.exports = {
     },
     "postcss-custom-media": {},
     tailwindcss: {},
-    autoprefixer: {},
   },
 }

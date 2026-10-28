@@ -3,17 +3,17 @@ import styles from "../ListingViewSeeds.module.scss"
 import { t } from "@bloom-housing/ui-components"
 
 type OtherFeaturesProps = {
-  hasEbllClearence: boolean
+  hasEbllClearance: boolean
 }
 
-export const OtherFeatures = ({ hasEbllClearence }: OtherFeaturesProps) => {
+export const OtherFeatures = ({ hasEbllClearance }: OtherFeaturesProps) => {
   return (
     <div className="seeds-m-bs-header">
       <HeadingGroup
         heading={t("t.other")}
         headingProps={{ size: "lg", priority: 3 }}
         subheading={
-          hasEbllClearence ? t("listings.hasEbllClearance") : t("listings.noEbllClearance")
+          hasEbllClearance ? t("listings.hasEbllClearance") : t("listings.noEbllClearance")
         }
         className={`${styles["heading-group"]} seeds-m-be-section`}
       />

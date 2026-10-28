@@ -1,33 +1,26 @@
 import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useSWRConfig } from "swr"
-import {
-  LoadingOverlay,
-  MinimalTable,
-  StandardCard,
-  t,
-  useMutate,
-} from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
-import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
+import { useSWRConfig } from "swr"
+import { MinimalTable, StandardCard, t } from "@bloom-housing/ui-components"
+import { Button, Dialog, LoadingState } from "@bloom-housing/ui-seeds"
+import { TabView } from "@bloom-housing/shared-helpers/src/views/components/TabView"
+import {
+  MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AuthContext, MessageContext, useMutate } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import {
-  FeatureFlagEnum,
-  MultiselectQuestion,
-  MultiselectQuestionCreate,
-  MultiselectQuestionUpdate,
-  MultiselectQuestionsApplicationSectionEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { PreferenceEditModal } from "../../components/settings/PreferenceEditModal"
-import TabView from "../../layouts/TabView"
-import { getSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
+import { useSettingsTabs, SettingsIndexEnum } from "../../components/settings/SettingsViewHelpers"
 
 export type DrawerType = "add" | "edit"
 
@@ -35,8 +28,10 @@ const SettingsPreferences = () => {
   const { mutate } = useSWRConfig()
   const router = useRouter()
 
-  const { profile, multiselectQuestionsService, doJurisdictionsHaveFeatureFlagOn } =
-    useContext(AuthContext)
+  const { profile, multiselectQuestionsService } = useContext(AuthContext)
+  const { enablePreferences, enableV2MSQ, hideTabs, tabs } = useSettingsTabs(
+    SettingsIndexEnum.preferences
+  )
   const { addToast } = useContext(MessageContext)
 
   const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
@@ -56,15 +51,8 @@ const SettingsPreferences = () => {
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    null,
-    true
-  )
-
   const tableData = useMemo(() => {
-    return data
+    return data?.items
       ?.sort((a, b) => {
         const aChar = a.text.toUpperCase()
         const bChar = b.text.toUpperCase()
@@ -162,10 +150,10 @@ const SettingsPreferences = () => {
   }
 
   const getCardContent = () => {
-    if (!loading && data?.length === 0) return null
+    if (!loading && data?.meta.totalItems === 0) return null
     return (
       <>
-        {data?.length ? (
+        {data?.meta.totalItems ? (
           <MinimalTable
             headers={{
               name: "t.name",
@@ -182,13 +170,10 @@ const SettingsPreferences = () => {
       </>
     )
   }
-  if (
-    profile?.userRoles?.isPartner ||
-    profile?.userRoles?.isSupportAdmin ||
-    !atLeastOneJurisdictionEnablesPreferences
-  ) {
+  if (profile?.userRoles?.isPartner || profile?.userRoles?.isSupportAdmin || !enablePreferences) {
     void router.push("/unauthorized")
   }
+  if (enableV2MSQ) void router.push("/settings/multiselectquestions/preferences")
 
   return (
     <>
@@ -197,32 +182,31 @@ const SettingsPreferences = () => {
           <title>{`Settings - Preferences - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
         <NavigationHeader className="relative" title={t("t.settings")} />
-        <TabView
-          hideTabs={!(atLeastOneJurisdictionEnablesPreferences && enableProperties)}
-          tabs={getSettingsTabs(SettingsIndexEnum.preferences, router)}
-        >
-          <LoadingOverlay isLoading={loading}>
-            <StandardCard
-              title={t("t.preferences")}
-              emptyStateMessage={t("t.none")}
-              footer={
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setQuestionData(null)
-                    setPreferenceDrawerOpen("add")
-                  }}
-                  id={"preference-add-item"}
-                  disabled={loading}
-                >
-                  {t("t.addItem")}
-                </Button>
-              }
-            >
-              {getCardContent()}
-            </StandardCard>
-          </LoadingOverlay>
-        </TabView>
+        {!enableV2MSQ && (
+          <TabView hideTabs={hideTabs} tabs={tabs}>
+            <LoadingState loading={loading}>
+              <StandardCard
+                title={t("t.preferences")}
+                emptyStateMessage={t("t.none")}
+                footer={
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setQuestionData(null)
+                      setPreferenceDrawerOpen("add")
+                    }}
+                    id={"preference-add-item"}
+                    disabled={loading}
+                  >
+                    {t("t.addItem")}
+                  </Button>
+                }
+              >
+                {getCardContent()}
+              </StandardCard>
+            </LoadingState>
+          </TabView>
+        )}
       </Layout>
 
       <PreferenceDrawer

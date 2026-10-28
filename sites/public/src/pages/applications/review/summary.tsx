@@ -2,15 +2,16 @@ import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Alert, Button } from "@bloom-housing/ui-seeds"
-import { Form, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
-  useToastyRef,
   listingSectionQuestions,
+  pushGtmEvent,
+  useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import {
   ApplicationCreate,
@@ -22,6 +23,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
@@ -33,6 +35,7 @@ const ApplicationSummary = () => {
   const { profile, applicationsService } = useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [validationError, setValidationError] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
   if (listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length)
@@ -43,6 +46,8 @@ const ApplicationSummary = () => {
     currentPageSection += 1
 
   const { handleSubmit } = useForm()
+
+  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -74,15 +79,25 @@ const ApplicationSummary = () => {
   }, [conductor])
 
   const onSubmit = () => {
+    setLoading(true)
     applicationsService
       .submissionValidation({
         body: {
           ...application,
-          reviewStatus: ApplicationReviewStatusEnum.pending,
-          listing: {
+          alternateContact:
+            application.alternateContact?.type === "noContact"
+              ? null
+              : application.alternateContact,
+          appUrl: window.location.origin,
+          householdMember: !disableWorkInRegion
+            ? application.householdMember
+            : application.householdMember?.map((member) => {
+                return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
+              }),
+          listings: {
             id: listing.id,
           },
-          appUrl: window.location.origin,
+          reviewStatus: ApplicationReviewStatusEnum.pending,
           ...(profile && {
             user: {
               id: profile.id,
@@ -151,14 +166,19 @@ const ApplicationSummary = () => {
               conductor.config,
               FeatureFlagEnum.enableFullTimeStudentQuestion
             )}
-            enableAdaOtherOption={isFeatureFlagOn(
+            enableReasonableAccommodations={isFeatureFlagOn(
               conductor.config,
-              FeatureFlagEnum.enableAdaOtherOption
+              FeatureFlagEnum.enableReasonableAccommodations
+            )}
+            enableMultiselectVoucherQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableMultiselectVoucherQuestion
             )}
             swapCommunityTypeWithPrograms={isFeatureFlagOn(
               conductor.config,
               FeatureFlagEnum.swapCommunityTypeWithPrograms
             )}
+            enableV2MSQ={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableV2MSQ)}
           />
 
           <CardSection divider={"flush"} className={"border-none"}>
@@ -171,6 +191,7 @@ const ApplicationSummary = () => {
               id={"app-summary-confirm"}
               disabled={validationError}
               type={"submit"}
+              loadingMessage={loading ? t("t.loading") : undefined}
             >
               {t("t.confirm")}
             </Button>
@@ -182,3 +203,5 @@ const ApplicationSummary = () => {
 }
 
 export default ApplicationSummary
+
+export const getStaticProps = sharedGetStaticProps

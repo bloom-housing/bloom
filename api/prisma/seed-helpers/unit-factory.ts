@@ -2,15 +2,23 @@ import {
   AmiChart,
   Prisma,
   PrismaClient,
+  UnitRentTypeEnum,
   UnitTypeEnum,
   UnitTypes,
 } from '@prisma/client';
 import { unitTypeFactorySingle } from './unit-type-factory';
-import { unitAccessibilityPriorityTypeFactorySingle } from './unit-accessibility-priority-type-factory';
-import { unitRentTypeFactory } from './unit-rent-type-factory';
+import {
+  unitRentTypeFactory,
+  unitRentTypeFactorySingle,
+} from './unit-rent-type-factory';
 import { randomInt } from 'crypto';
+import { UnitAccessibilityPriorityTypeEnum } from '../../src/enums/units/accessibility-priority-type-enum';
 
 const unitTypes = Object.values(UnitTypeEnum);
+
+const unitAccessibilityPriorityTypeValues = Object.values(
+  UnitAccessibilityPriorityTypeEnum,
+);
 
 export const unitFactorySingle = (
   unitType: UnitTypes,
@@ -18,9 +26,15 @@ export const unitFactorySingle = (
     amiChart?: AmiChart;
     unitRentTypeId?: string;
     otherFields?: Prisma.UnitsCreateWithoutListingsInput;
+    accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
+    canBePercentageOfIncome?: boolean;
   },
 ): Prisma.UnitsCreateWithoutListingsInput => {
   const bedrooms = unitType.numBedrooms || randomInt(6);
+  const randomRent =
+    randomInt(2500) * (bedrooms || 1) + (randomInt(10) === 1 ? 0.5 : 0);
+  const isPercentageOfIncome =
+    optionalParams?.canBePercentageOfIncome && Math.random() > 0.75;
   return {
     amiChart: optionalParams?.amiChart
       ? { connect: { id: optionalParams.amiChart.id } }
@@ -39,7 +53,10 @@ export const unitFactorySingle = (
     minOccupancy: bedrooms,
     maxOccupancy: bedrooms + 2,
     monthlyIncomeMin: randomInt(3500).toString(),
-    monthlyRent: (randomInt(2500) * (bedrooms || 1)).toString(),
+    monthlyRent: !isPercentageOfIncome ? randomRent : undefined,
+    monthlyRentAsPercentOfIncome: isPercentageOfIncome
+      ? randomInt(80)
+      : undefined,
     unitRentTypes: optionalParams?.unitRentTypeId
       ? { connect: { id: optionalParams?.unitRentTypeId } }
       : {
@@ -55,7 +72,8 @@ export const unitFactoryMany = async (
   optionalParams?: {
     randomizePriorityType?: boolean;
     amiChart?: AmiChart;
-    unitAccessibilityPriorityTypeId?: string;
+    accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
+    canBePercentageOfIncome?: boolean;
   },
 ): Promise<Prisma.UnitsCreateWithoutListingsInput[]> => {
   const createArray: Promise<Prisma.UnitsCreateWithoutListingsInput>[] = [
@@ -66,22 +84,23 @@ export const unitFactoryMany = async (
       unitTypes[randomInt(unitTypes.length)],
     );
 
-    // create a random priority type with roughly half being null
-    const unitAccessibilityPriorityTypes =
-      optionalParams?.randomizePriorityType && Math.random() > 0.5
-        ? await unitAccessibilityPriorityTypeFactorySingle(prismaClient)
+    const unitRentType = await unitRentTypeFactorySingle(
+      prismaClient,
+      UnitRentTypeEnum.fixed,
+    );
+
+    const accessibilityPriorityType =
+      optionalParams?.randomizePriorityType && Math.random() > 0.9
+        ? unitAccessibilityPriorityTypeValues[
+            randomInt(unitAccessibilityPriorityTypeValues.length)
+          ]
         : undefined;
 
     return unitFactorySingle(unitType, {
       ...optionalParams,
+      unitRentTypeId: unitRentType.id,
       otherFields: {
-        unitAccessibilityPriorityTypes: unitAccessibilityPriorityTypes
-          ? {
-              connect: {
-                id: unitAccessibilityPriorityTypes.id,
-              },
-            }
-          : undefined,
+        accessibilityPriorityType,
         numBathrooms: index,
       },
     });

@@ -1,64 +1,86 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { DOBField, Field, Form, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { DOBField, Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert, Icon } from "@bloom-housing/ui-seeds"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
-  CustomIconMap,
   emailRegex,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
+  const isAdvocate = conductor?.config?.isAdvocate
 
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors, trigger } = useForm<Record<string, any>>({
+  const { register, handleSubmit, watch, errors, trigger, clearErrors, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Record<string, any>
+  >({
     shouldFocusError: false,
     defaultValues: {
       "applicant.emailAddress": application.applicant.emailAddress,
       "applicant.noEmail": application.applicant.noEmail,
     },
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "primaryApplicantName",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "primaryApplicantName",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
+
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    if (!autofilled) {
-      conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
-    }
-    conductor.routeToNextOrReturnUrl()
+    const pendingSave = { applicant: { ...application.applicant, ...data.applicant } }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
+    })
   }
+
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const emailPresent: string = watch("applicant.emailAddress")
   const noEmail: boolean = watch("applicant.noEmail")
   const clientLoaded = OnClientSide()
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
-
-  const LockIcon = () => {
-    return (
-      autofilled && (
-        <Icon className="ml-2 text-primary" size="md">
-          {CustomIconMap.lockClosed}
-        </Icon>
-      )
-    )
-  }
+  const emailErrorMessage =
+    errors.applicant?.emailAddress?.type === "advocateEmail"
+      ? t("errors.advocateEmailAddressError")
+      : t("errors.emailAddressError")
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -74,7 +96,7 @@ const ApplicationName = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.name.title")}
@@ -88,17 +110,9 @@ const ApplicationName = () => {
             url: autofilled ? `/applications/start/autofill` : `/applications/start/what-to-expect`,
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>
             <div id={"application-initial-page"}>
               <fieldset>
@@ -106,13 +120,11 @@ const ApplicationName = () => {
                   className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
                 >
                   {t("application.name.yourName")}
-                  <LockIcon />
                 </legend>
 
                 <Field
                   name="applicant.firstName"
                   label={t("application.name.firstOrGivenName")}
-                  disabled={autofilled}
                   defaultValue={application.applicant.firstName}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.applicant?.firstName}
@@ -128,7 +140,6 @@ const ApplicationName = () => {
                 <Field
                   name="applicant.middleName"
                   label={t("application.name.middleNameOptional")}
-                  disabled={autofilled}
                   defaultValue={application.applicant.middleName}
                   register={register}
                   dataTestId={"app-primary-middle-name"}
@@ -140,7 +151,6 @@ const ApplicationName = () => {
                 <Field
                   name="applicant.lastName"
                   label={t("application.name.lastOrFamilyName")}
-                  disabled={autofilled}
                   defaultValue={application.applicant.lastName}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.applicant?.lastName}
@@ -162,7 +172,6 @@ const ApplicationName = () => {
                 birthMonth: application.applicant.birthMonth,
                 birthYear: application.applicant.birthYear,
               }}
-              disabled={autofilled}
               register={register}
               required={true}
               error={errors.applicant}
@@ -171,53 +180,64 @@ const ApplicationName = () => {
               watch={watch}
               validateAge18={true}
               errorMessage={t("errors.dateOfBirthErrorAge")}
-              label={
-                <>
-                  {t("application.name.yourDateOfBirth")}
-                  <LockIcon />
-                </>
-              }
+              label={t("application.name.yourDateOfBirth")}
             />
             <p className={"field-sub-note"}>{t("application.name.dobHelper")}</p>
           </CardSection>
           <CardSection divider={"flush"} className={"border-none"}>
-            <legend
-              className={`text__caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
-            >
-              {t("application.name.yourEmailAddress")}
-              <LockIcon />
-            </legend>
+            <fieldset>
+              <legend
+                className={`text__caps-spaced ${
+                  errors.applicant?.emailAddress ? "text-alert" : ""
+                }`}
+              >
+                {t("application.name.yourEmailAddress")}
+              </legend>
 
-            <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
+              <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 
-            <Field
-              type="email"
-              name="applicant.emailAddress"
-              label={t("application.name.yourEmailAddress")}
-              readerOnly={true}
-              defaultValue={application.applicant.emailAddress}
-              validation={{ required: !noEmail, pattern: emailRegex }}
-              error={errors.applicant?.emailAddress}
-              errorMessage={t("errors.emailAddressError")}
-              register={register}
-              disabled={clientLoaded && (noEmail || autofilled)}
-              dataTestId={"app-primary-email"}
-              subNote={"example@mail.com"}
-            />
+              <Field
+                type="email"
+                name="applicant.emailAddress"
+                label={t("application.name.yourEmailAddress")}
+                readerOnly={true}
+                defaultValue={application.applicant.emailAddress}
+                validation={{
+                  required: !noEmail,
+                  pattern: emailRegex,
+                  validate: {
+                    advocateEmail: (value: string) => {
+                      if (!isAdvocate || !value || !profile?.email) return true
+                      return value.trim().toLowerCase() !== profile.email.trim().toLowerCase()
+                    },
+                  },
+                }}
+                error={errors.applicant?.emailAddress}
+                errorMessage={emailErrorMessage}
+                register={register}
+                onChange={() => clearErrors("applicant.emailAddress")}
+                disabled={clientLoaded && noEmail}
+                dataTestId={"app-primary-email"}
+                subNote={"example@mail.com"}
+              />
 
-            <Field
-              type="checkbox"
-              id="noEmail"
-              name="applicant.noEmail"
-              label={t("application.name.noEmailAddress")}
-              primary={true}
-              register={register}
-              disabled={clientLoaded && (emailPresent?.length > 0 || autofilled)}
-              inputProps={{
-                defaultChecked: clientLoaded && noEmail,
-              }}
-              dataTestId={"app-primary-no-email"}
-            />
+              <Field
+                type="checkbox"
+                id="noEmail"
+                name="applicant.noEmail"
+                label={t("application.name.noEmailAddress")}
+                primary={true}
+                register={register}
+                disabled={clientLoaded && emailPresent?.length > 0}
+                onChange={(e) => {
+                  if (e.target.checked) clearErrors("applicant.emailAddress")
+                }}
+                inputProps={{
+                  defaultChecked: clientLoaded && noEmail,
+                }}
+                dataTestId={"app-primary-no-email"}
+              />
+            </fieldset>
           </CardSection>
         </ApplicationFormLayout>
       </Form>
@@ -226,3 +246,5 @@ const ApplicationName = () => {
 }
 
 export default ApplicationName
+
+export const getStaticProps = sharedGetStaticProps

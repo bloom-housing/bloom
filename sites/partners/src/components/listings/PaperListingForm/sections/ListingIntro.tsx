@@ -1,21 +1,33 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Field, FieldGroup, Select, SelectOption } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import {
   EnumListingListingType,
+  Property,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { defaultFieldProps, fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import {
+  defaultFieldProps,
+  fieldHasError,
+  fieldIsRequired,
+  fieldMessage,
+  getLabel,
+} from "../../../../lib/helpers"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 interface ListingIntroProps {
   enableHousingDeveloperOwner?: boolean
   enableListingFileNumber?: boolean
+  enableLandUse?: boolean
   enableNonRegulatedListings?: boolean
+  enableProperties?: boolean
   jurisdictionName: string
+  jurisdictionId?: string
   listingId: string
+  listingType?: EnumListingListingType
   requiredFields: string[]
+  properties: Property[]
 }
 
 const getDeveloperLabel = (
@@ -30,15 +42,35 @@ const getDeveloperLabel = (
   return t("listings.developer")
 }
 
+const getListingTypeLabel = (listingType: EnumListingListingType) => {
+  if (listingType === EnumListingListingType.landUse) {
+    return t("listings.landUse")
+  } else if (listingType === EnumListingListingType.nonRegulated) {
+    return t("listings.nonRegulated")
+  }
+  return t("listings.regulated")
+}
+
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, clearErrors, errors, watch, getValues } = formMethods
+  const { register, clearErrors, errors, getValues } = formMethods
 
   const listing = getValues()
 
-  const listingType = watch("listingType")
+  const showPropertiesDropDown = props.properties?.length > 0 && props.enableProperties
+
+  const propertyOptions: SelectOption[] =
+    props.properties && props.properties?.length !== 0
+      ? [
+          { label: "", value: "" },
+          ...props.properties.map((property) => ({
+            label: property.name,
+            value: property.id,
+          })),
+        ]
+      : []
 
   return (
     <>
@@ -49,13 +81,11 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        {props.enableNonRegulatedListings && (
+        {(props.enableNonRegulatedListings || props.enableLandUse) && (
           <Grid.Row columns={1}>
             <Grid.Cell>
               <FieldValue id="listingType" label={t("listings.listingTypeTitle")}>
-                {listing.listingType === EnumListingListingType.nonRegulated
-                  ? t("listings.nonRegulated")
-                  : t("listings.regulated")}
+                {getListingTypeLabel(props.listingType)}
               </FieldValue>
             </Grid.Cell>
           </Grid.Row>
@@ -96,7 +126,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               register={register}
               {...defaultFieldProps(
                 "developer",
-                getDeveloperLabel(listingType, props.enableHousingDeveloperOwner),
+                getDeveloperLabel(props.listingType, props.enableHousingDeveloperOwner),
                 props.requiredFields,
                 errors,
                 clearErrors
@@ -104,7 +134,7 @@ const ListingIntro = (props: ListingIntroProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        {listingType === EnumListingListingType.nonRegulated &&
+        {props.listingType === EnumListingListingType.nonRegulated &&
           props.enableNonRegulatedListings && (
             <Grid.Row columns={1}>
               <Grid.Cell>
@@ -133,6 +163,29 @@ const ListingIntro = (props: ListingIntroProps) => {
               </Grid.Cell>
             </Grid.Row>
           )}
+        {showPropertiesDropDown && (
+          <Grid.Row columns={3}>
+            <Grid.Cell>
+              <Select
+                id={"property.id"}
+                name={"property.id"}
+                label={getLabel("property", props.requiredFields, t("properties.drawer.nameLabel"))}
+                register={register}
+                controlClassName="control"
+                errorMessage={t("errors.requiredFieldError")}
+                options={propertyOptions.sort((a, b) =>
+                  a.label.toLowerCase() < b.label.toLowerCase() ? -1 : 1
+                )}
+                error={fieldHasError(errors ? errors.property : null)}
+                inputProps={{
+                  onChange: () =>
+                    fieldHasError(errors ? errors["property"] : null) && clearErrors("property"),
+                  "aria-required": fieldIsRequired("property", props.requiredFields),
+                }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </SectionWithGrid>
     </>
   )

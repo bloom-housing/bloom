@@ -1,8 +1,9 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 import type { UseFormMethods } from "react-hook-form"
-import { Field, Form, NavigationContext, t } from "@bloom-housing/ui-components"
-import { Button } from "@bloom-housing/ui-seeds"
+import { Field, PasswordField, t } from "@bloom-housing/ui-components"
+import { Button, Link } from "@bloom-housing/ui-seeds"
+import { Form } from "../forms/Form"
 import { getListingRedirectUrl } from "../../utilities/getListingRedirectUrl"
 import styles from "./FormSignIn.module.scss"
 
@@ -35,13 +36,12 @@ const FormSignInPwdless = ({
   const onError = () => {
     window.scrollTo(0, 0)
   }
-  const { LinkComponent } = useContext(NavigationContext)
   const router = useRouter()
   const listingIdRedirect = router.query?.listingId as string
   const forgetPasswordURL = getListingRedirectUrl(listingIdRedirect, "/forgot-password")
 
   return (
-    <Form id="sign-in" onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form id="sign-in" suppressSubmitOnEnter={false} onSubmit={handleSubmit(onSubmit, onError)}>
       <Field
         className={styles["sign-in-email-input"]}
         name="email"
@@ -56,25 +56,25 @@ const FormSignInPwdless = ({
       />
 
       {!useCode && (
-        <>
-          <aside>
-            <LinkComponent href={forgetPasswordURL} className={styles["forgot-password"]}>
-              {t("authentication.signIn.forgotPassword")}
-            </LinkComponent>
-          </aside>
-          <Field
+        <div className={styles["password-grid"]}>
+          <PasswordField
             className={styles["sign-in-password-input"]}
             name="password"
             label={t("authentication.createAccount.password")}
             labelClassName="text__caps-spaced"
+            showPasswordLabel={t("authentication.createAccount.showPassword")}
             validation={{ required: useCode === false }}
             error={errors.password}
             errorMessage={t("authentication.signIn.enterLoginPassword")}
             register={register}
-            type={"password"}
             dataTestId="sign-in-password-field"
           />
-        </>
+          <div className={styles["forgot-password-wrapper"]}>
+            <Link href={forgetPasswordURL} className={styles["forgot-password"]}>
+              {t("authentication.signIn.forgotPassword")}
+            </Link>
+          </div>
+        </div>
       )}
       <div className={styles["sign-in-action"]}>
         <Button

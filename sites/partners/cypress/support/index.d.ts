@@ -34,7 +34,7 @@ declare namespace Cypress {
     verifyTerms(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     fillMailingAddress(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     signOut(): Chainable
-    signOutApi(): Chainable
+    signOutApi(fixture?: string): Chainable
     fillFields(
       obj: Record<string, string>,
       fieldsToType: fieldObj[],
@@ -46,7 +46,9 @@ declare namespace Cypress {
       listingName: string,
       isLottery: boolean,
       isApproval: boolean,
-      jurisdiction: boolean
+      jurisdiction: boolean | string,
+      scheduledPublishDate?: Date,
+      existingListingName?: string
     ): Chainable
     addMinimalApplication(listingName: string): Chainable
     findAndOpenListing(listingName: string): Chainable

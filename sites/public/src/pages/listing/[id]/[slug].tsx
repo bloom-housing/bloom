@@ -1,19 +1,21 @@
 import React, { useEffect, useContext } from "react"
 import { GetStaticPaths, GetStaticProps } from "next"
-import axios from "axios"
+import { useRouter } from "next/router"
+import axios, { AxiosResponse } from "axios"
 import { t } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   ListingDetail,
   pushGtmEvent,
   AuthContext,
+  MessageContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/listing/ListingView"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
-import { fetchJurisdictionByName } from "../../../lib/hooks"
+import { fetchSharedPageProps } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 
@@ -22,13 +24,17 @@ interface ListingProps {
   jurisdiction: Jurisdiction
 }
 
+const VALID_STATUSES = ["active", "closed"]
+
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
   const { profile } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
+  const router = useRouter()
 
   useEffect(() => {
-    if (!listing.id) return
+    if (!listing?.id) return
     pushGtmEvent<ListingDetail>({
       event: "pageView",
       pageTitle: `${listing.name} - Housing Portal`,
@@ -42,19 +48,30 @@ export default function ListingPage(props: ListingProps) {
       paperApplication: listing.paperApplication,
     })
   }, [
-    listing.applicationDueDate,
-    listing.applicationOpenDate,
-    listing.digitalApplication,
-    listing.id,
-    listing.name,
-    listing.paperApplication,
-    listing.reviewOrderType,
-    listing.status,
+    listing?.applicationDueDate,
+    listing?.applicationOpenDate,
+    listing?.digitalApplication,
+    listing?.id,
+    listing?.name,
+    listing?.paperApplication,
+    listing?.reviewOrderType,
+    listing?.status,
     profile,
   ])
+  useEffect(() => {
+    if (!VALID_STATUSES.includes(listing?.status)) {
+      addToast(t("errors.invalidListing.redirect"), { variant: "alert" })
+      void router.push("/")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!listing) {
     return <ErrorPage />
+  }
+
+  if (!VALID_STATUSES.includes(listing?.status)) {
+    return null
   }
 
   const metaDescription = t("pageDescription.listing", {
@@ -82,7 +99,7 @@ export const getStaticProps: GetStaticProps = async (context: {
   params: Record<string, string>
   locale: string
 }) => {
-  let response
+  let response: AxiosResponse
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
       headers: {
@@ -93,10 +110,27 @@ export const getStaticProps: GetStaticProps = async (context: {
   } catch (e) {
     return { notFound: true }
   }
-  const jurisdiction = fetchJurisdictionByName()
+  const shared = fetchSharedPageProps(context.locale)
+
+  if (response.data.externalURL) {
+    try {
+      response = await axios.get(
+        `${response.data.externalURL}/listings/external/${response.data.externalListingId}`,
+        { headers: { language: context.locale } }
+      )
+      // re-setting the externalURL field with the publicUrl if we need to redirect to the external site
+      response.data.externalURL = response.data.jurisdiction.publicUrl
+    } catch (e) {
+      console.error(`Error fetching external listing data: ${e}`)
+      return { notFound: true }
+    }
+  }
 
   return {
-    props: { listing: response.data, jurisdiction: await jurisdiction },
+    props: {
+      listing: response.data,
+      ...(await shared),
+    },
     revalidate: Number(process.env.cacheRevalidate),
   }
 }

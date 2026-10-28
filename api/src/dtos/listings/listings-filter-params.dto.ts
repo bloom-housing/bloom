@@ -10,8 +10,11 @@ import {
   IsArray,
   IsBoolean,
   IsEnum,
+  IsInt,
   IsNumber,
   IsNumberString,
+  Max,
+  Min,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -20,6 +23,10 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { FilterAvailabilityEnum } from '../../enums/listings/filter-availability-enum';
 import { ListingFilterKeys } from '../../enums/listings/filter-key-enum';
 import { FixLargeObjectArray } from '../../decorators/fix-large-object-array';
+import { ParkingTypeEnum } from '../../enums/listings/filter-parking-type-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
+
+const MAX_BATHROOMS = 5;
 
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -50,9 +57,11 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    example: '2',
+    example: 1,
   })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsInt({ groups: [ValidationsGroupsEnum.default] })
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
+  @Max(MAX_BATHROOMS, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
   [ListingFilterKeys.bathrooms]?: number;
 
@@ -84,14 +93,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
-    type: Array,
-    example: ['Santa Clara'],
-  })
-  @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.counties]?: string[];
-
-  @Expose()
-  @ApiPropertyOptional({
     enum: HomeTypeEnum,
     enumName: 'HomeTypeEnum',
     isArray: true,
@@ -118,6 +119,14 @@ export class ListingFilterParams extends BaseFilter {
     example: false,
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.includeExternal]?: boolean;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Boolean,
+    example: false,
+  })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.isVerified]?: boolean;
 
   @Expose()
@@ -126,6 +135,14 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.jurisdiction]?: string;
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: Array,
+    example: ['jurisdiction1', 'jurisdiction2'],
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.jurisdictions]?: string[];
 
   @Expose()
   @ApiPropertyOptional({
@@ -187,6 +204,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiPropertyOptional({
+    isArray: true,
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.configurableRegions]?: string[];
+
+  @Expose()
+  @ApiPropertyOptional({
     type: Array,
     example: ['Seniors'],
   })
@@ -223,4 +247,26 @@ export class ListingFilterParams extends BaseFilter {
     example: 'regulated',
   })
   [ListingFilterKeys.listingType]?: ListingTypeEnum;
+
+  @Expose()
+  @ApiPropertyOptional({
+    enum: ParkingTypeEnum,
+    enumName: 'ParkingTypeEnum',
+    example: 'carport',
+  })
+  [ListingFilterKeys.parkingType]?: ParkingTypeEnum;
+
+  @Expose()
+  @ApiPropertyOptional({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+    isArray: true,
+    example: ['mobility'],
+  })
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(UnitAccessibilityPriorityTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+    each: true,
+  })
+  [ListingFilterKeys.accessibilityPriorityTypes]?: UnitAccessibilityPriorityTypeEnum[];
 }

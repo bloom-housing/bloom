@@ -36,12 +36,25 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 // https://www.npmjs.com/package/next-transpile-modules
 module.exports = withBundleAnalyzer(
   withTM({
+    // Tasks built from one image must share a build ID, or page data requests fail across tasks.
+    generateBuildId: () => process.env.GIT_SHA || null,
+    typescript: {
+      ignoreBuildErrors: process.env.DISABLE_NEXT_TYPECHECK === "TRUE",
+    },
+    experimental: {
+      webpackBuildWorker: true,
+      // Uncomment line below before building when using symlink for UI-C
+      // esmExternals: "loose"
+    },
     env: {
+      // Set ALLOW_SEO_INDEXING=TRUE only in production so dev/staging get noindex
+      allowSeoIndexing: process.env.ALLOW_SEO_INDEXING === "TRUE" ? "TRUE" : "",
       backendApiBase: BACKEND_API_BASE,
       backendProxyBase: BACKEND_PROXY_BASE,
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
       idleTimeout: process.env.IDLE_TIMEOUT,
       showSmsMfa: !process.env.SHOW_SMS_MFA || process.env.SHOW_SMS_MFA === "TRUE" ? "TRUE" : "", // SMS on by default
+      useS3FileStorage: process.env.USE_S3_FILE_STORAGE === "TRUE" ? "TRUE" : "",
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
@@ -72,12 +85,33 @@ module.exports = withBundleAnalyzer(
         test: /\.md$/,
         type: "asset/source",
       })
+
+      // Suppress noisy-but-harmless protobufjs dynamic require warning
+      // from @opentelemetry/exporter-metrics-otlp-grpc
+      config.ignoreWarnings = [
+        ...(config.ignoreWarnings || []),
+        {
+          module:
+            /node_modules\/@opentelemetry\/exporter-metrics-otlp-grpc\/node_modules\/protobufjs/,
+          message: /Critical dependency/,
+        },
+      ]
+
       return config
     },
     eslint: {
       ignoreDuringBuilds: true,
     },
-    // Uncomment line below before building when using symlink for UI-C
-    // experimental: { esmExternals: "loose" },
+    headers() {
+      if (process.env.ALLOW_SEO_INDEXING === "TRUE") {
+        return []
+      }
+      return [
+        {
+          source: "/:path*",
+          headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+        },
+      ]
+    },
   })
 )

@@ -16,19 +16,33 @@ Cypress.Commands.add("signIn", (email, password) => {
 
 Cypress.Commands.add("signOut", () => {
   // TODO: once the favorites feature is being tested, this is Sign out-4:
-  if (Cypress.env("showSeedsDesign")) {
-    cy.get(`[data-testid="My account"]`).trigger("click")
-    cy.get(`[data-testid="Sign out"]`).trigger("click")
-  } else {
-    // data-testid for SiteHeader in this path is set in ui-components
-    // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
-    cy.get(`[data-testid="My account-2"]`).trigger("mouseover")
-    cy.get(`[data-testid="Sign out-3"]`).trigger("click")
-  }
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (showSeedsDesign) {
+      cy.get(`[data-testid="My account"]`).trigger("click")
+      cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
+    } else {
+      // data-testid for SiteHeader in this path is set in ui-components
+      // See https://github.com/bloom-housing/ui-components/blob/c35c094554e8199f202d67a405272035189060ec/src/headers/SiteHeader.tsx#L175
+      // Use keypress instead of mouseover: the span's onKeyPress(Enter) sets activeMenu state
+      // and there's no keyboard-based close mechanism, keeping the dropdown open reliably.
+      cy.get(`[data-testid="My account-2"]`).trigger("keypress", {
+        key: "Enter",
+        keyCode: 13,
+        charCode: 13,
+        which: 13,
+      })
+      cy.contains("button", "Sign out", { timeout: 10000 }).click({ force: true })
+    }
+  })
 })
 
 Cypress.Commands.add("goNext", () => {
-  return cy.getByID("app-next-step-button").click()
+  return cy
+    .getByID("app-next-step-button")
+    .should("exist")
+    .scrollIntoView()
+    .should("be.visible")
+    .click({ force: true })
 })
 
 Cypress.Commands.add("getByID", (id, ...args) => {
@@ -43,6 +57,20 @@ Cypress.Commands.add("getPhoneFieldByTestId", (testId) => {
   return cy.get(`[data-testid="${testId}"]`).find("input")
 })
 
+Cypress.Commands.add("typePhoneFieldByTestId", (testId, value, attempt = 0) => {
+  // The masked phone input can lose typed input when a hydration re-render lands mid-typing on a
+  // slow runner, which surfaces later as a missing summary field. Verify the value and retype.
+  cy.getPhoneFieldByTestId(testId).clear()
+  cy.getPhoneFieldByTestId(testId).type(value)
+  cy.getPhoneFieldByTestId(testId).then(($input) => {
+    if ($input.val() !== value && attempt < 2) {
+      cy.typePhoneFieldByTestId(testId, value, attempt + 1)
+    } else {
+      cy.wrap($input).should("have.value", value)
+    }
+  })
+})
+
 Cypress.Commands.add("checkErrorAlert", (command) => {
   cy.getByID("application-alert-box").should(command)
 })
@@ -53,17 +81,20 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
-  if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
-  } else {
-    cy.get(".is-card-link").contains(listingName).parent().click()
-  }
+
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (showSeedsDesign) {
+      cy.getByID("listing-seeds-link").contains(listingName).parent().click()
+    } else {
+      cy.get(".is-card-link").contains(listingName).parent().click()
+    }
+  })
   cy.getByID("listing-view-apply-button").eq(1).click()
   cy.getByID("app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
   cy.get("[data-testid=sign-in-password-field]").type("abcdef")
   cy.getByID("sign-in-button").click()
-  cy.getByID("app-choose-language-button").eq(0).click()
+  cy.getByID("app-choose-language-button-en").eq(0).click()
   cy.getByID("app-next-step-button").click()
   cy.getByID("application-initial-page").then(() => {
     cy.get("h2").then(($header) => {
@@ -80,13 +111,15 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 
 Cypress.Commands.add("beginApplicationSignedIn", (listingName, autofill) => {
   cy.visit("/listings")
-  if (Cypress.env("showSeedsDesign")) {
-    cy.getByID("listing-seeds-link").contains(listingName).parent().click()
-  } else {
-    cy.get(".is-card-link").contains(listingName).parent().click()
-  }
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (showSeedsDesign) {
+      cy.getByID("listing-seeds-link").contains(listingName).parent().click()
+    } else {
+      cy.get(".is-card-link").contains(listingName).parent().click()
+    }
+  })
   cy.getByID("listing-view-apply-button").eq(1).click()
-  cy.getByID("app-choose-language-button").eq(0).click()
+  cy.getByID("app-choose-language-button-en").eq(0).click()
   cy.getByID("app-next-step-button").click()
   if (autofill) {
     cy.getByID("autofill-accept").click()
@@ -125,13 +158,17 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
     if (application.applicant.noPhone) {
       cy.getByTestId("app-primary-no-phone").check()
     } else {
-      cy.getPhoneFieldByTestId("app-primary-phone-number").type(application.applicant.phoneNumber)
-      cy.getByTestId("app-primary-phone-number-type").select(application.applicant.phoneNumberType)
+      cy.typePhoneFieldByTestId("app-primary-phone-number", application.applicant.phoneNumber)
+      cy.getByTestId("app-primary-phone-number-type").select(
+        application.applicant.phoneNumberType,
+        { force: true }
+      )
     }
 
     if (application.additionalPhoneNumber) {
       cy.getByTestId("app-primary-additional-phone").check()
-      cy.getPhoneFieldByTestId("app-primary-additional-phone-number").type(
+      cy.typePhoneFieldByTestId(
+        "app-primary-additional-phone-number",
         application.additionalPhoneNumber
       )
       cy.getByTestId("app-primary-additional-phone-number-type").select(
@@ -193,6 +230,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application, autofill) =
     cy.getByTestId("app-primary-work-in-region-no").check()
   }
 
+  cy.getByTestId("app-primary-address-street").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -213,6 +251,7 @@ Cypress.Commands.add("step3AlternateContactType", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-alternate-type").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -223,9 +262,10 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
     cy.getByTestId("app-alternate-first-name").type(application.alternateContact.firstName)
     cy.getByTestId("app-alternate-last-name").type(application.alternateContact.lastName)
   } else {
-    cy.contains("Who is your alternate contact?")
+    cy.getByTestId("app-alternate-first-name").should("exist")
   }
 
+  cy.getByTestId("app-alternate-first-name").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -234,7 +274,8 @@ Cypress.Commands.add("step4AlternateContactName", (application, autofill) => {
 
 Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
   if (!autofill) {
-    cy.getPhoneFieldByTestId("app-alternate-phone-number").type(
+    cy.typePhoneFieldByTestId(
+      "app-alternate-phone-number",
       application.alternateContact.phoneNumber
     )
     cy.getByTestId("app-alternate-email").type(application.alternateContact.emailAddress)
@@ -255,38 +296,33 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
     )
   }
 
+  cy.getByTestId("app-alternate-mailing-address-street").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-
-  if (autofill & (application.householdMember.length > 0)) {
-    cy.isNextRouteValid("liveAlone")
-  } else {
-    cy.isNextRouteValid("alternateContactInfo")
-  }
+  cy.isNextRouteValid("alternateContactInfo")
 })
 
-Cypress.Commands.add("step6HouseholdSize", (application, autofill) => {
-  if (!autofill) {
-    if (application.householdMember.length > 0) {
-      cy.getByID("householdSizeLiveWithOthers").click()
-
-      cy.goNext()
-      cy.checkErrorAlert("not.exist")
-      cy.checkErrorMessages("not.exist")
-
-      cy.location("pathname").should("include", "applications/household/members-info")
-    } else {
-      cy.getByID("householdSizeLiveAlone").click()
-      cy.goNext()
-      cy.checkErrorAlert("not.exist")
-      cy.checkErrorMessages("not.exist")
-      cy.location("pathname").should("include", "applications/household/preferred-units")
-    }
+Cypress.Commands.add("step6HouseholdSize", (application) => {
+  if (application.householdMember.length > 0) {
+    cy.getByID("householdSizeLiveWithOthers").should("exist").click()
+    cy.goNext()
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.location("pathname").should("include", "applications/household/members-info")
+  } else {
+    cy.getByID("householdSizeLiveAlone").should("exist").click()
+    cy.goNext()
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.location("pathname").should("include", "applications/household/preferred-units")
   }
 })
 
 Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
+  cy.contains(
+    "Before adding other people, make sure that they aren't named on any other application for this listing"
+  ).should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -306,7 +342,9 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
     if (!autofill) {
       cy.getByTestId("app-household-member-first-name").type(householdMember.firstName)
       cy.getByTestId("app-household-member-middle-name").type(householdMember.middleName)
-      cy.getByTestId("app-household-member-last-name").type(householdMember.lastName)
+      cy.getByTestId("app-household-member-last-name").type(householdMember.lastName, {
+        force: true,
+      })
       cy.getByTestId("dob-field-month").type(householdMember.birthMonth)
       cy.getByTestId("dob-field-day").type(householdMember.birthDay)
       cy.getByTestId("dob-field-year").type(householdMember.birthYear)
@@ -332,28 +370,28 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application, autofill) => {
         cy.getByTestId("app-household-member-same-address").eq(0).check()
       }
 
-      if (householdMember.workInRegion === "yes") {
-        cy.getByTestId("app-household-member-work-in-region").eq(0).check()
-        cy.getByTestId("app-household-member-work-address-street").type(
-          householdMember.householdMemberWorkAddress.street
-        )
-        cy.getByTestId("app-household-member-work-address-street2").type(
-          householdMember.householdMemberWorkAddress.street2
-        )
-        cy.getByTestId("app-household-member-work-address-city").type(
-          householdMember.householdMemberWorkAddress.city
-        )
-        cy.getByTestId("app-household-member-work-address-state").select(
-          householdMember.householdMemberWorkAddress.state
-        )
-        cy.getByTestId("app-household-member-work-address-zip").type(
-          householdMember.householdMemberWorkAddress.zipCode
-        )
-      } else {
-        cy.getByTestId("app-household-member-work-in-region").eq(1).check()
-      }
-
       cy.getByTestId("app-household-member-relationship").select(householdMember.relationship)
+    }
+
+    if (householdMember.workInRegion === "yes") {
+      cy.getByTestId("app-household-member-work-in-region").eq(0).check()
+      cy.getByTestId("app-household-member-work-address-street").type(
+        householdMember.householdMemberWorkAddress.street
+      )
+      cy.getByTestId("app-household-member-work-address-street2").type(
+        householdMember.householdMemberWorkAddress.street2
+      )
+      cy.getByTestId("app-household-member-work-address-city").type(
+        householdMember.householdMemberWorkAddress.city
+      )
+      cy.getByTestId("app-household-member-work-address-state").select(
+        householdMember.householdMemberWorkAddress.state
+      )
+      cy.getByTestId("app-household-member-work-address-zip").type(
+        householdMember.householdMemberWorkAddress.zipCode
+      )
+    } else {
+      cy.getByTestId("app-household-member-work-in-region").eq(1).check()
     }
 
     cy.getByID("app-household-member-save").click()
@@ -370,7 +408,7 @@ Cypress.Commands.add("step8PreferredUnits", (application, autofill) => {
       cy.getByTestId(prefUnit.name).check()
     })
   } else {
-    cy.contains("What unit sizes are you interested in?")
+    cy.contains("What unit sizes are you interested in?").should("exist")
   }
 
   cy.goNext()
@@ -390,15 +428,20 @@ Cypress.Commands.add("step9Accessibility", (application, autofill) => {
     if (application.accessibility.hearing) {
       cy.getByTestId("app-ada-hearing").check()
     }
+    if (application.accessibility.hearingAndVision) {
+      cy.getByTestId("app-ada-hearingAndVision").check()
+    }
     if (
       !application.accessibility.hearing &&
-      !application.accessibility.hearing &&
-      !application.accessibility.mobility
+      !application.accessibility.vision &&
+      !application.accessibility.mobility &&
+      !application.accessibility.hearingAndVision
     ) {
       cy.getByTestId("app-ada-none").check()
     }
   }
 
+  cy.getByTestId("app-ada-mobility").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -419,8 +462,8 @@ Cypress.Commands.add("step10Changes", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-expecting-changes").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdExpectingChanges")
@@ -435,8 +478,8 @@ Cypress.Commands.add("step11Student", (application, programsExist, autofill) => 
     }
   }
 
+  cy.getByTestId("app-student").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("householdStudent", !programsExist ? 1 : 0)
@@ -470,8 +513,8 @@ Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-income-vouchers").should("exist")
   cy.goNext()
-
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.isNextRouteValid("vouchersSubsidies")
@@ -479,7 +522,9 @@ Cypress.Commands.add("step13IncomeVouchers", (application, autofill) => {
 
 Cypress.Commands.add("step14Income", (application, autofill) => {
   if (!autofill) {
-    cy.getByTestId("app-income").type(application.income, { force: true })
+    cy.getByTestId("app-income")
+      .type(application.income, { force: true })
+      .should("have.value", application.income)
     if (application.incomePeriod === "perMonth") {
       cy.getByTestId("app-income-period").eq(0).check()
     } else {
@@ -487,6 +532,7 @@ Cypress.Commands.add("step14Income", (application, autofill) => {
     }
   }
 
+  cy.getByTestId("app-income").should("exist")
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -625,7 +671,7 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
     },
     {
       id: "app-summary-income-vouchers",
-      fieldValue: application.incomeVouchers ? "Yes" : "No",
+      fieldValue: application.incomeVouchers ? application.voucher : "None",
     },
     {
       id: "app-summary-income",
@@ -641,16 +687,20 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
   ]
 
   if (application.accessibility.mobility) {
-    const val = "For mobility impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "mobility"
+    fields.push({ id: "ada-mobility", fieldValue: val })
   }
   if (application.accessibility.vision) {
-    const val = "For vision impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "vision"
+    fields.push({ id: "ada-vision", fieldValue: val })
   }
   if (application.accessibility.hearing) {
-    const val = "For hearing impairments"
-    fields.push({ id: val, fieldValue: val })
+    const val = "hearing"
+    fields.push({ id: "ada-hearing", fieldValue: val })
+  }
+  if (application.accessibility.hearingAndVision) {
+    const val = "hearing and/or vision"
+    fields.push({ id: "ada-hearingAndVision", fieldValue: val })
   }
 
   if (application.alternateContact.type !== "noContact") {
@@ -727,10 +777,12 @@ Cypress.Commands.add("step18Summary", (application, verify) => {
       })
   }
 
-  if (!Cypress.env("showSeedsDesign")) {
-    pushMultiselect("preferences")
-    pushMultiselect("programs")
-  }
+  cy.env(["showSeedsDesign"]).then(({ showSeedsDesign }) => {
+    if (!showSeedsDesign) {
+      pushMultiselect("preferences")
+      pushMultiselect("programs")
+    }
+  })
 
   if (verify) {
     fields.forEach(({ id, fieldValue }) => {

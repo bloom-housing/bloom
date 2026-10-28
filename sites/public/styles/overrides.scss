@@ -1,6 +1,18 @@
 :root {
+  // Verbatim copies of the ui-seeds stacks, referenced by _document.tsx.
+  // TODO(ui-seeds#155): replace with var(--seeds-font-default-*) once those tokens ship.
+  --brand-font-fallback-sans: "Open Sans", Helvetica, Arial, Verdana, sans-serif;
+  --brand-font-fallback-alt-sans: Lato, Helvetica, Arial, Verdana, sans-serif;
+  --brand-font-fallback-serif: "Noto Serif", Georgia, Times, serif;
+
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+
+    // Defaults mirror ui-seeds/src/actions/Button.scss.
+    // TODO(ui-seeds#155): drop these once .seeds-button reads --seeds-rounded-button.
+    --button-border-radius-sm: var(--brand-button-radius, var(--seeds-rounded));
+    --button-border-radius-md: var(--brand-button-radius, var(--seeds-rounded));
+    --button-border-radius-lg: var(--brand-button-radius, var(--seeds-rounded));
   }
 
   .main-container {
@@ -68,6 +80,39 @@
       td,
       th {
         font-size: var(--seeds-type-caption-size);
+      }
+
+      &.force-mobile-responsive {
+        thead {
+          display: none;
+        }
+
+        tr {
+          display: block;
+          margin-bottom: 0;
+        }
+
+        td {
+          border: 0;
+          display: flex;
+          text-align: right;
+          padding: var(--seeds-s2);
+        }
+
+        td::before {
+          content: attr(data-label);
+          text-align: left;
+          width: 100%;
+          text-transform: uppercase;
+          font-weight: var(--seeds-font-weight-semibold);
+        }
+
+        .stacked-table-cell-container {
+          text-align: right;
+          padding-left: var(--seeds-s2);
+          padding-right: 0;
+          width: 100%;
+        }
       }
     }
   }
@@ -235,9 +280,11 @@
     --seeds-color-primary-lighter: #f9f4fa;
     --seeds-bg-color-surface-primary: var(--seeds-color-primary-lighter);
     --seeds-bg-color-surface-primary-inverse: var(--seeds-color-primary-darker);
+
+    // TODO(ui-seeds#155): drop these once .seeds-button reads --seeds-rounded-button.
     .seeds-button {
-      --button-border-radius-sm: var(--seeds-rounded-3xl);
-      --button-border-radius-md: var(--seeds-rounded-3xl);
+      --button-border-radius-sm: var(--brand-button-radius, var(--seeds-rounded-3xl));
+      --button-border-radius-md: var(--brand-button-radius, var(--seeds-rounded-3xl));
     }
   }
 
@@ -267,4 +314,73 @@
       }
     }
   }
+
+  .card-icon {
+    color: var(--seeds-color-primary);
+    background-color: var(--seeds-bg-color-surface-primary);
+    border-radius: var(--seeds-rounded-full);
+    padding: var(--seeds-s2);
+    svg {
+      fill: none;
+      stroke-width: 1px;
+    }
+  }
+
+  --heading-override-font-family: var(--seeds-font-alt-sans);
+  --heading-override-font-weight: var(--seeds-font-weight-semibold);
+
+  .seeds-large-heading {
+    font-family: var(--heading-override-font-family);
+    font-weight: var(--heading-override-font-weight);
+    font-size: var(--seeds-font-size-2xl);
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-xl);
+    }
+  }
+
+  .seeds-medium-heading {
+    font-family: var(--heading-override-font-family);
+    font-weight: var(--heading-override-font-weight);
+    font-size: var(--seeds-font-size-xl);
+    @media (--sm-only) {
+      font-size: var(--seeds-font-size-lg);
+    }
+  }
+}
+
+// Until we are able to write our own InfoWindow component, we need to override the default Google Maps styles to get the result we want and maximize screen space in the dialog. These overrides are based on the styles that Google Maps applies by default.
+.gm-style .gm-style-iw-c {
+  padding: 0 !important;
+}
+
+.gm-style .gm-style-iw-d {
+  padding: 0 !important;
+  overflow: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gm-style .gm-style-iw-d::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.gm-style .gm-style-iw-d > div {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.gm-style .gm-ui-hover-effect {
+  top: 0 !important;
+  right: 0 !important;
+}
+
+// Keep Google Maps overlay positioning stable in RTL layouts, while allowing
+// InfoWindow content itself to render with RTL text flow.
+[dir="rtl"] .gm-style {
+  direction: ltr;
+}
+
+[dir="rtl"] .gm-style .gm-style-iw-d > div {
+  direction: rtl;
 }

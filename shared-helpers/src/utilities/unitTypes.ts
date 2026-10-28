@@ -1,5 +1,6 @@
 import {
   Application,
+  EnumListingListingType,
   Listing,
   Unit,
   UnitGroup,
@@ -20,6 +21,8 @@ export const UnitTypeSort: string[] = [
   UnitTypeEnum.threeBdrm,
   UnitTypeEnum.fourBdrm,
   UnitTypeEnum.fiveBdrm,
+  UnitTypeEnum.sixBdrm,
+  UnitTypeEnum.sevenBdrm,
 ]
 
 export const UnitGroupTypeSort: string[] = [
@@ -29,6 +32,22 @@ export const UnitGroupTypeSort: string[] = [
   UnitTypeEnum.threeBdrm,
   UnitTypeEnum.fourBdrm,
 ]
+
+// sevenBdrm is intentionally absent: 7+ bedroom units are an unusual case and
+// stay editable rather than being prefilled.
+export const landUseMinOccupancy: Partial<Record<UnitTypeEnum, number>> = {
+  [UnitTypeEnum.SRO]: 1,
+  [UnitTypeEnum.studio]: 1,
+  [UnitTypeEnum.oneBdrm]: 1,
+  [UnitTypeEnum.twoBdrm]: 2,
+  [UnitTypeEnum.threeBdrm]: 4,
+  [UnitTypeEnum.fourBdrm]: 6,
+  [UnitTypeEnum.fiveBdrm]: 8,
+  [UnitTypeEnum.sixBdrm]: 10,
+}
+
+export const getLandUseMinOccupancy = (unitTypeName?: string): number | undefined =>
+  unitTypeName ? landUseMinOccupancy[unitTypeName as UnitTypeEnum] : undefined
 
 export const sortUnitTypes = (units: UnitType[] | GetUnitTypeNamesReturn[]) => {
   if (!units) return []
@@ -61,12 +80,15 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
   return sorted
 }
 
-export const getUniqueUnitGroupUnitTypes = (unitGroups?: UnitGroup[]): GetUnitTypeNamesReturn[] => {
+export const getUniqueUnitGroupUnitTypes = (
+  unitGroups?: UnitGroup[],
+  listingType?: EnumListingListingType
+): GetUnitTypeNamesReturn[] => {
   if (!unitGroups) return []
 
   const unitTypes = unitGroups.reduce((acc, group) => {
     const groupUnitTypes = group.unitTypes || []
-    if (!group.openWaitlist) return acc
+    if (listingType !== EnumListingListingType.nonRegulated && !group.openWaitlist) return acc
 
     groupUnitTypes.forEach((unitType: UnitType) => {
       const { id, name } = unitType || {}
@@ -85,7 +107,6 @@ export const getUniqueUnitGroupUnitTypes = (unitGroups?: UnitGroup[]): GetUnitTy
 
     return acc
   }, [] as GetUnitTypeNamesReturn[])
-
   const sorted = sortUnitTypes(unitTypes)
 
   return sorted
@@ -101,7 +122,7 @@ export const getPreferredUnitTypes = (
   returnName?: boolean
 ) => {
   const allListingUnitTypes = enableUnitGroups
-    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups || [])
+    ? getUniqueUnitGroupUnitTypes(listing?.unitGroups || [], listing?.listingType)
     : getUniqueUnitTypes(listing?.units)
 
   const preferredUnits = application.preferredUnitTypes

@@ -3,9 +3,13 @@ import {
   FilterAvailabilityEnum,
   HomeTypeEnum,
   ListingFeatures,
+  ListingFeaturesConfiguration,
   ListingFilterKeys,
   ListingFilterParams,
+  ListingsStatusEnum,
+  ParkingTypeEnum,
   RegionEnum,
+  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { UseFormMethods } from "react-hook-form"
@@ -14,6 +18,7 @@ import { Field, t } from "@bloom-housing/ui-components"
 import { encode, ParsedUrlQuery } from "querystring"
 import { isTrue } from "../../lib/helpers"
 import styles from "./FilterDrawer.module.scss"
+import Markdown from "markdown-to-jsx"
 
 type BooleanOrBooleanString = boolean | "true" | "false"
 
@@ -34,10 +39,16 @@ export interface FilterData {
   listingFeatures?: { [K in keyof ListingFeatures]?: BooleanOrBooleanString }
   monthlyRent?: { [K in "maxRent" | "minRent"]?: string }
   regions?: { [K in RegionEnum]: BooleanOrBooleanString }
+  configurableRegions?: string
+  bathrooms?: string
+  jurisdictions?: { [K in string]?: BooleanOrBooleanString }
   section8Acceptance?: BooleanOrBooleanString
   reservedCommunityTypes?: { [K in ReservedCommunityTypes]?: BooleanOrBooleanString }
   multiselectQuestions?: Record<string, BooleanOrBooleanString>
   name?: string
+  parkingType?: { [K in ParkingTypeEnum]?: BooleanOrBooleanString }
+  accessibilityPriorityTypes?: { [K in UnitAccessibilityPriorityTypeEnum]?: BooleanOrBooleanString }
+  status?: ListingsStatusEnum
 }
 
 export interface FilterField {
@@ -51,6 +62,20 @@ export interface CheckboxGroupProps {
   fields: FilterField[]
   register: UseFormMethods["register"]
   customColumnNumber?: number
+  optionalSubNote?: string
+  disabled?: boolean
+}
+
+export interface RadioField extends FilterField {
+  value: string
+}
+
+export interface RadioGroupProps {
+  groupLabel: string
+  name: string
+  fields: RadioField[]
+  register: UseFormMethods["register"]
+  customColumnNumber?: number
 }
 
 export interface RentSectionProps {
@@ -61,6 +86,7 @@ export interface RentSectionProps {
   setError: UseFormMethods["setError"]
   clearErrors: UseFormMethods["clearErrors"]
   errors: UseFormMethods["formState"]["errors"]
+  enableSection8?: boolean
 }
 
 export interface SearchSectionProps {
@@ -68,15 +94,24 @@ export interface SearchSectionProps {
   nameState: string
 }
 
+export interface AccessibilitySectionProps {
+  register: UseFormMethods["register"]
+  filterState: FilterData
+  listingFeaturesConfiguration: ListingFeaturesConfiguration
+}
+
 const arrayFilters: ListingFilterKeys[] = [
   ListingFilterKeys.bedroomTypes,
-  ListingFilterKeys.counties,
   ListingFilterKeys.homeTypes,
   ListingFilterKeys.listingFeatures,
   ListingFilterKeys.regions,
+  ListingFilterKeys.configurableRegions,
   ListingFilterKeys.reservedCommunityTypes,
   ListingFilterKeys.availabilities,
   ListingFilterKeys.multiselectQuestions,
+  ListingFilterKeys.parkingType,
+  ListingFilterKeys.accessibilityPriorityTypes,
+  ListingFilterKeys.jurisdictions,
 ]
 
 const booleanFilters: ListingFilterKeys[] = [
@@ -134,6 +169,16 @@ export const unitTypeMapping = {
     ordinal: 6,
     labelKey: "listings.unitTypes.expanded.fiveBdrm",
   },
+  [UnitTypeEnum.sixBdrm]: {
+    value: 6,
+    ordinal: 7,
+    labelKey: "listings.unitTypes.expanded.sixBdrm",
+  },
+  [UnitTypeEnum.sevenBdrm]: {
+    value: 7,
+    ordinal: 8,
+    labelKey: "listings.unitTypes.expanded.sevenBdrm",
+  },
 }
 
 export const unitTypeUnitGroupsMapping = {
@@ -190,7 +235,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
       <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
       <Grid spacing="sm">
         <Grid.Row columns={props.customColumnNumber ?? 2}>
-          {props.fields.map((field) => {
+          {props.fields?.map((field) => {
             return (
               <Grid.Cell key={`${field.key}-cell`}>
                 <Field
@@ -201,11 +246,44 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
                   type="checkbox"
                   register={props.register}
                   inputProps={{ defaultChecked: field.defaultChecked }}
+                  disabled={props.disabled}
                 />
               </Grid.Cell>
             )
           })}
         </Grid.Row>
+      </Grid>
+      {props.optionalSubNote && (
+        <div className={styles["filter-sub-note"]}>
+          <Markdown>{props.optionalSubNote}</Markdown>
+        </div>
+      )}
+    </fieldset>
+  )
+}
+
+export const RadioGroup = (props: RadioGroupProps) => {
+  return (
+    <fieldset className={styles["filter-section"]}>
+      <legend className={styles["filter-section-label"]}>{props.groupLabel}</legend>
+      <Grid spacing="sm">
+        <div className={styles["radio-row"]}>
+          {props.fields?.map((field) => {
+            return (
+              <Grid.Cell key={`${field.key}-cell`}>
+                <Field
+                  id={field.key}
+                  name={props.name}
+                  label={field.label}
+                  labelClassName={styles["filter-checkbox-label"]}
+                  type="radio"
+                  register={props.register}
+                  inputProps={{ value: field.value, defaultChecked: field.defaultChecked }}
+                />
+              </Grid.Cell>
+            )
+          })}
+        </div>
       </Grid>
     </fieldset>
   )
@@ -238,7 +316,9 @@ export const validateRentValues = (
 export const RentSection = (props: RentSectionProps) => {
   return (
     <fieldset className={styles["filter-section"]}>
-      <legend className={styles["filter-section-label"]}>{t("t.rent")}</legend>
+      <legend className={`${styles["filter-section-label"]} ${styles["parent-label"]}`}>
+        {t("t.rent")}
+      </legend>
       <Grid spacing="sm">
         <Grid.Row>
           <Grid.Cell>
@@ -280,23 +360,81 @@ export const RentSection = (props: RentSectionProps) => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row>
-          <Grid.Cell>
-            <Field
-              id={ListingFilterKeys.section8Acceptance}
-              name={ListingFilterKeys.section8Acceptance}
-              label={t("listings.section8Acceptance")}
-              labelClassName={styles["filter-checkbox-label"]}
-              type="checkbox"
-              register={props.register}
-              inputProps={{
-                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
-              }}
-            />
-          </Grid.Cell>
-        </Grid.Row>
+        {props.enableSection8 && (
+          <Grid.Row>
+            <Grid.Cell>
+              <Field
+                id={ListingFilterKeys.section8Acceptance}
+                name={ListingFilterKeys.section8Acceptance}
+                label={t("listings.section8Acceptance")}
+                labelClassName={styles["filter-checkbox-label"]}
+                type="checkbox"
+                register={props.register}
+                inputProps={{
+                  defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.section8Acceptance]),
+                }}
+              />
+            </Grid.Cell>
+          </Grid.Row>
+        )}
       </Grid>
     </fieldset>
+  )
+}
+
+export const AccessibilitySection = (props: AccessibilitySectionProps) => {
+  const accessibilityCategories = props.listingFeaturesConfiguration?.categories
+
+  if (accessibilityCategories?.length > 0) {
+    return (
+      <fieldset className={styles["filter-section"]}>
+        <legend className={`${styles["filter-section-label"]} ${styles["parent-label"]}`}>
+          {t("listings.sections.accessibilityFeatures")}
+        </legend>
+        <div className={styles["accessibility-category-groups"]}>
+          {accessibilityCategories.map((category) => {
+            const categoryFeatureKeys = category.fields
+              .map((field) => field.id)
+              .sort((a, b) =>
+                t(`eligibility.accessibility.${a}`).localeCompare(
+                  t(`eligibility.accessibility.${b}`)
+                )
+              )
+
+            if (!categoryFeatureKeys.length) {
+              return null
+            }
+
+            return (
+              <CheckboxGroup
+                key={category.id}
+                groupLabel={t(`eligibility.accessibility.categoryTitle.${category.id}`)}
+                fields={buildDefaultFilterFields(
+                  ListingFilterKeys.listingFeatures,
+                  "eligibility.accessibility",
+                  categoryFeatureKeys,
+                  props.filterState
+                )}
+                register={props.register}
+              />
+            )
+          })}
+        </div>
+      </fieldset>
+    )
+  }
+
+  return (
+    <CheckboxGroup
+      groupLabel={t("eligibility.accessibility.title")}
+      fields={buildDefaultFilterFields(
+        ListingFilterKeys.listingFeatures,
+        "eligibility.accessibility",
+        getAccessibilityFeatureKeys(props.listingFeaturesConfiguration),
+        props.filterState
+      )}
+      register={props.register}
+    />
   )
 }
 
@@ -368,12 +506,24 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
         filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
         filters.push(filter)
       }
+    } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison[">="],
+      }
+      filter[ListingFilterKeys.bathrooms] = parseInt(userSelections as string)
+      filters.push(filter)
     } else if (filterType === ListingFilterKeys.name) {
       const filter = {
         $comparison: EnumListingFilterParamsComparison["LIKE"],
       }
 
       filter[ListingFilterKeys.name] = userSelections
+      filters.push(filter)
+    } else if (filterType === ListingFilterKeys.status && userSelections) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison["="],
+      }
+      filter[ListingFilterKeys.status] = userSelections as ListingsStatusEnum
       filters.push(filter)
     }
   })
@@ -419,16 +569,22 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
       const booleanParam = `${ListingFilterKeys[filterType]}=true`
       queryArr.push(booleanParam)
     } else if (
-      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
-      userSelections["maxRent"]
+      filterType === ListingFilterKeys.monthlyRent &&
+      (userSelections["minRent"] || userSelections["maxRent"])
     ) {
       const rentParam = `${ListingFilterKeys[filterType]}=${Object.values(userSelections).join(
         "-"
       )}`
       queryArr.push(rentParam)
+    } else if (filterType === ListingFilterKeys.bathrooms) {
+      const bathroomsParam = `${ListingFilterKeys[filterType]}=${userSelections}`
+      queryArr.push(bathroomsParam)
     } else if (filterType === ListingFilterKeys.name) {
       const nameParam = `${ListingFilterKeys[filterType]}=${userSelections}`
       queryArr.push(nameParam)
+    } else if (filterType === ListingFilterKeys.status) {
+      const statusParam = `${ListingFilterKeys[filterType]}=${userSelections}`
+      queryArr.push(statusParam)
     }
   })
   return queryArr.join("&")
@@ -458,7 +614,15 @@ export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData
       //custom separator to avoid conflicts with higher values with commas
       const rentArr = userSelections.split("-")
       filterData[filterType] = { minRent: rentArr[0] ?? "", maxRent: rentArr[1] ?? "" }
+    } else if (filterType === ListingFilterKeys.bathrooms && typeof userSelections === "string") {
+      filterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.name) {
+      filterData[filterType] = userSelections
+    } else if (
+      filterType === ListingFilterKeys.status &&
+      userSelections === ListingsStatusEnum.closed
+    ) {
+      // only closed is a meaningful selection, active is the default
       filterData[filterType] = userSelections
     }
   })
@@ -487,13 +651,31 @@ export const removeUnselectedFilterData = (data: FilterData): FilterData => {
     } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
       cleanedFilterData[filterType] = userSelections
     } else if (
-      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
-      userSelections["maxRent"]
+      filterType === ListingFilterKeys.monthlyRent &&
+      (userSelections["minRent"] || userSelections["maxRent"])
     ) {
       cleanedFilterData[filterType] = userSelections
+    } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
+      cleanedFilterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.name && userSelections) {
+      cleanedFilterData[filterType] = userSelections
+    } else if (
+      filterType === ListingFilterKeys.status &&
+      userSelections === ListingsStatusEnum.closed
+    ) {
+      // active is the default status, so it is not treated as a selection
       cleanedFilterData[filterType] = userSelections
     }
   })
   return cleanedFilterData
+}
+
+export const getAccessibilityFeatureKeys = (config: ListingFeaturesConfiguration) => {
+  if (config?.categories?.length > 0) {
+    return config.categories
+      .flatMap((category) => category.fields.map((field) => field.id))
+      .sort((a, b) => a.localeCompare(b))
+  } else {
+    return config?.fields?.map((field) => field.id).sort((a, b) => a.localeCompare(b)) || []
+  }
 }

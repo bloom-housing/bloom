@@ -29,8 +29,16 @@ const DetailPreferences = () => {
       listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.map(
         (listingPreference, index) => ({
           order: { content: index + 1 },
-          name: { content: listingPreference?.multiselectQuestions?.text },
-          description: { content: listingPreference?.multiselectQuestions?.description },
+          name: {
+            content:
+              listingPreference?.multiselectQuestions?.name ||
+              listingPreference?.multiselectQuestions?.text,
+          },
+          description: {
+            content: listingPreference?.multiselectQuestions?.description
+              ? listingPreference?.multiselectQuestions?.description
+              : t("t.n/a"),
+          },
         })
       ),
     [listing]

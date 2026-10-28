@@ -1,3 +1,4 @@
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Formatter from "./Formatter"
 import { stringToBoolean, stringToNumber } from "../helpers"
 
@@ -10,6 +11,12 @@ export default class UnitsFormatter extends Formatter {
       const unit = { ...unitValue } // make a copy of the unit before transformation
 
       switch (unit.unitTypes?.name) {
+        case "sevenBdrm":
+          unit.numBedrooms = 7
+          break
+        case "sixBdrm":
+          unit.numBedrooms = 6
+          break
         case "fiveBdrm":
           unit.numBedrooms = 5
           break
@@ -58,7 +65,21 @@ export default class UnitsFormatter extends Formatter {
         delete unit.sqFeet
       }
 
+      if (this.data.listingType === EnumListingListingType.landUse) {
+        if (!unit.monthlyIncomeMin) {
+          delete unit.monthlyIncomeMin
+        }
+      }
+
       delete unit.tempId
+
+      // remove unnecessary ami chart fields for listing editing
+      if (unit.amiChart) {
+        delete unit.amiChart.items
+        delete unit.amiChart.jurisdictions
+        delete unit.createdAt
+        delete unit.updatedAt
+      }
 
       return unit
     })

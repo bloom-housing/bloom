@@ -1,10 +1,13 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
+import { useRouter } from "next/router"
 import InfoIcon from "@heroicons/react/20/solid/InformationCircleIcon"
 import LockClosedIcon from "@heroicons/react/20/solid/LockClosedIcon"
 import {
   t,
-  ListingCard,
+  ListingCard as UICListingCard,
   ApplicationStatusType,
   StatusBarType,
   AppearanceStyleType,
@@ -37,8 +40,26 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { Icon, Message } from "@bloom-housing/ui-seeds"
-import styles from "./helpers.module.scss"
 import { ApplicationFormConfig } from "./applications/configInterfaces"
+import { MapListingCard, MapListingCardList } from "../components/browse/map/MapListingCard"
+import styles from "./helpers.module.scss"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const defaultAppTimeZone = "America/Los_Angeles"
+
+const formatDateInConfiguredTimeZone = (date: Date, hideTime?: boolean): string => {
+  const configuredTimeZone = process.env.timeZone || defaultAppTimeZone
+  const zonedDate = dayjs(date).tz(configuredTimeZone)
+  const formattedDate = zonedDate.format("MMM DD, YYYY")
+
+  if (hideTime) {
+    return formattedDate
+  }
+
+  return `${formattedDate} ${t("t.at")} ${zonedDate.format("h:mmA")}`
+}
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -65,6 +86,10 @@ export const disableContactFormOption = (id: string, noPhone: boolean, noEmail: 
 export const openInFuture = (listing: Listing) => {
   const nowTime = dayjs()
   return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
+}
+
+export const scheduledApplicationOpenInFuture = (listing: Listing): boolean => {
+  return !!listing.scheduledApplicationOpenAt && dayjs() < dayjs(listing.scheduledApplicationOpenAt)
 }
 
 const getListingCardSubtitle = (address: Address) => {
@@ -114,8 +139,7 @@ export const getListingApplicationStatus = (
 
   if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
-    const openDate = dayjs(date)
-    formattedDate = openDate.format("MMM D, YYYY")
+    formattedDate = formatDateInConfiguredTimeZone(date, false)
     content = t("listings.applicationOpenPeriod")
   } else {
     if (listing.status === ListingsStatusEnum.closed) {
@@ -211,18 +235,25 @@ export const getListingStatusMessageContent = (
   marketingSeason: MarketingSeasonEnum,
   marketingMonth: MonthEnum,
   marketingYear: number,
-  hideTime?: boolean
+  hideTime?: boolean,
+  scheduledApplicationOpenAt?: Date,
+  useShortScheduledOpenCopy?: boolean
 ) => {
   let content = ""
   let formattedDate = ""
+  let hasScheduledApplicationOpenMessage = false
   if (status !== ListingsStatusEnum.closed) {
-    if (applicationDueDate) {
+    if (scheduledApplicationOpenAt && dayjs() < dayjs(scheduledApplicationOpenAt)) {
+      formattedDate = formatDateInConfiguredTimeZone(scheduledApplicationOpenAt, false)
+      content = useShortScheduledOpenCopy
+        ? `${t("listings.applicationOpenPeriod")}: ${formattedDate}`
+        : t("listings.scheduledApplicationOpen", {
+            openDate: formattedDate,
+          })
+      hasScheduledApplicationOpenMessage = true
+    } else if (applicationDueDate) {
       const dueDate = dayjs(applicationDueDate)
-      formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = !hideTime
-        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
-        : formattedDate
-
+      formattedDate = formatDateInConfiguredTimeZone(applicationDueDate, hideTime)
       if (dayjs() < dueDate) {
         content = t("listings.applicationDue")
         if (formattedDate) content = content + ": "
@@ -231,7 +262,7 @@ export const getListingStatusMessageContent = (
       content = t("listings.applicationOpenPeriod")
     }
 
-    if (formattedDate !== "") {
+    if (formattedDate !== "" && !hasScheduledApplicationOpenMessage) {
       content = content + `${formattedDate}`
     }
 
@@ -315,7 +346,9 @@ export const getListingStatusMessage = (
                 listing.marketingSeason,
                 listing.marketingMonth,
                 listing.marketingYear,
-                hideTime
+                hideTime,
+                listing.scheduledApplicationOpenAt,
+                true
               )}
             </div>
           )}
@@ -351,13 +384,19 @@ export const getListings = (listings) => {
   }
 
   const generateTableSubHeader = (listing) => {
-    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist &&
+      listing.reviewOrderType !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return {
         content: t("listings.availableUnits"),
         styleType: AppearanceStyleType.success,
         isPillType: true,
       }
-    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ||
+      listing.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       return {
         content: t("listings.waitlist.open"),
         styleType: AppearanceStyleType.primary,
@@ -368,7 +407,7 @@ export const getListings = (listings) => {
   }
   return listings.map((listing: Listing, index) => {
     return (
-      <ListingCard
+      <UICListingCard
         key={index}
         imageCardProps={{
           imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0],
@@ -407,6 +446,16 @@ export const getListings = (listings) => {
       />
     )
   })
+}
+
+export const getMapListings = (listings: Listing[]) => {
+  return (
+    <MapListingCardList>
+      {listings.map((listing, index) => {
+        return <MapListingCard key={index} listing={listing} index={index} />
+      })}
+    </MapListingCardList>
+  )
 }
 
 export const untranslateMultiselectQuestion = (
@@ -520,6 +569,20 @@ export const fetchFavoriteListingIds = async (userId: string, userService: UserS
   return (await userService.favoriteListings({ id: userId })).map((item) => item.id)
 }
 
+// RenderIf component to render content based on language (used in markdown components)
+export const RenderIf = (props: { language: string; children: ReactElement }) => {
+  const router = useRouter()
+
+  if (
+    props.language == "all" ||
+    props.language == router.locale ||
+    (router.locale == "en" && props.language == "default")
+  ) {
+    return props.children
+  }
+  return null
+}
+
 export const isTrue = (value) => {
   return value === true || value === "true"
 }
@@ -538,4 +601,35 @@ export const isUnitGroupAppBase = (listing: Listing, config: ApplicationFormConf
     !listing.unitGroups.some((group) => group.openWaitlist) &&
     !listing.unitGroups.some((group) => group.totalAvailable > 0)
   )
+}
+
+// Related to our google maps implementation, this function calculates based on a set of bounds (boundaries of a set of markers), what the zoom level would be that would allow all markers to be in view (sadly this is not built in without also automatically changing the bounds - which results in an instant and very harsh transition). This allows us to zoom in slowly.
+// https://stackoverflow.com/questions/6048975/google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
+export const getBoundsZoomLevel = (bounds: google.maps.LatLngBounds) => {
+  const mapElement = document.getElementById("listings-map")
+  const WORLD_DIM = { height: 256, width: 256 }
+  const ZOOM_MAX = 21
+
+  function latRad(lat) {
+    const sin = Math.sin((lat * Math.PI) / 180)
+    const radX2 = Math.log((1 + sin) / (1 - sin)) / 2
+    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2
+  }
+
+  function zoom(mapPx, worldPx, fraction) {
+    return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2)
+  }
+
+  const ne = bounds.getNorthEast()
+  const sw = bounds.getSouthWest()
+
+  const latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI
+
+  const lngDiff = ne.lng() - sw.lng()
+  const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360
+
+  const latZoom = zoom(mapElement.clientHeight, WORLD_DIM.height, latFraction)
+  const lngZoom = zoom(mapElement.clientWidth, WORLD_DIM.width, lngFraction)
+
+  return Math.min(latZoom, lngZoom, ZOOM_MAX)
 }

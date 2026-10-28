@@ -1,13 +1,23 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React from "react"
 import { screen } from "@testing-library/dom"
+import userEvent from "@testing-library/user-event"
+import { waitFor } from "@testing-library/react"
 import {
   FeatureFlagEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  ListingsStatusEnum,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
+  MultiselectQuestionsStatusEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  defaultListingFeaturesConfiguration,
+  expandedListingFeaturesConfiguration,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { addTranslation } from "@bloom-housing/ui-components"
 import { mockNextRouter, render } from "../../testUtils"
 import { FilterDrawer } from "../../../src/components/browse/FilterDrawer"
 import { FilterData } from "../../../src/components/browse/FilterDrawerHelpers"
@@ -24,6 +34,7 @@ describe("FilterDrawer", () => {
       text: "Families",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+      status: MultiselectQuestionsStatusEnum.active,
     },
     {
       id: "idTwo",
@@ -32,6 +43,7 @@ describe("FilterDrawer", () => {
       text: "Residents with Disabilities",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+      status: MultiselectQuestionsStatusEnum.active,
     },
     {
       id: "idThree",
@@ -40,6 +52,7 @@ describe("FilterDrawer", () => {
       text: "Seniors 55+",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+      status: MultiselectQuestionsStatusEnum.active,
     },
     {
       id: "idFour",
@@ -48,6 +61,7 @@ describe("FilterDrawer", () => {
       text: "Veterans",
       jurisdictions: [{ id: "jurisId" }],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+      status: MultiselectQuestionsStatusEnum.active,
     },
   ]
 
@@ -57,8 +71,18 @@ describe("FilterDrawer", () => {
         isOpen={true}
         onClose={() => {}}
         onSubmit={() => {}}
+        onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableIsVerified,
+          FeatureFlagEnum.enableHomeType,
+          FeatureFlagEnum.enableSection8Question,
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+          FeatureFlagEnum.enableParkingType,
+        ]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -75,8 +99,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Units available" })).not.toBeChecked()
     expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Open waitlist" })).not.toBeChecked()
-    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
     expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Coming soon" })).not.toBeChecked()
 
@@ -90,11 +113,21 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
 
+    expect(screen.getByRole("group", { name: "Parking types" })).toBeInTheDocument()
+    expect(screen.getByLabelText("On street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "On street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Garage")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).not.toBeChecked()
+    expect(screen.getByLabelText("Off street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Carport")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Carport" })).not.toBeChecked()
+
     expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Studio" })).not.toBeChecked()
-    expect(screen.getByLabelText("SRO")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "SRO" })).not.toBeChecked()
+    expect(screen.getByLabelText("Single Room Occupancy")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Single Room Occupancy" })).not.toBeChecked()
     expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "1 bedroom" })).not.toBeChecked()
     expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
@@ -153,17 +186,23 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "AC in unit" })).not.toBeChecked()
     expect(screen.getByLabelText("AC in unit")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with hearing disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with hearing accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with hearing disabilities")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with mobility disabilities" })
-    ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with mobility disabilities")).toBeInTheDocument()
+      screen.getByLabelText("Units for those with hearing accessibility needs")
+    ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with visual disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with mobility accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with visual disabilities")).toBeInTheDocument()
+    expect(
+      screen.getByLabelText("Units for those with mobility accessibility needs")
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: "Units for those with vision accessibility needs" })
+    ).not.toBeChecked()
+    expect(
+      screen.getByLabelText("Units for those with vision accessibility needs")
+    ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) unit entrances" })
     ).not.toBeChecked()
@@ -216,8 +255,18 @@ describe("FilterDrawer", () => {
         isOpen={true}
         onClose={() => {}}
         onSubmit={() => {}}
+        onClear={() => {}}
         filterState={filterState}
         multiselectData={mockMultiselect}
+        activeFeatureFlags={[
+          FeatureFlagEnum.enableIsVerified,
+          FeatureFlagEnum.enableHomeType,
+          FeatureFlagEnum.enableSection8Question,
+          FeatureFlagEnum.enableRegions,
+          FeatureFlagEnum.enableAccessibilityFeatures,
+          FeatureFlagEnum.enableParkingType,
+        ]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
     expect(screen.getByLabelText("Close")).toBeInTheDocument()
@@ -234,8 +283,7 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "Units available" })).not.toBeChecked()
     expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Open waitlist" })).not.toBeChecked()
-    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
     expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Coming soon" })).not.toBeChecked()
 
@@ -249,11 +297,21 @@ describe("FilterDrawer", () => {
     expect(screen.getByLabelText("Townhome")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Townhome" })).not.toBeChecked()
 
+    expect(screen.getByRole("group", { name: "Parking types" })).toBeInTheDocument()
+    expect(screen.getByLabelText("On street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "On street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Garage")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Garage" })).not.toBeChecked()
+    expect(screen.getByLabelText("Off street")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Off street" })).not.toBeChecked()
+    expect(screen.getByLabelText("Carport")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Carport" })).not.toBeChecked()
+
     expect(screen.getByRole("group", { name: "Bedroom size" })).toBeInTheDocument()
     expect(screen.getByLabelText("Studio")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "Studio" })).not.toBeChecked()
-    expect(screen.getByLabelText("SRO")).toBeInTheDocument()
-    expect(screen.getByRole("checkbox", { name: "SRO" })).not.toBeChecked()
+    expect(screen.getByLabelText("Single Room Occupancy")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Single Room Occupancy" })).not.toBeChecked()
     expect(screen.getByLabelText("1 bedroom")).toBeInTheDocument()
     expect(screen.getByRole("checkbox", { name: "1 bedroom" })).not.toBeChecked()
     expect(screen.getByLabelText("2 bedroom")).toBeInTheDocument()
@@ -312,17 +370,23 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "AC in unit" })).not.toBeChecked()
     expect(screen.getByLabelText("AC in unit")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with hearing disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with hearing accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with hearing disabilities")).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with mobility disabilities" })
-    ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with mobility disabilities")).toBeInTheDocument()
+      screen.getByLabelText("Units for those with hearing accessibility needs")
+    ).toBeInTheDocument()
     expect(
-      screen.getByRole("checkbox", { name: "Units for those with visual disabilities" })
+      screen.getByRole("checkbox", { name: "Units for those with mobility accessibility needs" })
     ).not.toBeChecked()
-    expect(screen.getByLabelText("Units for those with visual disabilities")).toBeInTheDocument()
+    expect(
+      screen.getByLabelText("Units for those with mobility accessibility needs")
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("checkbox", { name: "Units for those with vision accessibility needs" })
+    ).not.toBeChecked()
+    expect(
+      screen.getByLabelText("Units for those with vision accessibility needs")
+    ).toBeInTheDocument()
     expect(
       screen.getByRole("checkbox", { name: "Barrier-free (no-step) unit entrances" })
     ).not.toBeChecked()
@@ -364,9 +428,11 @@ describe("FilterDrawer", () => {
         isOpen={true}
         onClose={() => {}}
         onSubmit={() => {}}
+        onClear={() => {}}
         filterState={{}}
         multiselectData={mockMultiselect}
         activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
       />
     )
 
@@ -383,5 +449,562 @@ describe("FilterDrawer", () => {
     expect(screen.getByRole("checkbox", { name: "4 bedroom" })).not.toBeChecked()
     expect(screen.queryByLabelText("SRO")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("5 bedroom")).not.toBeInTheDocument()
+  })
+
+  it("should not show closed waitlist when unit groups flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Units available")).toBeInTheDocument()
+    expect(screen.getByLabelText("Open waitlist")).toBeInTheDocument()
+    expect(screen.queryByLabelText("Closed waitlist")).not.toBeInTheDocument()
+    expect(screen.getByLabelText("Coming soon")).toBeInTheDocument()
+  })
+
+  it("should show closed waitlist when unit groups flag is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={[]}
+        activeFeatureFlags={[FeatureFlagEnum.enableUnitGroups]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Availability" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Closed waitlist")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Closed waitlist" })).not.toBeChecked()
+  })
+
+  it("should not show regions if toggles are off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Region" })).not.toBeInTheDocument()
+  })
+
+  it("should show regions if region toggle is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableRegions]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Region" })).toBeInTheDocument()
+  })
+
+  it("should show regions if configurable region toggle is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableConfigurableRegions]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        regions={["East", "West", "North", "South"]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Region" })).toBeInTheDocument()
+  })
+
+  it("should not show confirmed listings section when isVerified flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Confirmed listings" })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("checkbox", { name: "Only show listings confirmed by property" })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should not show home type section when homeType flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Home type" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Apartment" })).not.toBeInTheDocument()
+  })
+
+  it("should not show bathrooms section when enableFilterByBathroom flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Bathrooms" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("radio", { name: "1+" })).not.toBeInTheDocument()
+  })
+
+  it("should show bathrooms section with 'Any' selected when flag is on and no filter state", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByBathroom]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Bathrooms" })).toBeInTheDocument()
+    expect(screen.getByRole("radio", { name: "Any" })).toBeChecked()
+    expect(screen.getByRole("radio", { name: "1+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "2+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "3+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "4+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "5+" })).not.toBeChecked()
+  })
+
+  it("should show the matching bathrooms radio as checked when filterState has a selection", () => {
+    const filterState: FilterData = {
+      [ListingFilterKeys.bathrooms]: "3",
+    }
+
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={filterState}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByBathroom]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("radio", { name: "Any" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "2+" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "3+" })).toBeChecked()
+    expect(screen.getByRole("radio", { name: "4+" })).not.toBeChecked()
+  })
+
+  it("should not show counties section when enableFilterByCounty flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "1", name: "Sample County" },
+          { id: "2", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Counties" })).not.toBeInTheDocument()
+  })
+
+  it("should show counties section when enableFilterByCounty flag is on and subJurisdictions are available", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByCounty]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "1", name: "Sample County" },
+          { id: "2", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
+    // All checkboxes are not checked when no filter of jurisdictions is provided in the filterState
+    expect(screen.getByRole("checkbox", { name: "Sample County" })).not.toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).not.toBeChecked()
+  })
+
+  it("should select correct counties when filterState is provided", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{
+          [ListingFilterKeys.jurisdictions]: {
+            "123": true,
+            "2": false,
+          },
+        }}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByCounty]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "123", name: "Sample County" },
+          { id: "234", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Sample County" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Another County" })).not.toBeChecked()
+  })
+
+  it("should show counties section subnote if text exists", () => {
+    addTranslation({ listingFilters: { countyFilterNote: "This is a county filter note" } })
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableFilterByCounty]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        subJurisdictions={[
+          { id: "1", name: "Sample County" },
+          { id: "2", name: "Another County" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "County" })).toBeInTheDocument()
+    expect(screen.getByText("This is a county filter note")).toBeInTheDocument()
+  })
+
+  it("should not show parking types section when parkingType flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Parking types" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: "Garage" })).not.toBeInTheDocument()
+  })
+
+  it("should not show section 8 checkbox when section8 flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Rent" })).toBeInTheDocument()
+    expect(
+      screen.queryByRole("checkbox", { name: "Accepts Section 8 Housing Choice Vouchers" })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should not show accessibility section when accessibility flag is off", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Accessibility features" })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Wheelchair ramp")).not.toBeInTheDocument()
+  })
+
+  it("should show accessibility section and category groups when accessibility flag is on", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[FeatureFlagEnum.enableAccessibilityFeatures]}
+        listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Accessibility features" })).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Mobility" })).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Bathroom" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Wheelchair ramp")).toBeInTheDocument()
+  })
+
+  it("should not show accessible units section when visibleAccessibilityPriorityTypes is not provided", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Accessible units" })).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Mobility")).not.toBeInTheDocument()
+  })
+
+  it("should not show accessible units section when visibleAccessibilityPriorityTypes is empty", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={[]}
+      />
+    )
+
+    expect(screen.queryByRole("group", { name: "Accessible units" })).not.toBeInTheDocument()
+  })
+
+  it("should show accessible units section with checkboxes when visibleAccessibilityPriorityTypes is provided", () => {
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={{}}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={[
+          UnitAccessibilityPriorityTypeEnum.mobility,
+          UnitAccessibilityPriorityTypeEnum.hearing,
+          UnitAccessibilityPriorityTypeEnum.vision,
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("group", { name: "Accessible units" })).toBeInTheDocument()
+    expect(screen.getByLabelText("Mobility")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Mobility" })).not.toBeChecked()
+    expect(screen.getByLabelText("Hearing")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Hearing" })).not.toBeChecked()
+    expect(screen.getByLabelText("Vision")).toBeInTheDocument()
+    expect(screen.getByRole("checkbox", { name: "Vision" })).not.toBeChecked()
+  })
+
+  it("should show accessible units checkboxes as checked when filterState has selections", () => {
+    const filterState: FilterData = {
+      [ListingFilterKeys.accessibilityPriorityTypes]: {
+        [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+        [UnitAccessibilityPriorityTypeEnum.hearing]: false,
+      },
+    }
+
+    render(
+      <FilterDrawer
+        isOpen={true}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        onClear={() => {}}
+        filterState={filterState}
+        multiselectData={mockMultiselect}
+        activeFeatureFlags={[]}
+        listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        visibleAccessibilityPriorityTypes={[
+          UnitAccessibilityPriorityTypeEnum.mobility,
+          UnitAccessibilityPriorityTypeEnum.hearing,
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("checkbox", { name: "Mobility" })).toBeChecked()
+    expect(screen.getByRole("checkbox", { name: "Hearing" })).not.toBeChecked()
+  })
+
+  describe("listing status filter", () => {
+    const availabilityLabels = ["Units available", "Open waitlist", "Coming soon"]
+
+    const renderStatusDrawer = (
+      filterState: FilterData = {},
+      activeFeatureFlags: FeatureFlagEnum[] = [FeatureFlagEnum.enableFilterByStatus],
+      onSubmit: (data: FilterData) => void = () => {}
+    ) =>
+      render(
+        <FilterDrawer
+          isOpen={true}
+          onClose={() => {}}
+          onSubmit={onSubmit}
+          onClear={() => {}}
+          filterState={filterState}
+          multiselectData={[]}
+          activeFeatureFlags={activeFeatureFlags}
+          listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        />
+      )
+
+    const expectAvailabilityDisabled = (disabled: boolean) => {
+      availabilityLabels.forEach((label) => {
+        const checkbox = screen.getByRole("checkbox", { name: label })
+        if (disabled) {
+          expect(checkbox).toBeDisabled()
+        } else {
+          expect(checkbox).toBeEnabled()
+        }
+      })
+    }
+
+    it("should not show status section when enableFilterByStatus flag is off", () => {
+      renderStatusDrawer({}, [])
+
+      expect(screen.queryByRole("group", { name: "Listing status" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("radio", { name: "Open" })).not.toBeInTheDocument()
+      expect(screen.queryByRole("radio", { name: "Closed" })).not.toBeInTheDocument()
+      expectAvailabilityDisabled(false)
+    })
+
+    it("should show status section with 'Open' selected when flag is on and no filter state", () => {
+      renderStatusDrawer()
+
+      expect(screen.getByRole("group", { name: "Listing status" })).toBeInTheDocument()
+      expect(screen.getByRole("radio", { name: "Open" })).toBeChecked()
+      expect(screen.getByRole("radio", { name: "Closed" })).not.toBeChecked()
+      expectAvailabilityDisabled(false)
+    })
+
+    it("should select 'Closed' and disable availability on first render when filterState is closed", () => {
+      renderStatusDrawer({ [ListingFilterKeys.status]: ListingsStatusEnum.closed })
+
+      expect(screen.getByRole("radio", { name: "Open" })).not.toBeChecked()
+      expect(screen.getByRole("radio", { name: "Closed" })).toBeChecked()
+      expectAvailabilityDisabled(true)
+    })
+
+    it("should toggle availability disabled state when switching between statuses", async () => {
+      renderStatusDrawer()
+
+      await userEvent.click(screen.getByRole("radio", { name: "Closed" }))
+      await waitFor(() => expectAvailabilityDisabled(true))
+
+      await userEvent.click(screen.getByRole("radio", { name: "Open" }))
+      await waitFor(() => expectAvailabilityDisabled(false))
+    })
+
+    it("should drop availabilities on submit when 'Closed' is selected", async () => {
+      const onSubmit = jest.fn()
+      renderStatusDrawer({}, undefined, onSubmit)
+
+      await userEvent.click(screen.getByRole("checkbox", { name: "Units available" }))
+      await userEvent.click(screen.getByRole("radio", { name: "Closed" }))
+      await userEvent.click(screen.getByRole("button", { name: "Show matching listings" }))
+
+      await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
+      const submitted = onSubmit.mock.calls[0][0]
+      expect(submitted[ListingFilterKeys.status]).toBe(ListingsStatusEnum.closed)
+      expect(submitted).not.toHaveProperty(ListingFilterKeys.availabilities)
+    })
+
+    it("should keep availabilities on submit when 'Open' is selected", async () => {
+      const onSubmit = jest.fn()
+      renderStatusDrawer({}, undefined, onSubmit)
+
+      await userEvent.click(screen.getByRole("checkbox", { name: "Units available" }))
+      await userEvent.click(screen.getByRole("button", { name: "Show matching listings" }))
+
+      await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
+      const submitted = onSubmit.mock.calls[0][0]
+      expect(submitted[ListingFilterKeys.status]).toBe(ListingsStatusEnum.active)
+      expect(submitted[ListingFilterKeys.availabilities]).toMatchObject({ unitsAvailable: true })
+    })
   })
 })

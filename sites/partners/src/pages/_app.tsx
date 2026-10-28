@@ -1,12 +1,20 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react"
+import Head from "next/head"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
-import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
+import {
+  NavigationContext as UICNavigationContext,
+  GenericRouter,
+} from "@bloom-housing/ui-components"
+import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
+import type { LinkProps as UICLinkProps } from "@bloom-housing/ui-components/src/config/NavigationContext"
+import type { LinkProps as SeedsLinkProps } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
 import {
   AuthProvider,
   ConfigProvider,
@@ -19,7 +27,8 @@ import "ag-grid-community/dist/styles/ag-grid.css"
 import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../components/core/LinkComponent"
-import { translations, overrideTranslations } from "../lib/translations"
+import { applyTranslations } from "../lib/translations"
+import { usePartnersOverrides } from "../lib/partnersOverrides"
 
 import "../../styles/overrides.scss"
 
@@ -41,58 +50,72 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     setHasMounted(true)
   }, [])
 
+  const { overrides, settled } = usePartnersOverrides(locale)
+
   useMemo(() => {
-    addTranslation(translations.general, true)
-    if (locale && locale !== "en" && translations[locale]) {
-      addTranslation(translations[locale])
-    }
-    addTranslation(overrideTranslations.en)
-    if (overrideTranslations[locale]) {
-      addTranslation(overrideTranslations[locale])
-    }
-  }, [locale])
+    applyTranslations(locale, overrides)
+  }, [locale, overrides])
+
+  const queryClient = new QueryClient()
 
   const pageContent = (
-    <ConfigProvider apiUrl={process.env.backendApiBase}>
-      <AuthProvider>
-        <RequireLogin
-          signInPath="/sign-in"
-          termsPath="/users/terms"
-          signInMessage={signInMessage}
-          skipForRoutes={skipLoginRoutes}
-        >
-          <MessageProvider>{hasMounted && <Component {...pageProps} />}</MessageProvider>
-        </RequireLogin>
-      </AuthProvider>
-    </ConfigProvider>
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider apiUrl={process.env.backendApiBase}>
+        <AuthProvider>
+          <RequireLogin
+            signInPath="/sign-in"
+            termsPath="/users/terms"
+            signInMessage={signInMessage}
+            skipForRoutes={skipLoginRoutes}
+          >
+            <MessageProvider>
+              {hasMounted && settled && <Component {...pageProps} />}
+            </MessageProvider>
+          </RequireLogin>
+        </AuthProvider>
+      </ConfigProvider>
+    </QueryClientProvider>
   )
 
   return (
-    <SWRConfig
-      value={{
-        onError: (error) => {
-          const { status } = error.response || {}
-          if (status === 403) {
-            window.location.href = "/unauthorized"
-          }
-        },
-      }}
-    >
-      <NavigationContext.Provider
+    <>
+      {process.env.allowSeoIndexing !== "TRUE" && (
+        <Head>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+      )}
+      <SWRConfig
         value={{
-          LinkComponent: LinkComponent,
-          router: router as GenericRouter,
+          onError: (error) => {
+            const { status } = error.response || {}
+            if (status === 403) {
+              window.location.href = "/unauthorized"
+            }
+          },
         }}
       >
-        {process.env.reCaptchaKey ? (
-          <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
-            {pageContent}
-          </GoogleReCaptchaProvider>
-        ) : (
-          pageContent
-        )}
-      </NavigationContext.Provider>
-    </SWRConfig>
+        {/* Seeds and UI-Components each have their own NavigationContext; both are needed so
+            internal links use Next's router instead of a full page load. */}
+        <NavigationContext.Provider
+          value={{ LinkComponent: LinkComponent as FunctionComponent<SeedsLinkProps> }}
+        >
+          <UICNavigationContext.Provider
+            value={{
+              LinkComponent: LinkComponent as FunctionComponent<UICLinkProps>,
+              router: router as GenericRouter,
+            }}
+          >
+            {process.env.reCaptchaKey ? (
+              <GoogleReCaptchaProvider reCaptchaKey={process.env.reCaptchaKey}>
+                {pageContent}
+              </GoogleReCaptchaProvider>
+            ) : (
+              pageContent
+            )}
+          </UICNavigationContext.Provider>
+        </NavigationContext.Provider>
+      </SWRConfig>
+    </>
   )
 }
 

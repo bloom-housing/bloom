@@ -1,6 +1,7 @@
+import { isAxiosError } from "axios"
+import { useRouter } from "next/router"
 import React, { useEffect, useState, useContext } from "react"
 import { useForm } from "react-hook-form"
-import { useRouter } from "next/router"
 import { Button, Alert, Dialog, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -8,19 +9,24 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@bloom-housing/ui-seeds/src/overlays/Dialog"
-import { Field, Form, t } from "@bloom-housing/ui-components"
+import { Field, t } from "@bloom-housing/ui-components"
 import {
+  AuthContext,
+  BloomCard,
+  Form,
+  FormSignInErrorBox,
+  MessageContext,
   PageView,
   pushGtmEvent,
   useCatchNetworkError,
-  BloomCard,
-  AuthContext,
-  MessageContext,
-  FormSignInErrorBox,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { TermsModal } from "../components/shared/TermsModal"
 import FormsLayout from "../layouts/forms"
+import { UserStatus } from "../lib/constants"
 import { useRedirectToPrevPage } from "../lib/hooks"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 import styles from "../../styles/verify.module.scss"
 
 const Verify = () => {
@@ -32,6 +38,14 @@ const Verify = () => {
   const { requestSingleUseCode, loginViaSingleUseCode } = useContext(AuthContext)
   const { addToast } = useContext(MessageContext)
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
+
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [notChecked, setChecked] = useState(true)
+
+  const featureFlags = useJurisdictionFeatureFlags()
+  const enablePublicTermsOfUse = featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enablePublicTermsOfUse
+  )
 
   type FlowType = "create" | "login" | "loginReCaptcha"
   const email = router.query?.email as string
@@ -66,7 +80,7 @@ const Verify = () => {
 
     try {
       setIsLoginLoading(true)
-      const user = await loginViaSingleUseCode(email, code)
+      const user = await loginViaSingleUseCode(email, code, !notChecked ? true : undefined)
       setIsLoginLoading(false)
       if (flowType === "login" || flowType === "loginReCaptcha") {
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
@@ -78,14 +92,36 @@ const Verify = () => {
       await redirectToPage()
     } catch (error) {
       setIsLoginLoading(false)
+      if (enablePublicTermsOfUse) {
+        setOpenTermsModal(false)
+        setChecked(true)
+      }
       const { status } = error.response || {}
-      determineNetworkError(status, error)
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
+
+      if (
+        enablePublicTermsOfUse &&
+        status === 400 &&
+        responseMessage?.includes("has not accepted the terms of service")
+      ) {
+        setOpenTermsModal(true)
+      } else {
+        determineNetworkError(status, error)
+      }
     }
   }
 
   return (
-    <FormsLayout pageTitle={t("pageTitle.verifyCode")}>
-      <BloomCard title={t("account.pwdless.verifyTitle")} iconSymbol={"profile"}>
+    <FormsLayout
+      pageTitle={t("pageTitle.verifyCode")}
+      metaDescription={t("pageDescription.verifyCode")}
+    >
+      <BloomCard
+        title={t("account.pwdless.verifyTitle")}
+        iconSymbol={"userCircle"}
+        iconClass={"card-icon"}
+        headingClass={"seeds-large-heading"}
+      >
         <>
           <FormSignInErrorBox
             errors={errors}
@@ -109,7 +145,7 @@ const Verify = () => {
 
             {alertMessage && <Message className={styles["verify-message"]}>{alertMessage}</Message>}
 
-            <Form id="verify" onSubmit={handleSubmit(onSubmit)}>
+            <Form id="verify" suppressSubmitOnEnter={false} onSubmit={handleSubmit(onSubmit)}>
               <Field
                 name="code"
                 label={t("account.pwdless.code")}
@@ -196,8 +232,18 @@ const Verify = () => {
           </Button>
         </DialogFooter>
       </Dialog>
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        notChecked={notChecked}
+        onSubmit={onSubmit}
+        openTermsModal={openTermsModal}
+        setChecked={setChecked}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </FormsLayout>
   )
 }
 
 export { Verify as default, Verify }
+
+export const getStaticProps = sharedGetStaticProps

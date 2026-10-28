@@ -9,6 +9,11 @@ const es = require("../locales/es.json")
 const zh = require("../locales/zh.json")
 const vi = require("../locales/vi.json")
 const tl = require("../locales/tl.json")
+const ar = require("../locales/ar.json")
+const bn = require("../locales/bn.json")
+const ko = require("../locales/ko.json")
+const hy = require("../locales/hy.json")
+const fa = require("../locales/fa.json")
 
 function main() {
   if (process.argv.length < 4) {
@@ -24,6 +29,11 @@ function main() {
     zh: zh,
     vi: vi,
     tl: tl,
+    ar: ar,
+    bn: bn,
+    ko: ko,
+    hy: hy,
+    fa: fa,
   }
 
   const [language, filePath] = process.argv.slice(2)
@@ -36,6 +46,7 @@ function main() {
   })
 
   // Add new keys if not present
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newTranslationsFile: any = fs.readFileSync(filePath, "utf-8")
   const newTranslations = newTranslationsFile.split("\n")
   newTranslations.forEach((translation: string) => {

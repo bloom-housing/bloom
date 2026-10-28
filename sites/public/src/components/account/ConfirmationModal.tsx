@@ -1,22 +1,27 @@
-import { t, Form, Field } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { AuthContext, useToastyRef, emailRegex } from "@bloom-housing/shared-helpers"
-import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
+import { t, Field } from "@bloom-housing/ui-components"
+import { Button, Dialog } from "@bloom-housing/ui-seeds"
+import {
+  AuthContext,
+  Form,
+  emailRegex,
+  useToastyRef,
+  isInternalLink,
+} from "@bloom-housing/shared-helpers"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ConfirmationModalProps {}
 
 const ConfirmationModal = () => {
-  const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
+  const { resendConfirmation, profile, confirmAccount, initialStateLoaded } =
+    useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [openModal, setOpenModal] = useState(false)
+  const hasCalledConfirm = useRef(false)
   const router = useRouter()
 
-  /* Form Handler */
-  // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
-  // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch, getValues } = useForm()
   const email = useRef({})
@@ -49,10 +54,11 @@ const ConfirmationModal = () => {
     const listingId = router.query?.listingId as string
 
     const routerRedirectUrl =
-      process.env.showMandatedAccounts && redirectUrl && listingId
+      process.env.showMandatedAccounts && redirectUrl && listingId && isInternalLink(redirectUrl)
         ? `${redirectUrl}`
         : "/account/dashboard"
-    if (router?.query?.token && !profile) {
+    if (router?.query?.token && initialStateLoaded && !hasCalledConfirm.current) {
+      hasCalledConfirm.current = true
       confirmAccount(router.query.token.toString())
         .then(() => {
           void router.push({
@@ -74,12 +80,14 @@ const ConfirmationModal = () => {
           }
         })
     }
-  }, [router, profile, toastyRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, profile, toastyRef, initialStateLoaded])
 
   return (
     <Dialog
       isOpen={openModal}
       onClose={() => {
+        setOpenModal(false)
         void router.push("/")
         window.scrollTo(0, 0)
       }}
@@ -89,7 +97,11 @@ const ConfirmationModal = () => {
         {t("authentication.createAccount.linkExpired")}
       </Dialog.Header>
       <Dialog.Content>
-        <Form id="resend-confirmation" onSubmit={handleSubmit(onSubmit)}>
+        <Form
+          id="resend-confirmation"
+          suppressSubmitOnEnter={false}
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Field
             type="email"
             name="email"

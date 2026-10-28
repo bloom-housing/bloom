@@ -18,15 +18,17 @@ class AutofillCleaner {
     this.
       addDefaults().
       removeAdditionalKeys().
-      removeLiveWorkAddresses()
+      removeWorkInRegion()
 
     return this.application
   }
 
   addDefaults() {
-    ;["id", "createdAt", "updatedAt", "deletedAt", "listing", "submissionDate"].forEach((key) => {
-      delete this.application[key]
-    })
+    ;["id", "createdAt", "updatedAt", "deletedAt", "listing", "submissionDate", "user"].forEach(
+      (key) => {
+        delete this.application[key]
+      }
+    )
 
     this.application["confirmationCode"] = "" // only used on frontend
     this.application["completedSections"] = 0 // only used on frontend
@@ -34,14 +36,17 @@ class AutofillCleaner {
     this.application.submissionType = ApplicationSubmissionTypeEnum.electronical
     this.application.acceptedTerms = false
     this.application.status = ApplicationStatusEnum.submitted
-    this.application.preferences = []
-    this.application.programs = []
+    this.application.applicationSelections = []
+    this.application.accessibleUnitWaitlistNumber = null
+    this.application.conventionalUnitWaitlistNumber = null
+    this.application.manualLotteryPositionNumber = null
 
     return this
   }
 
   removeAdditionalKeys() {
-    const unsetIdentifiers = (obj: { id: string; createdAt: Date; updatedAt: Date }) => {
+    const unsetIdentifiers = (obj: { id: string; createdAt?: Date; updatedAt?: Date }) => {
+      if (!obj) return
       delete obj.id
       delete obj.createdAt
       delete obj.updatedAt
@@ -50,18 +55,18 @@ class AutofillCleaner {
     unsetIdentifiers(this.application.accessibility)
     unsetIdentifiers(this.application.applicant)
     unsetIdentifiers(this.application.applicationsMailingAddress)
+    unsetIdentifiers(this.application.applicationsAlternateAddress)
 
-    if (this.application.applicationsAlternateAddress)
-      unsetIdentifiers(this.application.applicationsAlternateAddress)
+    if (this.application.householdMember) {
+      this.application.householdMember
+        .sort((a, b) => a.orderId - b.orderId)
+        .forEach((member, index) => {
+          unsetIdentifiers(member)
+          member.orderId = index
+          unsetIdentifiers(member.householdMemberAddress)
+        })
+    }
 
-    this.application.householdMember
-      .sort((a, b) => a.orderId - b.orderId)
-      .forEach((member, index) => {
-        unsetIdentifiers(member)
-        member.orderId = index
-        if (member.householdMemberAddress) unsetIdentifiers(member.householdMemberAddress)
-        if (member.householdMemberWorkAddress) unsetIdentifiers(member.householdMemberWorkAddress)
-      })
     unsetIdentifiers(this.application.demographics)
 
     if (this.application.alternateContact) {
@@ -74,11 +79,13 @@ class AutofillCleaner {
     return this
   }
 
-  removeLiveWorkAddresses() {
+  removeWorkInRegion() {
     this.application.applicant.workInRegion = null
     this.application.applicant.applicantWorkAddress = blankApplication.applicant
       .applicantWorkAddress as Address
-
+    this.application.householdMember = this.application.householdMember?.map((member) => {
+      return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
+    })
     return this
   }
 }

@@ -17,7 +17,7 @@ export const addressFactory =
 export const yellowstoneAddress = {
   placeName: 'Yellowstone National Park',
   city: 'Yellowstone National Park',
-  county: 'Teton County',
+  county: 'Teton',
   state: 'WY',
   street: '3200 Old Faithful Inn Rd',
   zipCode: '82190',
@@ -28,7 +28,7 @@ export const yellowstoneAddress = {
 export const yosemiteAddress = {
   placeName: 'Yosemite National Park',
   city: 'Yosemite Valley',
-  county: 'Mariposa County',
+  county: 'Mariposa',
   state: 'CA',
   street: '9035 Village Dr',
   zipCode: '95389',
@@ -39,7 +39,7 @@ export const yosemiteAddress = {
 export const rockyMountainAddress = {
   placeName: 'Rocky Mountain National Park',
   city: 'Estes Park',
-  county: 'Larimer County',
+  county: 'Larimer',
   state: 'CO',
   street: '1000 US-36',
   zipCode: '80517',
@@ -50,7 +50,7 @@ export const rockyMountainAddress = {
 export const moabAddress = {
   placeName: 'Arches National Park',
   city: 'Moab',
-  county: 'Grand County',
+  county: 'Grand',
   state: 'UT',
   street: '25 E Center St',
   zipCode: '84532',
@@ -61,7 +61,7 @@ export const moabAddress = {
 export const acadiaAddress = {
   placeName: 'Acadia National Park',
   city: 'Bar Harbor',
-  county: 'Hancock County',
+  county: 'Hancock',
   state: 'ME',
   street: '25 Visitor Center Rd',
   zipCode: '04609',
@@ -72,7 +72,7 @@ export const acadiaAddress = {
 export const grandCanyonAddress = {
   placeName: 'Grand Canyon National Park',
   city: 'Grand Canyon Village',
-  county: 'Coconino County',
+  county: 'Coconino',
   state: 'AZ',
   street: 'S Entrance Rd',
   zipCode: '86023',
@@ -83,7 +83,7 @@ export const grandCanyonAddress = {
 export const glacierAddress = {
   placeName: 'Glacier National Park',
   city: 'West Glacier',
-  county: 'Glacier County',
+  county: 'Glacier',
   state: 'MT',
   street: '64 Grinnell Dr',
   zipCode: '59936',
@@ -94,7 +94,7 @@ export const glacierAddress = {
 export const carlsbadAddress = {
   placeName: 'Carlsbad Caverns National Park',
   city: 'Carlsbad',
-  county: 'Eddy County',
+  county: 'Eddy',
   state: 'NM',
   street: '727 Carlsbad Cavern Hwy',
   zipCode: '88220',

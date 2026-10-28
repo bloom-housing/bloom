@@ -356,4 +356,94 @@ describe("<FormHouseholdMembers>", () => {
     expect(within(drawerContainer).getAllByLabelText(/yes/i)).toHaveLength(3)
     expect(within(drawerContainer).getAllByLabelText(/no/i)).toHaveLength(3)
   })
+
+  it("should show all relationship options when no visibleHouseholdMemberRelationships is set", async () => {
+    render(
+      <FormProviderWrapper>
+        {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+        <FormHouseholdMembers householdMembers={[]} setHouseholdMembers={() => {}} />
+      </FormProviderWrapper>
+    )
+
+    const addMemberButton = screen.getByRole("button", { name: /add household member/i })
+    await userEvent.click(addMemberButton)
+
+    const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
+    const drawerContainer = drawerTitle.parentElement.parentElement
+    const relationshipSelect = within(drawerContainer).getByLabelText(/relationship/i)
+
+    const options = relationshipSelect.querySelectorAll("option")
+    const optionValues = Array.from(options)
+      .map((opt) => opt.getAttribute("value"))
+      .filter((v) => v !== "")
+
+    expect(optionValues).toHaveLength(Object.values(HouseholdMemberRelationship).length)
+    expect(optionValues).toContain("spouse")
+    expect(optionValues).toContain("registeredDomesticPartner")
+    expect(optionValues).toContain("parent")
+    expect(optionValues).toContain("child")
+    expect(optionValues).toContain("sibling")
+    expect(optionValues).toContain("cousin")
+    expect(optionValues).toContain("aunt")
+    expect(optionValues).toContain("uncle")
+    expect(optionValues).toContain("nephew")
+    expect(optionValues).toContain("niece")
+    expect(optionValues).toContain("grandparent")
+    expect(optionValues).toContain("greatGrandparent")
+    expect(optionValues).toContain("inLaw")
+    expect(optionValues).toContain("friend")
+    expect(optionValues).toContain("other")
+    expect(optionValues).toContain("aideOrAttendant")
+    expect(optionValues).toContain("spousePartner")
+    expect(optionValues).toContain("girlfriendBoyfriend")
+    expect(optionValues).toContain("brotherSister")
+    expect(optionValues).toContain("auntUncle")
+    expect(optionValues).toContain("nephewNiece")
+    expect(optionValues).toContain("grandparentGreatGrandparent")
+    expect(optionValues).toContain("liveInAide")
+  })
+
+  it("should show only configured relationship options when visibleHouseholdMemberRelationships is set", async () => {
+    const customRelationships = [
+      HouseholdMemberRelationship.spousePartner,
+      HouseholdMemberRelationship.child,
+      HouseholdMemberRelationship.parent,
+      HouseholdMemberRelationship.liveInAide,
+      HouseholdMemberRelationship.other,
+    ]
+
+    render(
+      <FormProviderWrapper>
+        <FormHouseholdMembers
+          householdMembers={[]}
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          setHouseholdMembers={() => {}}
+          visibleHouseholdMemberRelationships={customRelationships}
+        />
+      </FormProviderWrapper>
+    )
+
+    const addMemberButton = screen.getByRole("button", { name: /add household member/i })
+    await userEvent.click(addMemberButton)
+
+    const drawerTitle = screen.getByRole("heading", { level: 1, name: /^household member$/i })
+    const drawerContainer = drawerTitle.parentElement.parentElement
+    const relationshipSelect = within(drawerContainer).getByLabelText(/relationship/i)
+
+    const options = relationshipSelect.querySelectorAll("option")
+    const optionValues = Array.from(options)
+      .map((opt) => opt.getAttribute("value"))
+      .filter((v) => v !== "")
+
+    expect(optionValues).toHaveLength(5)
+    expect(optionValues).toContain("spousePartner")
+    expect(optionValues).toContain("child")
+    expect(optionValues).toContain("parent")
+    expect(optionValues).toContain("liveInAide")
+    expect(optionValues).toContain("other")
+
+    expect(optionValues).not.toContain("spouse")
+    expect(optionValues).not.toContain("sibling")
+    expect(optionValues).not.toContain("registeredDomesticPartner")
+  })
 })

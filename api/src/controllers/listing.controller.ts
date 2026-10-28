@@ -58,6 +58,7 @@ import { defaultValidationPipeOptions } from '../utilities/default-validation-pi
 import { mapTo } from '../utilities/mapTo';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { ListingFilterKeyDTO } from '../dtos/listings/listing-filter-key.dto';
+import { ListingUpdateStatus } from '../dtos/listings/listing-status-update.dto';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -124,14 +125,33 @@ export class ListingController {
     return await this.listingCsvExportService.exportFile(req, res, queryParams);
   }
 
-  @Get('mapMarkers')
+  @Get(`csvSecure`)
+  @ApiOperation({
+    summary: 'Get listings and units as secured zip',
+    operationId: 'listAsCsvSecure',
+  })
+  @UseInterceptors(ExportLogInterceptor)
+  async listAsCsvSecure(
+    @Request() req: ExpressRequest,
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ListingCsvQueryParams,
+  ): Promise<string> {
+    return await this.listingCsvExportService.exporterSecure(req, queryParams);
+  }
+
+  @Post('mapMarkers')
   @ApiOperation({
     summary: 'Get listing map markers',
     operationId: 'mapMarkers',
   })
+  @PermissionAction(permissionActions.read)
   @ApiOkResponse({ type: ListingMapMarker, isArray: true })
-  async mapMarkers() {
-    return await this.listingService.mapMarkers();
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  async mapMarkers(
+    @Body() queryParams: ListingsQueryBody,
+  ): Promise<ListingMapMarker[]> {
+    return await this.listingService.mapMarkers(queryParams);
   }
 
   @Get(`external/:id`)
@@ -205,6 +225,24 @@ export class ListingController {
   @UseGuards(ApiKeyGuard, OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async closeListings(): Promise<SuccessDTO> {
     return await this.listingService.closeListings();
+  }
+
+  @Put('updateListingStatus')
+  @ApiOperation({
+    summary: 'Update listing status by id',
+    operationId: 'updateListingStatus',
+  })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
+  @UseGuards(ApiKeyGuard)
+  async updateListingStatus(
+    @Request() req: ExpressRequest,
+    @Body() dto: ListingUpdateStatus,
+  ): Promise<Listing> {
+    return await this.listingService.updateStatus(
+      dto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Put(':id')

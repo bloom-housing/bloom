@@ -1,63 +1,84 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
+import { Accessibility, Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
   adaFeatureKeys,
-  AuthContext,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
-import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("adaHouseholdMembers")
-  const enableAdaOtherOption = isFeatureFlagOn(
-    conductor.config,
-    FeatureFlagEnum.enableAdaOtherOption
-  )
   const currentPageSection = 2
-
+  const visibleAdaFeatureKeys = conductor.config?.visibleApplicationAccessibilityFeatures || []
+  const orderedVisibleAdaFeatureKeys = visibleAdaFeatureKeys.sort((a, b) => {
+    if (a === "other") return 1
+    if (b === "other") return -1
+    return 0
+  })
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, setValue, errors, getValues, clearErrors, trigger } = useForm<
-    Record<string, any>
+    Record<string, unknown>
   >({
     defaultValues: {
       none:
-        (application.accessibility.mobility === false &&
-          application.accessibility.vision === false &&
-          application.accessibility.hearing === false &&
-          !enableAdaOtherOption) ||
-        (enableAdaOtherOption && application.accessibility.other),
+        visibleAdaFeatureKeys.length > 0 &&
+        visibleAdaFeatureKeys.every((feature) => application.accessibility?.[feature] === false),
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "adaHouseholdMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "adaHouseholdMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
-    conductor.currentStep.save({
-      accessibility: {
-        mobility: !!data["app-accessibility-mobility"],
-        vision: !!data["app-accessibility-vision"],
-        hearing: !!data["app-accessibility-hearing"],
-        other: enableAdaOtherOption ? !!data["app-accessibility-other"] : null,
-      },
+    const accessibility = adaFeatureKeys.reduce<Omit<Accessibility, "id">>((acc, feature) => {
+      acc[feature] = !!data[`app-accessibility-${feature}`]
+      return acc
+    }, {})
+
+    const pendingSave = { accessibility } as Partial<Application>
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   useEffect(() => {
@@ -68,50 +89,43 @@ const ApplicationAda = () => {
     })
   }, [profile])
 
-  const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys
-    .filter((item) => {
-      return item === "other" ? enableAdaOtherOption : true
-    })
-    .map((item) => {
-      const isChecked = application.accessibility[item]
+  const adaFeaturesOptions: FieldSingle[] = orderedVisibleAdaFeatureKeys.map((item) => {
+    const isChecked = application.accessibility[item]
 
-      return {
-        id: item,
-        label: t(`application.ada.${item}`),
-        value: item,
-        defaultChecked: isChecked,
-        dataTestId: `app-ada-${item}`,
-        uniqueName: true,
-        inputProps: {
-          onChange: () => {
-            setTimeout(() => {
-              setValue("app-accessibility-no-features", false)
-              clearErrors()
-            }, 1)
-          },
+    return {
+      id: item,
+      label: t(`application.ada.${item}`),
+      value: item,
+      defaultChecked: isChecked,
+      dataTestId: `app-ada-${item}`,
+      uniqueName: true,
+      inputProps: {
+        onChange: () => {
+          setTimeout(() => {
+            setValue("app-accessibility-no-features", false)
+            clearErrors()
+          }, 1)
         },
-      }
-    })
+      },
+    }
+  })
 
   adaFeaturesOptions.push({
     id: "no-features",
     label: t(`t.no`),
     value: "no-features",
     defaultChecked:
-      application.accessibility["mobility"] === false &&
-      application.accessibility["hearing"] === false &&
-      application.accessibility["vision"] === false &&
-      !application.accessibility["other"],
+      visibleAdaFeatureKeys.length > 0 &&
+      visibleAdaFeatureKeys.every((feature) => application.accessibility?.[feature] === false),
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
       onChange: (e) => {
         if (e.target.checked) {
           setValue("app-accessibility-no-features", true)
-          setValue("app-accessibility-mobility", false)
-          setValue("app-accessibility-vision", false)
-          setValue("app-accessibility-hearing", false)
-          setValue("app-accessibility-other", false)
+          visibleAdaFeatureKeys.forEach((feature) => {
+            setValue(`app-accessibility-${feature}`, false)
+          })
           clearErrors()
         }
       },
@@ -124,7 +138,7 @@ const ApplicationAda = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.ada.title")}
@@ -139,19 +153,9 @@ const ApplicationAda = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length === Object.keys(getValues()).length &&
-            Object.keys(getValues()).length > 0 && (
-              <Alert
-                className={styles["message-inside-card"]}
-                variant="alert"
-                fullwidth
-                id={"application-alert-box"}
-              >
-                {t("errors.errorsToResolve")}
-              </Alert>
-            )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.details.adaPriorities")}</legend>
@@ -187,3 +191,5 @@ const ApplicationAda = () => {
 }
 
 export default ApplicationAda
+
+export const getStaticProps = sharedGetStaticProps

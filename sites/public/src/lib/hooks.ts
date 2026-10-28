@@ -8,6 +8,7 @@ import {
   FeatureFlagEnum,
   FilterAvailabilityEnum,
   Jurisdiction,
+  JurisdictionContentFields,
   Listing,
   ListingFilterParams,
   ListingOrderByKeys,
@@ -16,6 +17,10 @@ import {
   MultiselectQuestionFilterParams,
   OrderByEnum,
   PaginatedListing,
+  EnumAgencyFilterParamsComparison,
+  ListingMapMarker,
+  ListingsService,
+  ListingViews,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
@@ -26,7 +31,9 @@ import {
   useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import { t } from "@bloom-housing/ui-components"
-import { fetchFavoriteListingIds } from "./helpers"
+import { fetchFavoriteListingIds, isFeatureFlagOn } from "./helpers"
+
+import { ListingQueryBuilder } from "./listings/listing-query-builder"
 
 /**
  * This ensures a listing is present in memory and no application has yet been submitted
@@ -94,6 +101,7 @@ export const useFormConductor = (stepName: string) => {
 
   useEffect(() => {
     conductor.skipCurrentStepIfNeeded()
+    conductor.prefetchNextUrl()
   }, [conductor])
   return context
 }
@@ -155,17 +163,32 @@ export async function fetchBaseListingData(
   let listings
   let pagination
   try {
-    const { id: jurisdictionId, featureFlags } = await fetchJurisdictionByName(req)
+    const {
+      id: jurisdictionId,
+      featureFlags,
+      subJurisdictions,
+    } = await fetchJurisdictionByName(req)
 
     if (!jurisdictionId) {
       return listings
     }
-    let filter: ListingFilterParams[] = [
-      {
-        $comparison: EnumListingFilterParamsComparison["="],
-        jurisdiction: jurisdictionId,
-      },
-    ]
+    // if there are subjurisdictions, we want to pull listings for all of those jurisdictions, otherwise just pull for the single jurisdiction
+    let filter: ListingFilterParams[] = subJurisdictions
+      ? [
+          {
+            $comparison: EnumListingFilterParamsComparison["IN"],
+            jurisdictions: [
+              jurisdictionId,
+              ...subJurisdictions.map((jurisdiction) => jurisdiction.id),
+            ],
+          },
+        ]
+      : [
+          {
+            $comparison: EnumListingFilterParamsComparison["="],
+            jurisdiction: jurisdictionId,
+          },
+        ]
 
     if (additionalFilters) {
       filter = filter.concat(additionalFilters)
@@ -229,6 +252,10 @@ export async function fetchOpenListings(
           $comparison: EnumListingFilterParamsComparison["="],
           status: ListingsStatusEnum.active,
         },
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          includeExternal: true,
+        },
         ...additionalFilters,
       ],
       orderBy: [
@@ -287,12 +314,21 @@ export async function fetchLimitedUnderConstructionListings(req?: any, limit?: n
   )
 }
 
+export const API_TIMEOUT_MS = 5000
+
 let jurisdiction: Jurisdiction | null = null
+let jurisdictionUntil = 0
+let jurisdictionPhase: string | undefined
+
+// A failed read is held for this long so an unreachable API is not re-hit on every render.
+export const JURISDICTION_RETRY_MS = 5000
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchJurisdictionByName(req?: any) {
+  const phase = process.env.NEXT_PHASE
+
   try {
-    if (jurisdiction) {
+    if (jurisdictionPhase === phase && jurisdictionUntil > Date.now()) {
       return jurisdiction
     }
 
@@ -308,14 +344,123 @@ export async function fetchJurisdictionByName(req?: any) {
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`,
       {
         headers,
+        timeout: API_TIMEOUT_MS,
       }
     )
     jurisdiction = jurisdictionRes?.data
+    jurisdictionUntil = Date.now() + cacheWindowMs(phase)
+    jurisdictionPhase = phase
   } catch (error) {
-    console.log("error = ", error)
+    console.log("error fetching jurisdiction = ", error.message)
+    jurisdictionUntil = Date.now() + JURISDICTION_RETRY_MS
+    jurisdictionPhase = phase
   }
 
   return jurisdiction
+}
+
+type Cached<T> = { value: T; until: number; phase?: string }
+
+const publicOverridesByLanguage = new Map<string, Cached<Record<string, Record<string, string>>>>()
+const jurisdictionContentByLanguage = new Map<string, Cached<JurisdictionContentFields>>()
+
+const RENDERED_DOCUMENTS = ["footer", "faq", "resources", "disclaimers", "contact"] as const
+
+const cacheWindowMs = (phase?: string) => {
+  if (phase === "phase-production-build") return Number.POSITIVE_INFINITY
+  const revalidate = Number(process.env.cacheRevalidate)
+  return Number.isFinite(revalidate) && revalidate > 0 ? revalidate * 1000 : 30000
+}
+
+const fetchJurisdictionScoped = async <T>(
+  path: string,
+  params: Record<string, string>,
+  cache: Map<string, Cached<T>>,
+  label: string,
+  language?: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  req?: any
+): Promise<T | null> => {
+  const key = language ?? "en"
+  const phase = process.env.NEXT_PHASE
+  const cached = cache.get(key)
+  if (cached && cached.phase === phase && cached.until > Date.now()) {
+    return cached.value
+  }
+
+  const headers = {
+    passkey: process.env.API_PASS_KEY,
+  }
+  if (req) {
+    headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+  }
+
+  try {
+    const response = await axios.get(`${process.env.backendApiBase}${path}`, {
+      params: { ...params, language: key },
+      headers,
+      timeout: API_TIMEOUT_MS,
+    })
+    const value = (response?.data ?? null) as T | null
+    if (value) {
+      cache.set(key, { value, until: Date.now() + cacheWindowMs(phase), phase })
+    }
+    return value
+  } catch (error) {
+    console.log(`error fetching ${label} = `, error.message)
+    return null
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchPublicOverrides(language?: string, req?: any) {
+  return fetchJurisdictionScoped<Record<string, Record<string, string>>>(
+    `/translations/byName/${process.env.jurisdictionName}`,
+    { site: "public" },
+    publicOverridesByLanguage,
+    "public translation overrides",
+    language,
+    req
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchJurisdictionContent(language?: string, req?: any) {
+  const content = await fetchJurisdictionScoped<JurisdictionContentFields>(
+    `/jurisdictionContent/byName/${process.env.jurisdictionName}`,
+    {},
+    jurisdictionContentByLanguage,
+    "jurisdiction content",
+    language,
+    req
+  )
+  if (!content) return null
+
+  return Object.fromEntries(
+    RENDERED_DOCUMENTS.filter((document) => content[document] != null).map((document) => [
+      document,
+      content[document],
+    ])
+  ) as JurisdictionContentFields
+}
+
+/**
+ * The props every public page passes down: the jurisdiction, its translation overrides, and its
+ * stored content. Reading the flag here means a jurisdiction can be taken off stored content
+ * without deleting its rows.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchSharedPageProps(language?: string, req?: any) {
+  const jurisdiction = await fetchJurisdictionByName(req)
+  const storedContentOn =
+    !!jurisdiction && isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableDbDrivenContent)
+
+  const [publicOverrides, jurisdictionContent] = await Promise.all([
+    fetchPublicOverrides(language, req),
+    storedContentOn ? fetchJurisdictionContent(language, req) : null,
+  ])
+
+  return { jurisdiction, publicOverrides, jurisdictionContent }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -354,5 +499,118 @@ export async function fetchMultiselectProgramData(req: any, jurisdictionId: stri
     return multiselectDataResponse?.data
   } catch (error) {
     console.log("error = ", error)
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetchAgencies(req: any, jurisdictionId: string) {
+  try {
+    const headers = {
+      passkey: process.env.API_PASS_KEY,
+    }
+    if (req) {
+      headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress
+    }
+
+    const params = {
+      filter: [
+        {
+          $comparison: EnumAgencyFilterParamsComparison["="],
+          jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
+        },
+      ],
+      limit: "all",
+    }
+
+    const paramsString = qs.stringify(params)
+
+    const agencyDataResponse = await axios.get(
+      `${process.env.backendApiBase}/agency?${paramsString}`,
+      {
+        headers,
+      }
+    )
+    return agencyDataResponse?.data
+  } catch (error) {
+    console.log("error = ", error)
+  }
+}
+
+export const searchListings = async (
+  qb: ListingQueryBuilder,
+  limit: number | "all" = "all",
+  page = 1,
+  listingsService: ListingsService,
+  view: ListingViews = ListingViews.base,
+  jurisdictionIds: string[] = [],
+  additionalFilters: ListingFilterParams[] = []
+): Promise<PaginatedListing> => {
+  let results: PaginatedListing = {
+    items: [],
+    meta: {
+      currentPage: 0,
+      itemCount: 0,
+      itemsPerPage: 0,
+      totalItems: 0,
+      totalPages: 0,
+    },
+  }
+
+  const filter = qb.getFilterParams().concat(additionalFilters)
+
+  if (jurisdictionIds.length > 0) {
+    filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: jurisdictionIds.join(","),
+    })
+  }
+
+  const params: Parameters<ListingsService["list"]>[0] = {
+    view,
+    limit: limit || "all",
+    page: page,
+    filter,
+    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    orderDir: [OrderByEnum.desc],
+  }
+
+  try {
+    const response = await listingsService.filterableList({
+      body: { ...params },
+    })
+    results = response
+  } catch (e) {
+    console.log("ListingService.searchListings error: ", e)
+  }
+
+  return results
+}
+
+export const searchMapMarkers = async (
+  qb: ListingQueryBuilder,
+  listingsService: ListingsService,
+  jurisdictionIds: string[] = [],
+  additionalFilters: ListingFilterParams[] = []
+): Promise<ListingMapMarker[]> => {
+  const filter = qb.getFilterParams().concat(additionalFilters)
+
+  if (jurisdictionIds.length > 0) {
+    filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: jurisdictionIds.join(","),
+    })
+  }
+
+  const params = {
+    limit: "all" as number | "all",
+    filter,
+  }
+
+  try {
+    const response = await listingsService.mapMarkers({ body: { ...params } })
+    return response
+  } catch (e) {
+    console.log("ListingService.searchMapMarkers error: ", e)
+    return []
   }
 }

@@ -1,14 +1,25 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationHouseholdChanges = () => {
   const { profile } = useContext(AuthContext)
@@ -20,19 +31,36 @@ const ApplicationHouseholdChanges = () => {
     defaultValues: { householdExpectingChanges: application.householdExpectingChanges?.toString() },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "householdChanges",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "householdChanges",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
     const { householdExpectingChanges } = data
-    conductor.currentStep.save({
-      householdExpectingChanges: householdExpectingChanges === "true",
+    const pendingSave = { householdExpectingChanges: householdExpectingChanges === "true" }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
   }
 
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const householdChangesValues = [
@@ -62,7 +90,7 @@ const ApplicationHouseholdChanges = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.expectingChanges.question")}
@@ -77,20 +105,14 @@ const ApplicationHouseholdChanges = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
+              <legend className="sr-only">
+                {t("application.household.expectingChanges.question")}
+              </legend>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"
@@ -117,3 +139,5 @@ const ApplicationHouseholdChanges = () => {
 }
 
 export default ApplicationHouseholdChanges
+
+export const getStaticProps = sharedGetStaticProps

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react"
 import {
   HouseholdMember,
+  HouseholdMemberRelationship,
   HouseholdMemberUpdate,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -14,6 +15,7 @@ type FormHouseholdMembersProps = {
   setHouseholdMembers: (members: HouseholdMember[]) => void
   enableFullTimeStudentQuestion?: boolean
   disableWorkInRegion?: boolean
+  visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[]
 }
 
 const FormHouseholdMembers = ({
@@ -21,6 +23,7 @@ const FormHouseholdMembers = ({
   setHouseholdMembers,
   enableFullTimeStudentQuestion,
   disableWorkInRegion,
+  visibleHouseholdMemberRelationships,
 }: FormHouseholdMembersProps) => {
   type MembersDrawer = HouseholdMember | null
 
@@ -179,6 +182,7 @@ const FormHouseholdMembers = ({
           editedMemberId={membersDrawer?.orderId}
           enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
           disableWorkInRegion={disableWorkInRegion}
+          visibleHouseholdMemberRelationships={visibleHouseholdMemberRelationships}
         />
       </Drawer>
 

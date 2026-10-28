@@ -2,55 +2,103 @@
 // Note, these are just used to keep backend and frontend in sync. We store feature flags as strings so this list might not include every flag.
 // Keep alphabetized for readability.
 export enum FeatureFlagEnum {
+  disableAccessibilityFeaturesTag = 'disableAccessibilityFeaturesTag',
   disableBuildingSelectionCriteria = 'disableBuildingSelectionCriteria',
   disableCommonApplication = 'disableCommonApplication',
+  disableEthnicityQuestion = 'disableEthnicityQuestion',
+  disableHowToContact = 'disableHowToContact',
   disableJurisdictionalAdmin = 'disableJurisdictionalAdmin',
   disableListingPreferences = 'disableListingPreferences',
+  disablePartnerPublicListingEdits = 'disablePartnerPublicListingEdits',
+  disableReferralOpportunity = 'disableReferralOpportunity',
+  disableReservedCommunityTypeEdit = 'disableReservedCommunityTypeEdit',
   disableWorkInRegion = 'disableWorkInRegion',
   enableAccessibilityFeatures = 'enableAccessibilityFeatures',
-  enableAdaOtherOption = 'enableAdaOtherOption',
   enableAdditionalResources = 'enableAdditionalResources',
+  enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
+  enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableApproveAndPublishOnEdit = 'enableApproveAndPublishOnEdit',
+  enableAutoOpenDate = 'enableAutoOpenDate',
+  enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
+  enableConfigurableRegions = 'enableConfigurableRegions',
   enableCreditScreeningFee = 'enableCreditScreeningFee',
+  enableCustomListingNotifications = 'enableCustomListingNotifications',
+  enableDbDrivenBranding = 'enableDbDrivenBranding',
+  enableDbDrivenContent = 'enableDbDrivenContent',
+  enableDuplicatesDetailsInEmail = 'enableDuplicatesDetailsInEmail',
+  enableExportTerms = 'enableExportTerms',
+  enableFaq = 'enableFaq',
+  enableFilterByBathroom = 'enableFilterByBathroom',
+  enableFilterByCounty = 'enableFilterByCounty',
+  enableFilterByStatus = 'enableFilterByStatus',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
+  enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
   enableGeocodingRadiusMethod = 'enableGeocodingRadiusMethod',
+  enableGetAssistanceCard = 'enableGetAssistanceCard',
+  enableGetAssistancePage = 'enableGetAssistancePage',
   enableHomeType = 'enableHomeType',
+  enableHomePageSearchHero = 'enableHomePageSearchHero',
+  enableHousingAdvocate = 'enableHousingAdvocate',
+  enableHousingBasics = 'enableHousingBasics',
   enableHousingDeveloperOwner = 'enableHousingDeveloperOwner',
   enableIsVerified = 'enableIsVerified',
+  enableLandUse = 'enableLandUse',
+  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableLimitedHowDidYouHear = 'enableLimitedHowDidYouHear',
   enableListingFavoriting = 'enableListingFavoriting',
   enableListingFileNumber = 'enableListingFileNumber',
   enableListingFiltering = 'enableListingFiltering',
-  enableLeasingAgentAltText = 'enableLeasingAgentAltText',
   enableListingImageAltText = 'enableListingImageAltText',
+  enableListingMap = 'enableListingMap',
   enableListingOpportunity = 'enableListingOpportunity',
   enableListingPagination = 'enableListingPagination',
   enableListingUpdatedAt = 'enableListingUpdatedAt',
   enableMarketingFlyer = 'enableMarketingFlyer',
   enableMarketingStatus = 'enableMarketingStatus',
   enableMarketingStatusMonths = 'enableMarketingStatusMonths',
+  enableMultiselectVoucherQuestion = 'enableMultiselectVoucherQuestion',
   enableNeighborhoodAmenities = 'enableNeighborhoodAmenities',
   enableNeighborhoodAmenitiesDropdown = 'enableNeighborhoodAmenitiesDropdown',
+  enableNonAdminLotteries = 'enableNonAdminLotteries',
   enableNonRegulatedListings = 'enableNonRegulatedListings',
+  enableOnlyAdminCanAddAppsAfterClose = 'enableOnlyAdminCanAddAppsAfterClose',
+  enableOnlyAdminCanEditListingDates = 'enableOnlyAdminCanEditListingDates',
+  enableOnlyAdminCanManageUsers = 'enableOnlyAdminCanManageUsers',
   enableParkingFee = 'enableParkingFee',
+  enableParkingType = 'enableParkingType',
   enablePartnerDemographics = 'enablePartnerDemographics',
+  enablePartnerLotteryExport = 'enablePartnerLotteryExport',
   enablePartnerSettings = 'enablePartnerSettings',
+  enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
+  enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
+  enablePublicTermsOfUse = 'enablePublicTermsOfUse',
+  enableReasonableAccommodations = 'enableReasonableAccommodations',
+  enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
+  enableResources = 'enableResources',
+  enableResourcesCard = 'enableResourcesCard',
   enableSection8Question = 'enableSection8Question',
+  enableSeeOurData = 'enableSeeOurData',
+  enableSexualOrientationQuestion = 'enableSexualOrientationQuestion',
   enableSingleUseCode = 'enableSingleUseCode',
   enableSmokingPolicyRadio = 'enableSmokingPolicyRadio',
+  enableSpokenLanguage = 'enableSpokenLanguage',
+  enableStopLights = 'enableStopLights',
   enableSupportAdmin = 'enableSupportAdmin',
   enableUnderConstructionHome = 'enableUnderConstructionHome',
+  enableUnitAccessibilityTypeTags = 'enableUnitAccessibilityTypeTags',
   enableUnitGroups = 'enableUnitGroups',
   enableUtilitiesIncluded = 'enableUtilitiesIncluded',
+  enableV2MSQ = 'enableV2MSQ',
+  enableVerifyIncome = 'enableVerifyIncome',
   enableWaitlistAdditionalFields = 'enableWaitlistAdditionalFields',
   enableWaitlistLottery = 'enableWaitlistLottery',
   enableWhatToExpectAdditionalField = 'enableWhatToExpectAdditionalField',
-  enableV2MSQ = 'enableV2MSQ',
   example = 'example', // sample feature flag for testing purposes
   hideCloseListingButton = 'hideCloseListingButton',
   swapCommunityTypeWithPrograms = 'swapCommunityTypeWithPrograms',
@@ -64,6 +112,11 @@ export const featureFlagMap: {
   description: string;
 }[] = [
   {
+    name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
+    description:
+      "When true, the listing 'accessibility features' tag is hidden on public listing cards and details",
+  },
+  {
     name: FeatureFlagEnum.disableBuildingSelectionCriteria,
     description:
       'When true, building selection criteria is not displayed in the listing',
@@ -74,18 +127,43 @@ export const featureFlagMap: {
       'When true, the digital common application is not an option for listings',
   },
   {
+    name: FeatureFlagEnum.disableEthnicityQuestion,
+    description:
+      'When true, the ethnicity question is hidden in the application demographics section',
+  },
+  {
+    name: FeatureFlagEnum.disableHowToContact,
+    description:
+      'When true, the "How do you prefer to be contacted?" question will be removed from the application process',
+  },
+  {
     name: FeatureFlagEnum.disableJurisdictionalAdmin,
     description: 'When true, jurisdictional admins cannot be created',
   },
   {
     name: FeatureFlagEnum.disableListingPreferences,
     description:
-      'When true listings will no longer support preferences section',
+      'When true, listings will no longer support preferences section',
+  },
+  {
+    name: FeatureFlagEnum.disablePartnerPublicListingEdits,
+    description:
+      'When true, partner users cannot edit open or closed listings, or unpublish open listings',
+  },
+  {
+    name: FeatureFlagEnum.disableReferralOpportunity,
+    description:
+      'When true, disables the referral opportunity question on the listing edit and detail pages on partner site',
+  },
+  {
+    name: FeatureFlagEnum.disableReservedCommunityTypeEdit,
+    description:
+      'When true, disables editing of reserved community type description in the partners site (shows as plaintext only).',
   },
   {
     name: FeatureFlagEnum.disableWorkInRegion,
     description:
-      'When true the "Work in Region" question will be removed from the application process',
+      'When true, the "Work in Region" question will be removed from the application process',
   },
   {
     name: FeatureFlagEnum.enableAccessibilityFeatures,
@@ -93,14 +171,19 @@ export const featureFlagMap: {
       "When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view",
   },
   {
-    name: FeatureFlagEnum.enableAdaOtherOption,
-    description:
-      "When true, the ADA impairment options will include 'For Other Impairments'",
-  },
-  {
     name: FeatureFlagEnum.enableAdditionalResources,
     description:
       "When true, the 'learn more' section is displayed on the home page",
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    description:
+      'When true, allows for the bulk uptake of application statuses',
+  },
+  {
+    name: FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+    description:
+      'When true, application data in the partner site will expire for non-admin users after 45 days',
   },
   {
     name: FeatureFlagEnum.enableApplicationStatus,
@@ -108,18 +191,87 @@ export const featureFlagMap: {
       'When true, the application status and notifications feature is enabled on public and partners',
   },
   {
+    name: FeatureFlagEnum.enableApproveAndPublishOnEdit,
+    description:
+      'When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving',
+  },
+  {
+    name: FeatureFlagEnum.enableAutoOpenDate,
+    description:
+      'When true, partners can set an optional scheduled listing applications open date',
+  },
+  {
+    name: FeatureFlagEnum.enableAutopublish,
+    description:
+      'When true, partners can set an optional scheduled listing publish date',
+  },
+  {
     name: FeatureFlagEnum.enableCompanyWebsite,
     description:
       'When true, allows partners to add company website information',
+  },
+  {
+    name: FeatureFlagEnum.enableCustomListingNotifications,
+    description: 'When true, users have access to custom notification settings',
+  },
+  {
+    name: FeatureFlagEnum.enableConfigurableRegions,
+    description:
+      'When true, allows for configurable regions per jurisdiction enabled on partners and public',
   },
   {
     name: FeatureFlagEnum.enableCreditScreeningFee,
     description: 'When true, credit screening fee is enabled for listings',
   },
   {
+    name: FeatureFlagEnum.enableDbDrivenBranding,
+    description:
+      "When true, the public site renders the jurisdiction's brand colors, logo, favicon, and font from the database instead of the bundled static assets",
+  },
+  {
+    name: FeatureFlagEnum.enableDbDrivenContent,
+    description:
+      'When true, the jurisdiction reads its translations and structured content from the database instead of the bundled override files',
+  },
+  {
+    name: FeatureFlagEnum.enableDuplicatesDetailsInEmail,
+    description:
+      'When true, lottery published applicant email contains duplicates details section',
+  },
+  {
+    name: FeatureFlagEnum.enableExportTerms,
+    description:
+      'When true, display terms of use before exporting applications and lotteries from the partner site',
+  },
+  {
+    name: FeatureFlagEnum.enableFaq,
+    description:
+      'When true, a link to the FAQ page is displayed on the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByBathroom,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByCounty,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by county',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByStatus,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by their status',
+  },
+  {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
     description:
       'When true, the full time student question is displayed in the application form',
+  },
+  {
+    name: FeatureFlagEnum.enableGenderQuestion,
+    description:
+      'When true, the gender identity question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableGeocodingPreferences,
@@ -132,8 +284,26 @@ export const featureFlagMap: {
       'When true, preferences can be created with geocoding functionality that verifies via a mile radius',
   },
   {
+    name: FeatureFlagEnum.enableGetAssistanceCard,
+    description:
+      'When true, a resource card will appear on the homepage to link to the get assistance page',
+  },
+  {
+    name: FeatureFlagEnum.enableGetAssistancePage,
+    description:
+      'When true, get assistance will appear in the nav header and page will be reachable',
+  },
+  {
     name: FeatureFlagEnum.enableHomeType,
     description: 'When true, home type feature is turned on',
+  },
+  {
+    name: FeatureFlagEnum.enableHomePageSearchHero,
+    description: 'When true, the home page hero has a search form',
+  },
+  {
+    name: FeatureFlagEnum.enableHousingAdvocate,
+    description: 'When true, partners can view housing advocate users',
   },
   {
     name: FeatureFlagEnum.enableHousingDeveloperOwner,
@@ -141,9 +311,23 @@ export const featureFlagMap: {
       "When true, the 'Housing developer' field label becomes 'Housing developer / owner'",
   },
   {
+    name: FeatureFlagEnum.enableHousingBasics,
+    description:
+      'When true, a link to the housing basics page is displayed on the get assistance page',
+  },
+  {
     name: FeatureFlagEnum.enableIsVerified,
     description:
       'When true, the listing can ba have its contents manually verified by a user',
+  },
+  {
+    name: FeatureFlagEnum.enableLandUse,
+    description:
+      'When true, land use listings are displayed in listing creation/edit and public listing view',
+  },
+  {
+    name: FeatureFlagEnum.enableLeasingAgentAltText,
+    description: 'When true, shows alternative text for LA users',
   },
   {
     name: FeatureFlagEnum.enableLimitedHowDidYouHear,
@@ -166,12 +350,12 @@ export const featureFlagMap: {
       'When true, a filter button is shown on listings browse and users can filter with the options in the drawer',
   },
   {
-    name: FeatureFlagEnum.enableLeasingAgentAltText,
-    description: 'When true, shows alternative text for LA users',
-  },
-  {
     name: FeatureFlagEnum.enableListingImageAltText,
     description: 'When true, allows partners to add alt text to listing images',
+  },
+  {
+    name: FeatureFlagEnum.enableListingMap,
+    description: 'When true, a map is displayed on the listings page',
   },
   {
     name: FeatureFlagEnum.enableListingOpportunity,
@@ -181,7 +365,7 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableListingPagination,
     description:
-      'When true listings browser will display pagination controls section',
+      'When true, listings browser will display pagination controls section',
   },
   {
     name: FeatureFlagEnum.enableListingUpdatedAt,
@@ -203,6 +387,11 @@ export const featureFlagMap: {
       "When true, the 'marketing status' sub-section uses months instead of seasons (functions only if enableMarketingStatus is also true)",
   },
   {
+    name: FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    description:
+      'When true, the vouchers question on the application form becomes a multi-select checkbox experience with Section 8, rental assistance, and none of the above as options',
+  },
+  {
     name: FeatureFlagEnum.enableNeighborhoodAmenities,
     description:
       "When true, the 'neighborhood amenities' section is displayed in listing creation/edit and the public listing view",
@@ -213,9 +402,29 @@ export const featureFlagMap: {
       'When true, neighborhood amenities inputs render as dropdowns with distance options instead of textareas',
   },
   {
+    name: FeatureFlagEnum.enableNonAdminLotteries,
+    description:
+      'When true, the lotteries can be published without the admin confirmation',
+  },
+  {
     name: FeatureFlagEnum.enableNonRegulatedListings,
     description:
       'When true, non-regulated listings are displayed in listing creation/edit and public listing view',
+  },
+  {
+    name: FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+    description:
+      'When true, only admin level users are allowed to add paper apps after a listing has closed',
+  },
+  {
+    name: FeatureFlagEnum.enableOnlyAdminCanEditListingDates,
+    description:
+      'When true, only admins level users can edit the application close dates, the review order type or the lottery run date on a published listing',
+  },
+  {
+    name: FeatureFlagEnum.enableOnlyAdminCanManageUsers,
+    description:
+      'When true, only admins can add/edit users on the partner site. Jurisdictional admins can view but not cannot create or edit users other than themselves',
   },
   {
     name: FeatureFlagEnum.enableParkingFee,
@@ -227,16 +436,47 @@ export const featureFlagMap: {
       'When true, demographics data is included in application or lottery exports for partners',
   },
   {
+    name: FeatureFlagEnum.enablePartnerLotteryExport,
+    description:
+      'When true, partner can export lottery immediately after it is run.',
+  },
+  {
     name: FeatureFlagEnum.enablePartnerSettings,
     description: "When true, the 'settings' tab in the partner site is visible",
+  },
+  {
+    name: FeatureFlagEnum.enablePetPolicyCheckbox,
+    description:
+      'When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area',
+  },
+  {
+    name: FeatureFlagEnum.enableProfessionalPartnersPage,
+    description:
+      'When true, the professional partners page will appear in the nav header of the public site and page will be reachable',
   },
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
   },
   {
+    name: FeatureFlagEnum.enablePublicTermsOfUse,
+    description:
+      'When true, creating a user account on the public site will require the user to review and accept terms of use',
+  },
+  {
+    name: FeatureFlagEnum.enableReasonableAccommodations,
+    description:
+      'When true, the reasonable accommodations question is shown in the public and partner application flow',
+  },
+  {
+    name: FeatureFlagEnum.enableReceivedAtAndByFields,
+    description:
+      'When true, partners can view/edit paper application received at/by fields and include them in application exports',
+  },
+  {
     name: FeatureFlagEnum.enableReferralQuestionUnits,
-    description: 'when true, updates the the referral details question labels',
+    description:
+      'When true, updates the the referral opportunity question to be specifically about units',
   },
   {
     name: FeatureFlagEnum.enableRegions,
@@ -244,8 +484,28 @@ export const featureFlagMap: {
       'When true, the region can be defined for the building address',
   },
   {
+    name: FeatureFlagEnum.enableResources,
+    description:
+      'When true, the public site displays links to resources on various pages',
+  },
+  {
+    name: FeatureFlagEnum.enableResourcesCard,
+    description:
+      'When true, a resource card will appear on the homepage to link to the additional resources page',
+  },
+  {
     name: FeatureFlagEnum.enableSection8Question,
     description: 'When true, the Section 8 listing data will be visible',
+  },
+  {
+    name: FeatureFlagEnum.enableSeeOurData,
+    description:
+      'When true, a see our data card with a link on the home page is displayed',
+  },
+  {
+    name: FeatureFlagEnum.enableSexualOrientationQuestion,
+    description:
+      'When true, the sexual orientation question is displayed in the public and partner application demographics section',
   },
   {
     name: FeatureFlagEnum.enableSingleUseCode,
@@ -258,6 +518,16 @@ export const featureFlagMap: {
       "When true, the listing 'Smoking policy' field is a radio group",
   },
   {
+    name: FeatureFlagEnum.enableSpokenLanguage,
+    description:
+      'When true, the application demographics section displays a spoken language question with options configured on the jurisdiction',
+  },
+  {
+    name: FeatureFlagEnum.enableStopLights,
+    description:
+      'When true, Stop Light eligibility rules enabled for the jurisdiction are evaluated on the public application, blocking (red) or warning (yellow) the applicant',
+  },
+  {
     name: FeatureFlagEnum.enableSupportAdmin,
     description: 'When true, support admins can be created',
   },
@@ -267,6 +537,11 @@ export const featureFlagMap: {
       "When true, the 'under construction' section is displayed on the home page",
   },
   {
+    name: FeatureFlagEnum.enableUnitAccessibilityTypeTags,
+    description:
+      "When true, unit accessibility type tags (for example, 'Mobility units') are displayed on listing cards and details",
+  },
+  {
     name: FeatureFlagEnum.enableUnitGroups,
     description: 'When true, uses unit groups instead of units',
   },
@@ -274,6 +549,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableUtilitiesIncluded,
     description:
       "When true, the 'utilities included' section is displayed in listing creation/edit and the public listing view",
+  },
+  {
+    name: FeatureFlagEnum.enableVerifyIncome,
+    description:
+      'When true, the income question on the application will be validated against the income limits for the listing and an error message will be shown if income is outside limits',
   },
   {
     name: FeatureFlagEnum.enableWaitlistAdditionalFields,
@@ -291,8 +571,13 @@ export const featureFlagMap: {
       'When true, the what to expect additional field is displayed in listing creation/edit form on the partner site',
   },
   {
+    name: FeatureFlagEnum.enableParkingType,
+    description:
+      'When true, the parking type field is visible in the listing form',
+  },
+  {
     name: FeatureFlagEnum.enableV2MSQ,
-    description: 'When true, the new mutliselect question logic will be used.',
+    description: 'When true, the new multiselect question logic will be used.',
   },
   {
     name: FeatureFlagEnum.hideCloseListingButton,

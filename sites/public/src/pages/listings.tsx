@@ -15,10 +15,11 @@ import { ListingBrowseDeprecated } from "../components/browse/ListingBrowseDepre
 import { isFeatureFlagOn } from "../lib/helpers"
 import {
   fetchClosedListings,
-  fetchJurisdictionByName,
   fetchMultiselectProgramData,
   fetchOpenListings,
+  fetchSharedPageProps,
 } from "../lib/hooks"
+import { ListingMap } from "../components/browse/map/ListingMap"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -36,17 +37,28 @@ export interface ListingsProps {
 }
 
 export default function ListingsPage(props: ListingsProps) {
+  const enableMap = isFeatureFlagOn(props.jurisdiction, FeatureFlagEnum.enableListingMap)
   return (
     <>
       {process.env.showNewSeedsDesigns ? (
-        <ListingBrowse
-          listings={props.openListings}
-          tab={TabsIndexEnum.open}
-          jurisdiction={props.jurisdiction}
-          multiselectData={props.multiselectData}
-          paginationData={props.paginationData}
-          areFiltersActive={props.areFiltersActive}
-        />
+        enableMap ? (
+          <ListingMap
+            listings={props.openListings}
+            jurisdiction={props.jurisdiction}
+            multiselectData={props.multiselectData}
+            paginationData={props.paginationData}
+            areFiltersActive={props.areFiltersActive}
+          />
+        ) : (
+          <ListingBrowse
+            listings={props.openListings}
+            tab={TabsIndexEnum.open}
+            jurisdiction={props.jurisdiction}
+            multiselectData={props.multiselectData}
+            paginationData={props.paginationData}
+            areFiltersActive={props.areFiltersActive}
+          />
+        )
       ) : (
         <ListingBrowseDeprecated
           openListings={props.openListings}
@@ -58,10 +70,35 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getServerSideProps(context: { req: any; query: any }) {
+export async function getServerSideProps(context: { req: any; query: any; locale?: string }) {
   let openListings
   let closedListings
   let areFiltersActive = false
+  const isUsingNewSeedsDesign = Boolean(process.env.showNewSeedsDesigns)
+
+  const shared = await fetchSharedPageProps(context.locale, context.req)
+  const enableMap = isFeatureFlagOn(shared.jurisdiction, FeatureFlagEnum.enableListingMap)
+
+  // Map mode fetches listings client-side, so we keep SSR props minimal to avoid large page-data payloads
+  if (process.env.showNewSeedsDesigns && enableMap) {
+    const multiselectData = isFeatureFlagOn(
+      shared.jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    )
+      ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
+      : null
+
+    return {
+      props: {
+        openListings: [],
+        closedListings: [],
+        paginationData: null,
+        ...shared,
+        multiselectData: multiselectData,
+        areFiltersActive,
+      },
+    }
+  }
 
   if (isFiltered(context.query)) {
     const filterData = decodeQueryToFilterData(context.query)
@@ -70,14 +107,15 @@ export async function getServerSideProps(context: { req: any; query: any }) {
     areFiltersActive = true
   } else {
     openListings = await fetchOpenListings(context.req, Number(context.query.page) || 1)
-    closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+    if (!isUsingNewSeedsDesign) {
+      closedListings = await fetchClosedListings(context.req, Number(context.query.page) || 1)
+    }
   }
-  const jurisdiction = await fetchJurisdictionByName(context.req)
   const multiselectData = isFeatureFlagOn(
-    jurisdiction,
+    shared.jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
     : null
 
   return {
@@ -85,7 +123,7 @@ export async function getServerSideProps(context: { req: any; query: any }) {
       openListings: openListings?.items || [],
       closedListings: closedListings?.items || [],
       paginationData: openListings?.items?.length ? openListings.meta : null,
-      jurisdiction: jurisdiction,
+      ...shared,
       multiselectData: multiselectData,
       areFiltersActive,
     },

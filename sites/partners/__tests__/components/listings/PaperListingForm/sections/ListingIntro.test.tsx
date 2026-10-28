@@ -2,9 +2,9 @@ import React from "react"
 import "@testing-library/jest-dom"
 import { setupServer } from "msw/node"
 import { screen } from "@testing-library/react"
-import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
-import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
 import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ListingIntro from "../../../../../src/components/listings/PaperListingForm/sections/ListingIntro"
+import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
 
 const server = setupServer()
 
@@ -152,7 +152,7 @@ describe("ListingIntro", () => {
 
   it("should render the ListingIntro section with non-regulated fields when feature flag is on and listing is non-regulated", () => {
     render(
-      <FormProviderWrapper values={{ listingType: EnumListingListingType.nonRegulated }}>
+      <FormProviderWrapper>
         <ListingIntro
           requiredFields={[]}
           enableNonRegulatedListings={true}
@@ -160,6 +160,7 @@ describe("ListingIntro", () => {
           enableListingFileNumber={false}
           jurisdictionName={"JurisdictionA"}
           listingId={"1234"}
+          listingType={EnumListingListingType.nonRegulated}
         />
       </FormProviderWrapper>
     )
@@ -178,5 +179,46 @@ describe("ListingIntro", () => {
         name: "Has this property received HUD EBLL clearance?",
       })
     ).toBeInTheDocument()
+  })
+
+  it("should render the ListingIntro section with land use FieldValue when enableLandUse is on and listing is land use", () => {
+    render(
+      <FormProviderWrapper>
+        <ListingIntro
+          requiredFields={[]}
+          enableNonRegulatedListings={false}
+          enableLandUse={true}
+          enableHousingDeveloperOwner={false}
+          enableListingFileNumber={false}
+          jurisdictionName={"JurisdictionA"}
+          listingId={"1234"}
+          listingType={EnumListingListingType.landUse}
+          properties={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.getByRole("heading", { level: 2, name: "Listing intro" })).toBeInTheDocument()
+    expect(screen.getByText("What kind of listing is this?")).toBeInTheDocument()
+    expect(screen.getByText("Land use")).toBeInTheDocument()
+  })
+
+  it("should not render the FieldValue when both enableNonRegulatedListings and enableLandUse are off", () => {
+    render(
+      <FormProviderWrapper>
+        <ListingIntro
+          requiredFields={[]}
+          enableNonRegulatedListings={false}
+          enableLandUse={false}
+          enableHousingDeveloperOwner={false}
+          enableListingFileNumber={false}
+          jurisdictionName={"JurisdictionA"}
+          listingId={"1234"}
+          properties={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(screen.queryAllByText("What kind of listing is this?")).toHaveLength(0)
   })
 })

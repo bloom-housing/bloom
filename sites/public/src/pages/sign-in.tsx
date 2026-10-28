@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
-import { useForm } from "react-hook-form"
-import { GoogleReCaptcha } from "react-google-recaptcha-v3"
-import { t, useMutate } from "@bloom-housing/ui-components"
+import { isAxiosError } from "axios"
 import { useRouter } from "next/router"
-import FormsLayout from "../layouts/forms"
-import { fetchJurisdictionByName, useRedirectToPrevPage } from "../lib/hooks"
+import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
+import { GoogleReCaptcha } from "react-google-recaptcha-v3"
+import { useForm } from "react-hook-form"
+import { t } from "@bloom-housing/ui-components"
+
 import {
   PageView,
   pushGtmEvent,
@@ -18,18 +18,25 @@ import {
   FormSignInDefault,
   FormSignInPwdless,
   NetworkErrorMessage,
+  useMutate,
+  getListingRedirectUrl,
+  isInternalLink,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
-import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
 import {
   FeatureFlagEnum,
   Jurisdiction,
   SuccessDTO,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { AccountTypeDialog } from "../components/account/AccountTypeDialog"
+import { PasswordExpiredModal } from "../components/account/PasswordExpiredModal"
 import SignUpBenefits from "../components/account/SignUpBenefits"
-import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
-import { setFeatureFlagLocalStorage } from "../lib/helpers"
+import { TermsModal, FormSignInValues } from "../components/shared/TermsModal"
+import FormsLayout from "../layouts/forms"
+import { UserStatus } from "../lib/constants"
+import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../lib/helpers"
+import { fetchSharedPageProps, useRedirectToPrevPage } from "../lib/hooks"
+import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
 
 interface SignInProps {
   jurisdiction: Jurisdiction
@@ -39,9 +46,15 @@ const SignIn = (props: SignInProps) => {
   const { addToast } = useContext(MessageContext)
   const router = useRouter()
 
-  const { login, requestSingleUseCode, userService } = useContext(AuthContext)
+  const { login, requestSingleUseCode, userService, initialStateLoaded, profile } =
+    useContext(AuthContext)
   const signUpCopy = process.env.showMandatedAccounts
   const reCaptchaEnabled = !!process.env.reCaptchaKey
+
+  const enableHousingAdvocate = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enableHousingAdvocate
+  )
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -59,6 +72,7 @@ const SignIn = (props: SignInProps) => {
     message: NetworkStatusContent
     type: NetworkStatusType
   }>()
+  const [accountTypeDialog, setAccountTypeDialog] = useState<boolean>(false)
 
   type LoginType = "pwd" | "code"
   const loginType = router.query?.loginType as LoginType
@@ -68,12 +82,32 @@ const SignIn = (props: SignInProps) => {
   const [reCaptchaToken, setReCaptchaToken] = useState(null)
   const [refreshReCaptcha, setRefreshReCaptcha] = useState(false)
   const [passwordExpired, setPasswordExpired] = useState(false)
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [notChecked, setChecked] = useState(true)
+
+  const enablePublicTermsOfUse = isFeatureFlagOn(
+    props.jurisdiction,
+    FeatureFlagEnum.enablePublicTermsOfUse
+  )
 
   const {
     mutate: mutateResendConfirmation,
     reset: resetResendConfirmation,
     isLoading: isResendConfirmationLoading,
   } = useMutate<SuccessDTO>()
+
+  useEffect(() => {
+    if (initialStateLoaded && profile) {
+      const rawRedirectUrl = router.query?.redirectUrl as string
+      const redirectUrl =
+        rawRedirectUrl && isInternalLink(rawRedirectUrl) ? rawRedirectUrl : "/account/dashboard"
+      const queryParams = router.query?.listingId
+        ? { listingId: router.query.listingId as string }
+        : {}
+      void router.push({ pathname: redirectUrl, query: queryParams })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialStateLoaded, profile])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -158,7 +192,8 @@ const SignIn = (props: SignInProps) => {
         undefined,
         undefined,
         undefined,
-        reCaptchaEnabled ? reCaptchaToken : undefined
+        reCaptchaEnabled ? reCaptchaToken : undefined,
+        !notChecked ? true : undefined
       )
       await redirectToPage()
       addToast(t(`authentication.signIn.success`, { name: user.firstName }), { variant: "success" })
@@ -167,8 +202,22 @@ const SignIn = (props: SignInProps) => {
       if (sendToReCaptchaFlow(error.response.data.name)) {
         await singleUseCodeFlow(email, true)
       }
+      if (enablePublicTermsOfUse) {
+        setOpenTermsModal(false)
+        setChecked(true)
+      }
       const { status } = error.response || {}
-      determineNetworkError(status, error)
+      const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
+
+      if (
+        enablePublicTermsOfUse &&
+        status === 400 &&
+        responseMessage?.includes("has not accepted the terms of service")
+      ) {
+        setOpenTermsModal(true)
+      } else {
+        determineNetworkError(status, error)
+      }
       setRefreshReCaptcha(!refreshReCaptcha)
     }
   }
@@ -187,7 +236,8 @@ const SignIn = (props: SignInProps) => {
           undefined,
           undefined,
           undefined,
-          reCaptchaEnabled ? reCaptchaToken : undefined
+          reCaptchaEnabled ? reCaptchaToken : undefined,
+          !notChecked ? true : undefined
         )
         addToast(t(`authentication.signIn.success`, { name: user.firstName }), {
           variant: "success",
@@ -198,8 +248,22 @@ const SignIn = (props: SignInProps) => {
         if (sendToReCaptchaFlow(error.response.data.name)) {
           await singleUseCodeFlow(email, true)
         }
+        if (enablePublicTermsOfUse) {
+          setOpenTermsModal(false)
+          setChecked(true)
+        }
         const { status } = error.response || {}
-        determineNetworkError(status, error)
+        const responseMessage = isAxiosError(error) ? error.response?.data.message : ""
+
+        if (
+          enablePublicTermsOfUse &&
+          status === 400 &&
+          responseMessage?.includes("has not accepted the terms of service")
+        ) {
+          setOpenTermsModal(true)
+        } else {
+          determineNetworkError(status, error)
+        }
         setRefreshReCaptcha(!refreshReCaptcha)
       }
     }
@@ -230,7 +294,9 @@ const SignIn = (props: SignInProps) => {
             setConfirmationStatusMessage({
               message: {
                 title: t("errors.somethingWentWrong"),
-                description: t("authentication.signIn.errorGenericMessage"),
+                description: t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("t.contactEmail"),
+                }),
                 error: err,
               },
               type: "alert",
@@ -280,6 +346,7 @@ const SignIn = (props: SignInProps) => {
       <FormsLayout
         className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}
         pageTitle={t("nav.signIn")}
+        metaDescription={t("pageDescription.signIn")}
       >
         <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
           {signUpCopy && (
@@ -300,6 +367,18 @@ const SignIn = (props: SignInProps) => {
               }}
               showRegisterBtn={true}
               control={{ errors }}
+              createAccountAction={() => {
+                if (enableHousingAdvocate) {
+                  setAccountTypeDialog(true)
+                } else {
+                  const listingIdRedirect = router.query?.listingId as string
+                  const createAccountUrl = getListingRedirectUrl(
+                    listingIdRedirect,
+                    "/create-account"
+                  )
+                  void router.push(createAccountUrl)
+                }
+              }}
             >
               {process.env.showPwdless ? (
                 <FormSignInPwdless
@@ -353,9 +432,22 @@ const SignIn = (props: SignInProps) => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
+      <AccountTypeDialog isOpen={accountTypeDialog} onClose={() => setAccountTypeDialog(false)} />
       {reCaptchaEnabled && (
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha} action={"login"} />
       )}
+      <TermsModal
+        control={{ register, errors, handleSubmit }}
+        notChecked={notChecked}
+        onSubmit={(data) => {
+          process.env.showPwdless
+            ? void onSubmitPwdless(data as FormSignInValues)
+            : void onSubmit(data as FormSignInValues)
+        }}
+        openTermsModal={openTermsModal}
+        setChecked={setChecked}
+        setOpenTermsModal={setOpenTermsModal}
+      />
     </>
   )
 }
@@ -363,10 +455,11 @@ const SignIn = (props: SignInProps) => {
 export { SignIn as default, SignIn }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps() {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
 
   return {
-    props: { jurisdiction },
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }

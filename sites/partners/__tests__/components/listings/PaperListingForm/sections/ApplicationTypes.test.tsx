@@ -1,15 +1,30 @@
 import React from "react"
 import { setupServer } from "msw/node"
-import { screen, within } from "@testing-library/react"
-import { FormProviderWrapper, mockNextRouter, render } from "../../../../testUtils"
-import userEvent from "@testing-library/user-event"
-import ApplicationTypes from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
-import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import {
-  FeatureFlagEnum,
+  EnumListingListingType,
   LanguagesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import userEvent from "@testing-library/user-event"
+
+import {
+  mockNextRouter,
+  render,
+  screen,
+  within,
+  waitFor,
+  FormProviderWrapper,
+} from "../../../../testUtils"
+import ApplicationTypes, {
+  phoneMask,
+} from "../../../../../src/components/listings/PaperListingForm/sections/ApplicationTypes"
+import * as helpers from "../../../../../src/lib/helpers"
+
+jest.mock("../../../../../src/lib/helpers", () => ({
+  ...jest.requireActual("../../../../../src/lib/helpers"),
+  fileUploader: jest.fn(),
+}))
 
 const server = setupServer()
 
@@ -31,6 +46,8 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
@@ -54,29 +71,37 @@ describe("ApplicationTypes", () => {
     expect(screen.getAllByRole("radio", { name: /no/i })).toHaveLength(3)
   })
 
+  it("should update the referral question label when disableReferralOpportunity flag is turned on", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={true}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("group", { name: "Is there a referral opportunity?" })
+    ).not.toBeInTheDocument()
+  })
+
   it("should update the referral question label when enableReferralQuestionUnits flag is turned on", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          profile: {
-            ...user,
-            jurisdictions: [],
-            listings: [],
-          },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
-            featureFlag === FeatureFlagEnum.enableReferralQuestionUnits,
-          getJurisdictionLanguages: () => [],
-        }}
-      >
-        <FormProviderWrapper>
-          <ApplicationTypes
-            disableCommonApplication={false}
-            jurisdiction={jurisdiction.id}
-            listing={listing}
-            requiredFields={[]}
-          />
-        </FormProviderWrapper>
-      </AuthContext.Provider>
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={true}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
     )
 
     expect(
@@ -92,6 +117,8 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
@@ -120,14 +147,14 @@ describe("ApplicationTypes", () => {
             jurisdictions: [],
             listings: [],
           },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
-            featureFlag === FeatureFlagEnum.enableReferralQuestionUnits,
           getJurisdictionLanguages: () => Object.values(LanguagesEnum),
         }}
       >
         <FormProviderWrapper>
           <ApplicationTypes
             disableCommonApplication={false}
+            disableReferralOpportunity={false}
+            enableReferralQuestionUnits={false}
             jurisdiction={jurisdiction.id}
             listing={listing}
             requiredFields={[]}
@@ -199,6 +226,8 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
@@ -230,6 +259,8 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
@@ -256,6 +287,8 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
@@ -297,6 +330,8 @@ describe("ApplicationTypes", () => {
       <FormProviderWrapper>
         <ApplicationTypes
           disableCommonApplication={true}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
           jurisdiction={jurisdiction.id}
           listing={listing}
           requiredFields={[]}
@@ -316,7 +351,7 @@ describe("ApplicationTypes", () => {
     expect(digitalApplicationYesRadio).toBeChecked()
 
     expect(
-      await screen.queryByRole("group", {
+      screen.queryByRole("group", {
         name: "Are you using the common digital application?",
       })
     ).not.toBeInTheDocument()
@@ -326,5 +361,306 @@ describe("ApplicationTypes", () => {
     })
     expect(customApplicationInput).toBeInTheDocument()
     expect(customApplicationInput).toHaveAttribute("placeholder", "https://")
+  })
+
+  it("should prefill the reference summary with default text", async () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={true}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+          defaultReferralText="Test default referral summary text"
+        />
+      </FormProviderWrapper>
+    )
+
+    const referralFieldset = screen.getByRole("group", {
+      name: /is there a referral opportunity/i,
+    })
+    expect(referralFieldset).toBeInTheDocument()
+
+    const referralYesOption = within(referralFieldset).getByRole("radio", { name: /yes/i })
+    expect(referralYesOption).toBeInTheDocument()
+    await userEvent.click(referralYesOption)
+
+    expect(referralYesOption).toBeChecked()
+
+    const textBox = await screen.findByRole("textbox", { name: /referral summary/i })
+    expect(textBox).toBeInTheDocument()
+    expect(textBox).toHaveValue("Test default referral summary text")
+  })
+
+  it("should not show the leasing agent question for a non-land-use listing", () => {
+    render(
+      <FormProviderWrapper>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={listing}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    expect(
+      screen.queryByRole("group", {
+        name: "Is the application through leasing agent contact only?",
+      })
+    ).not.toBeInTheDocument()
+  })
+
+  it("should show the leasing agent question first for a land-use listing, defaulting to No", () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    const fieldsetGroups = screen.getAllByRole("group").filter((g) => g.tagName === "FIELDSET")
+    expect(fieldsetGroups[0]).toHaveAccessibleName(
+      "Is the application through leasing agent contact only?"
+    )
+
+    const leasingAgentFieldset = screen.getByRole("group", {
+      name: "Is the application through leasing agent contact only?",
+    })
+    expect(within(leasingAgentFieldset).getByRole("radio", { name: /no/i })).toBeChecked()
+    expect(within(leasingAgentFieldset).getByRole("radio", { name: /yes/i })).not.toBeChecked()
+  })
+
+  it("should hide digital/paper questions and clear their choices when leasing agent is selected", async () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    const leasingAgentFieldset = screen.getByRole("group", {
+      name: "Is the application through leasing agent contact only?",
+    })
+    await userEvent.click(within(leasingAgentFieldset).getByRole("radio", { name: /yes/i }))
+
+    expect(
+      screen.queryByRole("group", { name: "Is there a digital application?" })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("group", { name: "Is there a paper application?" })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole("group", { name: "Is there a referral opportunity?" })
+    ).toBeInTheDocument()
+  })
+
+  it("should restore digital/paper questions when leasing agent is switched back to No", async () => {
+    render(
+      <FormProviderWrapper values={{ listingType: EnumListingListingType.landUse }}>
+        <ApplicationTypes
+          disableCommonApplication={false}
+          disableReferralOpportunity={false}
+          enableReferralQuestionUnits={false}
+          jurisdiction={jurisdiction.id}
+          listing={{ ...listing, listingType: EnumListingListingType.landUse }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
+    )
+
+    const leasingAgentFieldset = screen.getByRole("group", {
+      name: "Is the application through leasing agent contact only?",
+    })
+    await userEvent.click(within(leasingAgentFieldset).getByRole("radio", { name: /yes/i }))
+    await userEvent.click(within(leasingAgentFieldset).getByRole("radio", { name: /no/i }))
+
+    expect(
+      screen.getByRole("group", { name: "Is there a digital application?" })
+    ).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Is there a paper application?" })).toBeInTheDocument()
+  })
+
+  describe("phoneMask", () => {
+    it("should mask phone number and add proper character", () => {
+      expect(phoneMask("1234567890")).toEqual("(123) 456-7890")
+      expect(phoneMask("123")).toEqual("(123")
+      expect(phoneMask("S")).toEqual("(")
+      expect(phoneMask("(D")).toEqual("(")
+      expect(phoneMask("1234")).toEqual("(123) 4")
+      expect(phoneMask("12345678901234")).toEqual("(123) 456-7890")
+      expect(phoneMask("(123) -45-67")).toEqual("(123) 456-7")
+      expect(phoneMask("(123) g-45-67")).toEqual("(123) 456-7")
+    })
+  })
+
+  describe("Add Application drawer", () => {
+    it("should open and close the paper application drawer", async () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      expect(addPaperAppButton).toBeInTheDocument()
+
+      await userEvent.click(addPaperAppButton)
+      expect(screen.getByRole("heading", { name: "Add paper application" })).toBeInTheDocument()
+
+      const cancelButton = screen.getByRole("button", { name: "Cancel" })
+      await userEvent.click(cancelButton)
+      expect(
+        screen.queryByRole("heading", { name: "Add paper application" })
+      ).not.toBeInTheDocument()
+    })
+
+    it("should disable save button and hide dropzone when no language is selected", async () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      await userEvent.click(addPaperAppButton)
+
+      const saveButton = screen.getByRole("button", { name: "Save" })
+      expect(saveButton).toBeDisabled()
+
+      expect(screen.queryByText("Upload file")).not.toBeInTheDocument()
+    })
+
+    it.skip("should show dropzone when a language is selected", async () => {
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      await userEvent.click(addPaperAppButton)
+
+      const languageSelect = screen.getByRole("combobox")
+      await userEvent.selectOptions(languageSelect, "en")
+      expect(screen.getByText("Upload file")).toBeInTheDocument()
+    })
+
+    it.skip("should disable language selector and save button during file upload, then enable save after upload", async () => {
+      const mockFileUploader = helpers.fileUploader as jest.MockedFunction<
+        typeof helpers.fileUploader
+      >
+      // eslint-disable-next-line @typescript-eslint/require-await
+      mockFileUploader.mockImplementation(async ({ setFileUploadData, setProgressValue }) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: "test-cloudinary-id/test-file",
+          url: "https://test.cloudinary.com/test-file.pdf",
+        })
+      })
+
+      render(
+        <FormProviderWrapper>
+          <ApplicationTypes
+            disableCommonApplication={false}
+            disableReferralOpportunity={true}
+            enableReferralQuestionUnits={false}
+            jurisdiction={jurisdiction.id}
+            listing={listing}
+            requiredFields={[]}
+          />
+        </FormProviderWrapper>
+      )
+
+      const paperApplication = screen.getByRole("group", {
+        name: "Is there a paper application?",
+      })
+      await userEvent.click(within(paperApplication).getByRole("radio", { name: "Yes" }))
+
+      const addPaperAppButton = screen.getByRole("button", { name: "Add paper application" })
+      await userEvent.click(addPaperAppButton)
+
+      const languageSelect = screen.getByRole("combobox")
+      await userEvent.selectOptions(languageSelect, "en")
+
+      await waitFor(() => {
+        expect(screen.getByText("Upload file")).toBeInTheDocument()
+      })
+
+      const saveButton = screen.getByRole("button", { name: "Save" })
+      expect(saveButton).toBeDisabled()
+
+      const file = new File(["mocked application pdf content"], "application.pdf", {
+        type: "application/pdf",
+      })
+      const dropzone = screen.getByLabelText("Upload file")
+
+      await userEvent.upload(dropzone, file)
+
+      await waitFor(() => {
+        expect(languageSelect).toBeDisabled()
+      })
+
+      await waitFor(() => {
+        expect(saveButton).not.toBeDisabled()
+      })
+
+      await userEvent.click(saveButton)
+      expect(
+        screen.queryByRole("heading", { name: "Add paper application" })
+      ).not.toBeInTheDocument()
+    })
   })
 })

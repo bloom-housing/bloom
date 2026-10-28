@@ -1,29 +1,35 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
 import { CookieOptions, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { EmailService } from './email.service';
+import { PrismaService } from './prisma.service';
+import { SmsService } from './sms.service';
+import { SnapshotCreateService } from './snapshot-create.service';
+import { UserService } from './user.service';
+import { Confirm } from '../dtos/auth/confirm.dto';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
-import { MfaType } from '../enums/mfa/mfa-type-enum';
-import { UserViews } from '../enums/user/view-enum';
-import { getSingleUseCode } from '../utilities/get-single-use-code';
-import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
-import { RequestMfaCodeResponse } from '../dtos/mfa/request-mfa-code-response.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { RequestMfaCode } from '../dtos/mfa/request-mfa-code.dto';
+import { RequestMfaCodeResponse } from '../dtos/mfa/request-mfa-code-response.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
-import { PrismaService } from './prisma.service';
-import { UserService } from './user.service';
-import { IdDTO } from '../dtos/shared/id.dto';
+import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
+import { MfaType } from '../enums/mfa/mfa-type-enum';
+import { UserViews } from '../enums/user/view-enum';
+import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { getSingleUseCode } from '../utilities/get-single-use-code';
 import { mapTo } from '../utilities/mapTo';
-import { Confirm } from '../dtos/auth/confirm.dto';
-import { SmsService } from './sms.service';
-import { EmailService } from './email.service';
+import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
 
 // since our local env doesn't have an https cert we can't be secure. Hosted envs should be secure
 const secure = process.env.NODE_ENV !== 'development';
@@ -37,7 +43,7 @@ export const AUTH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure,
   sameSite,
-  maxAge: TOKEN_COOKIE_MAXAGE / 24, // access token should last 1 hr
+  maxAge: TOKEN_COOKIE_MAXAGE / 8, // access token should last 3 hours
 };
 export const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   ...AUTH_COOKIE_OPTIONS,
@@ -56,10 +62,13 @@ type IdAndEmail = {
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
-    private userService: UserService,
-    private smsService: SmsService,
     private emailsService: EmailService,
+    @Inject(Logger)
+    private logger = new Logger(AuthService.name),
+    private prisma: PrismaService,
+    private smsService: SmsService,
+    private snapshotCreateService: SnapshotCreateService,
+    private userService: UserService,
   ) {}
 
   /*
@@ -89,6 +98,8 @@ export class AuthService {
     reCaptchaConfigured?: boolean,
     mfaCode?: boolean,
     shouldReCaptchaBlockLogin?: boolean,
+    agreedToTermsOfService?: boolean,
+    ignoreTermsOfService?: boolean,
   ): Promise<SuccessDTO> {
     if (!user?.id) {
       throw new UnauthorizedException('no user found');
@@ -126,10 +137,12 @@ export class AuthService {
 
       if (response.tokenProperties.action === 'login') {
         response.riskAnalysis.reasons.forEach((reason) => {
-          console.log(reason);
+          this.logger.log(reason);
         });
 
-        console.log(`The ReCaptcha score is ${response.riskAnalysis.score}`);
+        this.logger.log(
+          `The ReCaptcha score is ${response.riskAnalysis.score}`,
+        );
 
         const threshold = parseFloat(process.env.RECAPTCHA_THRESHOLD);
 
@@ -186,6 +199,32 @@ export class AuthService {
       }
     }
 
+    if (!ignoreTermsOfService && user.jurisdictions?.at(0)) {
+      const jurisdiction = await this.prisma.jurisdictions.findUnique({
+        select: {
+          featureFlags: true,
+        },
+        where: {
+          id: user.jurisdictions.at(0).id,
+        },
+      });
+      const enablePublicTermsOfUse = doJurisdictionHaveFeatureFlagSet(
+        mapTo(Jurisdiction, jurisdiction),
+        FeatureFlagEnum.enablePublicTermsOfUse,
+      );
+
+      if (
+        enablePublicTermsOfUse &&
+        !user.agreedToTermsOfService &&
+        !agreedToTermsOfService &&
+        !user.userRoles
+      ) {
+        throw new BadRequestException(
+          `User ${user.id} has not accepted the terms of service`,
+        );
+      }
+    }
+
     const accessToken = this.generateAccessToken(user);
     const newRefreshToken = this.generateAccessToken(user, true);
 
@@ -194,6 +233,8 @@ export class AuthService {
       data: {
         activeAccessToken: accessToken,
         activeRefreshToken: newRefreshToken,
+        agreedToTermsOfService:
+          agreedToTermsOfService ?? agreedToTermsOfService,
       },
       where: {
         id: user.id,
@@ -260,9 +301,11 @@ export class AuthService {
       );
     }
 
+    let isPhoneNumberBeingAdded = false;
     if (dto.mfaType === MfaType.sms) {
       if (dto.phoneNumber) {
         if (!user.phoneNumberVerified) {
+          isPhoneNumberBeingAdded = true;
           user.phoneNumber = dto.phoneNumber;
         } else {
           throw new UnauthorizedException(
@@ -284,6 +327,9 @@ export class AuthService {
       Number(process.env.MFA_CODE_VALID),
     );
 
+    if (isPhoneNumberBeingAdded) {
+      await this.snapshotCreateService.createUserSnapshot(user.id);
+    }
     await this.prisma.userAccounts.update({
       data: {
         singleUseCode,
@@ -317,6 +363,10 @@ export class AuthService {
     res: Response,
   ): Promise<SuccessDTO> {
     const user = await this.prisma.userAccounts.findFirst({
+      include: {
+        jurisdictions: { include: { featureFlags: true } },
+        userRoles: true,
+      },
       where: { resetToken: dto.token },
     });
 
@@ -327,13 +377,28 @@ export class AuthService {
     }
 
     const token: IdDTO = verify(dto.token, process.env.APP_SECRET) as IdDTO;
-
     if (token.id !== user.id) {
       throw new UnauthorizedException(
         `resetToken ${dto.token} does not match user ${user.id}'s reset token (${user.resetToken})`,
       );
     }
 
+    const enablePublicTermsOfUse = doJurisdictionHaveFeatureFlagSet(
+      mapTo(Jurisdiction, user.jurisdictions?.at(0)),
+      FeatureFlagEnum.enablePublicTermsOfUse,
+    );
+    if (
+      enablePublicTermsOfUse &&
+      !user.agreedToTermsOfService &&
+      !dto.agreedToTermsOfService &&
+      !user.userRoles
+    ) {
+      throw new BadRequestException(
+        `User ${user.id} has not accepted the terms of service`,
+      );
+    }
+
+    await this.snapshotCreateService.createUserSnapshot(user.id);
     await this.prisma.userAccounts.update({
       data: {
         passwordHash: await passwordToHash(dto.password),
@@ -341,13 +406,25 @@ export class AuthService {
         resetToken: null,
         confirmedAt: user.confirmedAt || new Date(),
         confirmationToken: null,
+        lastLoginAt: new Date(),
+        wasWarnedOfDeletion: false,
       },
       where: {
         id: user.id,
       },
     });
 
-    return await this.setCredentials(res, mapTo(User, user));
+    return await this.setCredentials(
+      res,
+      mapTo(User, user),
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      true,
+    );
   }
 
   /*
@@ -387,7 +464,17 @@ export class AuthService {
       },
     });
 
-    return await this.setCredentials(res, mapTo(User, updatedUser));
+    return await this.setCredentials(
+      res,
+      mapTo(User, updatedUser),
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      true,
+    );
   }
 
   /*
@@ -396,6 +483,7 @@ export class AuthService {
   async confirmAndSetCredentials(
     user: User,
     res: Response,
+    agreedToTermsOfService?: boolean,
   ): Promise<SuccessDTO> {
     if (!user.confirmedAt) {
       const data: Prisma.UserAccountsUpdateInput = {
@@ -411,6 +499,15 @@ export class AuthService {
       });
     }
 
-    return await this.setCredentials(res, user);
+    return await this.setCredentials(
+      res,
+      user,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      agreedToTermsOfService,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import React from "react"
-import { cleanup, screen } from "@testing-library/react"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { cleanup, screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   listing,
   mockBaseJurisdiction,
@@ -13,11 +14,13 @@ import ListingFormActions, {
 import { mockNextRouter, render } from "../../testUtils"
 import {
   UserRoleEnum,
+  EnumListingListingType,
   Jurisdiction,
+  ListingsService,
   ListingsStatusEnum,
   User,
+  FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import userEvent from "@testing-library/user-event"
 
 afterEach(cleanup)
 
@@ -61,7 +64,7 @@ let partnerUser: User = {
   userRoles: { isPartner: true },
 }
 
-let doJurisdictionsHaveFeatureFlagOn = () => {
+let doJurisdictionsHaveFeatureFlagOn: (featureFlag: string) => boolean = () => {
   return false
 }
 
@@ -468,7 +471,6 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.edit}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
@@ -496,7 +498,6 @@ describe("<ListingFormActions>", () => {
             formActionType={ListingFormActionsType.edit}
           />
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -553,21 +554,6 @@ describe("<ListingFormActions>", () => {
         expect(screen.getByRole("button", { name: "Unpublish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Post results" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
-      })
-
-      it("click approve and publish in edit mode", async () => {
-        const submitMock = jest.fn()
-        render(
-          <ListingFormActionsComponent
-            user={adminUser}
-            listingStatus={ListingsStatusEnum.pendingReview}
-            formActionType={ListingFormActionsType.edit}
-            submitFormWithStatus={submitMock}
-          />
-        )
-
-        await userEvent.click(screen.getByRole("button", { name: "Approve & publish" }))
-        expect(submitMock).toBeCalledWith("redirect", ListingsStatusEnum.active)
       })
     })
     describe("as a jurisdictional admin", () => {
@@ -946,7 +932,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
@@ -988,7 +973,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -1158,7 +1142,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
@@ -1199,7 +1182,6 @@ describe("<ListingFormActions>", () => {
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
-        expect(screen.getByRole("button", { name: "Approve & publish" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
         expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
       })
@@ -1822,6 +1804,349 @@ describe("<ListingFormActions>", () => {
         )
         expect(screen.queryByText("Close")).toBeFalsy()
       })
+    })
+  })
+
+  describe("with enableAutopublish enabled", () => {
+    afterAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => false
+    })
+
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = (flag) => flag === FeatureFlagEnum.enableAutopublish
+      adminUser = { ...adminUser, jurisdictions: [mockAdminOnlyApprovalJurisdiction] }
+    })
+
+    it("shows Approve (not Approve & publish) on listing detail when pending review", () => {
+      render(
+        <ListingFormActionsComponent
+          user={adminUser}
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+        />
+      )
+      expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument()
+      expect(screen.queryByRole("button", { name: "Approve & publish" })).not.toBeInTheDocument()
+    })
+
+    it("opens admin approve modal after approve click on listing detail when pending review", async () => {
+      const user = userEvent.setup()
+      render(
+        <ListingFormActionsComponent
+          user={adminUser}
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+        />
+      )
+
+      expect(screen.queryByRole("heading", { name: "Approve listing" })).not.toBeInTheDocument()
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      expect(screen.getByRole("heading", { name: "Approve listing" })).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          "This listing has no scheduled publish date entered. Approving it will publish it immediately. To delay publication, set a publish date before approving."
+        )
+      ).toBeInTheDocument()
+    })
+  })
+
+  describe("with enableAutopublish enabled for scheduled listings", () => {
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = (flag) => flag === FeatureFlagEnum.enableAutopublish
+    })
+
+    afterAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => false
+    })
+
+    describe("as an admin", () => {
+      beforeAll(() => {
+        adminUser = { ...adminUser, jurisdictions: [mockAdminOnlyApprovalJurisdiction] }
+      })
+
+      it("renders correct buttons in a scheduled detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+        expect(screen.getByRole("button", { name: "Publish" })).toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Edit" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+
+      it("renders correct buttons in a scheduled edit state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+        expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Unapprove" })).toBeInTheDocument()
+        expect(screen.getByRole("button", { name: "Exit" })).toBeInTheDocument()
+      })
+
+      it("opens publish scheduled dialog after publish click on scheduled listing detail", async () => {
+        const user = userEvent.setup()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("heading", { name: "Are you sure?" })).not.toBeInTheDocument()
+        await user.click(screen.getByRole("button", { name: "Publish" }))
+
+        expect(screen.getByRole("heading", { name: "Are you sure?" })).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "This listing will go live immediately, overriding the scheduled publish date."
+          )
+        ).toBeInTheDocument()
+      })
+
+      it("opens unapprove dialog after unapprove click on scheduled listing edit", async () => {
+        const user = userEvent.setup()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+
+        expect(screen.queryByRole("heading", { name: "Are you sure?" })).not.toBeInTheDocument()
+        await user.click(screen.getByRole("button", { name: "Unapprove" }))
+
+        expect(screen.getByRole("heading", { name: "Are you sure?" })).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "This listing will be returned to under review status and will no longer be scheduled to automatically publish. It will need to be re-approved before it can be published."
+          )
+        ).toBeInTheDocument()
+      })
+
+      it("opens save scheduled dialog after save click on scheduled listing edit", async () => {
+        const user = userEvent.setup()
+        render(
+          <ListingFormActionsComponent
+            user={adminUser}
+            listingStatus={ListingsStatusEnum.scheduled}
+            formActionType={ListingFormActionsType.edit}
+          />
+        )
+
+        expect(screen.queryByRole("heading", { name: "Are you sure?" })).not.toBeInTheDocument()
+        await user.click(screen.getByRole("button", { name: "Save" }))
+
+        expect(screen.getByRole("heading", { name: "Are you sure?" })).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            "This listing no longer has a scheduled publish date entered. As it is already approved, saving will publish it immediately. To delay publication, set a publish date before saving, or Unapprove the listing."
+          )
+        ).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe("with disablePartnerPublicListingEdits flag enabled", () => {
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => true
+    })
+
+    describe("as partner", () => {
+      it("should not render edit button in open detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.active}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+
+      it("should not render edit button in closed detail state", () => {
+        render(
+          <ListingFormActionsComponent
+            user={partnerUser}
+            listingStatus={ListingsStatusEnum.closed}
+            formActionType={ListingFormActionsType.details}
+          />
+        )
+
+        expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument()
+        expect(screen.getByRole("link", { name: "Preview" })).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe("with enableLandUse and enableAutopublish enabled", () => {
+    const landUseCopy =
+      "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date."
+    const listingsUpdateMock = jest.fn()
+    const listingsStatusUpdateMock = jest.fn().mockReturnValue({})
+    const addToastMock = jest.fn()
+
+    const LandUseFormActionsComponent = ({
+      listingStatus,
+      formActionType,
+      listingType,
+      scheduledPublishAt,
+      submitFormWithStatus,
+    }: {
+      listingStatus: ListingsStatusEnum
+      formActionType: ListingFormActionsType
+      listingType?: EnumListingListingType
+      scheduledPublishAt?: Date | null
+      submitFormWithStatus?: () => void
+    }) => {
+      return (
+        <AuthContext.Provider
+          value={{
+            profile: adminUser,
+            doJurisdictionsHaveFeatureFlagOn,
+            listingsService: {
+              update: listingsUpdateMock,
+              updateListingStatus: listingsStatusUpdateMock,
+            } as unknown as ListingsService,
+          }}
+        >
+          <MessageContext.Provider
+            value={{ addToast: addToastMock, toastMessagesRef: { current: [] } }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                status: listingStatus,
+                listingType: listingType,
+                scheduledPublishAt: scheduledPublishAt,
+                listingEvents: [],
+              }}
+            >
+              <ListingFormActions
+                type={formActionType}
+                submitFormWithStatus={submitFormWithStatus}
+              />
+            </ListingContext.Provider>
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+    }
+
+    beforeAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = (flag) =>
+        flag === FeatureFlagEnum.enableAutopublish || flag === FeatureFlagEnum.enableLandUse
+      adminUser = { ...adminUser, jurisdictions: [mockAdminOnlyApprovalJurisdiction] }
+    })
+
+    afterAll(() => {
+      doJurisdictionsHaveFeatureFlagOn = () => false
+    })
+
+    beforeEach(() => {
+      listingsUpdateMock.mockReset().mockResolvedValue({ id: listing.id })
+      listingsStatusUpdateMock.mockReset().mockReturnValue({})
+      addToastMock.mockReset()
+    })
+
+    it("approves a dateless land use listing into closed status", async () => {
+      const user = userEvent.setup()
+      render(
+        <LandUseFormActionsComponent
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={null}
+        />
+      )
+
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      const dialog = screen.getByRole("dialog")
+      expect(within(dialog).getByText(landUseCopy)).toBeInTheDocument()
+
+      await user.click(within(dialog).getByRole("button", { name: "Approve" }))
+
+      await waitFor(() =>
+        expect(listingsStatusUpdateMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.objectContaining({ id: listing.id, status: ListingsStatusEnum.closed }),
+          })
+        )
+      )
+      expect(addToastMock).toHaveBeenCalledWith("Listing closed", { variant: "success" })
+    })
+
+    it("approves a land use listing with a future date into scheduled status", async () => {
+      const user = userEvent.setup()
+      render(
+        <LandUseFormActionsComponent
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.details}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={new Date("2099-12-31T00:00:00.000Z")}
+        />
+      )
+
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      const dialog = screen.getByRole("dialog")
+      expect(within(dialog).queryByText(landUseCopy)).not.toBeInTheDocument()
+
+      await user.click(within(dialog).getByRole("button", { name: "Approve" }))
+
+      await waitFor(() =>
+        expect(listingsStatusUpdateMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            body: expect.objectContaining({ status: ListingsStatusEnum.scheduled }),
+          })
+        )
+      )
+      expect(addToastMock).toHaveBeenCalledWith("Listing scheduled", { variant: "success" })
+    })
+
+    it("approves a land use listing in edit mode with enableApproveAndPublishOnEdit enabled", async () => {
+      const previousFlagCheck = doJurisdictionsHaveFeatureFlagOn
+      doJurisdictionsHaveFeatureFlagOn = (flag) =>
+        flag === FeatureFlagEnum.enableAutopublish ||
+        flag === FeatureFlagEnum.enableLandUse ||
+        flag === FeatureFlagEnum.enableApproveAndPublishOnEdit
+
+      const submitFormWithStatusMock = jest.fn()
+
+      const user = userEvent.setup()
+      render(
+        <LandUseFormActionsComponent
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.edit}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={null}
+          submitFormWithStatus={submitFormWithStatusMock}
+        />
+      )
+
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      const dialog = screen.getByRole("dialog")
+      await user.click(within(dialog).getByRole("button", { name: "Approve" }))
+
+      await waitFor(() =>
+        expect(submitFormWithStatusMock).toHaveBeenCalledWith("redirect", ListingsStatusEnum.active)
+      )
+      expect(listingsStatusUpdateMock).not.toHaveBeenCalled()
+
+      doJurisdictionsHaveFeatureFlagOn = previousFlagCheck
     })
   })
 })

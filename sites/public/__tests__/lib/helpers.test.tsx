@@ -16,6 +16,7 @@ import {
   getListingStatusMessage,
   getListingStatusMessageContent,
   getStatusPrefix,
+  scheduledApplicationOpenInFuture,
 } from "../../src/lib/helpers"
 
 describe("helpers", () => {
@@ -437,7 +438,7 @@ describe("helpers", () => {
     it("should return correctly under with construction and marketing disabled", () => {
       const result = getListingStatusMessageContent(
         ListingsStatusEnum.active,
-        dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+        new Date("2030-07-15T17:30:00.000Z"),
         false,
         false,
         MarketingTypeEnum.comingSoon,
@@ -452,7 +453,7 @@ describe("helpers", () => {
     it("should return date but hide time", () => {
       const result = getListingStatusMessageContent(
         ListingsStatusEnum.active,
-        dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+        new Date("2030-07-15T17:30:00.000Z"),
         false,
         false,
         MarketingTypeEnum.comingSoon,
@@ -495,6 +496,38 @@ describe("helpers", () => {
       )
     ).toEqual("Applications open")
   })
+  it("should return applications open with date and time when scheduled open date is in the future", () => {
+    const result = getListingStatusMessageContent(
+      ListingsStatusEnum.active,
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      false,
+      new Date("2030-07-15T16:00:00.000Z")
+    )
+    expect(result).toContain("Applications can be submitted starting on")
+    expect(result).toContain("9:00AM")
+  })
+  it("should return applications open with date and time when hideTime is true", () => {
+    const result = getListingStatusMessageContent(
+      ListingsStatusEnum.active,
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      true,
+      new Date("2030-07-15T16:00:00.000Z")
+    )
+    expect(result).toContain("Applications can be submitted starting on")
+    expect(result).toContain("9:00AM")
+  })
 
   describe("getListingStatusMessage", () => {
     it("should return correctly for closed listing", () => {
@@ -519,7 +552,7 @@ describe("helpers", () => {
       getListingStatusMessage(
         {
           ...listing,
-          applicationDueDate: dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+          applicationDueDate: new Date("2030-07-15T17:30:00.000Z"),
           status: ListingsStatusEnum.active,
         },
         jurisdiction,
@@ -528,14 +561,33 @@ describe("helpers", () => {
         false
       )
     )
-    expect(view.getByText("10:30AM", { exact: false })).toBeDefined()
+    expect(view.getByText(/10:30AM/)).toBeDefined()
+  })
+  it("should show short applications open copy in the status bar for future scheduled open date", () => {
+    const view = render(
+      getListingStatusMessage(
+        {
+          ...listing,
+          status: ListingsStatusEnum.active,
+          applicationDueDate: null,
+          scheduledApplicationOpenAt: new Date("2030-07-15T16:00:00.000Z"),
+        },
+        jurisdiction,
+        null,
+        false,
+        false
+      )
+    )
+    expect(view.getByText(/Applications open:/)).toBeDefined()
+    expect(view.getByText(/9:00AM/)).toBeDefined()
+    expect(view.queryByText(/Applications can be submitted starting on/)).toBeNull()
   })
   it("should return correctly for open listing without date", () => {
     const view = render(
       getListingStatusMessage(
         {
           ...listing,
-          applicationDueDate: dayjs(new Date()).add(5, "days").hour(10).minute(30).toDate(),
+          applicationDueDate: new Date("2030-07-15T17:30:00.000Z"),
           status: ListingsStatusEnum.active,
         },
         jurisdiction,
@@ -592,6 +644,33 @@ describe("helpers", () => {
       expect(getApplicationSeason(MarketingSeasonEnum.spring, null, 2027)).toEqual(
         "Residents should apply in Spring 2027"
       )
+    })
+  })
+
+  describe("scheduledApplicationOpenInFuture", () => {
+    it("returns true when scheduledApplicationOpenAt is in the future", () => {
+      expect(
+        scheduledApplicationOpenInFuture({
+          ...listing,
+          scheduledApplicationOpenAt: dayjs().add(2, "days").toDate(),
+        })
+      ).toBe(true)
+    })
+    it("returns false when scheduledApplicationOpenAt is in the past", () => {
+      expect(
+        scheduledApplicationOpenInFuture({
+          ...listing,
+          scheduledApplicationOpenAt: dayjs().subtract(1, "day").toDate(),
+        })
+      ).toBe(false)
+    })
+    it("returns false when scheduledApplicationOpenAt is null", () => {
+      expect(
+        scheduledApplicationOpenInFuture({
+          ...listing,
+          scheduledApplicationOpenAt: null,
+        })
+      ).toBe(false)
     })
   })
 })

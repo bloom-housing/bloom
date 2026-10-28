@@ -24,6 +24,10 @@ import {
   EnumUnitGroupAmiLevelMonthlyRentDeterminationType,
   UnitType,
   User,
+  MultiselectQuestionsStatusEnum,
+  ListingFeaturesConfiguration,
+  RaceEthnicityConfiguration,
+  ApplicationAccessibilityFeatureEnum,
 } from "../src/types/backend-swagger"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -34,6 +38,7 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
   createdAt: new Date("2022-09-14T22:53:09.982Z"),
   updatedAt: new Date("2022-09-15T22:53:09.982Z"),
   description: "At least one household member lives or works in County",
+  status: MultiselectQuestionsStatusEnum.active,
   links: [
     {
       title: "Live/Work in County Link Title",
@@ -53,8 +58,65 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
         },
       ],
       collectAddress: false,
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
-    { text: "Work in County", ordinal: 1, collectAddress: false },
+    {
+      text: "Work in County",
+      ordinal: 1,
+      collectAddress: false,
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ],
+  applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
+}
+
+export const multiselectQuestionPreferenceV2: MultiselectQuestion = {
+  id: "id1",
+  status: MultiselectQuestionsStatusEnum.visible,
+  name: "Live/Work in County",
+  subText: "Live/Work in County subtitle",
+  jurisdictions: [{ id: "1", name: "Bloomington" }],
+  createdAt: new Date("2022-09-14T22:53:09.982Z"),
+  updatedAt: new Date("2022-09-15T22:53:09.982Z"),
+  description: "At least one household member lives or works in County",
+  text: "Example text",
+  links: [
+    {
+      title: "Live/Work in County Link Title",
+      url: "https://www.example.com",
+    },
+  ],
+  optOutText: "I don't want this preference",
+  multiselectOptions: [
+    {
+      name: "Live in County",
+      ordinal: 1,
+      description: "A description of the option.",
+      links: [
+        {
+          title: "Live in County Link Title",
+          url: "https://www.example.com",
+        },
+      ],
+      collectAddress: false,
+      text: "Example text",
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      name: "Work in County",
+      ordinal: 2,
+      collectAddress: false,
+      text: "Example text",
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ],
   applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
 }
@@ -133,7 +195,8 @@ export const application: Application = {
   sendMailToMailingAddress: true,
   householdExpectingChanges: true,
   householdStudent: false,
-  incomeVouchers: true,
+  reasonableAccommodations: "Wheelchair-accessible unit entrance",
+  incomeVouchers: ["incomeVoucher"],
   income: "40000.00",
   incomePeriod: IncomePeriodEnum.perYear,
   status: ApplicationStatusEnum.submitted,
@@ -146,8 +209,6 @@ export const application: Application = {
   reviewStatus: ApplicationReviewStatusEnum.pending,
   applicationsMailingAddress: {
     id: "applications_mail_address_id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     placeName: "Rocky Mountain National Park",
     city: "Estes Park",
     state: "CO",
@@ -157,8 +218,6 @@ export const application: Application = {
     longitude: -105.5709864,
   },
   applicationsAlternateAddress: {
-    createdAt: new Date(),
-    updatedAt: new Date(),
     id: "c9b065d6-6683-44da-a270-f30ca9346b19",
     city: "",
     state: "",
@@ -167,8 +226,6 @@ export const application: Application = {
     zipCode: "",
   },
   accessibility: {
-    createdAt: new Date(),
-    updatedAt: new Date(),
     id: "accessibility_id",
     mobility: false,
     vision: true,
@@ -176,13 +233,12 @@ export const application: Application = {
   },
   demographics: {
     id: "demographics_id_1",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     ethnicity: "notHispanicLatino",
     gender: "",
     sexualOrientation: "",
     howDidYouHear: ["flyer", "emailAlert", "friend"],
     race: ["white"],
+    spokenLanguage: "English",
   },
   preferredUnitTypes: [
     {
@@ -202,8 +258,6 @@ export const application: Application = {
   ],
   applicant: {
     id: "applicant_id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     firstName: "Applicant First",
     middleName: "Applicant Middle",
     lastName: "Applicant Last",
@@ -219,8 +273,6 @@ export const application: Application = {
     fullTimeStudent: YesNoEnum.no,
     applicantWorkAddress: {
       id: "applicant_work_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       placeName: "Yosemite National Park",
       city: "Yosemite Valley",
       state: "CA",
@@ -231,8 +283,6 @@ export const application: Application = {
     },
     applicantAddress: {
       id: "applicant_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       city: "Yellowstone National Park",
       county: "",
       state: "WY",
@@ -244,8 +294,6 @@ export const application: Application = {
   applicationLotteryPositions: [],
   alternateContact: {
     id: "application_1",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     type: AlternateContactRelationship.familyMember,
     firstName: "Alternate First",
     lastName: "Alternate Last",
@@ -254,8 +302,6 @@ export const application: Application = {
     emailAddress: "alternate@email.com",
     address: {
       id: "alternate_work_address_id",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       placeName: "Acadia National Park",
       city: "Bay Harbor",
       state: "ME",
@@ -373,7 +419,7 @@ export const unit: Unit = {
   numBathrooms: undefined,
   numBedrooms: undefined,
   number: undefined,
-  unitAccessibilityPriorityTypes: undefined,
+  accessibilityPriorityType: undefined,
   sqFeet: "285",
 
   unitTypes: {
@@ -437,6 +483,20 @@ export const unitTypes: UnitType[] = [
     updatedAt: new Date(),
     name: UnitTypeEnum.fiveBdrm,
     numBedrooms: 5,
+  },
+  {
+    id: "b3f2a6b1-3c4d-4e5f-8a9b-0c1d2e3f4a5b",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.sixBdrm,
+    numBedrooms: 6,
+  },
+  {
+    id: "c4a3b7c2-4d5e-4f60-9b0c-1d2e3f4a5b6c",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: UnitTypeEnum.sevenBdrm,
+    numBedrooms: 7,
   },
 ]
 
@@ -656,6 +716,8 @@ export const jurisdiction: Jurisdiction = {
   emailFromAddress: "Bloomington <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  referralSummaryDefault:
+    "Some additional units in this property are only available through a referral from a local nonprofit or agency. To learn if you qualify, please call the number listed above or reach out to the property manager.",
   whatToExpect:
     "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
   whatToExpectAdditionalText:
@@ -697,6 +759,18 @@ export const jurisdiction: Jurisdiction = {
     },
   ],
   allowSingleUseCodeLogin: false,
+  whatToExpectUnderConstruction: "",
+  visibleNeighborhoodAmenities: [],
+  visibleAccessibilityPriorityTypes: [],
+  visibleApplicationAccessibilityFeatures: [
+    ApplicationAccessibilityFeatureEnum.mobility,
+    ApplicationAccessibilityFeatureEnum.vision,
+    ApplicationAccessibilityFeatureEnum.hearing,
+  ],
+  regions: [],
+  visibleSpokenLanguages: [],
+  visibleHouseholdMemberRelationships: [],
+  enabledStopLightRuleKeys: [],
 }
 
 export const listing: Listing = {
@@ -810,22 +884,12 @@ export const listing: Listing = {
     },
   ],
   applicationOrganization: "98 Archer Street",
-  assets: [
-    {
-      id: "1234",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      label: "building",
-      fileId:
-        "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
-    },
-  ],
   buildingSelectionCriteria:
     "Tenant Selection Criteria will be available to all applicants upon request.",
   costsNotIncluded:
     "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
   creditHistory:
-    "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
+    "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant performance information provided to the credit reporting agency.  All applicants are expected have a passing score of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   depositMin: "1140.0",
   specialNotes: "Special notes description",
   programRules:
@@ -844,8 +908,6 @@ export const listing: Listing = {
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   listingsLeasingAgentAddress: {
     id: "id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -859,6 +921,7 @@ export const listing: Listing = {
   leasingAgentPhone: "(408) 217-8562",
   leasingAgentTitle: "",
   listingFeatures: {
+    id: "id",
     elevator: true,
     wheelchairRamp: true,
     serviceAnimalsAllowed: true,
@@ -870,6 +933,7 @@ export const listing: Listing = {
   },
   servicesOffered: "Services offered description",
   listingUtilities: {
+    id: "id",
     water: true,
     gas: true,
     electricity: true,
@@ -883,12 +947,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Preference 1",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -901,12 +969,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Preference 2",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -919,12 +991,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Families",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -937,12 +1013,16 @@ export const listing: Listing = {
         updatedAt: new Date(),
         text: "Veterans",
         jurisdictions: [],
+        status: MultiselectQuestionsStatusEnum.active,
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
         options: [
           {
             name: "option_1",
             text: "Option 1",
             ordinal: 1,
+            id: "id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
           },
         ],
       },
@@ -950,7 +1030,7 @@ export const listing: Listing = {
   ],
   rentalAssistance: "Custom rental assistance",
   rentalHistory:
-    "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
+    "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed through the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   householdSizeMin: 2,
   householdSizeMax: 3,
   smokingPolicy: "Non-smoking building",
@@ -976,10 +1056,68 @@ export const listing: Listing = {
     ],
     unitTypes: [],
     priorityTypes: [],
-    amiPercentages: [],
-    byUnitType: [],
+    amiPercentages: ["30"],
+    byUnitType: [
+      {
+        areaRange: {
+          min: 750,
+          max: 750,
+        },
+        minIncomeRange: {
+          min: "$2,000",
+          max: "$2,000",
+        },
+        occupancyRange: {
+          min: 1,
+          max: 3,
+        },
+        rentRange: {
+          min: "$1,200",
+          max: "$1,200",
+        },
+        rentAsPercentIncomeRange: {
+          min: 0,
+          max: 20,
+        },
+        floorRange: {
+          min: 1,
+          max: 1,
+        },
+        unitTypes: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          id: "dbfd0d09-5e49-42dc-a660-709a2406d025",
+          name: UnitTypeEnum.oneBdrm,
+          numBedrooms: 1,
+        },
+        totalAvailable: 0,
+      },
+    ],
     byAMI: [],
-    hmi: { columns: {}, rows: [] },
+    hmi: {
+      columns: {
+        sizeColumn: "listings.householdSize",
+        maxIncomeMonth: "listings.maxIncomeMonth",
+        maxIncomeYear: "listings.maxIncomeYear",
+      },
+      rows: [
+        {
+          sizeColumn: 1,
+          maxIncomeMonth: "listings.monthlyIncome*income:$3,000",
+          maxIncomeYear: "listings.annualIncome*income:$36,000",
+        },
+        {
+          sizeColumn: 2,
+          maxIncomeMonth: "listings.monthlyIncome*income:$4,000",
+          maxIncomeYear: "listings.annualIncome*income:$48,000",
+        },
+        {
+          sizeColumn: 3,
+          maxIncomeMonth: "listings.monthlyIncome*income:$5,000",
+          maxIncomeYear: "listings.annualIncome*income:$60,000",
+        },
+      ],
+    },
   },
   unitAmenities: "Dishwasher",
   developer: "Charities Housing",
@@ -991,8 +1129,6 @@ export const listing: Listing = {
   buildingTotalUnits: 35,
   listingsBuildingAddress: {
     id: "buildingId",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -1018,7 +1154,7 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      unitAccessibilityPriorityTypes: undefined,
+      accessibilityPriorityType: undefined,
       sqFeet: "285",
 
       unitTypes: {
@@ -1045,7 +1181,7 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      unitAccessibilityPriorityTypes: undefined,
+      accessibilityPriorityType: undefined,
       sqFeet: "285",
 
       unitTypes: {
@@ -1072,7 +1208,7 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      unitAccessibilityPriorityTypes: undefined,
+      accessibilityPriorityType: undefined,
       sqFeet: "285",
 
       unitTypes: {
@@ -1099,7 +1235,7 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      unitAccessibilityPriorityTypes: undefined,
+      accessibilityPriorityType: undefined,
       sqFeet: "285",
 
       unitTypes: {
@@ -1127,7 +1263,7 @@ export const listing: Listing = {
       numBathrooms: undefined,
       numBedrooms: undefined,
       number: undefined,
-      unitAccessibilityPriorityTypes: undefined,
+      accessibilityPriorityType: undefined,
       sqFeet: "285",
 
       unitTypes: {
@@ -1157,6 +1293,8 @@ export const mockBaseJurisdiction: Jurisdiction = {
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
     "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  referralSummaryDefault:
+    "Some additional units in this property are only available through a referral from a local nonprofit or agency. To learn if you qualify, please call the number listed above or reach out to the property manager.",
   whatToExpect:
     "<p>If you are interested in applying for this property, please get in touch in one of these ways:</p><ul><li><p>Phone</p></li><li><p>Email</p></li><li><p>In-person</p></li><li><p>In some instances, the property has a link directly to an application</p></li></ul><p>Once you contact a property, ask if they have any available units if you are looking to move in immediately.</p><p><strong>Waitlists</strong>:</p><p>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</p>",
   whatToExpectAdditionalText:
@@ -1168,6 +1306,14 @@ export const mockBaseJurisdiction: Jurisdiction = {
   allowSingleUseCodeLogin: false,
   featureFlags: [],
   requiredListingFields: [],
+  whatToExpectUnderConstruction: "",
+  visibleNeighborhoodAmenities: [],
+  visibleAccessibilityPriorityTypes: [],
+  visibleApplicationAccessibilityFeatures: [],
+  regions: [],
+  visibleSpokenLanguages: [],
+  visibleHouseholdMemberRelationships: [],
+  enabledStopLightRuleKeys: [],
 }
 
 export const mockUser: User = {
@@ -1184,4 +1330,151 @@ export const mockUser: User = {
   passwordValidForDays: 180,
   agreedToTermsOfService: true,
   listings: [],
+}
+
+export const defaultListingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  fields: [
+    { id: "wheelchairRamp" },
+    { id: "elevator" },
+    { id: "serviceAnimalsAllowed" },
+    { id: "accessibleParking" },
+    { id: "parkingOnSite" },
+    { id: "inUnitWasherDryer" },
+    { id: "laundryInBuilding" },
+    { id: "barrierFreeEntrance" },
+    { id: "rollInShower" },
+    { id: "grabBars" },
+    { id: "heatingInUnit" },
+    { id: "acInUnit" },
+    { id: "hearing" },
+    { id: "mobility" },
+    { id: "visual" },
+    { id: "barrierFreeUnitEntrance" },
+    { id: "loweredLightSwitch" },
+    { id: "barrierFreeBathroom" },
+    { id: "wideDoorways" },
+    { id: "loweredCabinets" },
+  ],
+}
+
+export const expandedListingFeaturesConfiguration: ListingFeaturesConfiguration = {
+  categories: [
+    {
+      id: "mobility",
+      fields: [
+        { id: "accessibleParking" },
+        { id: "barrierFreePropertyEntrance" },
+        { id: "barrierFreeUnitEntrance" },
+        { id: "elevator" },
+        { id: "frontControlsDishwasher" },
+        { id: "frontControlsStoveCookTop" },
+        { id: "kitchenCounterLowered" },
+        { id: "leverHandlesOnDoors" },
+        { id: "loweredLightSwitch" },
+        { id: "mobility" },
+        { id: "noEntryStairs" },
+        { id: "noStairsToParkingSpots" },
+        { id: "noStairsWithinUnit" },
+        { id: "refrigeratorWithBottomDoorFreezer" },
+        { id: "streetLevelEntrance" },
+        { id: "wheelchairRamp" },
+      ],
+    },
+    {
+      id: "bathroom",
+      fields: [
+        { id: "accessibleHeightToilet" },
+        { id: "barrierFreeBathroom" },
+        { id: "bathGrabBarsOrReinforcements" },
+        { id: "bathroomCounterLowered" },
+        { id: "rollInShower" },
+        { id: "toiletGrabBarsOrReinforcements" },
+        { id: "turningCircleInBathrooms" },
+        { id: "walkInShower" },
+        { id: "wideDoorways" },
+      ],
+    },
+    {
+      id: "flooring",
+      fields: [{ id: "carpetInUnit" }, { id: "hardFlooringInUnit" }],
+      required: true,
+    },
+    {
+      id: "utility",
+      fields: [
+        { id: "acInUnit" },
+        { id: "fireSuppressionSprinklerSystem" },
+        { id: "heatingInUnit" },
+        { id: "inUnitWasherDryer" },
+        { id: "laundryInBuilding" },
+        { id: "leverHandlesOnFaucets" },
+      ],
+    },
+    {
+      id: "hearingVision",
+      fields: [
+        { id: "brailleSignageInBuilding" },
+        { id: "carbonMonoxideDetectorWithStrobe" },
+        { id: "extraAudibleCarbonMonoxideDetector" },
+        { id: "extraAudibleSmokeDetector" },
+        { id: "hearingAndVision" },
+        { id: "nonDigitalKitchenAppliances" },
+        { id: "smokeDetectorWithStrobe" },
+        { id: "ttyAmplifiedPhone" },
+      ],
+    },
+  ],
+}
+
+export const defaultRaceEthnicityConfiguration: RaceEthnicityConfiguration = {
+  options: [
+    {
+      id: "americanIndianAlaskanNative",
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "asian",
+      subOptions: [
+        { id: "asianIndian", allowOtherText: false },
+        { id: "chinese", allowOtherText: false },
+        { id: "filipino", allowOtherText: false },
+        { id: "japanese", allowOtherText: false },
+        { id: "korean", allowOtherText: false },
+        { id: "vietnamese", allowOtherText: false },
+        { id: "otherAsian", allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: "blackAfricanAmerican",
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "nativeHawaiianOtherPacificIslander",
+      subOptions: [
+        { id: "nativeHawaiian", allowOtherText: false },
+        { id: "guamanianOrChamorro", allowOtherText: false },
+        { id: "samoan", allowOtherText: false },
+        { id: "otherPacificIslander", allowOtherText: true },
+      ],
+      allowOtherText: false,
+    },
+    {
+      id: "white",
+      subOptions: [],
+      allowOtherText: false,
+    },
+    {
+      id: "otherMultiracial",
+      subOptions: [],
+      allowOtherText: true,
+    },
+    {
+      id: "declineToRespond",
+      subOptions: [],
+      allowOtherText: false,
+    },
+  ],
 }

@@ -1,90 +1,135 @@
+// Synthetic base strings, so these cases verify the merge contract rather than today's shipped
+// copy, which a fork edits.
+const TEST_BASE: Record<string, Array<{ key: string; value: string }>> = {
+  en: [
+    { key: 'test.translated', value: 'Base english' },
+    { key: 'test.englishOnly', value: 'Base english only' },
+  ],
+  es: [{ key: 'test.translated', value: 'Base spanish' }],
+};
+
+jest.mock('../../../src/locales/email-translations', () => ({
+  baseTranslationRows: (language: string) => TEST_BASE[language] ?? [],
+}));
+
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Prisma,
+  SiteEnum,
+  TranslationOrigin,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { Listing } from '../../../src/dtos/listings/listing.dto';
-import { TranslationService } from '../../../src/services/translation.service';
-import { PrismaService } from '../../../src/services/prisma.service';
-import { Test, TestingModule } from '@nestjs/testing';
-import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 import dayjs from 'dayjs';
+import { Listing } from '../../../src/dtos/listings/listing.dto';
+import { User } from '../../../src/dtos/users/user.dto';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { PermissionService } from '../../../src/services/permission.service';
+import { PrismaService } from '../../../src/services/prisma.service';
+import { TranslationService } from '../../../src/services/translation.service';
+import { sourceHash } from '../../../src/utilities/translation-source-hash';
 
 const mockListing = (): Listing => {
-  const basicListing = {
+  return {
     id: 'id 1',
     createdAt: new Date(),
     updatedAt: new Date(),
+    accessibility: 'untranslated accessibility',
+    amenities: 'untranslated amenities',
+    applicationDropOffAddressOfficeHours:
+      'untranslated application drop off address office hours',
+    applicationPickUpAddressOfficeHours:
+      'untranslated application pick up address office hours',
+    communityDisclaimerDescription:
+      'untranslated community disclaimer description',
+    communityDisclaimerTitle: 'untranslated community disclaimer title',
     contentUpdatedAt: new Date(),
-    name: 'listing 1',
-    status: ListingsStatusEnum.active,
+    costsNotIncluded: 'untranslated costs not included',
+    creditHistory: 'untranslated credit history',
+    criminalBackground: 'untranslated criminal background',
+    depositHelperText: 'untranslated deposit helper text',
+    depositMax: 'untranslated deposit maximum',
+    depositMin: 'untranslated deposit minimum',
     displayWaitlistSize: true,
+    includeCommunityDisclaimer: true,
+    leasingAgentOfficeHours: 'untranslated leasing agent office hours',
+    name: 'listing 1',
+    neighborhood: 'untranslated neighborhood',
+    petPolicy: 'untranslated pet policy',
+    programRules: 'untranslated program rules',
+    rentalAssistance: 'untranslated rental assistance',
+    rentalHistory: 'untranslated rental history',
+    requiredDocuments: 'untranslated required documents',
+    reservedCommunityDescription: 'untranslated reserved community description',
+    servicesOffered: 'untranslated services offered',
+    showWaitlist: true,
+    smokingPolicy: 'untranslated smoking policy',
+    specialNotes: 'untranslated special notes',
+    status: ListingsStatusEnum.active,
+    unitAmenities: 'untranslated unit amenities',
+    whatToExpect: 'untranslated what to expect',
+
+    applicationLotteryTotals: [],
     applicationMethods: [],
-    assets: [],
-    events: [],
+    jurisdictions: {
+      id: 'jurisdiction id 1',
+      name: 'jurisdiction',
+    },
     listingsBuildingAddress: {
       id: 'address id 1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
       city: 'bloom city',
       state: 'Bloom',
       street: '123 main street',
       zipCode: '12345',
     },
-    jurisdictions: {
-      id: 'jurisdiction id 1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      name: 'jurisdiction',
-      languages: [],
-      multiselectQuestions: [],
-      publicUrl: '',
-      emailFromAddress: '',
-      rentalAssistanceDefault: '',
-      whatToExpect: '',
-      whatToExpectAdditionalText: '',
-    },
-    units: [],
-    unitsSummarized: undefined,
-    unitsSummary: [],
-    showWaitlist: true,
-    referralApplication: undefined,
-  };
-  return {
-    ...basicListing,
-    whatToExpect: 'untranslated what to expect',
-    unitAmenities: 'untranslated unit amenities',
-    specialNotes: 'untranslated special notes',
-    smokingPolicy: 'untranslated smoking policy',
-    servicesOffered: 'untranslated services offered',
-    reservedCommunityDescription: 'untranslated reserved community description',
-    requiredDocuments: 'untranslated required documents',
-    rentalHistory: 'untranslated rental history',
-    rentalAssistance: 'untranslated rental assistance',
-    programRules: 'untranslated program rules',
-    petPolicy: 'untranslated pet policy',
-    neighborhood: 'untranslated neighborhood',
-    leasingAgentOfficeHours: 'untranslated leasing agent office hours',
-    depositMin: 'untranslated deposit minimum',
-    depositMax: 'untranslated deposit maximum',
-    depositHelperText: 'untranslated deposit helper text',
-    criminalBackground: 'untranslated criminal background',
-    creditHistory: 'untranslated credit history',
-    costsNotIncluded: 'untranslated costs not included',
-    applicationPickUpAddressOfficeHours:
-      'untranslated application pick up address office hours',
-    applicationDropOffAddressOfficeHours:
-      'untranslated application drop off address office hours',
-    amenities: 'untranslated amenities',
-    accessibility: 'untranslated accessibility',
-    referralApplication: {
-      externalReference: 'untranslated external reference',
-      type: 'Referral',
-      id: 'referral application',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+    listingEvents: [],
+    listingMultiselectQuestions: [
+      {
+        multiselectQuestions: {
+          id: 'multiselectQuestions id 1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          applicationSection:
+            MultiselectQuestionsApplicationSectionEnum.preferences,
+          description: 'untranslated multiselect description',
+          jurisdictions: [],
+          multiselectOptions: [
+            {
+              id: '',
+              createdAt: undefined,
+              updatedAt: undefined,
+              description: 'untranslated multiselectOption description',
+              name: 'untranslated multiselectOption name',
+              ordinal: 0,
+              text: '',
+            },
+          ],
+          name: 'untranslated multiselect name',
+          optOutText: 'untranslated multiselect opt out text',
+          options: [
+            {
+              id: '',
+              createdAt: undefined,
+              updatedAt: undefined,
+              description: 'untranslated multiselectOption description',
+              name: '',
+              ordinal: 0,
+              text: 'untranslated multiselectOption text',
+            },
+          ],
+          status: 'active',
+          subText: 'untranslated multiselect subtext',
+          text: 'untranslated multiselect text',
+        },
+      },
+    ],
     listingNeighborhoodAmenities: {
       groceryStores: 'untranslated grocery stores',
       publicTransportation: 'untranslated public transportation',
@@ -92,80 +137,91 @@ const mockListing = (): Listing => {
       parksAndCommunityCenters: 'untranslated parks and community centers',
       pharmacies: 'untranslated pharmacies',
       healthCareResources: 'untranslated health care resources',
+      id: '',
     },
-    listingMultiselectQuestions: [
-      {
-        multiselectQuestions: {
-          id: 'multiselectQuestions id 1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          text: 'untranslated multiselect text',
-          description: 'untranslated multiselect description',
-          subText: 'untranslated multiselect subtext',
-          optOutText: 'untranslated multiselect opt out text',
-          jurisdictions: [],
-          applicationSection:
-            MultiselectQuestionsApplicationSectionEnum.preferences,
-        },
-      },
-    ],
-    includeCommunityDisclaimer: true,
-    communityDisclaimerTitle: 'untranslated community disclaimer title',
-    communityDisclaimerDescription:
-      'untranslated community disclaimer description',
+    property: {
+      id: 'property id 1',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: 'property 1',
+      description: 'untranslated property description',
+      urlTitle: 'untranslated property url title',
+    },
+    referralApplication: {
+      externalReference: 'untranslated external reference',
+      type: 'Referral',
+      id: 'referral application',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    units: [],
+    unitsSummarized: undefined,
+    unitsSummary: [],
   };
 };
 
-const translatedStrings = [
-  'translated accessibility',
-  'translated amenities',
-  'translated application drop off address office hours',
-  'translated application pick up address office hours',
-  'translated costs not included',
-  'translated credit history',
-  'translated criminal background',
-  'translated deposit helper text',
-  'translated deposit maximum',
-  'translated deposit minimum',
-  'translated leasing agent office hours',
-  'translated neighborhood',
-  'translated pet policy',
-  'translated program rules',
-  'translated rental assistance',
-  'translated rental history',
-  'translated required documents',
-  'translated reserved community description',
-  'translated services offered',
-  'translated smoking policy',
-  'translated special notes',
-  'translated unit amenities',
-  'translated what to expect',
-  'translated grocery stores',
-  'translated public transportation',
-  'translated schools',
-  'translated parks and community centers',
-  'translated pharmacies',
-  'translated health care resources',
-  'translated external reference',
-  'translated multiselect text',
-  'translated multiselect description',
-  'translated multiselect subtext',
-  'translated multiselect opt out text',
-  'translated community disclaimer title',
-  'translated community disclaimer description',
-];
+const translatedStrings = (enableV2MSQ?: boolean) => {
+  return [
+    'translated accessibility',
+    'translated amenities',
+    'translated application drop off address office hours',
+    'translated application pick up address office hours',
+    'translated costs not included',
+    'translated credit history',
+    'translated criminal background',
+    'translated deposit helper text',
+    'translated deposit maximum',
+    'translated deposit minimum',
+    'translated leasing agent office hours',
+    'translated neighborhood',
+    'translated pet policy',
+    'translated program rules',
+    'translated rental assistance',
+    'translated rental history',
+    'translated required documents',
+    'translated reserved community description',
+    'translated services offered',
+    'translated smoking policy',
+    'translated special notes',
+    'translated unit amenities',
+    'translated what to expect',
+    'translated grocery stores',
+    'translated public transportation',
+    'translated schools',
+    'translated parks and community centers',
+    'translated pharmacies',
+    'translated health care resources',
+    'translated external reference',
+    'translated community disclaimer title',
+    'translated community disclaimer description',
+    'translated property description',
+    'translated property url title',
+    enableV2MSQ ? 'translated multiselect name' : null,
+    'translated multiselect description',
+    'translated multiselect subtext',
+    enableV2MSQ ? 'translated multiselectOption name' : null,
+    enableV2MSQ ? 'translated multiselectOption description' : null,
+    !enableV2MSQ ? 'translated multiselect text' : null,
+    !enableV2MSQ ? 'translated multiselectOption text' : null,
+    !enableV2MSQ ? 'translated multiselectOption description' : null,
+    !enableV2MSQ ? 'translated multiselect opt out text' : null,
+  ];
+};
 
 describe('Testing translations service', () => {
   let service: TranslationService;
   let prisma: PrismaService;
   let googleTranslateServiceMock;
+  let permissionServiceMock;
   let mockConsoleWarn;
+  const adminUser = { id: 'admin-user' } as User;
 
   beforeEach(async () => {
     googleTranslateServiceMock = {
       isConfigured: () => true,
       fetch: jest.fn(),
     };
+    permissionServiceMock = { canOrThrow: jest.fn() };
     mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -175,174 +231,1137 @@ describe('Testing translations service', () => {
           provide: GoogleTranslateService,
           useValue: googleTranslateServiceMock,
         },
+        {
+          provide: PermissionService,
+          useValue: permissionServiceMock,
+        },
       ],
     }).compile();
 
     service = module.get<TranslationService>(TranslationService);
     prisma = module.get<PrismaService>(PrismaService);
+    // The admin methods assert the jurisdiction exists; default it to found.
+    prisma.jurisdictions.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: 'jurisdiction' });
   });
 
   afterEach(() => {
     mockConsoleWarn.mockRestore();
   });
 
-  it('Should get unique translations by language and jurisdiction', async () => {
-    const jurisdictionId = randomUUID();
-    const translations = {
-      id: 'translations id 1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      language: LanguagesEnum.en,
-      jurisdictionId: jurisdictionId,
-      translations: {
-        translation1: 'translation 1',
-        translation2: 'translation 2',
-      },
-    };
-    prisma.translations.findFirst = jest
-      .fn()
-      .mockResolvedValueOnce(translations);
+  describe('listRawOverrides', () => {
+    it('lists the jurisdiction overrides after a permission check', async () => {
+      const jurisdictionId = randomUUID();
+      const rows = [
+        {
+          key: 'region.name',
+          site: SiteEnum.public,
+          language: LanguagesEnum.en,
+          value: 'Bloomington',
+          updatedAt: new Date(),
+          origin: null,
+        },
+      ];
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce(rows);
 
-    const result = await service.getTranslationByLanguageAndJurisdiction(
-      LanguagesEnum.es,
-      jurisdictionId,
-    );
+      const result = await service.listRawOverrides(jurisdictionId, adminUser);
 
-    expect(result).toEqual(translations);
-    expect(prisma.translations.findFirst).toHaveBeenCalledTimes(1);
-  });
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'read',
+        { jurisdictionId },
+      );
+      expect(result).toEqual(rows);
+    });
 
-  it('Should fetch translations and translate listing if not in db', async () => {
-    googleTranslateServiceMock.fetch.mockResolvedValueOnce([translatedStrings]);
-    prisma.generatedListingTranslations.findFirst = jest
-      .fn()
-      .mockResolvedValue(null);
-    prisma.generatedListingTranslations.create = jest
-      .fn()
-      .mockResolvedValue(null);
+    it('rejects when the permission check fails', async () => {
+      permissionServiceMock.canOrThrow.mockRejectedValueOnce(
+        new ForbiddenException(),
+      );
 
-    const result = await service.translateListing(
-      mockListing() as Listing,
-      LanguagesEnum.es,
-    );
-    expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
-    expect(prisma.generatedListingTranslations.findFirst).toHaveBeenCalledTimes(
-      1,
-    );
-    expect(prisma.generatedListingTranslations.create).toHaveBeenCalledTimes(1);
-    validateTranslatedFields(result);
-  });
-
-  it('Should fetch translations and translate listing if db translations outdated', async () => {
-    googleTranslateServiceMock.fetch.mockResolvedValueOnce([translatedStrings]);
-    prisma.generatedListingTranslations.findFirst = jest
-      .fn()
-      .mockResolvedValue({
-        createdAt: dayjs(new Date()).subtract(1, 'days').toDate(),
-        id: randomUUID(),
-        translations: [translatedStrings],
-      });
-    prisma.generatedListingTranslations.delete = jest
-      .fn()
-      .mockResolvedValue(null);
-    prisma.generatedListingTranslations.create = jest
-      .fn()
-      .mockResolvedValue(null);
-
-    const result = await service.translateListing(
-      mockListing() as Listing,
-      LanguagesEnum.es,
-    );
-    expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
-    expect(prisma.generatedListingTranslations.findFirst).toHaveBeenCalledTimes(
-      1,
-    );
-    expect(prisma.generatedListingTranslations.delete).toHaveBeenCalledTimes(1);
-    validateTranslatedFields(result);
-  });
-
-  it('Should fetch translations from db and translate listing', async () => {
-    prisma.generatedListingTranslations.findFirst = jest
-      .fn()
-      .mockResolvedValue({ translations: [translatedStrings] });
-
-    const result = await service.translateListing(
-      mockListing() as Listing,
-      LanguagesEnum.es,
-    );
-    expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(0);
-    expect(prisma.generatedListingTranslations.findFirst).toHaveBeenCalledTimes(
-      1,
-    );
-    validateTranslatedFields(result);
-  });
-
-  it('Should get merged translations for just english and null jurisdiction', async () => {
-    const nullJurisdiction = {
-      value: 'null jurisdiction',
-      extraValue: 'extra value',
-    };
-    prisma.translations.findFirst = jest
-      .fn()
-      .mockResolvedValueOnce({ translations: nullJurisdiction });
-    const result = await service.getMergedTranslations(null);
-    expect(prisma.translations.findFirst).toBeCalledTimes(1);
-    expect(result).toEqual(nullJurisdiction);
-  });
-
-  it('Should get merged translations for jurisdiction in english', async () => {
-    const nullJurisdiction = {
-      value: 'null jurisdiction',
-      extraValue: 'extra value',
-    };
-    const englishJurisdictionValue = {
-      value: 'jurisdiction english',
-    };
-    prisma.translations.findFirst = jest
-      .fn()
-      .mockResolvedValueOnce({ translations: englishJurisdictionValue })
-      .mockResolvedValueOnce({ translations: nullJurisdiction });
-    const result = await service.getMergedTranslations(randomUUID());
-    expect(prisma.translations.findFirst).toBeCalledTimes(2);
-    expect(result).toEqual({
-      value: 'jurisdiction english',
-      extraValue: 'extra value',
+      await expect(
+        service.listRawOverrides(randomUUID(), adminUser),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
-  it('Should get merged translations for just non-english and active jurisdiction', async () => {
-    const nullJurisdiction = {
-      value: 'null jurisdiction',
-      extraValue: 'extra value',
-    };
-    const englishJurisdictionValue = {
-      value: 'jurisdiction english',
-    };
-    const spanishJurisdictionValue = {
-      value: 'jurisdiction spanish',
-    };
-    const spanishNullValue = {
-      value: 'null jurisdiction',
-      extraValue: 'extra spanish',
-    };
-    prisma.translations.findFirst = jest
-      .fn()
-      .mockResolvedValueOnce({ translations: spanishJurisdictionValue })
-      .mockResolvedValueOnce({ translations: spanishNullValue })
-      .mockResolvedValueOnce({ translations: englishJurisdictionValue })
-      .mockResolvedValueOnce({ translations: nullJurisdiction });
-    const result = await service.getMergedTranslations(
-      randomUUID(),
-      LanguagesEnum.es,
-    );
-    expect(prisma.translations.findFirst).toBeCalledTimes(4);
-    expect(result).toEqual({
-      value: 'jurisdiction spanish',
-      extraValue: 'extra spanish',
+
+  describe('getRawOverrides', () => {
+    it('never flags english keys stale and skips the english lookup', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          key: 'region.name',
+          value: 'Bloomington',
+          updatedAt: new Date(),
+          origin: TranslationOrigin.human,
+          sourceHash: null,
+        },
+      ]);
+
+      const result = await service.getRawOverrides(
+        jurisdictionId,
+        SiteEnum.public,
+        LanguagesEnum.en,
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledTimes(1);
+      expect(result[0].stale).toBe(false);
+    });
+
+    it('flags a non-english key stale when the english source changed', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        // the scope's spanish rows
+        .mockResolvedValueOnce([
+          {
+            key: 'a',
+            value: 'A es',
+            updatedAt: new Date(),
+            origin: TranslationOrigin.human,
+            sourceHash: sourceHash('old english'),
+          },
+          {
+            key: 'b',
+            value: 'B es',
+            updatedAt: new Date(),
+            origin: TranslationOrigin.human,
+            sourceHash: sourceHash('b english'),
+          },
+          {
+            // orphaned: has a source hash but its english source no longer exists
+            key: 'c',
+            value: 'C es',
+            updatedAt: new Date(),
+            origin: TranslationOrigin.human,
+            sourceHash: sourceHash('deleted english'),
+          },
+        ])
+        // the english source rows
+        .mockResolvedValueOnce([
+          {
+            jurisdictionId,
+            site: SiteEnum.public,
+            key: 'a',
+            value: 'new english',
+          },
+          {
+            jurisdictionId,
+            site: SiteEnum.public,
+            key: 'b',
+            value: 'b english',
+          },
+        ]);
+
+      const result = await service.getRawOverrides(
+        jurisdictionId,
+        SiteEnum.public,
+        LanguagesEnum.es,
+        adminUser,
+      );
+
+      expect(result.find((row) => row.key === 'a').stale).toBe(true);
+      expect(result.find((row) => row.key === 'b').stale).toBe(false);
+      // orphaned: english source gone -> stale
+      expect(result.find((row) => row.key === 'c').stale).toBe(true);
+    });
+  });
+
+  describe('updateOverrides', () => {
+    it('writes non-conflicting keys and reports only the stale key as a conflict', async () => {
+      const jurisdictionId = randomUUID();
+      const lastUpdatedAt = new Date();
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 }) // key a: lock matches, written
+        .mockResolvedValueOnce({ count: 0 }); // key b: lock stale
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'b-row' }); // key b still exists -> conflict
+      prisma.translationStrings.create = jest.fn();
+
+      let caught: ConflictException;
+      try {
+        await service.updateOverrides(
+          jurisdictionId,
+          SiteEnum.public,
+          LanguagesEnum.en,
+          {
+            edits: [
+              { key: 'a', value: 'A', lastUpdatedAt },
+              { key: 'b', value: 'B', lastUpdatedAt },
+            ],
+          },
+          adminUser,
+        );
+      } catch (error) {
+        caught = error;
+      }
+
+      expect(caught).toBeInstanceOf(ConflictException);
+      expect(caught.getResponse()).toEqual({
+        message: 'translationConflict',
+        conflicts: ['b'],
+      });
+      // both were attempted; key a was written despite key b conflicting
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledTimes(2);
+      expect(prisma.translationStrings.create).not.toHaveBeenCalled();
+    });
+
+    it('records the shipped english as the source for an email translation', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.email,
+        LanguagesEnum.es,
+        { edits: [{ key: 'test.translated', value: 'Hola' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            sourceHash: sourceHash('Base english'),
+          }),
+        }),
+      );
+    });
+
+    it('prefers a stored english override over the shipped one as the source', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId,
+          site: SiteEnum.email,
+          key: 't.hello',
+          value: 'Howdy',
+        },
+      ]);
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.email,
+        LanguagesEnum.es,
+        { edits: [{ key: 't.hello', value: 'Hola' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ sourceHash: sourceHash('Howdy') }),
+        }),
+      );
+    });
+
+    it('creates a new key when no lastUpdatedAt is provided', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.public,
+        LanguagesEnum.en,
+        { edits: [{ key: 'new', value: 'New' }] },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith({
+        data: {
+          jurisdictionId,
+          language: LanguagesEnum.en,
+          site: SiteEnum.public,
+          key: 'new',
+          value: 'New',
+          origin: TranslationOrigin.human,
+          sourceHash: null,
+        },
+      });
+    });
+
+    it('records origin=human and the english source hash on a non-english save', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId,
+          site: SiteEnum.public,
+          key: 'region.name',
+          value: 'Bloomington',
+        },
+      ]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        jurisdictionId,
+        SiteEnum.public,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'region.name',
+              value: 'Bloomington ES',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          jurisdictionId,
+          language: LanguagesEnum.es,
+          site: SiteEnum.public,
+          key: 'region.name',
+        }),
+        data: {
+          value: 'Bloomington ES',
+          origin: TranslationOrigin.human,
+          sourceHash: sourceHash('Bloomington'),
+        },
+      });
+    });
+
+    it('reports a conflict when a concurrent create races the lock-miss path', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 0 });
+      // The row was deleted since the client read it, so we try to re-create it...
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce(null);
+      // ...but another writer created it first.
+      prisma.translationStrings.create = jest.fn().mockRejectedValueOnce(
+        new Prisma.PrismaClientKnownRequestError('unique violation', {
+          code: 'P2002',
+          clientVersion: 'test',
+        }),
+      );
+
+      let caught: ConflictException;
+      try {
+        await service.updateOverrides(
+          jurisdictionId,
+          SiteEnum.public,
+          LanguagesEnum.en,
+          { edits: [{ key: 'a', value: 'A', lastUpdatedAt: new Date() }] },
+          adminUser,
+        );
+      } catch (error) {
+        caught = error;
+      }
+
+      expect(caught).toBeInstanceOf(ConflictException);
+      expect(caught.getResponse()).toEqual({
+        message: 'translationConflict',
+        conflicts: ['a'],
+      });
+    });
+
+    it('throws a 404 when the jurisdiction does not exist', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValueOnce(null);
+
+      await expect(
+        service.updateOverrides(
+          randomUUID(),
+          SiteEnum.public,
+          LanguagesEnum.en,
+          { edits: [{ key: 'a', value: 'A' }] },
+          adminUser,
+        ),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('deleteOverride', () => {
+    it('deletes a key override after a permission check', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      const result = await service.deleteOverride(
+        jurisdictionId,
+        SiteEnum.public,
+        LanguagesEnum.es,
+        'region.name',
+        adminUser,
+      );
+
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'delete',
+        { jurisdictionId },
+      );
+      expect(prisma.translationStrings.deleteMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId,
+          language: LanguagesEnum.es,
+          site: SiteEnum.public,
+          key: 'region.name',
+        },
+      });
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // The global Partners rows have no jurisdiction, so the same admin methods run with a null id.
+  describe('the global Partners scope', () => {
+    it('reads the null-jurisdiction rows without resolving a jurisdiction', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+          updatedAt: new Date(),
+          origin: TranslationOrigin.human,
+          sourceHash: null,
+        },
+      ]);
+
+      const result = await service.getRawOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        adminUser,
+      );
+
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'read',
+        { jurisdictionId: undefined },
+      );
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId: null,
+          site: SiteEnum.partners,
+          language: LanguagesEnum.en,
+        },
+        select: {
+          key: true,
+          value: true,
+          updatedAt: true,
+          origin: true,
+          sourceHash: true,
+        },
+      });
+      expect(result[0].key).toEqual('nav.siteTitlePartners');
+    });
+
+    it('creates a key with a null jurisdiction', async () => {
+      prisma.translationStrings.create = jest.fn().mockResolvedValueOnce({});
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        { edits: [{ key: 'nav.siteTitlePartners', value: 'Partners Portal' }] },
+        adminUser,
+      );
+
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.create).toHaveBeenCalledWith({
+        data: {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+          origin: TranslationOrigin.human,
+          sourceHash: null,
+        },
+      });
+    });
+
+    it('reports a stale lock as a conflict', async () => {
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 0 });
+      prisma.translationStrings.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: 'existing-row' });
+
+      let caught: ConflictException;
+      try {
+        await service.updateOverrides(
+          null,
+          SiteEnum.partners,
+          LanguagesEnum.en,
+          {
+            edits: [
+              {
+                key: 'nav.siteTitlePartners',
+                value: 'Partners Portal',
+                lastUpdatedAt: new Date(),
+              },
+            ],
+          },
+          adminUser,
+        );
+      } catch (error) {
+        caught = error;
+      }
+
+      expect(caught).toBeInstanceOf(ConflictException);
+      expect(caught.getResponse()).toEqual({
+        message: 'translationConflict',
+        conflicts: ['nav.siteTitlePartners'],
+      });
+    });
+
+    it('deletes a key with a null jurisdiction', async () => {
+      prisma.translationStrings.deleteMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      const result = await service.deleteOverride(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.en,
+        'nav.siteTitlePartners',
+        adminUser,
+      );
+
+      expect(permissionServiceMock.canOrThrow).toHaveBeenCalledWith(
+        adminUser,
+        'translation',
+        'delete',
+        { jurisdictionId: undefined },
+      );
+      expect(prisma.jurisdictions.findFirst).not.toHaveBeenCalled();
+      expect(prisma.translationStrings.deleteMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId: null,
+          language: LanguagesEnum.en,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+        },
+      });
+      expect(result).toEqual({ success: true });
+    });
+
+    it('rejects when the permission check fails', async () => {
+      permissionServiceMock.canOrThrow.mockRejectedValueOnce(
+        new ForbiddenException(),
+      );
+
+      await expect(
+        service.updateOverrides(
+          null,
+          SiteEnum.partners,
+          LanguagesEnum.en,
+          { edits: [{ key: 'nav.siteTitlePartners', value: 'Blocked' }] },
+          adminUser,
+        ),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('records the english source hash from the global rows on a non-english save', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          jurisdictionId: null,
+          site: SiteEnum.partners,
+          key: 'nav.siteTitlePartners',
+          value: 'Partners Portal',
+        },
+      ]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'nav.siteTitlePartners',
+              value: 'Portal de Socios',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            language: LanguagesEnum.en,
+            OR: [
+              { jurisdictionId: null, site: SiteEnum.partners },
+              { jurisdictionId: null, site: SiteEnum.partners },
+              { jurisdictionId: null, site: null },
+            ],
+          }),
+        }),
+      );
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.objectContaining({
+          jurisdictionId: null,
+          language: LanguagesEnum.es,
+          site: SiteEnum.partners,
+        }),
+        data: {
+          value: 'Portal de Socios',
+          origin: TranslationOrigin.human,
+          sourceHash: sourceHash('Partners Portal'),
+        },
+      });
+    });
+
+    /**
+     * The English a key falls back to lives in the bundled locale files, not the database, so a
+     * global key with no English row records no source hash and never reports stale. #6519 decides
+     * which of those files it seeds, which is what settles whether this stays true.
+     */
+    it('records no source hash for a key with no english row', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+      prisma.translationStrings.updateMany = jest
+        .fn()
+        .mockResolvedValueOnce({ count: 1 });
+
+      await service.updateOverrides(
+        null,
+        SiteEnum.partners,
+        LanguagesEnum.es,
+        {
+          edits: [
+            {
+              key: 'nav.siteTitlePartners',
+              value: 'Portal de Socios',
+              lastUpdatedAt: new Date(),
+            },
+          ],
+        },
+        adminUser,
+      );
+
+      expect(prisma.translationStrings.updateMany).toHaveBeenCalledWith({
+        where: expect.anything(),
+        data: expect.objectContaining({ sourceHash: null }),
+      });
+    });
+  });
+
+  describe('getBaseEmailTranslations', () => {
+    it('returns the strings shipped with the api, flat', () => {
+      const result = service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(result['test.translated']).toEqual('Base english');
+      expect(result['test.englishOnly']).toEqual('Base english only');
+    });
+
+    it('returns only what the language translates', () => {
+      const spanish = service.getBaseEmailTranslations(LanguagesEnum.es);
+      const english = service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(spanish['test.translated']).toEqual('Base spanish');
+      expect(spanish['test.englishOnly']).toBeUndefined();
+      expect(Object.keys(spanish).length).toBeLessThan(
+        Object.keys(english).length,
+      );
+    });
+
+    it('reads nothing from the database', () => {
+      prisma.translationStrings.findMany = jest.fn();
+
+      service.getBaseEmailTranslations(LanguagesEnum.en);
+
+      expect(prisma.translationStrings.findMany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getMergedTranslations', () => {
+    const row = (
+      jurisdictionId: string | null,
+      language: LanguagesEnum,
+      key: string,
+      value: string,
+    ) => ({ jurisdictionId, language, key, value });
+
+    it('reads the email scope, so public and partners overrides never leak in', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+
+      await service.getMergedTranslations(null);
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
+        where: {
+          site: SiteEnum.email,
+          language: { in: [LanguagesEnum.en] },
+          OR: [{ jurisdictionId: null }],
+        },
+        select: {
+          jurisdictionId: true,
+          language: true,
+          key: true,
+          value: true,
+        },
+      });
+    });
+
+    it('returns the strings shipped with the code when nothing is stored', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+
+      const result = await service.getMergedTranslations(null);
+
+      expect(result['test.translated']).toEqual('Base english');
+      expect(result['test.englishOnly']).toEqual('Base english only');
+    });
+
+    it('lets a stored value replace the one shipped with the code', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'Howdy'),
+        ]);
+
+      const result = await service.getMergedTranslations(null);
+
+      expect(result['test.translated']).toEqual('Howdy');
+    });
+
+    it("lets a jurisdiction's value replace the one stored for everyone", async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'Everyone'),
+          row(jurisdictionId, LanguagesEnum.en, 'test.translated', 'Just us'),
+        ]);
+
+      const result = await service.getMergedTranslations(jurisdictionId);
+
+      expect(result['test.translated']).toEqual('Just us');
+    });
+
+    it('reads a language over english, in one query', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'generic en'),
+          row(null, LanguagesEnum.es, 'test.translated', 'generic es'),
+          row(
+            jurisdictionId,
+            LanguagesEnum.es,
+            'test.translated',
+            'jurisdiction es',
+          ),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
+      expect(result['test.translated']).toEqual('jurisdiction es');
+    });
+
+    // Only english is complete, so a language the base does not translate falls through to it.
+    it('falls through to english for a key the language does not translate', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.englishOnly']).toEqual('Base english only');
+      expect(result['test.translated']).toEqual('Base spanish');
+    });
+
+    it('lets a stored translation replace the shipped one for that language', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.es, 'test.translated', 'stored spanish'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.translated']).toEqual('stored spanish');
+    });
+
+    it("puts a jurisdiction's english above a translation stored for everyone", async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.es, 'test.translated', 'generic spanish'),
+          row(
+            jurisdictionId,
+            LanguagesEnum.en,
+            'test.translated',
+            'jurisdiction english',
+          ),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.translated']).toEqual('jurisdiction english');
+    });
+
+    it('keeps a translation when only the english it came from is edited', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'test.translated', 'edited english'),
+          row(null, LanguagesEnum.en, 'test.englishOnly', 'edited english'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        null,
+        LanguagesEnum.es,
+      );
+
+      expect(result['test.translated']).toEqual('Base spanish');
+      expect(result['test.englishOnly']).toEqual('edited english');
+    });
+
+    it("keeps a jurisdiction's translation when its english is edited", async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(jurisdictionId, LanguagesEnum.es, 't.hello', 'jurisdiction es'),
+          row(jurisdictionId, LanguagesEnum.en, 't.hello', 'jurisdiction en'),
+        ]);
+
+      const result = await service.getMergedTranslations(
+        jurisdictionId,
+        LanguagesEnum.es,
+      );
+
+      expect(result['t.hello']).toEqual('jurisdiction es');
+    });
+
+    it('keeps dot-path keys flat', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValueOnce([
+          row(null, LanguagesEnum.en, 'footer.line1', 'Bloom'),
+        ]);
+
+      const result = await service.getMergedTranslations(null);
+
+      expect(result['footer.line1']).toEqual('Bloom');
+    });
+  });
+  describe('getJurisdictionOverrides', () => {
+    it('returns one map per language, kept apart rather than merged', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        {
+          language: LanguagesEnum.en,
+          key: 'region.name',
+          value: 'Bloomington',
+        },
+        {
+          language: LanguagesEnum.en,
+          key: 'footer.programQuestions',
+          value: 'Call default',
+        },
+        {
+          language: LanguagesEnum.es,
+          key: 'region.name',
+          value: 'Bloomington ES',
+        },
+      ]);
+
+      const result = await service.getJurisdictionOverrides(
+        jurisdictionId,
+        LanguagesEnum.es,
+        SiteEnum.public,
+      );
+
+      expect(prisma.translationStrings.findMany).toBeCalledTimes(1);
+      // footer.programQuestions stays under `en` rather than filling in under `es`, so a consumer
+      // can place it below its own Spanish base instead of above it.
+      expect(result).toEqual({
+        en: {
+          'region.name': 'Bloomington',
+          'footer.programQuestions': 'Call default',
+        },
+        es: { 'region.name': 'Bloomington ES' },
+      });
+    });
+
+    it('reads only the requested site scope for english', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { language: LanguagesEnum.en, key: 'partners.only', value: 'x' },
+        ]);
+
+      await service.getJurisdictionOverrides(
+        jurisdictionId,
+        LanguagesEnum.en,
+        SiteEnum.partners,
+      );
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId,
+          site: SiteEnum.partners,
+          language: { in: [LanguagesEnum.en] },
+        },
+        select: { language: true, key: true, value: true },
+      });
+    });
+
+    it('reads the global Partners layer with a null jurisdiction', async () => {
+      prisma.translationStrings.findMany = jest
+        .fn()
+        .mockResolvedValue([
+          { language: LanguagesEnum.en, key: 'partners.brand', value: 'Bloom' },
+        ]);
+
+      const result = await service.getJurisdictionOverrides(
+        null,
+        LanguagesEnum.en,
+        SiteEnum.partners,
+      );
+
+      expect(prisma.translationStrings.findMany).toHaveBeenCalledWith({
+        where: {
+          jurisdictionId: null,
+          site: SiteEnum.partners,
+          language: { in: [LanguagesEnum.en] },
+        },
+        select: { language: true, key: true, value: true },
+      });
+      expect(result).toEqual({ en: { 'partners.brand': 'Bloom' } });
+    });
+
+    it('returns both languages for the global Partners layer', async () => {
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValueOnce([
+        { language: LanguagesEnum.en, key: 'partners.brand', value: 'Bloom' },
+        { language: LanguagesEnum.en, key: 'partners.tag', value: 'EN tag' },
+        {
+          language: LanguagesEnum.es,
+          key: 'partners.brand',
+          value: 'Bloom ES',
+        },
+      ]);
+
+      const result = await service.getJurisdictionOverrides(
+        null,
+        LanguagesEnum.es,
+        SiteEnum.partners,
+      );
+
+      expect(result).toEqual({
+        en: { 'partners.brand': 'Bloom', 'partners.tag': 'EN tag' },
+        es: { 'partners.brand': 'Bloom ES' },
+      });
+    });
+  });
+
+  describe('getJurisdictionOverridesById', () => {
+    it('reads overrides when the jurisdiction exists', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: jurisdictionId });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          language: LanguagesEnum.en,
+          key: 'region.name',
+          value: 'Bloomington',
+        },
+      ]);
+
+      const result = await service.getJurisdictionOverridesById(
+        jurisdictionId,
+        LanguagesEnum.en,
+        SiteEnum.public,
+      );
+
+      expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+        where: { id: jurisdictionId },
+        select: { id: true },
+      });
+      expect(result).toEqual({ en: { 'region.name': 'Bloomington' } });
+    });
+
+    it('throws when the jurisdiction is not found', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValueOnce(null);
+
+      await expect(
+        service.getJurisdictionOverridesById(
+          randomUUID(),
+          LanguagesEnum.en,
+          SiteEnum.public,
+        ),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getJurisdictionOverridesByName', () => {
+    it('resolves the jurisdiction id then reads its overrides', async () => {
+      const jurisdictionId = randomUUID();
+      prisma.jurisdictions.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce({ id: jurisdictionId });
+      prisma.translationStrings.findMany = jest.fn().mockResolvedValue([
+        {
+          language: LanguagesEnum.en,
+          key: 'region.name',
+          value: 'Bloomington',
+        },
+      ]);
+
+      const result = await service.getJurisdictionOverridesByName(
+        'Bloomington',
+        LanguagesEnum.en,
+        SiteEnum.public,
+      );
+
+      expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
+        where: { name: 'Bloomington' },
+        select: { id: true },
+      });
+      expect(result).toEqual({ en: { 'region.name': 'Bloomington' } });
+    });
+
+    it('throws when the jurisdiction is not found', async () => {
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValueOnce(null);
+
+      await expect(
+        service.getJurisdictionOverridesByName(
+          'Nowhere',
+          LanguagesEnum.en,
+          SiteEnum.public,
+        ),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('translateListing', () => {
+    it('Should fetch translations and translate listing if not in db', async () => {
+      googleTranslateServiceMock.fetch.mockResolvedValueOnce([
+        translatedStrings(),
+      ]);
+      prisma.generatedListingTranslations.findFirst = jest
+        .fn()
+        .mockResolvedValue(null);
+      prisma.generatedListingTranslations.create = jest
+        .fn()
+        .mockResolvedValue(null);
+
+      const result = await service.translateListing(
+        mockListing() as Listing,
+        LanguagesEnum.es,
+      );
+      expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
+      expect(
+        prisma.generatedListingTranslations.findFirst,
+      ).toHaveBeenCalledTimes(1);
+      expect(prisma.generatedListingTranslations.create).toHaveBeenCalledTimes(
+        1,
+      );
+      validateTranslatedFields(result);
+    });
+
+    it('Should fetch translations and translate listing if not in db with enableV2MSQ as true', async () => {
+      googleTranslateServiceMock.fetch.mockResolvedValueOnce([
+        translatedStrings(true),
+      ]);
+      prisma.generatedListingTranslations.findFirst = jest
+        .fn()
+        .mockResolvedValue(null);
+      prisma.generatedListingTranslations.create = jest
+        .fn()
+        .mockResolvedValue(null);
+
+      const result = await service.translateListing(
+        mockListing() as Listing,
+        LanguagesEnum.es,
+      );
+      expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
+      expect(
+        prisma.generatedListingTranslations.findFirst,
+      ).toHaveBeenCalledTimes(1);
+      expect(prisma.generatedListingTranslations.create).toHaveBeenCalledTimes(
+        1,
+      );
+      validateTranslatedFields(result, true);
+    });
+
+    it('Should fetch translations and translate listing if db translations outdated', async () => {
+      googleTranslateServiceMock.fetch.mockResolvedValueOnce([
+        translatedStrings(),
+      ]);
+      prisma.generatedListingTranslations.findFirst = jest
+        .fn()
+        .mockResolvedValue({
+          createdAt: dayjs(new Date()).subtract(1, 'days').toDate(),
+          id: randomUUID(),
+          translations: [translatedStrings()],
+        });
+      prisma.generatedListingTranslations.delete = jest
+        .fn()
+        .mockResolvedValue(null);
+      prisma.generatedListingTranslations.create = jest
+        .fn()
+        .mockResolvedValue(null);
+
+      const result = await service.translateListing(
+        mockListing() as Listing,
+        LanguagesEnum.es,
+      );
+      expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
+      expect(
+        prisma.generatedListingTranslations.findFirst,
+      ).toHaveBeenCalledTimes(1);
+      expect(prisma.generatedListingTranslations.delete).toHaveBeenCalledTimes(
+        1,
+      );
+      validateTranslatedFields(result);
+    });
+
+    it('Should fetch translations from db and translate listing', async () => {
+      prisma.generatedListingTranslations.findFirst = jest
+        .fn()
+        .mockResolvedValue({ translations: [translatedStrings()] });
+
+      const result = await service.translateListing(
+        mockListing() as Listing,
+        LanguagesEnum.es,
+      );
+      expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(0);
+      expect(
+        prisma.generatedListingTranslations.findFirst,
+      ).toHaveBeenCalledTimes(1);
+      validateTranslatedFields(result);
     });
   });
 });
 
-const validateTranslatedFields = (listing: Listing) => {
+const validateTranslatedFields = (listing: Listing, enableV2MSQ?: boolean) => {
   expect(listing.accessibility).toEqual('translated accessibility');
   expect(listing.amenities).toEqual('translated amenities');
   expect(listing.applicationPickUpAddressOfficeHours).toEqual(
@@ -378,6 +1397,10 @@ const validateTranslatedFields = (listing: Listing) => {
   expect(listing.referralApplication.externalReference).toEqual(
     'translated external reference',
   );
+  expect(listing.property.description).toEqual(
+    'translated property description',
+  );
+  expect(listing.property.urlTitle).toEqual('translated property url title');
   expect(listing.listingNeighborhoodAmenities.groceryStores).toEqual(
     'translated grocery stores',
   );
@@ -396,23 +1419,45 @@ const validateTranslatedFields = (listing: Listing) => {
   expect(listing.listingNeighborhoodAmenities.healthCareResources).toEqual(
     'translated health care resources',
   );
-
-  expect(
-    listing.listingMultiselectQuestions[0].multiselectQuestions.text,
-  ).toEqual('translated multiselect text');
-  expect(
-    listing.listingMultiselectQuestions[0].multiselectQuestions.description,
-  ).toEqual('translated multiselect description');
-  expect(
-    listing.listingMultiselectQuestions[0].multiselectQuestions.subText,
-  ).toEqual('translated multiselect subtext');
-  expect(
-    listing.listingMultiselectQuestions[0].multiselectQuestions.optOutText,
-  ).toEqual('translated multiselect opt out text');
   expect(listing.communityDisclaimerTitle).toEqual(
     'translated community disclaimer title',
   );
   expect(listing.communityDisclaimerDescription).toEqual(
     'translated community disclaimer description',
   );
+
+  expect(
+    listing.listingMultiselectQuestions[0].multiselectQuestions.description,
+  ).toEqual('translated multiselect description');
+  expect(
+    listing.listingMultiselectQuestions[0].multiselectQuestions.subText,
+  ).toEqual('translated multiselect subtext');
+  if (!enableV2MSQ) {
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions.text,
+    ).toEqual('translated multiselect text');
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions.options[0]
+        .text,
+    ).toEqual('translated multiselectOption text');
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions.options[0]
+        .description,
+    ).toEqual('translated multiselectOption description');
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions.optOutText,
+    ).toEqual('translated multiselect opt out text');
+  } else {
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions.name,
+    ).toEqual('translated multiselect name');
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions
+        .multiselectOptions[0].name,
+    ).toEqual('translated multiselectOption name');
+    expect(
+      listing.listingMultiselectQuestions[0].multiselectQuestions
+        .multiselectOptions[0].description,
+    ).toEqual('translated multiselectOption description');
+  }
 };

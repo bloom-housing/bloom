@@ -20,6 +20,7 @@ import {
 } from '@prisma/client';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
+import { applicationSelectionFactory } from '../../prisma/seed-helpers/application-selection-factory';
 import { createAllFeatureFlags } from '../../prisma/seed-helpers/feature-flag-factory';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
@@ -60,11 +61,16 @@ describe('Application Controller Tests', () => {
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
     applicationConfirmation: async () => {},
+    applicationUpdateEmail: async () => {},
   };
 
   const mockApplicationConfirmation = jest.spyOn(
     testEmailService,
     'applicationConfirmation',
+  );
+  const mockApplicationUpdateEmail = jest.spyOn(
+    testEmailService,
+    'applicationUpdateEmail',
   );
 
   const createMultiselectQuestion = async (
@@ -114,7 +120,7 @@ describe('Application Controller Tests', () => {
       housingStatus: 'example status',
       householdExpectingChanges: false,
       householdStudent: false,
-      incomeVouchers: false,
+      incomeVouchers: [],
       income: '36000',
       incomePeriod: IncomePeriodEnum.perYear,
       language: LanguagesEnum.en,
@@ -164,6 +170,7 @@ describe('Application Controller Tests', () => {
         sexualOrientation: 'example sexual orientation',
         howDidYouHear: ['example how did you hear'],
         race: ['example race'],
+        spokenLanguage: 'example spoken language',
       },
       householdMember: [
         {
@@ -174,7 +181,7 @@ describe('Application Controller Tests', () => {
           birthMonth: '12',
           birthDay: '17',
           birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
+          sameAddress: YesNoEnum.no,
           relationship: HouseholdMemberRelationship.friend,
           workInRegion: YesNoEnum.yes,
           householdMemberWorkAddress: exampleAddress,
@@ -314,13 +321,15 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       const resApplicationA = res.body.items.find(
-        (item) => item.applicant.firstName === applicationA.applicant.firstName,
+        (item) =>
+          item.applicant?.firstName === applicationA.applicant.firstName,
       );
       expect(resApplicationA).not.toBeNull();
-      res.body.items.find(
-        (item) => item.applicant.firstName === applicationB.applicant.firstName,
+      const resApplicationB = res.body.items.find(
+        (item) =>
+          item.applicant?.firstName === applicationB.applicant.firstName,
       );
-      expect(resApplicationA).not.toBeNull();
+      expect(resApplicationB).not.toBeNull();
     });
 
     it('should get stored applications when no params sent', async () => {
@@ -353,13 +362,15 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.items.length).toBeGreaterThanOrEqual(2);
       const resApplicationA = res.body.items.find(
-        (item) => item.applicant.firstName === applicationA.applicant.firstName,
+        (item) =>
+          item.applicant?.firstName === applicationA.applicant.firstName,
       );
       expect(resApplicationA).not.toBeNull();
-      res.body.items.find(
-        (item) => item.applicant.firstName === applicationB.applicant.firstName,
+      const resApplicationB = res.body.items.find(
+        (item) =>
+          item.applicant?.firstName === applicationB.applicant.firstName,
       );
-      expect(resApplicationA).not.toBeNull();
+      expect(resApplicationB).not.toBeNull();
     });
   });
 
@@ -591,12 +602,18 @@ describe('Application Controller Tests', () => {
         isNewest: true,
         markedAsDuplicate: false,
         manualLotteryPositionNumber: null,
+        reasonableAccommodations: null,
+        receivedAt: null,
+        receivedBy: null,
+        applicationDeclineReason: null,
+        applicationDeclineReasonAdditionalDetails: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),
           mobility: false,
           vision: false,
           hearing: false,
+          hearingAndVision: null,
           other: null,
         },
         alternateContact: {
@@ -653,13 +670,12 @@ describe('Application Controller Tests', () => {
         },
         demographics: {
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           ethnicity: 'example ethnicity',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example spoken language',
         },
         householdMember: [
           {
@@ -683,7 +699,7 @@ describe('Application Controller Tests', () => {
             middleName: 'example middle name',
             orderId: 0,
             relationship: 'friend',
-            sameAddress: 'yes',
+            sameAddress: 'no',
             workInRegion: 'yes',
           },
         ],
@@ -781,6 +797,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -792,6 +809,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -907,18 +925,18 @@ describe('Application Controller Tests', () => {
       });
       const savedPreferences = savedApplication[0].preferences;
       expect(savedPreferences).toHaveLength(1);
+
+      // Poll for geocoding to finish adding both extraData entries (address + geocodingVerified)
       let geocodingOptions = savedPreferences[0].options[0];
-      // This catches the edge case where the geocoding hasn't completed yet
-      if (geocodingOptions.extraData.length === 1) {
-        // I'm unsure why removing this console log makes this test fail. This should be looked into
-        console.log('');
+      for (let i = 0; i < 5 && geocodingOptions.extraData.length < 2; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
         savedApplication = await prisma.applications.findMany({
           where: {
             id: res.body.id,
           },
         });
+        geocodingOptions = savedApplication[0].preferences[0].options[0];
       }
-      geocodingOptions = savedApplication[0].preferences[0].options[0];
       expect(geocodingOptions.extraData).toHaveLength(2);
       expect(geocodingOptions.extraData).toContainEqual({
         key: 'geocodingVerified',
@@ -1016,12 +1034,18 @@ describe('Application Controller Tests', () => {
         isNewest: true,
         markedAsDuplicate: false,
         manualLotteryPositionNumber: null,
+        reasonableAccommodations: null,
+        receivedAt: null,
+        receivedBy: null,
+        applicationDeclineReason: null,
+        applicationDeclineReasonAdditionalDetails: null,
         submissionDate: expect.any(String),
         accessibility: {
           id: expect.any(String),
           mobility: false,
           vision: false,
           hearing: false,
+          hearingAndVision: null,
           other: null,
         },
         alternateContact: {
@@ -1068,8 +1092,6 @@ describe('Application Controller Tests', () => {
         applicationSelections: [
           {
             id: expect.any(String),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
             hasOptedOut: false,
             multiselectQuestion: {
               id: multiselectQuestion.id,
@@ -1078,8 +1100,6 @@ describe('Application Controller Tests', () => {
             selections: [
               {
                 id: expect.any(String),
-                createdAt: expect.any(String),
-                updatedAt: expect.any(String),
                 addressHolderAddress: {
                   ...exampleAddress,
                   id: expect.any(String),
@@ -1109,13 +1129,12 @@ describe('Application Controller Tests', () => {
         },
         demographics: {
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
           ethnicity: 'example ethnicity',
           gender: 'example gender',
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example spoken language',
         },
         householdMember: [
           {
@@ -1139,7 +1158,7 @@ describe('Application Controller Tests', () => {
             middleName: 'example middle name',
             orderId: 0,
             relationship: 'friend',
-            sameAddress: 'yes',
+            sameAddress: 'no',
             workInRegion: 'yes',
           },
         ],
@@ -1198,6 +1217,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -1209,6 +1229,7 @@ describe('Application Controller Tests', () => {
         data: {
           listings: { connect: { id: listing2.id } },
           confirmationCode: randomUUID(),
+          incomeVouchers: [],
           preferences: [],
           submissionType: ApplicationSubmissionTypeEnum.electronical,
           status: ApplicationStatusEnum.submitted,
@@ -1244,7 +1265,7 @@ describe('Application Controller Tests', () => {
       });
     });
 
-    it.skip('should calculate geocoding on application', async () => {
+    it('should calculate geocoding on application', async () => {
       const exampleAddress = addressFactory() as AddressCreate;
       const listingGeocoding = await prisma.listings.create({
         data: await listingFactory(jurisdiction.id, prisma, {
@@ -1255,9 +1276,10 @@ describe('Application Controller Tests', () => {
         }),
       });
 
-      const multiselectQuestionPreference =
-        await prisma.multiselectQuestions.create({
-          data: multiselectQuestionFactory(jurisdiction.id, {
+      const multiselectQuestion = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdiction.id,
+          {
             multiselectQuestion: {
               applicationSection:
                 MultiselectQuestionsApplicationSectionEnum.preferences,
@@ -1266,46 +1288,48 @@ describe('Application Controller Tests', () => {
                   listingId: listingGeocoding.id,
                 },
               },
-              options: [
-                {
-                  text: 'geocoding preference',
-                  collectAddress: true,
-                  validationMethod: ValidationMethod.radius,
-                  radiusSize: 5,
+              multiselectOptions: {
+                createMany: {
+                  data: [
+                    {
+                      name: 'geocoding preference',
+                      ordinal: 1,
+                      shouldCollectAddress: true,
+                      validationMethod: ValidationMethod.radius,
+                      radiusSize: 5,
+                    },
+                  ],
                 },
-              ],
+              },
             },
-          }),
-        });
-      const preferences = [
+          },
+          true,
+        ),
+        include: {
+          multiselectOptions: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const applicationSelections = [
         {
-          multiselectQuestionId: multiselectQuestionPreference.id,
-          key: multiselectQuestionPreference.text,
-          claimed: true,
-          options: [
+          multiselectQuestion: { id: multiselectQuestion.id },
+          selections: [
             {
-              key: 'geocoding preference',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.address,
-                  key: 'address',
-                  value: exampleAddress,
-                },
-              ],
+              addressHolderAddress: exampleAddress,
+              multiselectOption: {
+                id: multiselectQuestion.multiselectOptions[0].id,
+              },
             },
           ],
         },
       ];
-
-      const submissionDate = new Date();
       const dto: ApplicationCreate = applicationCreate(
         exampleAddress,
         listingGeocoding.id,
         submissionDate,
         unitTypeA.id,
-        [],
-        preferences,
+        applicationSelections,
       );
       const res = await request(app.getHttpServer())
         .post(`/applications/submit`)
@@ -1315,31 +1339,27 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.id).not.toBeNull();
 
-      let savedApplication = await prisma.applications.findMany({
+      let savedApplication = await prisma.applications.findUnique({
+        include: { applicationSelections: { include: { selections: true } } },
         where: {
           id: res.body.id,
         },
       });
-      const savedPreferences = savedApplication[0].preferences;
-      expect(savedPreferences).toHaveLength(1);
-      let geocodingOptions = savedPreferences[0].options[0];
+      const savedSelections = savedApplication.applicationSelections;
+      expect(savedSelections).toHaveLength(1);
+      let geocodingSelection = savedSelections[0].selections[0];
       // This catches the edge case where the geocoding hasn't completed yet
-      if (geocodingOptions.extraData.length === 1) {
-        // I'm unsure why removing this console log makes this test fail. This should be looked into
-        console.log('');
-        savedApplication = await prisma.applications.findMany({
+      if (!!geocodingSelection.isGeocodingVerified) {
+        savedApplication = await prisma.applications.findUnique({
+          include: { applicationSelections: { include: { selections: true } } },
           where: {
             id: res.body.id,
           },
         });
       }
-      geocodingOptions = savedApplication[0].preferences[0].options[0];
-      expect(geocodingOptions.extraData).toHaveLength(2);
-      expect(geocodingOptions.extraData).toContainEqual({
-        key: 'geocodingVerified',
-        type: 'text',
-        value: true,
-      });
+      geocodingSelection =
+        savedApplication.applicationSelections[0].selections[0];
+      expect(geocodingSelection.isGeocodingVerified).toBeTrue();
     });
   });
 
@@ -1443,7 +1463,6 @@ describe('Application Controller Tests', () => {
           featureFlags: [FeatureFlagEnum.enableV2MSQ],
         }),
       });
-      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
       const listing1 = await prisma.listings.create({
         data: await listingFactory(jurisdiction.id, prisma),
       });
@@ -1602,6 +1621,7 @@ describe('Application Controller Tests', () => {
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example spoken language',
         },
         preferredUnitTypes: [
           {
@@ -1617,7 +1637,7 @@ describe('Application Controller Tests', () => {
             birthMonth: '12',
             birthDay: '17',
             birthYear: '1993',
-            sameAddress: YesNoEnum.yes,
+            sameAddress: YesNoEnum.no,
             relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
@@ -1633,7 +1653,7 @@ describe('Application Controller Tests', () => {
         sendMailToMailingAddress: true,
         householdExpectingChanges: false,
         householdStudent: false,
-        incomeVouchers: false,
+        incomeVouchers: [],
         income: '36000',
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
@@ -1671,6 +1691,531 @@ describe('Application Controller Tests', () => {
 
       expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
       expect(res.body.id).toEqual(dto.id);
+
+      const snapshot = await prisma.applicationSnapshot.findFirst({
+        where: {
+          originalId: applicationA.id,
+        },
+        select: {
+          id: true,
+          originalId: true,
+        },
+      });
+      expect(snapshot.originalId).toEqual(applicationA.id);
+    });
+
+    it('should update an application when one exists and add an applicationSelection with MSQ V2', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('applicationUpdateWithV2MSQ', {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+        true,
+      );
+      const multiselectQuestionProgram = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.programs,
+        true,
+      );
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationUpdate = {
+        id: applicationA.id,
+        acceptedTerms: true,
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        applicationSelections: [
+          {
+            hasOptedOut: false,
+            multiselectQuestion: {
+              id: multiselectQuestionPreference.id,
+              name: multiselectQuestionPreference.name,
+            },
+            selections: [
+              {
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionPreference.multiselectOptions[0].id,
+                  name: multiselectQuestionPreference.multiselectOptions[0]
+                    .name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+          {
+            hasOptedOut: true,
+            multiselectQuestion: {
+              id: multiselectQuestionProgram.id,
+              name: multiselectQuestionProgram.name,
+            },
+            selections: [
+              {
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionProgram.multiselectOptions[0].id,
+                  name: multiselectQuestionProgram.multiselectOptions[0].name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+        ],
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        appUrl: 'http://www.example.com',
+        contactPreferences: ['example contact preference'],
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+          spokenLanguage: 'example spoken language',
+        },
+        householdExpectingChanges: false,
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.no,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        householdSize: 2,
+        householdStudent: false,
+        housingStatus: 'example status',
+        incomeVouchers: [],
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        listings: {
+          id: listing1Created.id,
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        preferences: [],
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: submissionDate,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+      };
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res.body.applicant.firstName).toEqual(dto.applicant.firstName);
+      expect(res.body.id).toEqual(dto.id);
+      expect(res.body.applicationSelections.length).toEqual(2);
+    });
+
+    it('should update an application when one exists and update an applicationSelection with MSQ V2', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('applicationSelectionUpdateWithV2MSQ', {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+        true,
+      );
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      const applicationSelection = await prisma.applicationSelections.create({
+        data: await applicationSelectionFactory(
+          applicationA.id,
+          multiselectQuestionPreference.id,
+          prisma,
+          {
+            multiselectOptionId:
+              multiselectQuestionPreference.multiselectOptions[0].id,
+          },
+        ),
+        include: {
+          selections: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationUpdate = {
+        id: applicationA.id,
+        acceptedTerms: true,
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        applicationSelections: [
+          {
+            hasOptedOut: !applicationSelection.hasOptedOut,
+            id: applicationSelection.id,
+            multiselectQuestion: {
+              id: multiselectQuestionPreference.id,
+              name: multiselectQuestionPreference.name,
+            },
+            selections: [
+              {
+                id: applicationSelection.selections[0].id,
+                addressHolderAddress: exampleAddress,
+                multiselectOption: {
+                  id: multiselectQuestionPreference.multiselectOptions[0].id,
+                  name: multiselectQuestionPreference.multiselectOptions[0]
+                    .name,
+                  ordinal: 1,
+                },
+              },
+            ],
+          },
+        ],
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        appUrl: 'http://www.example.com',
+        contactPreferences: ['example contact preference'],
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+          spokenLanguage: 'example spoken language',
+        },
+        householdExpectingChanges: false,
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.no,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        householdSize: 2,
+        householdStudent: false,
+        housingStatus: 'example status',
+        incomeVouchers: [],
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        listings: {
+          id: listing1Created.id,
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        preferences: [],
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: submissionDate,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+      };
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res.body.id).toEqual(dto.id);
+      expect(res.body.applicationSelections.length).toEqual(1);
+      expect(res.body.applicationSelections[0].id).toEqual(
+        applicationSelection.id,
+      );
+      expect(res.body.applicationSelections[0].hasOptedOut).toEqual(
+        !applicationSelection.hasOptedOut,
+      );
+      expect(res.body.applicationSelections[0].selections[0].id).toEqual(
+        applicationSelection.selections[0].id,
+      );
+    });
+
+    it('should update an application when one exists and remove an applicationSelection with MSQ V2', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('applicationSelectionDeleteWithV2MSQ', {
+          featureFlags: [FeatureFlagEnum.enableV2MSQ],
+        }),
+      });
+      const listing1 = await listingFactory(jurisdiction.id, prisma);
+      const listing1Created = await prisma.listings.create({
+        data: listing1,
+      });
+
+      const multiselectQuestionPreference = await createMultiselectQuestion(
+        jurisdiction.id,
+        listing1Created.id,
+        MultiselectQuestionsApplicationSectionEnum.preferences,
+        true,
+      );
+
+      const appA = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing1Created.id,
+      });
+
+      const applicationA = await prisma.applications.create({
+        data: appA,
+        include: {
+          applicant: true,
+        },
+      });
+
+      await prisma.applicationSelections.create({
+        data: await applicationSelectionFactory(
+          applicationA.id,
+          multiselectQuestionPreference.id,
+          prisma,
+          {
+            multiselectOptionId:
+              multiselectQuestionPreference.multiselectOptions[0].id,
+          },
+        ),
+        include: {
+          selections: true,
+        },
+      });
+
+      const submissionDate = new Date();
+      const exampleAddress = addressFactory() as AddressCreate;
+      const dto: ApplicationUpdate = {
+        id: applicationA.id,
+        acceptedTerms: true,
+        accessibility: {
+          mobility: false,
+          vision: false,
+          hearing: false,
+        },
+        additionalPhone: true,
+        additionalPhoneNumber: '111-111-1111',
+        additionalPhoneNumberType: 'example type',
+        alternateContact: {
+          type: AlternateContactRelationship.friend,
+          otherType: 'example other type',
+          firstName: 'example first name',
+          lastName: 'example last name',
+          agency: 'example agency',
+          phoneNumber: '111-111-1111',
+          emailAddress: 'example@email.com',
+          address: exampleAddress,
+        },
+        applicant: {
+          firstName: 'applicant first name',
+          middleName: 'applicant middle name',
+          lastName: 'applicant last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          emailAddress: 'example@email.com',
+          noEmail: false,
+          phoneNumber: '111-111-1111',
+          phoneNumberType: 'Cell',
+          noPhone: false,
+          workInRegion: YesNoEnum.yes,
+          applicantWorkAddress: exampleAddress,
+          applicantAddress: exampleAddress,
+        },
+        applicationSelections: [],
+        applicationsAlternateAddress: exampleAddress,
+        applicationsMailingAddress: exampleAddress,
+        appUrl: 'http://www.example.com',
+        contactPreferences: ['example contact preference'],
+        demographics: {
+          ethnicity: 'example ethnicity',
+          gender: 'example gender',
+          sexualOrientation: 'example sexual orientation',
+          howDidYouHear: ['example how did you hear'],
+          race: ['example race'],
+          spokenLanguage: 'example spoken language',
+        },
+        householdExpectingChanges: false,
+        householdMember: [
+          {
+            orderId: 0,
+            firstName: 'example first name',
+            middleName: 'example middle name',
+            lastName: 'example last name',
+            birthMonth: '12',
+            birthDay: '17',
+            birthYear: '1993',
+            sameAddress: YesNoEnum.no,
+            relationship: HouseholdMemberRelationship.friend,
+            workInRegion: YesNoEnum.yes,
+            householdMemberWorkAddress: exampleAddress,
+            householdMemberAddress: exampleAddress,
+          },
+        ],
+        householdSize: 2,
+        householdStudent: false,
+        housingStatus: 'example status',
+        incomeVouchers: [],
+        income: '36000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        language: LanguagesEnum.en,
+        listings: {
+          id: listing1Created.id,
+        },
+        preferredUnitTypes: [
+          {
+            id: unitTypeA.id,
+          },
+        ],
+        preferences: [],
+        reviewStatus: ApplicationReviewStatusEnum.valid,
+        sendMailToMailingAddress: true,
+        status: ApplicationStatusEnum.submitted,
+        submissionDate: submissionDate,
+        submissionType: ApplicationSubmissionTypeEnum.electronical,
+      };
+
+      const res = await request(app.getHttpServer())
+        .put(`/applications/${applicationA.id}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send(dto)
+        .set('Cookie', adminCookies)
+        .expect(200);
+
+      expect(res.body.id).toEqual(dto.id);
+      expect(res.body.applicationSelections.length).toEqual(0);
     });
 
     it("should throw an error when update is called with an Id that doesn't exist", async () => {
@@ -1772,6 +2317,7 @@ describe('Application Controller Tests', () => {
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example spoken language',
         },
         preferredUnitTypes: [
           {
@@ -1787,7 +2333,7 @@ describe('Application Controller Tests', () => {
             birthMonth: '12',
             birthDay: '17',
             birthYear: '1993',
-            sameAddress: YesNoEnum.yes,
+            sameAddress: YesNoEnum.no,
             relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
@@ -1803,7 +2349,7 @@ describe('Application Controller Tests', () => {
         sendMailToMailingAddress: true,
         householdExpectingChanges: false,
         householdStudent: false,
-        incomeVouchers: false,
+        incomeVouchers: [],
         income: '36000',
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
@@ -1841,6 +2387,53 @@ describe('Application Controller Tests', () => {
       expect(res.body.message).toEqual(
         `applicationId ${id} was requested but not found`,
       );
+    });
+  });
+
+  describe('notify update endpoint', () => {
+    it('should send application update email when changes exist', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listing = await prisma.listings.create({
+        data: await listingFactory(jurisdiction.id, prisma),
+      });
+
+      const appData = await applicationFactory({
+        unitTypeId: unitTypeA.id,
+        listingId: listing.id,
+      });
+      const application = await prisma.applications.create({
+        data: appData,
+        include: { applicant: true },
+      });
+      await prisma.applications.update({
+        where: { id: application.id },
+        data: {
+          status: ApplicationStatusEnum.waitlist,
+          accessibleUnitWaitlistNumber: 2,
+          conventionalUnitWaitlistNumber: 5,
+        },
+      });
+
+      const res = await request(app.getHttpServer())
+        .post(`/applications/${application.id}/notify-update`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          previousStatus: ApplicationStatusEnum.submitted,
+          previousAccessibleUnitWaitlistNumber: 1,
+          previousConventionalUnitWaitlistNumber: 3,
+        })
+        .set('Cookie', adminCookies)
+        .expect(201);
+
+      expect(res.body).toEqual({ success: true });
+      expect(mockApplicationUpdateEmail).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -1942,6 +2535,7 @@ describe('Application Controller Tests', () => {
           sexualOrientation: 'example sexual orientation',
           howDidYouHear: ['example how did you hear'],
           race: ['example race'],
+          spokenLanguage: 'example spoken language',
         },
         preferredUnitTypes: [
           {
@@ -1957,7 +2551,7 @@ describe('Application Controller Tests', () => {
             birthMonth: '12',
             birthDay: '17',
             birthYear: '1993',
-            sameAddress: YesNoEnum.yes,
+            sameAddress: YesNoEnum.no,
             relationship: HouseholdMemberRelationship.friend,
             workInRegion: YesNoEnum.yes,
             householdMemberWorkAddress: exampleAddress,
@@ -1973,7 +2567,7 @@ describe('Application Controller Tests', () => {
         sendMailToMailingAddress: true,
         householdExpectingChanges: false,
         householdStudent: false,
-        incomeVouchers: false,
+        incomeVouchers: [],
         income: '36000',
         incomePeriod: IncomePeriodEnum.perYear,
         language: LanguagesEnum.en,
@@ -2028,14 +2622,32 @@ describe('Application Controller Tests', () => {
   });
 
   describe('publicAppsView endpoint', () => {
+    const createAndLoginUser = async () => {
+      const user = await prisma.userAccounts.create({
+        data: await userFactory({
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: user.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      return { user, cookies: resLogIn.headers['set-cookie'] };
+    };
+
     it('should retrieve applications and counts when they exist', async () => {
       const unitTypeA = await unitTypeFactorySingle(
         prisma,
         UnitTypeEnum.oneBdrm,
       );
-      const user = await prisma.userAccounts.create({
-        data: await userFactory(),
-      });
+      const { user, cookies } = await createAndLoginUser();
       const juris = await prisma.jurisdictions.create({
         data: jurisdictionFactory(),
       });
@@ -2094,13 +2706,15 @@ describe('Application Controller Tests', () => {
         userId: user.id,
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
+        page: 1,
+        limit: 10,
       };
       const query = stringify(queryParams as any);
 
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(3);
@@ -2108,30 +2722,186 @@ describe('Application Controller Tests', () => {
       expect(res.body.applicationsCount.closed).toEqual(1);
       expect(res.body.applicationsCount.open).toEqual(1);
 
-      expect(res.body.displayApplications.length).toBe(3);
-      expect(res.body.displayApplications[0].id).not.toBeNull();
+      expect(res.body.items.length).toBe(3);
+      expect(res.body.items[0].id).not.toBeNull();
+      expect(res.body.meta.currentPage).toEqual(1);
+      expect(res.body.meta.totalItems).toEqual(3);
+      expect(res.body.meta.totalPages).toEqual(1);
     });
 
-    it('should not retrieve applications nor error when none exist', async () => {
-      const userA = await prisma.userAccounts.create({
-        data: await userFactory(),
+    it('should filter applications by applicantNameSearch for advocate users', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const advocateUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          isAdvocate: true,
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+
+      const resLogIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: advocateUser.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+      const cookies = resLogIn.headers['set-cookie'];
+
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+
+      const listingOpen = await prisma.listings.create({
+        data: await listingFactory(juris.id, prisma, {
+          status: ListingsStatusEnum.active,
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: advocateUser.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Taylor',
+            lastName: 'Match',
+            emailAddress: 'taylor.match@example.com',
+          },
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: advocateUser.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Jordan',
+            lastName: 'Other',
+            emailAddress: 'jordan.other@example.com',
+          },
+        }),
       });
 
       const queryParams: PublicAppsViewQueryParams = {
-        userId: userA.id,
+        userId: advocateUser.id,
+        applicantNameSearch: 'Taylor Match',
         filterType: ApplicationsFilterEnum.all,
         includeLotteryApps: true,
+        page: 1,
+        limit: 10,
       };
       const query = stringify(queryParams as any);
 
       const res = await request(app.getHttpServer())
         .get(`/applications/publicAppsView?${query}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminCookies)
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(1);
+      expect(res.body.applicationsCount.open).toEqual(1);
+      expect(res.body.applicationsCount.closed).toEqual(0);
+      expect(res.body.applicationsCount.lottery).toEqual(0);
+      expect(res.body.items.length).toEqual(1);
+      expect(res.body.items[0].applicant.firstName).toEqual('Taylor');
+      expect(res.body.items[0].applicant.lastName).toEqual('Match');
+    });
+
+    it('should ignore applicantNameSearch for non-advocate users', async () => {
+      const unitTypeA = await unitTypeFactorySingle(
+        prisma,
+        UnitTypeEnum.oneBdrm,
+      );
+      const { user, cookies } = await createAndLoginUser();
+      const juris = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(juris.id, prisma);
+
+      const listingOpen = await prisma.listings.create({
+        data: await listingFactory(juris.id, prisma, {
+          status: ListingsStatusEnum.active,
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: user.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Casey',
+            lastName: 'Visible',
+            emailAddress: 'casey.visible@example.com',
+          },
+        }),
+      });
+
+      await prisma.applications.create({
+        data: await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          userId: user.id,
+          listingId: listingOpen.id,
+          applicant: {
+            firstName: 'Lisa',
+            lastName: 'AlsoVisible',
+            emailAddress: 'lisa.alsovisible@example.com',
+          },
+        }),
+      });
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: user.id,
+        applicantNameSearch: 'Casey',
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
+        page: 1,
+        limit: 10,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      expect(res.body.applicationsCount.total).toEqual(2);
+      expect(res.body.applicationsCount.open).toEqual(2);
+      expect(res.body.applicationsCount.closed).toEqual(0);
+      expect(res.body.applicationsCount.lottery).toEqual(0);
+      expect(res.body.items.length).toEqual(2);
+    });
+
+    it('should not retrieve applications nor error when none exist', async () => {
+      const { user, cookies } = await createAndLoginUser();
+
+      const queryParams: PublicAppsViewQueryParams = {
+        userId: user.id,
+        filterType: ApplicationsFilterEnum.all,
+        includeLotteryApps: true,
+        page: 1,
+        limit: 10,
+      };
+      const query = stringify(queryParams as any);
+
+      const res = await request(app.getHttpServer())
+        .get(`/applications/publicAppsView?${query}`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
         .expect(200);
 
       expect(res.body.applicationsCount.total).toEqual(0);
-      expect(res.body.displayApplications.length).toEqual(0);
+      expect(res.body.items.length).toEqual(0);
+      expect(res.body.meta.currentPage).toEqual(1);
+      expect(res.body.meta.totalItems).toEqual(0);
     });
   });
 
@@ -2142,6 +2912,9 @@ describe('Application Controller Tests', () => {
         data: jurisdictionFactory(),
       });
       await reservedCommunityTypeFactoryAll(juris.id, prisma);
+      const user = await prisma.userAccounts.create({
+        data: await userFactory({}),
+      });
       const listing = await prisma.listings.create({
         data: await listingFactory(juris.id, prisma, {
           status: ListingsStatusEnum.active,
@@ -2151,6 +2924,7 @@ describe('Application Controller Tests', () => {
       // Application that is the newest for a user
       const newestApplication = await prisma.applications.create({
         data: await applicationFactory({
+          userId: user.id,
           listingId: listing.id,
           isNewest: true,
           expireAfter: dayjs(new Date()).subtract(180, 'days').toDate(),
@@ -2159,6 +2933,7 @@ describe('Application Controller Tests', () => {
       // Application that expires in the future
       const futureApplication = await prisma.applications.create({
         data: await applicationFactory({
+          userId: user.id,
           listingId: listing.id,
           isNewest: false,
           expireAfter: dayjs(new Date()).add(3, 'days').toDate(),
@@ -2167,6 +2942,7 @@ describe('Application Controller Tests', () => {
       // This application should have the PII script run against it
       const applicationToBeCleaned = await prisma.applications.create({
         data: await applicationFactory({
+          userId: user.id,
           listingId: listing.id,
           isNewest: false,
           additionalPhone: '(123) 456-7890',
@@ -2282,6 +3058,7 @@ describe('Application Controller Tests', () => {
       });
       expect(application1.wasPIICleared).toBe(true);
       expect(application1.additionalPhoneNumber).toBeNull();
+      expect(application1.historicalUserId).toBe(user.id);
 
       // Verify that the other applications didn't have their data cleared
       const application2 = await prisma.applications.findFirst({

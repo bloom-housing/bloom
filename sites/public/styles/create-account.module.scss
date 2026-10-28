@@ -1,15 +1,7 @@
-.create-account-header {
-  color: var(--seeds-input-text-label-color);
-  font-size: var(--seeds-font-size-sm);
-  font-weight: var(--seeds-font-weight-bold);
-  display: block;
-}
-
 .create-account-field {
   color: var(--seeds-input-text-label-color);
   font-size: var(--seeds-font-size-sm);
   display: block;
-  margin-top: var(--bloom-s3);
 }
 
 .create-account-input {
@@ -17,18 +9,6 @@
   margin-top: var(--bloom-s2);
 }
 
-.create-account-gap {
-  margin-bottom: var(--bloom-s4);
-}
-
-.create-account-label {
-  margin-bottom: var(--bloom-s1);
-}
-
-.create-account-dob-age-helper {
-  margin-top: var(--seeds-s4);
-}
-
-.create-account-dob-example {
-  margin-top: var(--seeds-s2);
+.footer-card-section {
+  background-color: var(--seeds-color-primary-lighter);
 }

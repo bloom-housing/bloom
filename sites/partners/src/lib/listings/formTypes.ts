@@ -11,6 +11,7 @@ import {
   MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
+  ListingParkingTypeCreate,
   Unit,
   UnitGroup,
   UnitGroupAmiLevel,
@@ -22,7 +23,10 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "listingUtilities"> & {
+export type FormListing = Omit<
+  Listing,
+  "countyCode" | "listingFeatures" | "listingUtilities" | "parkType"
+> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -51,6 +55,7 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
   commonDigitalApplicationChoice?: YesNoEnum
   paperApplicationChoice?: YesNoEnum
   referralOpportunityChoice?: YesNoEnum
+  leasingAgentApplicationChoice?: YesNoEnum
   criteriaAttachType?: string
   marketingFlyerAttachType?: "upload" | "url"
   accessibleMarketingFlyerAttachType?: "upload" | "url"
@@ -79,6 +84,16 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
     day: string
     year: string
   }
+  scheduledListingPublishDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  scheduledApplicationOpenDateField?: {
+    month: string
+    day: string
+    year: string
+  }
   reviewOrderQuestion?: string
   lotteryOptInQuestion?: YesNoEnum
   listingAvailabilityQuestion?: string
@@ -93,6 +108,12 @@ export type FormListing = Omit<Listing, "countyCode" | "listingFeatures" | "list
   selectedRequiredDocuments?: string[]
   listingFeatures?: ListingFeaturesCreate
   listingUtilities?: ListingUtilitiesCreate
+  allowsDogs?: boolean
+  allowsCats?: boolean
+  parkType?: ListingParkingTypeCreate
+  parking?: string[]
+  petPolicyPreferences?: string[]
+  configurableAccessibilityFeatures?: unknown
 }
 
 export const addressTypes = {
@@ -116,7 +137,6 @@ export const formDefaults: FormListing = {
   listingsApplicationMailingAddress: null,
   listingsApplicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
-  assets: [],
   buildingSelectionCriteria: "",
   listingsBuildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
@@ -131,7 +151,7 @@ export const formDefaults: FormListing = {
   depositType: EnumListingDepositType.fixedDeposit,
   depositMax: "0",
   depositMin: "0",
-  depositHelperText: "or one month's rent may be higher for lower credit scores",
+  depositHelperText: "Deposit will not exceed one month's rent",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   listingEvents: [],
@@ -150,6 +170,8 @@ export const formDefaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
+  scheduledPublishAt: null,
+  scheduledApplicationOpenAt: null,
   listingMultiselectQuestions: [],
   programRules: "",
   rentalAssistance: null,
@@ -174,16 +196,21 @@ export const formDefaults: FormListing = {
   neighborhood: undefined,
   region: undefined,
   petPolicy: "",
+  allowsDogs: null,
+  allowsCats: null,
+  petPolicyPreferences: [],
   smokingPolicy: "",
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
   yearBuilt: null,
+  configurableRegion: "",
   // urlSlug: undefined,
   // showWaitlist: false,
   reviewOrderType: null,
   unitsSummary: [],
   applicationLotteryTotals: [],
+  configurableAccessibilityFeatures: null,
 }
 
 export type TempUnit = Unit & {
@@ -223,4 +250,6 @@ export type FormMetadata = {
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
   enableUnitGroups: boolean
+  enableAutopublish?: boolean
+  enableAutoOpenDate?: boolean
 }

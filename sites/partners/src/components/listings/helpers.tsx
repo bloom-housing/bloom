@@ -1,7 +1,14 @@
 import React from "react"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import { t } from "@bloom-housing/ui-components"
 import { Tag } from "@bloom-housing/ui-seeds"
-import { ListingsStatusEnum, MinMax } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  EnumListingListingType,
+  ListingsStatusEnum,
+  MinMax,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
   switch (listingStatus) {
@@ -60,6 +67,17 @@ export const getListingStatusTag = (listingStatus: ListingsStatusEnum) => {
           {t(`listings.listingStatus.pending`)}
         </Tag>
       )
+    case ListingsStatusEnum.scheduled:
+      return (
+        <Tag
+          className="tag-full-width"
+          variant={"highlight-cool"}
+          size={"lg"}
+          id={"listing-status-scheduled"}
+        >
+          {t(`listings.listingStatus.scheduled`)}
+        </Tag>
+      )
     default:
       return null
   }
@@ -89,6 +107,41 @@ export const formatRange = (
   if (min == max || !max) return `${prefix}${min}${postfix}`
   if (!min) return `${prefix}${max}${postfix}`
   return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
+}
+
+/**
+ * Returns the formatted scheduled publish date (MM/DD/YYYY) if it is valid and in the future,
+ * or false if the date is absent, invalid, or in the past.
+ */
+export function getValidFutureScheduledDate(
+  scheduledPublishAt: Date | string | null | undefined
+): string | false {
+  if (scheduledPublishAt == null) return false
+  const scheduledAt = dayjs.utc(scheduledPublishAt)
+  if (!scheduledAt.isValid()) return false
+  if (dayjs.utc().startOf("day").isBefore(scheduledAt.startOf("day"))) {
+    return scheduledAt.format("MM/DD/YYYY")
+  }
+  return false
+}
+
+export function publishesLandUseToClosed({
+  listingType,
+  enableLandUse,
+  enableAutopublish,
+  scheduledPublishAt,
+}: {
+  listingType?: EnumListingListingType
+  enableLandUse?: boolean
+  enableAutopublish?: boolean
+  scheduledPublishAt?: Date | string | null
+}): boolean {
+  return (
+    listingType === EnumListingListingType.landUse &&
+    !!enableLandUse &&
+    !!enableAutopublish &&
+    scheduledPublishAt == null
+  )
 }
 
 export function formatRentRange(rent: MinMax, percent: MinMax): string {

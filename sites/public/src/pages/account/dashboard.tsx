@@ -17,7 +17,7 @@ import Layout from "../../layouts/application"
 import { UserStatus } from "../../lib/constants"
 import MaxWidthLayout from "../../layouts/max-width"
 import { isFeatureFlagOn, setFeatureFlagLocalStorage } from "../../lib/helpers"
-import { fetchJurisdictionByName } from "../../lib/hooks"
+import { fetchSharedPageProps } from "../../lib/hooks"
 
 import styles from "./account.module.scss"
 
@@ -62,7 +62,7 @@ function Dashboard(props: DashboardProps) {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout pageTitle={t("nav.myDashboard")}>
+      <Layout pageTitle={t("nav.myDashboard")} metaDescription={t("pageDescription.dashboard")}>
         {alertMessage && (
           <AlertBox className="" onClose={() => closeAlert()} type="success">
             {t(alertMessage)}
@@ -78,9 +78,11 @@ function Dashboard(props: DashboardProps) {
                 ) : (
                   <Grid.Cell>
                     <BloomCard
-                      iconSymbol="application"
+                      iconSymbol="listBullet"
+                      iconClass={"card-icon"}
                       title={t("account.myApplications")}
                       subtitle={t("account.myApplicationsSubtitle")}
+                      headingClass={"seeds-large-heading"}
                       variant={"block"}
                       headingPriority={2}
                     >
@@ -99,9 +101,18 @@ function Dashboard(props: DashboardProps) {
                 )}
                 <Grid.Cell>
                   <BloomCard
-                    iconSymbol="profile"
+                    iconSymbol="userCircle"
+                    iconClass={"card-icon"}
                     title={t("account.accountSettings")}
-                    subtitle={t("account.accountSettingsSubtitle")}
+                    subtitle={t(
+                      isFeatureFlagOn(
+                        props.jurisdiction,
+                        FeatureFlagEnum.enableCustomListingNotifications
+                      )
+                        ? "account.accountSettingsSubtitleWithNotifications"
+                        : "account.accountSettingsSubtitle"
+                    )}
+                    headingClass={"seeds-large-heading"}
                     id="account-dashboard-settings"
                     variant={"block"}
                     headingPriority={2}
@@ -123,9 +134,11 @@ function Dashboard(props: DashboardProps) {
                     <BloomCard
                       iconSymbol="heartIcon"
                       iconOutlined={true}
+                      iconClass={"card-icon"}
                       title={t("account.myFavorites")}
                       subtitle={t("account.myFavoritesSubtitle")}
                       id="account-dashboard-favorites"
+                      headingClass={"seeds-large-heading"}
                       variant={"block"}
                       headingPriority={2}
                     >
@@ -156,10 +169,11 @@ function Dashboard(props: DashboardProps) {
 export default Dashboard
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps() {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
 
   return {
-    props: { jurisdiction },
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
   }
 }

@@ -4,12 +4,17 @@ terraform {
       version = "6.21.0"
       source  = "hashicorp/aws"
     }
+    grafana = {
+      version = "4.28.2"
+      source  = "hashicorp/grafana"
+    }
   }
 }
 
 variable "aws_profile" {
   type        = string
-  description = "AWS CLI profile to use when running aws commands in local-exec provisioners."
+  description = "Optional AWS CLI profile to use when running aws commands in local-exec provisioners. IMPORTANT: if not specified, you must authenticate the AWS CLI some other way like with environment variables."
+  default     = ""
 }
 variable "aws_account_number" {
   type        = string
@@ -43,6 +48,52 @@ variable "vpc_cidr_range" {
   validation {
     condition     = cidrnetmask(var.vpc_cidr_range) == cidrnetmask("10.0.0.0/22")
     error_message = "Must be a /22."
+  }
+}
+variable "vpc_peering_settings" {
+  type = object({
+    aws_account_number        = number
+    vpc_id                    = string
+    allowed_security_group_id = string
+    allowed_cidr_range        = string
+  })
+  description = "Details of an existing VPC. If not null, a VPC peering request from the Bloom VPC will be created. Processes in the allowed_cidr_range and allowed_security_group_id in the existing VPC will be allowed to send traffic to the Bloom database."
+  default     = null
+  validation {
+    condition = var.vpc_peering_settings == null || (
+      var.vpc_peering_settings.aws_account_number != 0 &&
+      var.vpc_peering_settings.vpc_id != "" &&
+      var.vpc_peering_settings.allowed_security_group_id != "" &&
+      var.vpc_peering_settings.allowed_cidr_range != ""
+    )
+    error_message = "All fields of vpc_peering_settings must be set to non-empty values."
+  }
+  validation {
+    condition = var.vpc_peering_settings == null || (
+      cidrcontains("10.0.0.0/8", var.vpc_peering_settings.allowed_cidr_range) ||
+      cidrcontains("172.16.0.0/12", var.vpc_peering_settings.allowed_cidr_range) ||
+      cidrcontains("192.168.0.0/16", var.vpc_peering_settings.allowed_cidr_range)
+    )
+    error_message = "CIDR range in peered VPC must be in the RFC 1918 private IP space."
+  }
+}
+variable "ses_identities" {
+  type        = list(string)
+  description = "SES email identities to create. Can either be individual email addresses or domains. If SES in this Bloom deployment will not be taken out of sandbox mode, identities for both sender and receiver email address must be validated for email to be succefully delivered."
+  default     = []
+}
+variable "google_translate_settings" {
+  type = object({
+    project_id = string
+    iam_user   = string
+  })
+  description = "Google Translate API settings. project_id is the Google Cloud project ID. iam_user is the email of the service account."
+  default     = null
+  validation {
+    condition = var.google_translate_settings == null || (
+      var.google_translate_settings.project_id != "" && var.google_translate_settings.iam_user != ""
+    )
+    error_message = "project_id and iam_user must not be empty strings."
   }
 }
 variable "high_availability" {
@@ -110,6 +161,27 @@ locals {
   ecs_logs_retention_days = var.ecs_logs_retention_days != null ? var.ecs_logs_retention_days : (local.is_prod ? 30 : 3)
 }
 
+variable "bloom_dbinit_image" {
+  type        = string
+  description = "Container image for the Bloom dbinit process."
+}
+variable "bloom_dbinit_run_number" {
+  type        = number
+  description = "The run number is used to trigger additional runs of the dbinit process. The dbinit process will not be re-triggered unless the run number is changed."
+  default     = 1
+}
+
+variable "bloom_dbseed_image" {
+  type        = string
+  description = "Container image for the Bloom dbseed process. Leave empty to disable running the dbseed process."
+  default     = ""
+}
+variable "bloom_dbseed_run_number" {
+  type        = number
+  description = "The run number is used to trigger additional runs of the dbseed process. The dbseed process will not be re-triggered unless the run number is changed."
+  default     = 1
+}
+
 variable "bloom_api_image" {
   type        = string
   description = "Container image for the Bloom API."
@@ -141,6 +213,19 @@ variable "apply_seed" {
 locals {
   bloom_api_task_count = var.bloom_api_task_count != null ? var.bloom_api_task_count : (var.high_availability ? 2 : 1)
 }
+variable "bloom_api_resource_limits" {
+  description = "ECS task resource limits for the API contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
+  type = object({
+    vcpu       = number
+    memory_mib = number
+  })
+  # Keep in sync with docker-compose.yml
+  default = {
+    vcpu       = 1 * 1024 # 1 CPU
+    memory_mib = 2 * 1024 # 2 GiB
+  }
+}
+
 variable "bloom_site_partners_image" {
   type        = string
   description = "Container image for the Bloom partners site."
@@ -158,6 +243,18 @@ variable "bloom_site_partners_task_count" {
 locals {
   bloom_site_partners_task_count = var.bloom_site_partners_task_count != null ? var.bloom_site_partners_task_count : (var.high_availability ? 2 : 1)
 }
+variable "bloom_site_partners_resource_limits" {
+  description = "ECS task resource limits for the partners site contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
+  type = object({
+    vcpu       = number
+    memory_mib = number
+  })
+  # Keep in sync with docker-compose.yml
+  default = {
+    vcpu       = 2 * 1024 # 2 CPU
+    memory_mib = 4 * 1024 # 4 GiB
+  }
+}
 variable "bloom_site_public_image" {
   type        = string
   description = "Container image for the Bloom public site."
@@ -174,6 +271,49 @@ variable "bloom_site_public_task_count" {
 }
 locals {
   bloom_site_public_task_count = var.bloom_site_public_task_count != null ? var.bloom_site_public_task_count : (var.high_availability ? 2 : 1)
+}
+variable "bloom_site_public_resource_limits" {
+  description = "ECS task resource limits for the public site contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
+  type = object({
+    vcpu       = number
+    memory_mib = number
+  })
+  # Keep in sync with docker-compose.yml
+  default = {
+    vcpu       = 2 * 1024 # 2 CPU
+    memory_mib = 6 * 1024 # 6 GiB
+  }
+}
+
+variable "bloom_otel_collector_image" {
+  type        = string
+  description = "Container image for the AWS Distro for OpenTelemetry collector sidecar."
+}
+
+variable "grafana_editor_group_ids" {
+  type        = list(string)
+  description = "IAM Identity Center group IDs that should have the editor role on the managed Grafana instance."
+  default     = []
+}
+
+variable "observability_collection_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "bloom_api_sms_config" {
+  description = "SMS configuration for the Bloom API using AWS Pinpoint SMS Voice V2. When set, provisions a phone number and configures the API to send SMS via AWS."
+  type = object({
+    number_type = optional(string, "LONG_CODE")
+  })
+  default = null
+  validation {
+    condition = var.bloom_api_sms_config == null || contains(
+      ["LONG_CODE", "TOLL_FREE", "SHORT_CODE", "TEN_DLC"],
+      var.bloom_api_sms_config.number_type
+    )
+    error_message = "number_type must be one of: LONG_CODE, TOLL_FREE, SHORT_CODE, TEN_DLC."
+  }
 }
 
 # Create a CloudTrail data store so that audit events are query-able in SQL.

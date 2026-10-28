@@ -2,18 +2,20 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { t, FieldGroup, Form, AlertBox } from "@bloom-housing/ui-components"
+import { t, FieldGroup, AlertBox } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   listingSectionQuestions,
+  pushGtmEvent,
   useToastyRef,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import {
   isFeatureFlagOn,
@@ -47,6 +49,8 @@ const ApplicationTerms = () => {
     currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
+  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
@@ -76,17 +80,25 @@ const ApplicationTerms = () => {
         .submit({
           body: {
             ...application,
-            reviewStatus: ApplicationReviewStatusEnum.pending,
+            alternateContact:
+              application.alternateContact?.type === "noContact"
+                ? null
+                : application.alternateContact,
+            appUrl: window.location.origin,
+            householdMember: !disableWorkInRegion
+              ? application.householdMember
+              : application.householdMember?.map((member) => {
+                  return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
+                }),
             listings: {
               id: listing.id,
             },
-            appUrl: window.location.origin,
+            reviewStatus: ApplicationReviewStatusEnum.pending,
             ...(profile && {
               user: {
                 id: profile.id,
               },
             }),
-            // TODO remove this once this call is changed to the new backend
           },
         })
         .then((result) => {
@@ -241,3 +253,5 @@ const ApplicationTerms = () => {
 }
 
 export default ApplicationTerms
+
+export const getStaticProps = sharedGetStaticProps

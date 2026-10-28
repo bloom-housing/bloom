@@ -9,13 +9,12 @@ import {
   FeatureFlagEnum,
   NeighborhoodAmenitiesEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { useJurisdiction } from "../../../../lib/hooks"
 
 const DetailNeighborhoodAmenities = () => {
   const listing = useContext(ListingContext)
-  const { doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { doJurisdictionsHaveFeatureFlagOn, getJurisdiction } = useContext(AuthContext)
 
-  const { data: jurisdictionData } = useJurisdiction(listing.jurisdictions.id)
+  const jurisdictionData = getJurisdiction(listing.jurisdictions.id)
 
   const enableNeighborhoodAmenities = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableNeighborhoodAmenities,
@@ -29,7 +28,7 @@ const DetailNeighborhoodAmenities = () => {
     )
   }, [jurisdictionData?.visibleNeighborhoodAmenities])
 
-  if (!enableNeighborhoodAmenities) {
+  if (!enableNeighborhoodAmenities || visibleAmenities.length === 0) {
     return <></>
   }
 

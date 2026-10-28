@@ -1,49 +1,54 @@
-import React, { useEffect, useState, useContext } from "react"
-import { t, Field, Select, FieldGroup, Form, numberOptions } from "@bloom-housing/ui-components"
-import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react"
+import { t, Field, Select, FieldGroup, numberOptions } from "@bloom-housing/ui-components"
+import { Button, Card, Drawer, Grid, LoadingState } from "@bloom-housing/ui-seeds"
+import { AuthContext, Form, MAX_BATHROOMS } from "@bloom-housing/shared-helpers"
+import { getLandUseMinOccupancy } from "@bloom-housing/shared-helpers/src/utilities/unitTypes"
 import { useWatch, useForm } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
 import {
   AmiChart,
   AmiChartItem,
-  UnitAccessibilityPriorityType,
+  EnumListingListingType,
   UnitType,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  useAmiChartList,
-  useUnitPriorityList,
-  useUnitTypeList,
-  useWatchOnFormNumberFieldsChange,
-} from "../../../lib/hooks"
-import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
+import { useWatchOnFormNumberFieldsChange } from "../../../lib/hooks"
+import { arrayToFormOptions, getRentType, fieldHasError, addAsterisk } from "../../../lib/helpers"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 import styles from "./ListingForm.module.scss"
 
 type UnitFormProps = {
+  amiCharts: AmiChart[] | undefined
+  amiChartsLoading: boolean
   defaultUnit: TempUnit | undefined
   draft: boolean
-  jurisdiction: string
+  jurisdictionId: string
+  listingType?: EnumListingListingType
   nextId: number
   onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   onSubmit: (unit: TempUnit) => void
+  unitTypes: UnitType[] | undefined
+  unitTypesLoading: boolean
 }
 
 const UnitForm = ({
+  amiCharts,
+  amiChartsLoading,
   defaultUnit,
   draft,
-  jurisdiction,
+  jurisdictionId,
+  listingType,
   nextId,
   onClose,
   onSubmit,
+  unitTypes,
+  unitTypesLoading,
 }: UnitFormProps) => {
-  const { amiChartsService } = useContext(AuthContext)
+  const { amiChartsService, getJurisdiction } = useContext(AuthContext)
 
-  const [amiChartsOptions, setAmiChartsOptions] = useState([])
-  const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
-  const [unitTypesOptions, setUnitTypesOptions] = useState([])
+  const initialLoadComplete = useRef(false)
   const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [fetchingAmiChart, setFetchingAmiChart] = useState(false)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
@@ -61,12 +66,28 @@ const UnitForm = ({
     mode: "onChange",
     shouldFocusError: false,
   })
-  /**
-   * fetch form options
-   */
-  const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
-  const { data: unitPriorities = [] } = useUnitPriorityList()
-  const { data: unitTypes = [] } = useUnitTypeList()
+  const hasInitializedFormData = amiCharts !== undefined && unitTypes !== undefined
+
+  const amiChartsOptions = useMemo(() => {
+    if (!amiCharts) return []
+    return arrayToFormOptions<AmiChart>(amiCharts, "name", "id")
+  }, [amiCharts])
+
+  const unitTypesOptions = useMemo(() => {
+    if (!unitTypes) return []
+    return arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
+  }, [unitTypes])
+
+  const jurisdiction = getJurisdiction(jurisdictionId)
+
+  const unitPrioritiesOptions = useMemo(() => {
+    const visibleTypes = jurisdiction?.visibleAccessibilityPriorityTypes || []
+    return visibleTypes.map((type) => ({
+      value: type,
+      id: type,
+      label: t(`listings.unit.accessibilityType.${type}`),
+    }))
+  }, [jurisdiction])
 
   const numberOccupancyOptions = 11
 
@@ -88,6 +109,11 @@ const UnitForm = ({
     name: "minOccupancy",
   })
 
+  const unitTypeId: string = useWatch({
+    control,
+    name: "unitTypes.id",
+  })
+
   const maxOccupancy: number = useWatch({
     control,
     name: "maxOccupancy",
@@ -98,6 +124,20 @@ const UnitForm = ({
   const fieldsToTriggerWatch = ["minOccupancy", "maxOccupancy"]
 
   useWatchOnFormNumberFieldsChange(fieldsValuesToWatch, fieldsToTriggerWatch, trigger)
+
+  // Land use listings derive minimum occupancy from the unit type instead of letting partners pick
+  const derivedMinOccupancy = useMemo(
+    () => getLandUseMinOccupancy(unitTypes?.find((type) => type.id === unitTypeId)?.name),
+    [unitTypes, unitTypeId]
+  )
+  const minOccupancyLocked =
+    listingType === EnumListingListingType.landUse && derivedMinOccupancy !== undefined
+
+  useEffect(() => {
+    if (minOccupancyLocked) {
+      setValue("minOccupancy", derivedMinOccupancy.toString())
+    }
+  }, [minOccupancyLocked, derivedMinOccupancy, setValue])
 
   const maxAmiHouseholdSize = 8
 
@@ -136,30 +176,50 @@ const UnitForm = ({
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
+      const values: Record<string, unknown> = { ...defaultUnit }
+
       if (defaultUnit.amiChart) {
         const chartData = await fetchAmiChart(defaultUnit.amiChart.id)
-        resetAmiTableValues(chartData, defaultUnit.amiPercentage)
+        if (chartData) {
+          const percentage = defaultUnit.amiPercentage
+          const newPercentagesByHouseHold = chartData.reduce((acc, item: AmiChartItem) => {
+            if (item.percentOfAmi === parseInt(percentage)) {
+              acc[item.householdSize] = item
+            }
+            return acc
+          }, {})
+          for (let i = 1; i < 9; i++) {
+            values[`maxIncomeHouseholdSize${i}`] = newPercentagesByHouseHold[i]
+              ? newPercentagesByHouseHold[i].income.toString()
+              : ""
+          }
+        }
+        if (defaultUnit.unitAmiChartOverrides) {
+          defaultUnit.unitAmiChartOverrides.items.forEach((override) => {
+            values[`maxIncomeHouseholdSize${override.householdSize}`] = override.income
+          })
+        }
       }
-      Object.keys(defaultUnit).forEach((key) => {
-        setValue(key, defaultUnit[key])
-      })
-      if (defaultUnit.unitAmiChartOverrides) {
-        defaultUnit.unitAmiChartOverrides.items.forEach((override) => {
-          setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
-        })
-      }
-      setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
-      setValue("rentType", getRentType(defaultUnit))
+
+      values.amiPercentage = parseInt(defaultUnit["amiPercentage"])
+      values.rentType = getRentType(defaultUnit, listingType === EnumListingListingType.landUse)
+
+      reset(values)
+    } else {
+      reset({})
     }
+    initialLoadComplete.current = true
     setLoading(false)
   }
 
   useEffect(() => {
+    setLoading(true)
     void resetDefaultValues()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [defaultUnit])
 
   const fetchAmiChart = async (defaultChartID?: string) => {
+    setFetchingAmiChart(true)
     try {
       const thisAmiChart = await amiChartsService.retrieve({
         amiChartId: defaultChartID ?? amiChartID,
@@ -182,6 +242,8 @@ const UnitForm = ({
       return amiChartData
     } catch (e) {
       console.error(e)
+    } finally {
+      setFetchingAmiChart(false)
     }
   }
 
@@ -221,7 +283,7 @@ const UnitForm = ({
   }, [amiPercentage, amiChartPercentageOptions, isAmiPercentageDirty])
 
   useEffect(() => {
-    if (defaultUnit && !amiPercentage) {
+    if (!initialLoadComplete.current && defaultUnit && !amiPercentage) {
       setValue("amiPercentage", defaultUnit.amiPercentage)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -232,7 +294,7 @@ const UnitForm = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
-      const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
+      const chart = amiCharts?.find((chart) => chart.id === data.amiChart.id)
       data.amiChart = chart
     } else {
       delete data.amiChart
@@ -245,20 +307,29 @@ const UnitForm = ({
       delete data.monthlyRent
     }
 
-    if (data.unitAccessibilityPriorityTypes?.id) {
-      const priority = unitPriorities.find(
-        (priority) => priority.id === data.unitAccessibilityPriorityTypes.id
-      )
-      data.unitAccessibilityPriorityTypes = priority
-    } else {
-      delete data.unitAccessibilityPriorityTypes
+    if (!data.accessibilityPriorityType) {
+      delete data.accessibilityPriorityType
+    }
+
+    if (!data.monthlyIncomeMin) {
+      delete data.monthlyIncomeMin
+    }
+    if (!data.monthlyRent) {
+      delete data.monthlyRent
+    }
+    if (!data.monthlyRentAsPercentOfIncome) {
+      delete data.monthlyRentAsPercentOfIncome
     }
 
     if (data.unitTypes?.id) {
-      const type = unitTypes.find((type) => type.id === data.unitTypes.id)
+      const type = unitTypes?.find((type) => type.id === data.unitTypes.id)
       data.unitTypes = type
     } else {
       delete data.unitTypes
+    }
+
+    if (minOccupancyLocked) {
+      data.minOccupancy = derivedMinOccupancy.toString()
     }
 
     if (currentAmiChart) {
@@ -297,14 +368,13 @@ const UnitForm = ({
   }
 
   async function onFormSubmit(action?: FormSubmitAction) {
-    setLoading(true)
     const data = getValues()
     const validation = await trigger()
     if (!validation) {
-      setLoading(false)
       return
     }
 
+    setLoading(true)
     const formData = formatFormData(data)
 
     // If we're looking at a draft unit in the drawer
@@ -360,13 +430,13 @@ const UnitForm = ({
   // sets the unit type to be the value from default
   // after the unitType options are set
   useEffect(() => {
-    if (defaultUnit && unitTypesOptions) {
+    if (defaultUnit && unitTypesOptions.length) {
       setValue("unitTypes.id", defaultUnit.unitTypes?.id)
     }
   }, [defaultUnit, unitTypesOptions, setValue])
 
   // when rent type is updated we set the rent/income data to defaultUnit data for that value
-  // e.g. rent is fixed and swithced to percentage, then switched back we readd the old fixed data
+  // e.g. rent is fixed and switched to percentage, then switched back we readd the old fixed data
   useEffect(() => {
     if (defaultUnit) {
       if (rentType === "fixed") {
@@ -379,27 +449,13 @@ const UnitForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentType])
 
-  // sets the options for the ami charts
-  useEffect(() => {
-    if (amiCharts.length === 0 || amiChartsOptions.length) return
-    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
-  }, [amiCharts, amiChartsOptions])
-
-  // sets the options for the unit priorities
-  useEffect(() => {
-    if (unitPriorities.length === 0 || unitPrioritiesOptions.length) return
-    setUnitPrioritiesOptions(
-      arrayToFormOptions<UnitAccessibilityPriorityType>(unitPriorities, "name", "id")
+  if (!hasInitializedFormData || loading || amiChartsLoading || unitTypesLoading) {
+    return (
+      <LoadingState loading={true}>
+        <></>
+      </LoadingState>
     )
-  }, [unitPrioritiesOptions, unitPriorities, defaultUnit, setValue])
-
-  // sets the options for the unit types
-  useEffect(() => {
-    if (unitTypes.length === 0 || unitTypesOptions.length) return
-    setUnitTypesOptions(
-      arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
-    )
-  }, [unitTypesOptions, unitTypes])
+  }
 
   return (
     <>
@@ -422,7 +478,7 @@ const UnitForm = ({
                     <Select
                       id="unitTypes.id"
                       name="unitTypes.id"
-                      label={t("listings.unit.type")}
+                      label={addAsterisk(t("listings.unit.type"))}
                       placeholder={t("listings.unit.type")}
                       register={register}
                       controlClassName="control"
@@ -442,12 +498,12 @@ const UnitForm = ({
                       id="numBathrooms"
                       name="numBathrooms"
                       label={t("listings.unit.numBathrooms")}
-                      placeholder={t("listings.unit.numBathrooms")}
                       register={register}
                       controlClassName="control"
                       options={[
+                        { value: "", label: t("t.selectOne") },
                         { label: t("listings.unit.sharedBathroom"), value: "0" },
-                        ...numberOptions(5),
+                        ...numberOptions(MAX_BATHROOMS),
                       ]}
                     />
                   </Grid.Cell>
@@ -456,10 +512,9 @@ const UnitForm = ({
                       id="floor"
                       name="floor"
                       label={t("listings.unit.floor")}
-                      placeholder={t("listings.unit.floor")}
                       register={register}
                       controlClassName="control"
-                      options={numberOptions(10)}
+                      options={[{ value: "", label: t("t.selectOne") }, ...numberOptions(10)]}
                     />
                   </Grid.Cell>
                   <Grid.Cell>
@@ -477,13 +532,16 @@ const UnitForm = ({
                       id="minOccupancy"
                       name="minOccupancy"
                       label={t("listings.unit.minOccupancy")}
-                      placeholder={t("listings.unit.minOccupancy")}
                       register={register}
                       controlClassName="control"
-                      options={numberOptions(numberOccupancyOptions)}
+                      options={[
+                        { value: "", label: t("t.selectOne") },
+                        ...numberOptions(numberOccupancyOptions),
+                      ]}
                       error={fieldHasError(errors?.minOccupancy)}
                       errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                       validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                      disabled={minOccupancyLocked}
                     />
                   </Grid.Cell>
                   <Grid.Cell>
@@ -491,10 +549,12 @@ const UnitForm = ({
                       id="maxOccupancy"
                       name="maxOccupancy"
                       label={t("listings.unit.maxOccupancy")}
-                      placeholder={t("listings.unit.maxOccupancy")}
                       register={register}
                       controlClassName="control"
-                      options={numberOptions(numberOccupancyOptions)}
+                      options={[
+                        { value: "", label: t("t.selectOne") },
+                        ...numberOptions(numberOccupancyOptions),
+                      ]}
                       error={fieldHasError(errors?.maxOccupancy)}
                       errorMessage={t("errors.maxLessThanMinOccupancyError")}
                       validation={{ min: minOccupancy }}
@@ -510,7 +570,7 @@ const UnitForm = ({
                     <Select
                       id="amiChart.id"
                       name="amiChart.id"
-                      label={t("listings.unit.amiChart")}
+                      label={addAsterisk(t("listings.unit.amiChart"))}
                       placeholder={t("listings.unit.amiChart")}
                       register={register}
                       controlClassName="control"
@@ -526,6 +586,8 @@ const UnitForm = ({
                           ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
                             setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
                           })
+                          setAmiChartPercentageOptions([])
+                          setCurrentAmiChart(null)
                           if (value?.target?.value && !loading && amiChartsOptions) {
                             void fetchAmiChart(value.target?.value)
                             setIsAmiPercentageDirty(true)
@@ -538,7 +600,7 @@ const UnitForm = ({
                     <Select
                       id={"amiPercentage"}
                       name="amiPercentage"
-                      label={t("listings.unit.amiPercentage")}
+                      label={addAsterisk(t("listings.unit.amiPercentage"))}
                       placeholder={t("listings.unit.amiPercentage")}
                       register={register}
                       controlClassName="control"
@@ -552,7 +614,7 @@ const UnitForm = ({
                       error={fieldHasError(errors?.amiPercentage)}
                       errorMessage={t("errors.requiredFieldError")}
                       validation={{ required: !!amiChartID }}
-                      disabled={!amiChartID}
+                      disabled={!amiChartID || fetchingAmiChart}
                     />
                   </Grid.Cell>
                 </Grid.Row>
@@ -632,13 +694,12 @@ const UnitForm = ({
                 <Grid.Row columns={4}>
                   <Grid.Cell>
                     <Select
-                      id="unitAccessibilityPriorityTypes.id"
-                      name="unitAccessibilityPriorityTypes.id"
+                      id="accessibilityPriorityType"
+                      name="accessibilityPriorityType"
                       label={t("listings.unit.accessibilityPriorityType")}
-                      placeholder={t("listings.unit.accessibilityPriorityType")}
                       register={register}
                       controlClassName="control"
-                      options={unitPrioritiesOptions}
+                      options={[{ value: "", label: t("t.selectOne") }, ...unitPrioritiesOptions]}
                     />
                   </Grid.Cell>
                 </Grid.Row>

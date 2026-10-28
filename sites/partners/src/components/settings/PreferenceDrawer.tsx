@@ -142,6 +142,7 @@ const PreferenceDrawer = ({
       questionData?.options
         ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
         .map((item) => ({
+          id: { content: item.text },
           name: { content: item.text },
           description: { content: item.description },
           action: {
@@ -616,7 +617,7 @@ const PreferenceDrawer = ({
                   </Grid.Cell>
                 </Grid.Row>
                 <Grid.Row columns={3}>
-                  <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
+                  <FieldValue label={t("settings.preferenceExclusiveOption")} className="mb-1">
                     <FieldGroup
                       name="exclusiveQuestion"
                       type="radio"

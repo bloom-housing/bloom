@@ -613,1237 +613,25 @@ describe('Application flagged set Controller Tests', () => {
     });
   });
 
-  describe('test process endpoint', () => {
+  describe('test process duplicates endpoint', () => {
     it('should not create a flagged set if applications do not match', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing);
       await createComplexApplication('2', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-      });
-
-      expect(afs.length).toEqual(0);
-    });
-
-    it('should create a new flagged set if applications match on email', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing);
-      await createComplexApplication('1', 2, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-    });
-
-    it('should create a new flagged set if applications match on nameAndDOB', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing);
-      await createComplexApplication('2', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set('Cookie', adminAccessToken)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-    });
-
-    it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing, 'test');
-      await createComplexApplication('2', 1, listing, 'TEST');
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-    });
-
-    it('should keep application in flagged set if email still matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('1', 2, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-        },
-        where: {
-          id: appB.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-      const applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appB.id);
-    });
-
-    it('should keep application in flagged set if nameAndDOB still matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('2', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-        },
-        where: {
-          id: appB.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-      const applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appB.id);
-    });
-
-    it('should remove application from flagged set if email no longer matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      await createComplexApplication('1', 2, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                emailAddress: `${listing}-email3@email.com`,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(0);
-    });
-
-    it('should remove application from flagged set if nameAndDOB no longer matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      await createComplexApplication('2', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                firstName: `${listing}-firstName3@email.com`,
-                lastName: `${listing}-lastName3@email.com`,
-                birthDay: 3,
-                birthMonth: 3,
-                birthYear: 3,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(0);
-    });
-
-    it('should remove and create flagged set if email changed', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('2', 2, listing);
-      const appC = await createComplexApplication('1', 3, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-
-      let applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appC.id);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                emailAddress: `${listing}-email2@email.com`,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appB.id);
-    });
-
-    it('should remove and create flagged set if nameAndDOB changed', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('2', 2, listing);
-      const appC = await createComplexApplication('3', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-
-      let applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appC.id);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                firstName: `${listing}-firstName2`,
-                lastName: `${listing}-lastName2`,
-                birthDay: 2,
-                birthMonth: 2,
-                birthYear: 2,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set('Cookie', adminAccessToken)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-      applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appB.id);
-    });
-
-    it('should move application from flagged set to another if email changed', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('1', 2, listing);
-
-      const appC = await createComplexApplication('3', 3, listing);
-      const appD = await createComplexApplication('3', 4, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(2);
-      let allApplicationCount = 0;
-      for (const flaggedSet of afs) {
-        expect(flaggedSet.rule).toEqual(RuleEnum.email);
-        if (flaggedSet.ruleKey.indexOf(`${listing}-email1@email.com`) >= 0) {
-          const applications = flaggedSet.applications.map((app) => app.id);
-          expect(applications).toContain(appA.id);
-          expect(applications).toContain(appB.id);
-          allApplicationCount++;
-        } else if (
-          flaggedSet.ruleKey.indexOf(`${listing}-email3@email.com`) >= 0
-        ) {
-          const applications = flaggedSet.applications.map((app) => app.id);
-          expect(applications).toContain(appC.id);
-          expect(applications).toContain(appD.id);
-          allApplicationCount++;
-        }
-      }
-      expect(allApplicationCount).toEqual(2);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                emailAddress: `${listing}-email3@email.com`,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      const applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appC.id);
-      expect(applications).toContain(appD.id);
-    });
-
-    it('should move application from flagged set to another if nameAndDOB changed', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('2', 1, listing);
-
-      const appC = await createComplexApplication('3', 3, listing);
-      const appD = await createComplexApplication('4', 3, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(2);
-      let allApplicationCount = 0;
-      for (const flaggedSet of afs) {
-        expect(flaggedSet.rule).toEqual(RuleEnum.nameAndDOB);
-        if (flaggedSet.ruleKey.indexOf(`${listing}-firstname1`) >= 0) {
-          const applications = flaggedSet.applications.map((app) => app.id);
-          expect(applications).toContain(appA.id);
-          allApplicationCount++;
-          expect(applications).toContain(appB.id);
-          allApplicationCount++;
-        } else if (flaggedSet.ruleKey.indexOf(`${listing}-firstname3`) >= 0) {
-          const applications = flaggedSet.applications.map((app) => app.id);
-          expect(applications).toContain(appC.id);
-          allApplicationCount++;
-          expect(applications).toContain(appD.id);
-          allApplicationCount++;
-        }
-      }
-      expect(allApplicationCount).toEqual(4);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                firstName: `${listing}-firstName3`,
-                lastName: `${listing}-lastName3`,
-                birthDay: 3,
-                birthMonth: 3,
-                birthYear: 3,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      const applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appC.id);
-      expect(applications).toContain(appD.id);
-    });
-
-    it('should create nameAndDob flagged set on household member matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing);
-      await createComplexApplication('2', 2, listing, '2', {
-        firstName: `${listing}-firstName1`,
-        lastName: `${listing}-lastName1`,
-        birthDay: 1,
-        birthMonth: 1,
-        birthYear: 1,
-        sameAddress: YesNoEnum.yes,
-        workInRegion: YesNoEnum.yes,
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set('Cookie', adminAccessToken)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-    });
-
-    it('should create nameAndDob flagged set on household member matches case insensitive', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing, 'TEST');
-      await createComplexApplication('2', 2, listing, '2', {
-        firstName: `${listing}-firstNametest`,
-        lastName: `${listing}-lastNameTest`,
-        birthDay: 1,
-        birthMonth: 1,
-        birthYear: 1,
-        sameAddress: YesNoEnum.yes,
-        workInRegion: YesNoEnum.yes,
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-    });
-
-    it('should remove from flagged set and create new flagged set when match moves from email -> nameAndDOB', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('2', 2, listing);
-      const appC = await createComplexApplication('1', 3, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-
-      let applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appC.id);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                emailAddress: `${listing}-email4@email.com`,
-                firstName: `${listing}-firstName2`,
-                lastName: `${listing}-lastName2`,
-                birthDay: 2,
-                birthMonth: 2,
-                birthYear: 2,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appB.id);
-    });
-
-    it('should remove from flagged set and create new flagged set when match moves from nameAndDOB -> email', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      const appB = await createComplexApplication('2', 2, listing);
-      const appC = await createComplexApplication('3', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-
-      let applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appC.id);
-
-      await prisma.applications.update({
-        data: {
-          acceptedTerms: true,
-          applicant: {
-            update: {
-              where: {
-                id: appA.applicantId,
-              },
-              data: {
-                emailAddress: `${listing}-email2@email.com`,
-                firstName: `${listing}-firstName4`,
-                lastName: `${listing}-lastName4`,
-                birthDay: 4,
-                birthMonth: 4,
-                birthYear: 4,
-              },
-            },
-          },
-        },
-        where: {
-          id: appA.id,
-        },
-      });
-
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-      applications = afs[0].applications.map((app) => app.id);
-      expect(applications).toContain(appA.id);
-      expect(applications).toContain(appB.id);
-    });
-
-    it('should create new email flagged set instead of nameAndDOB flagged set', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing);
-      await createComplexApplication('1', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.email);
-    });
-
-    it('should not reset resolved status when new application not in flagged set', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      await createComplexApplication('2', 1, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-
-      await request(app.getHttpServer())
-        .post(`/applicationFlaggedSets/resolve`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          afsId: afs[0].id,
-          status: FlaggedSetStatusEnum.resolved,
-          applications: [
-            {
-              id: appA.id,
-            },
-          ],
-        } as AfsResolve)
-        .set('Cookie', adminAccessToken)
-        .expect(201);
-
-      await createComplexApplication('3', 3, listing);
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-      expect(afs.length).toEqual(1);
-      expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
-      expect(afs[0].status).toEqual(FlaggedSetStatusEnum.resolved);
-    });
-
-    it('should reset resolved status when new application in flagged set', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = null;
-      const listing = await createListing();
-
-      const appA = await createComplexApplication('1', 1, listing);
-      await createComplexApplication('2', 1, listing);
-
-      const appC = await createComplexApplication('3', 3, listing);
-      await createComplexApplication('4', 3, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      let afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      const containsAppA = afs.find((flaggedSet) =>
-        flaggedSet.applications.some((app) => app.id === appA.id),
-      );
-      const containsAppC = afs.find((flaggedSet) =>
-        flaggedSet.applications.some((app) => app.id === appC.id),
-      );
-      expect(afs.length).toEqual(2);
-      await request(app.getHttpServer())
-        .post(`/applicationFlaggedSets/resolve`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          afsId: containsAppA.id,
-          status: FlaggedSetStatusEnum.resolved,
-          applications: [
-            {
-              id: appA.id,
-            },
-          ],
-        } as AfsResolve)
-        .set('Cookie', adminAccessToken)
-        .expect(201);
-
-      await request(app.getHttpServer())
-        .post(`/applicationFlaggedSets/resolve`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .send({
-          afsId: containsAppC.id,
-          status: FlaggedSetStatusEnum.resolved,
-          applications: [
-            {
-              id: appC.id,
-            },
-          ],
-        } as AfsResolve)
-        .set('Cookie', adminAccessToken)
-        .expect(201);
-
-      await createComplexApplication('5', 3, listing);
-      await prisma.listings.update({
-        where: {
-          id: listing,
-        },
-        data: {
-          lastApplicationUpdateAt: new Date(),
-        },
-      });
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listing,
-        },
-        include: {
-          applications: true,
-        },
-      });
-
-      expect(afs.length).toEqual(2);
-
-      const unchangedFlaggedSet = afs.find(
-        (flaggedSet) => flaggedSet.applications.length === 2,
-      );
-      const changedFlaggedSet = afs.find(
-        (flaggedSet) => flaggedSet.applications.length === 3,
-      );
-
-      expect(unchangedFlaggedSet.rule).toEqual(RuleEnum.nameAndDOB);
-      expect(unchangedFlaggedSet.status).toEqual(FlaggedSetStatusEnum.resolved);
-
-      expect(changedFlaggedSet.applications.length).toEqual(3);
-      expect(changedFlaggedSet.status).toEqual(FlaggedSetStatusEnum.pending);
-    });
-  });
-
-  describe('test process duplicates endpoint', () => {
-    it('should not run duplicate if DUPLICATES_CLOSE_DATE is in the future', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2124-06-28 00:00 -08:00';
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
 
       expect(logger.warn).toBeCalledWith(
-        'DUPLICATES_CLOSE_DATE either not set or is in the future',
+        'running the Application flagged sets cron job',
       );
-    });
-
-    it('should not run on listings closed before the DUPLICATES_CLOSE_DATE', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
-      const jurisdiction = await createJurisdiction();
-      const listing = await listingFactory(jurisdiction, prisma, {
-        status: ListingsStatusEnum.closed,
-        afsLastRunSetInPast: true,
-        closedAt: new Date('2024-04-28 00:00 -08:00'),
-      });
-      const listingCreated = await prisma.listings.create({
-        data: listing,
-      });
-
-      await createComplexApplication('1', 1, listingCreated.id);
-      await createComplexApplication('1', 2, listingCreated.id);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
-      const afs = await prisma.applicationFlaggedSet.findMany({
-        where: {
-          listingId: listingCreated.id,
-        },
-      });
-
-      expect(afs.length).toEqual(0);
-    });
-
-    it('should not create a flagged set if applications do not match', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
-      const listing = await createListing();
-
-      await createComplexApplication('1', 1, listing);
-      await createComplexApplication('2', 2, listing);
-
-      await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
-        .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', adminAccessToken)
-        .expect(200);
-
+      expect(logger.warn).toBeCalledWith(
+        expect.stringContaining('running duplicates check on'),
+      );
       const afs = await prisma.applicationFlaggedSet.findMany({
         where: {
           listingId: listing,
@@ -1855,7 +643,7 @@ describe('Application flagged set Controller Tests', () => {
 
     it('should create a new flagged set if applications match on email', async () => {
       const newDate = new Date();
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
+
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing);
@@ -1887,14 +675,13 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create a new flagged set if applications match on nameAndDOB', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing);
       await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -1911,14 +698,13 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create a new flagged set if applications match on nameAndDOB and email', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing);
       await createComplexApplication('1', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -1935,7 +721,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create a new flagged set if multiple applications flagged', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       // Three match with email and a different one has a household member with same name/dob as one in the match
@@ -1952,7 +737,7 @@ describe('Application flagged set Controller Tests', () => {
         workInRegion: YesNoEnum.yes,
       });
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -1979,7 +764,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create multiple flag sets with chaining of flags', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       // Two flag sets should be created one for just email on app 1 and 5
@@ -2042,14 +826,13 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create a new flagged set if applications match on nameAndDOB case insensitive', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing, 'test');
       await createComplexApplication('2', 1, listing, 'TEST');
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2072,7 +855,7 @@ describe('Application flagged set Controller Tests', () => {
       const appB = await createComplexApplication('1', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2117,7 +900,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2145,7 +928,7 @@ describe('Application flagged set Controller Tests', () => {
       const appB = await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2190,7 +973,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2218,7 +1001,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('1', 2, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2264,7 +1047,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2289,7 +1072,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('1', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2336,7 +1119,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2355,14 +1138,13 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should remove application from flagged set if nameAndDOB no longer matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
       await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2412,7 +1194,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2430,7 +1212,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should remove and create flagged set if email changed', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
@@ -2438,7 +1219,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('1', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2488,7 +1269,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2516,7 +1297,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('3', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2570,7 +1351,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -2601,7 +1382,7 @@ describe('Application flagged set Controller Tests', () => {
       const appD = await createComplexApplication('3', 4, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2664,7 +1445,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2686,7 +1467,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should move application from flagged set to another if nameAndDOB changed', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
@@ -2696,7 +1476,7 @@ describe('Application flagged set Controller Tests', () => {
       const appD = await createComplexApplication('4', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2763,7 +1543,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2785,7 +1565,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create nameAndDob flagged set on household member matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing);
@@ -2800,7 +1579,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -2816,7 +1595,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create nameAndDob flagged set when more than one name matches', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing, undefined, {
@@ -2839,7 +1617,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set('Cookie', adminAccessToken)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .expect(200);
@@ -2858,7 +1636,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should create nameAndDob flagged set on household member matches case insensitive', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       await createComplexApplication('1', 1, listing, 'TEST');
@@ -2873,7 +1650,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2889,7 +1666,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should remove from flagged set and create new flagged set when match moves from email -> nameAndDOB', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
@@ -2897,7 +1673,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('1', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2952,7 +1728,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -2973,7 +1749,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should remove from flagged set and create new flagged set when match moves from nameAndDOB -> email', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
@@ -2981,7 +1756,7 @@ describe('Application flagged set Controller Tests', () => {
       const appC = await createComplexApplication('3', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -3036,7 +1811,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -3058,14 +1833,13 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should not reset resolved status when new application not in flagged set', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
       await createComplexApplication('2', 1, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -3107,7 +1881,7 @@ describe('Application flagged set Controller Tests', () => {
       });
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -3126,7 +1900,6 @@ describe('Application flagged set Controller Tests', () => {
     });
 
     it('should reset resolved status when new application in flagged set', async () => {
-      process.env.DUPLICATES_CLOSE_DATE = '2024-06-28 00:00 -08:00';
       const listing = await createListing();
 
       const appA = await createComplexApplication('1', 1, listing);
@@ -3136,7 +1909,7 @@ describe('Application flagged set Controller Tests', () => {
       await createComplexApplication('4', 3, listing);
 
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);
@@ -3197,7 +1970,7 @@ describe('Application flagged set Controller Tests', () => {
         },
       });
       await request(app.getHttpServer())
-        .put(`/applicationFlaggedSets/process_duplicates`)
+        .put(`/applicationFlaggedSets/process_duplicates?listingId=${listing}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
         .set('Cookie', adminAccessToken)
         .expect(200);

@@ -15,12 +15,14 @@ export const multiselectQuestionFactory = (
   optionalParams?: {
     optOut?: boolean;
     multiselectQuestion?: Partial<Prisma.MultiselectQuestionsCreateInput>;
+    status?: MultiselectQuestionsStatusEnum;
   },
   version2 = false,
 ): Prisma.MultiselectQuestionsCreateInput => {
   const previousMultiselectQuestion = optionalParams?.multiselectQuestion || {};
   const name = optionalParams?.multiselectQuestion?.name || randomName();
   const text = optionalParams?.multiselectQuestion?.text || randomName();
+
   const baseFields = {
     applicationSection:
       optionalParams?.multiselectQuestion?.applicationSection ||
@@ -37,40 +39,50 @@ export const multiselectQuestionFactory = (
   };
 
   const v1Fields = {
-    description: `description of ${text}`,
+    description:
+      optionalParams?.multiselectQuestion?.description ??
+      `description of ${text}`,
     isExclusive: false,
     name: text,
-    options: multiselectOptionFactory(randomInt(1, 3)),
+    options:
+      optionalParams?.multiselectQuestion?.options ||
+      multiselectOptionFactory(randomInt(1, 3)),
     optOutText: optionalParams?.optOut ? "I don't want this preference" : null,
     status: MultiselectQuestionsStatusEnum.draft,
     subText: `sub text for ${text}`,
     text: text,
   };
   const v2Fields = {
-    description: `description of ${name}`,
+    description:
+      optionalParams?.multiselectQuestion?.description ??
+      `description of ${name}`,
     isExclusive: optionalParams?.multiselectQuestion?.isExclusive ?? false,
-    multiselectOptions: {
+    multiselectOptions: optionalParams?.multiselectQuestion
+      ?.multiselectOptions ?? {
       createMany: {
         data: multiselectOptionFactoryV2(randomInt(1, 3)),
       },
     },
     name: name,
     subText: `sub text for ${name}`,
-    status: MultiselectQuestionsStatusEnum.draft,
+    status:
+      optionalParams?.status ??
+      optionalParams?.multiselectQuestion?.status ??
+      MultiselectQuestionsStatusEnum.visible,
     // TODO: Can be removed after MSQ refactor
     text: name,
   };
 
   if (version2) {
     return {
-      ...v2Fields,
       ...previousMultiselectQuestion,
+      ...v2Fields,
       ...baseFields,
     };
   }
   return {
-    ...v1Fields,
     ...previousMultiselectQuestion,
+    ...v1Fields,
     ...baseFields,
   };
 };

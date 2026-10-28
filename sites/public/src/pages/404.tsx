@@ -5,6 +5,7 @@ import Layout from "../layouts/application"
 import { Content404 } from "../components/page/Content404"
 import { Content404Deprecated } from "../components/page/Content404Deprecated"
 import { UserStatus } from "../lib/constants"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
 
 const ErrorPage = () => {
   const { profile } = useContext(AuthContext)
@@ -18,10 +19,12 @@ const ErrorPage = () => {
   }, [profile])
 
   return (
-    <Layout pageTitle={t("errors.notFound.title")}>
+    <Layout pageTitle={t("errors.notFound.title")} metaDescription={t("pageDescription.notFound")}>
       {process.env.showNewSeedsDesigns ? <Content404 /> : <Content404Deprecated />}
     </Layout>
   )
 }
 
 export { ErrorPage as default, ErrorPage }
+
+export const getStaticProps = sharedGetStaticProps

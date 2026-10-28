@@ -1,14 +1,23 @@
+import { HttpModule } from '@nestjs/axios';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MailService } from '@sendgrid/mail';
+import { AwsSesService } from '../services/aws-ses.service';
+import { EmailProvider } from '../services/email-provider.service';
 import { EmailService } from '../services/email.service';
-import { JurisdictionService } from '../services/jurisdiction.service';
-import { TranslationService } from '../services/translation.service';
 import { GoogleTranslateService } from '../services/google-translate.service';
+import { GovDeliveryService } from '../services/gov-delivery.service';
+import { JurisdictionService } from '../services/jurisdiction.service';
 import { SendGridService } from '../services/sendgrid.service';
+import { TranslationService } from '../services/translation.service';
+import { PermissionModule } from './permission.module';
+
+const emailProvider = {
+  provide: EmailProvider,
+  useClass: process.env.USE_AWS_SES ? AwsSesService : SendGridService,
+};
 
 @Module({
-  imports: [],
+  imports: [HttpModule, PermissionModule],
   controllers: [],
   providers: [
     EmailService,
@@ -16,9 +25,9 @@ import { SendGridService } from '../services/sendgrid.service';
     TranslationService,
     ConfigService,
     GoogleTranslateService,
-    SendGridService,
-    MailService,
+    GovDeliveryService,
     Logger,
+    emailProvider,
   ],
   exports: [EmailService],
 })

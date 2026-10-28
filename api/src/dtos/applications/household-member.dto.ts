@@ -1,4 +1,8 @@
+import { Address } from '../addresses/address.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+import { HouseholdMemberRelationship } from '../../enums/applications/household-member-relationship-enum';
+import { IdOnlyDTO } from '../shared/id-only.dto';
 import {
   IsDefined,
   IsEnum,
@@ -7,14 +11,10 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { YesNoEnum } from '@prisma/client';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { HouseholdMemberRelationship } from '../../enums/applications/household-member-relationship-enum';
-import { AbstractDTO } from '../shared/abstract.dto';
-import { Address } from '../addresses/address.dto';
+import { YesNoEnum } from '@prisma/client';
 
-export class HouseholdMember extends AbstractDTO {
+export class HouseholdMember extends IdOnlyDTO {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()

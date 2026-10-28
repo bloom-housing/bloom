@@ -1,26 +1,30 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
-import { ValidateNested } from 'class-validator';
-import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AddressCreate } from '../addresses/address-create.dto';
+import { AddressUpdate } from '../addresses/address-update.dto';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Applicant } from './applicant.dto';
+import { Expose, Type } from 'class-transformer';
+import { IsString, IsUUID, ValidateNested } from 'class-validator';
+import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class ApplicantUpdate extends OmitType(Applicant, [
   'id',
-  'createdAt',
-  'updatedAt',
   'applicantAddress',
   'applicantWorkAddress',
 ]) {
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate })
-  applicantAddress: AddressCreate;
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  id?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate })
-  applicantWorkAddress: AddressCreate;
+  @Type(() => AddressUpdate)
+  @ApiProperty({ type: AddressUpdate })
+  applicantAddress: AddressUpdate;
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressUpdate)
+  @ApiProperty({ type: AddressUpdate })
+  applicantWorkAddress: AddressUpdate;
 }

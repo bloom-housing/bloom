@@ -6,7 +6,12 @@ import {
   Listing,
   MarketingTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { imageUrlFromListing, oneLineAddress, ClickableCard } from "@bloom-housing/shared-helpers"
+import {
+  imageUrlFromListing,
+  IMAGE_FALLBACK_URL,
+  oneLineAddress,
+  ClickableCard,
+} from "@bloom-housing/shared-helpers"
 import { StackedTable, t } from "@bloom-housing/ui-components"
 import { Card, Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
 import {
@@ -38,16 +43,24 @@ export const ListingCard = ({
   showHomeType,
 }: ListingCardProps) => {
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
-
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !showHomeType,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !showHomeType,
+    hideAccessibilityFeaturesTag: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
   const status = getListingApplicationStatus(listing, true, true)
   const actions = []
 
@@ -152,11 +165,19 @@ export const ListingCard = ({
               )}
             </div>
             <div className={styles["image"]}>
-              <div
+              <img
                 className={styles["image-background"]}
-                style={{ backgroundImage: `url(${imageUrl})` }}
-                role="img"
-                aria-label={t("listings.buildingImageAltText")}
+                src={imageUrl}
+                alt={listing.listingImages?.[0]?.description || t("listings.buildingImageAltText")}
+                ref={(el) => {
+                  if (el?.complete) el.style.opacity = "1"
+                }}
+                onLoad={(e) => {
+                  e.currentTarget.style.opacity = "1"
+                }}
+                onError={(e) => {
+                  e.currentTarget.src = IMAGE_FALLBACK_URL
+                }}
               />
             </div>
           </div>

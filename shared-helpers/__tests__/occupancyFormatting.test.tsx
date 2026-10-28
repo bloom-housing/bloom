@@ -2,13 +2,11 @@ import React from "react"
 import { cleanup } from "@testing-library/react"
 import {
   occupancyTable,
-  getOccupancyDescription,
   getOccupancy,
   stackedOccupancyTable,
   stackedUnitGroupsOccupancyTable,
 } from "../src/views/occupancyFormatting"
-import { t } from "@bloom-housing/ui-components"
-import { Listing, UnitType, UnitTypeEnum, UnitsSummarized } from "../src/types/backend-swagger"
+import { Listing, UnitTypeEnum, UnitsSummarized } from "../src/types/backend-swagger"
 import { unitGroup } from "./testHelpers"
 
 const testListing: Listing = {} as Listing
@@ -120,50 +118,17 @@ describe("occupancy formatting helper", () => {
     expect(occupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { content: "2-6 people" },
-        unitType: { content: <strong>3 BR</strong> },
+        unitType: { content: <strong>3 Bedrooms</strong> },
       },
       {
         occupancy: { content: "at least 1 person" },
-        unitType: { content: <strong>2 BR</strong> },
+        unitType: { content: <strong>2 Bedrooms</strong> },
       },
       {
         occupancy: { content: "1 person" },
-        unitType: { content: <strong>SRO</strong> },
+        unitType: { content: <strong>Single Room Occupancy</strong> },
       },
     ])
-  })
-  it("properly creates occupancy description for some SRO", () => {
-    expect(getOccupancyDescription(testListing)).toBe(t("listings.occupancyDescriptionSomeSro"))
-  })
-  it("properly creates occupancy description for no SRO", () => {
-    const testListing2 = testListing
-    testListing2.unitsSummarized = {
-      ...unitsSummarized,
-      unitTypes: [
-        {
-          name: "threeBdrm",
-          numBedrooms: 3,
-        },
-        {
-          name: "twoBdrm",
-          numBedrooms: 2,
-        },
-      ] as UnitType[],
-    }
-    expect(getOccupancyDescription(testListing2)).toBe(t("listings.occupancyDescriptionNoSro"))
-  })
-  it("properly creates occupancy description for all SRO", () => {
-    const testListing3 = testListing
-    testListing3.unitsSummarized = {
-      ...unitsSummarized,
-      unitTypes: [
-        {
-          name: "SRO",
-          numBedrooms: 1,
-        },
-      ] as UnitType[],
-    }
-    expect(getOccupancyDescription(testListing3)).toBe(t("listings.occupancyDescriptionAllSro"))
   })
 })
 
@@ -172,15 +137,15 @@ describe("occupancy formatting helper stacked table", () => {
     expect(stackedOccupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { cellText: "2-6 people" },
-        unitType: { cellText: "3 BR" },
+        unitType: { cellText: "3 Bedrooms" },
       },
       {
         occupancy: { cellText: "at least 1 person" },
-        unitType: { cellText: "2 BR" },
+        unitType: { cellText: "2 Bedrooms" },
       },
       {
         occupancy: { cellText: "1 person" },
-        unitType: { cellText: "SRO" },
+        unitType: { cellText: "Single Room Occupancy" },
       },
     ])
   })
@@ -243,11 +208,11 @@ describe("occupancy formatting helper stacked table", () => {
         occupancy: { cellText: "1-2 people" },
       },
       {
-        unitType: { cellText: "1 BR" },
+        unitType: { cellText: "1 Bedroom" },
         occupancy: { cellText: "1-2 people" },
       },
       {
-        unitType: { cellText: "2 BR, 3 BR" },
+        unitType: { cellText: "2 Bedrooms, 3 Bedrooms" },
         occupancy: { cellText: "2-4 people" },
       },
     ])
@@ -371,19 +336,19 @@ describe("occupancy formatting helper stacked table", () => {
 
     expect(stackedUnitGroupsOccupancyTable(testListing)).toStrictEqual([
       {
-        unitType: { cellText: "Studio, 1 BR" },
+        unitType: { cellText: "Studio, 1 Bedroom" },
         occupancy: { cellText: "1-4 people" },
       },
       {
-        unitType: { cellText: "2 BR" },
+        unitType: { cellText: "2 Bedrooms" },
         occupancy: { cellText: "at least 2 people" },
       },
       {
-        unitType: { cellText: "3 BR" },
+        unitType: { cellText: "3 Bedrooms" },
         occupancy: { cellText: "no more than 6 people" },
       },
       {
-        unitType: { cellText: "4 BR" },
+        unitType: { cellText: "4 Bedrooms" },
         occupancy: { cellText: "3-6 people" },
       },
     ])

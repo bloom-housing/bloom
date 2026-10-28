@@ -1,0 +1,9 @@
+.faq-page {
+  --page-header-layout-content-bg-color: var(--seeds-bg-color-canvas);
+  .faq-card {
+    max-width: var(--seeds-width-3xl);
+    h2 {
+      font-size: var(--seeds-font-size-2xl);
+    }
+  }
+}

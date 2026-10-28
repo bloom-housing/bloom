@@ -1,7 +1,7 @@
 import { SetStateAction } from "react"
+import axios, { AxiosResponse, AxiosProgressEvent } from "axios"
 import { t, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
-import { CloudinaryUpload } from "./listings/CloudinaryUpload"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import tz from "dayjs/plugin/timezone"
@@ -18,6 +18,7 @@ import {
   Application,
   AssetsService,
   IncomePeriodEnum,
+  UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import * as styles from "../components/listings/PaperListingForm/ListingForm.module.scss"
 
@@ -98,7 +99,12 @@ export const booleanToString = (bool: boolean): string => {
   return bool === true ? "true" : "false"
 }
 
-export const getRentType = (unit: TempUnit): string | null => {
+export const getRentType = (unit: TempUnit, isLandUse = false): string | null => {
+  if (isLandUse) {
+    if (unit?.monthlyRentAsPercentOfIncome) return "percentage"
+    return unit?.monthlyIncomeMin || unit?.monthlyRent ? "fixed" : null
+  }
+
   return unit?.monthlyIncomeMin && unit?.monthlyRent
     ? "fixed"
     : unit?.monthlyRentAsPercentOfIncome
@@ -141,11 +147,14 @@ export const createTime = (
 
   return dayjs(date).hour(formattedHours).minute(parseInt(formTime.minutes)).toDate()
 }
-
 /**
- * Create Date object depending on DateField component
+ * Create Date object depending on DateField component.
+ * Pass `utcMidnight: true` for UTC midnight (start of the day) of the selected calendar date.
  */
-export const createDate = (formDate: { year: string; month: string; day: string }) => {
+export const createDate = (
+  formDate: { year: string; month: string; day: string },
+  utcMidnight?: boolean
+) => {
   const year = formDate?.year
   let month = formDate?.month
   let day = formDate?.day
@@ -154,68 +163,194 @@ export const createDate = (formDate: { year: string; month: string; day: string 
   if (day.length === 1) day = `0${day}`
   if (month.length === 1) month = `0${month}`
 
-  const date = dayjs(`${year}-${month}-${day}`, "YYYY-MM-DD", true)
-  if (!date.isValid()) return null
+  const dateStr = `${year}-${month}-${day}`
+  const parsed = dayjs(dateStr, "YYYY-MM-DD", true)
+  if (!parsed.isValid()) return null
 
-  return date.toDate()
+  if (utcMidnight) {
+    return dayjs.utc(dateStr, "YYYY-MM-DD", true).startOf("day").toDate()
+  }
+
+  return parsed.toDate()
+}
+
+// fileId is the bare storage key. On s3 `id` is the full public url, which some consumers store
+// verbatim, so the key is reported separately rather than by changing `id`. Optional because the
+// listing callers predate it and set only id and url.
+export interface FileUploadData {
+  id: string
+  url: string
+  fileId?: string
 }
 
 interface FileUploaderParams {
   file: File
-  setCloudinaryData: (data: SetStateAction<{ id: string; url: string }>) => void
+  setFileUploadData: (data: SetStateAction<FileUploadData>) => void
   setProgressValue: (value: SetStateAction<number>) => void
+  contentType?: string
+  contentDisposition?: string
 }
 
 /**
- * Accept a file from the Dropzone component along with data and progress state
- * setters. It will then handle obtaining a signature from the backend and
- * uploading the file to Cloudinary, setting progress along the way and the
- * id/url of the file when the upload is complete.
+ * Accept a file from the Dropzone component along with data and progress state setters. It will
+ * then handle obtaining a signature from the backend and uploading the file, setting progress along
+ * the way and the id/url of the file when the upload is complete.
  */
-export const cloudinaryFileUploader = async ({
+export const fileUploader = async ({
   file,
-  setCloudinaryData,
+  setFileUploadData,
   setProgressValue,
+  contentType,
+  contentDisposition,
 }: FileUploaderParams) => {
-  const cloudName = process.env.cloudinaryCloudName
-  const uploadPreset = process.env.cloudinarySignedPreset
-
-  setProgressValue(1)
-
-  const timestamp = Math.round(new Date().getTime() / 1000)
-  const tag = "browser_upload"
-
-  const assetsService = new AssetsService()
-  const params = {
-    timestamp,
-    tags: tag,
-    upload_preset: uploadPreset,
+  const onUploadProgress = (p: AxiosProgressEvent) => {
+    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
   }
 
-  const resp = await assetsService.createPresignedUploadMetadata({
-    body: { parametersToSign: params },
-  })
-  const signature = resp.signature
+  const assetsService = new AssetsService()
+  setProgressValue(1)
 
-  setProgressValue(3)
-
-  void CloudinaryUpload({
-    signature,
-    apiKey: process.env.cloudinaryKey,
-    timestamp,
-    file,
-    onUploadProgress: (progress) => {
-      setProgressValue(progress)
-    },
-    cloudName,
-    uploadPreset,
-    tag,
-  }).then((response) => {
-    setProgressValue(100)
-    setCloudinaryData({
-      id: response.data.public_id,
-      url: cloudinaryUrlFromId(response.data.public_id),
+  if (process.env.useS3FileStorage === "TRUE") {
+    const resp = await assetsService.createS3UploadUrl({
+      body: {
+        contentType: contentType || "",
+        contentDisposition: contentDisposition || "",
+      },
     })
+    const { uploadUrl, publicUrl, fileId } = resp
+    setProgressValue(3)
+
+    void S3Upload({
+      file,
+      uploadUrl,
+      onUploadProgress,
+      contentType,
+      contentDisposition,
+    })
+      .then((_) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: publicUrl,
+          url: publicUrl,
+          fileId,
+        })
+      })
+      .catch(() => {
+        alert(
+          "Unable to upload the file. Please verify the file format is correct before retrying."
+        )
+        setProgressValue(0)
+      })
+  } else {
+    const timestamp = Math.round(new Date().getTime() / 1000)
+    const tag = "browser_upload"
+
+    const uploadPreset = process.env.cloudinarySignedPreset
+    const params = {
+      timestamp,
+      tags: tag,
+      upload_preset: uploadPreset,
+    }
+    const resp = await assetsService.createPresignedUploadMetadata({
+      body: { parametersToSign: params },
+    })
+    const signature = resp.signature
+    setProgressValue(3)
+
+    void CloudinaryUpload({
+      file,
+      uploadPreset,
+      tag,
+      timestamp,
+      signature,
+      onUploadProgress,
+    })
+      .then((response) => {
+        setProgressValue(100)
+        setFileUploadData({
+          id: response.data.public_id,
+          url: cloudinaryUrlFromId(response.data.public_id),
+          fileId: response.data.public_id,
+        })
+      })
+      .catch(() => {
+        alert(
+          "Unable to upload the file. Please verify the file format is correct before retrying."
+        )
+        setProgressValue(0)
+      })
+  }
+}
+
+interface CloudinaryUploadProps {
+  file: File
+  uploadPreset?: string
+  tag?: string
+  timestamp?: number
+  signature?: string
+  onUploadProgress: (progress: AxiosProgressEvent) => void
+}
+
+export const CloudinaryUpload = async ({
+  file,
+  uploadPreset,
+  tag = "browser_upload",
+  timestamp,
+  signature,
+  onUploadProgress,
+}: CloudinaryUploadProps): Promise<AxiosResponse> => {
+  const cloudName = process.env.cloudinaryCloudName
+  const apiKey = process.env.cloudinaryKey
+
+  const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`
+  const data = new FormData()
+  data.append("upload_preset", uploadPreset)
+  data.append("tags", tag)
+  data.append("file", file)
+  if (signature && timestamp && apiKey) {
+    data.append("signature", signature)
+    data.append("timestamp", `${timestamp}`)
+    data.append("api_key", apiKey)
+  }
+
+  if (!cloudName || cloudName == "" || !uploadPreset || uploadPreset == "") {
+    const err = "Please supply a cloud name and upload preset for Cloudinary"
+    alert(err)
+    throw err
+  }
+
+  return await axios.request({
+    method: "post",
+    url: url,
+    data: data,
+    onUploadProgress: onUploadProgress,
+  })
+}
+
+interface S3UploadProps {
+  file: File
+  uploadUrl: string
+  onUploadProgress: (progress: AxiosProgressEvent) => void
+  contentType: string
+  contentDisposition: string
+}
+
+export const S3Upload = async ({
+  file,
+  uploadUrl,
+  onUploadProgress,
+  contentType,
+  contentDisposition,
+}: S3UploadProps) => {
+  await axios.request({
+    method: "put",
+    url: uploadUrl,
+    data: file,
+    onUploadProgress: onUploadProgress,
+    headers: {
+      "Content-Type": contentType || "",
+      "Content-Disposition": contentDisposition || "",
+    },
   })
 }
 
@@ -371,4 +506,8 @@ export const mergeApplicationNames = (applications: Application[]) => {
   }, [])
 
   return `${names.join(", ")}`
+}
+
+export const isAdminRole = (userRoles: UserRole) => {
+  return userRoles?.isAdmin || userRoles?.isSuperAdmin || userRoles?.isSupportAdmin
 }

@@ -11,7 +11,7 @@ const server = setupServer()
 
 beforeAll(() => {
   server.listen()
-  mockNextRouter({ token: "ex4mpl3-tok3n" })
+  mockNextRouter({ token: "test-reset-token" })
 })
 
 afterEach(() => server.resetHandlers())
@@ -26,11 +26,7 @@ describe("Public Reset Password Page", () => {
     const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
     expect(passwordInput).toBeInTheDocument()
     expect(passwordInput).toHaveAttribute("type", "password")
-    const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-      selector: "input",
-    })
-    expect(confirmPasswordInput).toBeInTheDocument()
-    expect(confirmPasswordInput).toHaveAttribute("type", "password")
+    expect(screen.getByLabelText(/show password/i)).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /change password/i })).toBeInTheDocument()
   })
 
@@ -39,42 +35,17 @@ describe("Public Reset Password Page", () => {
       render(<ResetPassword />)
       expect(screen.getByLabelText(/^password$/i, { selector: "input" })).toBeValid()
       expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(screen.getByLabelText(/password confirmation/i, { selector: "input" })).toBeValid()
-      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
     })
 
     it("show missing password on empty input", async () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
 
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(passwordInput).toBeInvalid()
-      expect(confirmPasswordInput).toBeValid()
       expect(await screen.findByText("Please enter new login password")).toBeInTheDocument()
-      expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
-    })
-
-    it("show not matching password error on empty password confirmation input", async () => {
-      render(<ResetPassword />)
-
-      const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
-
-      await userEvent.type(passwordInput, "Password_1")
-      await userEvent.type(confirmPasswordInput, "Password_2")
-      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
-
-      expect(passwordInput).toBeValid()
-      expect(confirmPasswordInput).toBeInvalid()
-      expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
-      expect(await screen.findByText("The passwords do not match")).toBeInTheDocument()
     })
   })
 
@@ -126,12 +97,8 @@ describe("Public Reset Password Page", () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
 
       await userEvent.type(passwordInput, "Password")
-      await userEvent.type(confirmPasswordInput, "Password")
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(await screen.findByText(value)).toBeInTheDocument()
@@ -148,24 +115,20 @@ describe("Public Reset Password Page", () => {
       render(<ResetPassword />)
 
       const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-      const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-        selector: "input",
-      })
 
       await userEvent.type(passwordInput, "Password")
-      await userEvent.type(confirmPasswordInput, "Password")
       await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
       expect(
         await screen.findByText(
-          "There was an error. Please try again, or contact support for help."
+          /There was an error. Please try again, or contact support at [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,} for help/
         )
       ).toBeInTheDocument()
     })
   })
 
   it("should navigate on success", async () => {
-    const { pushMock } = mockNextRouter({ token: "ex4mpl3-tok3n" })
+    const { pushMock } = mockNextRouter({ token: "test-reset-token" })
     server.use(
       rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
         return res(
@@ -183,20 +146,95 @@ describe("Public Reset Password Page", () => {
     render(<ResetPassword />)
 
     const passwordInput = screen.getByLabelText(/^password$/i, { selector: "input" })
-    const confirmPasswordInput = screen.getByLabelText(/password confirmation/i, {
-      selector: "input",
-    })
 
     await userEvent.type(passwordInput, "Password")
-    await userEvent.type(confirmPasswordInput, "Password")
     await userEvent.click(screen.getByRole("button", { name: /change password/i }))
 
     expect(screen.queryByText("Please enter new login password")).not.toBeInTheDocument()
-    expect(screen.queryByText("The passwords do not match")).not.toBeInTheDocument()
 
     expect(await screen.findByText("Welcome back, John!"))
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith("/account/applications")
+    })
+  })
+
+  describe("redirect URL validation with showMandatedAccounts", () => {
+    let originalShowMandatedAccounts: string
+
+    beforeEach(() => {
+      originalShowMandatedAccounts = process.env.showMandatedAccounts
+      process.env.showMandatedAccounts = "TRUE"
+      server.use(
+        rest.put("http://localhost/api/adapter/auth/update-password", (_req, res, ctx) => {
+          return res(ctx.json({ success: true }))
+        }),
+        rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
+          return res(
+            ctx.json({ ...user, firstName: "John", listings: [], agreedToTermsOfService: true })
+          )
+        })
+      )
+    })
+
+    afterEach(() => {
+      process.env.showMandatedAccounts = originalShowMandatedAccounts
+    })
+
+    const submitForm = async () => {
+      await userEvent.type(screen.getByLabelText(/^password$/i, { selector: "input" }), "Password")
+      await userEvent.click(screen.getByRole("button", { name: /change password/i }))
+    }
+
+    it("redirects to a valid internal redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "test-reset-token",
+        redirectUrl: "/listings/abc",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/listings/abc?listingId=abc")
+      })
+    })
+
+    it("falls back to /account/applications for an external redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "test-reset-token",
+        redirectUrl: "https://bad.com",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/account/applications")
+      })
+    })
+
+    it("falls back to /account/applications for a protocol-relative redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "test-reset-token",
+        redirectUrl: "//bad.com",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/account/applications")
+      })
+    })
+
+    it("falls back to /account/applications for a javascript: redirectUrl", async () => {
+      const { pushMock } = mockNextRouter({
+        token: "test-reset-token",
+        redirectUrl: "javascript:alert(1)",
+        listingId: "abc",
+      })
+      render(<ResetPassword />)
+      await submitForm()
+      await waitFor(() => {
+        expect(pushMock).toHaveBeenCalledWith("/account/applications")
+      })
     })
   })
 })

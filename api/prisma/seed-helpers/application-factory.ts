@@ -7,33 +7,39 @@ import {
   YesNoEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
-import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
+import dayjs from 'dayjs';
+import { randomInt } from 'crypto';
 import { addressFactory } from './address-factory';
-import { randomNoun } from './word-generator';
+import { alternateContactFactory } from './alternate-contact-factory';
+import { preferenceFactory } from './application-preference-factory';
+import { randomBoolean } from './boolean-generator';
+import { demographicsFactory } from './demographic-factory';
 import {
   randomBirthDay,
   randomBirthMonth,
   randomBirthYear,
 } from './number-generator';
-import { preferenceFactory } from './application-preference-factory';
-import { demographicsFactory } from './demographic-factory';
-import { alternateContactFactory } from './alternate-contact-factory';
-import { randomBoolean } from './boolean-generator';
+import { randomNoun } from './word-generator';
+import { RaceEthnicityConfiguration } from '../../src/dtos/jurisdictions/race-ethnicity-configuration.dto';
+import { generateConfirmationCode } from '../../src/utilities/applications-utilities';
 
+// TODO: Needs to handle V2MSQ
 export const applicationFactory = async (optionalParams?: {
-  createdAt?: Date;
-  unitTypeId?: string;
-  applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
-  listingId?: string;
-  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
-  demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
-  multiselectQuestions?: Partial<MultiselectQuestions>[];
-  userId?: string;
-  submissionType?: ApplicationSubmissionTypeEnum;
-  isNewest?: boolean;
-  expireAfter?: Date;
-  wasPIICleared?: boolean;
   additionalPhone?: string;
+  applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
+  createdAt?: Date;
+  demographics?: Prisma.DemographicsCreateWithoutApplicationsInput;
+  enableV2MSQ?: boolean;
+  expireAfter?: Date;
+  householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput[];
+  isNewest?: boolean;
+  listingId?: string;
+  multiselectQuestions?: Partial<MultiselectQuestions>[];
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration;
+  submissionType?: ApplicationSubmissionTypeEnum;
+  unitTypeId?: string;
+  userId?: string;
+  wasPIICleared?: boolean;
 }): Promise<Prisma.ApplicationsCreateInput> => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -45,15 +51,21 @@ export const applicationFactory = async (optionalParams?: {
       ],
     };
   }
-  const demographics = await demographicsFactory();
+  const demographics = await demographicsFactory(
+    optionalParams?.raceEthnicityConfiguration,
+  );
   const includeAdditionalPhone =
     !!optionalParams?.additionalPhone || randomBoolean();
   let householdSize = 1;
   if (optionalParams?.householdMember) {
     householdSize = optionalParams.householdMember.length + 1;
   }
+  const createdAtDate =
+    optionalParams?.createdAt ||
+    // Created at date sometime in the last 2 months
+    dayjs(new Date()).subtract(randomInt(87_600), 'minutes').toDate();
   return {
-    createdAt: optionalParams?.createdAt || new Date(),
+    createdAt: createdAtDate,
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
     appUrl: '',
@@ -61,30 +73,37 @@ export const applicationFactory = async (optionalParams?: {
     submissionType:
       optionalParams?.submissionType ??
       ApplicationSubmissionTypeEnum.electronical,
-    submissionDate: new Date(),
+    submissionDate:
+      optionalParams?.submissionType !== ApplicationSubmissionTypeEnum.paper
+        ? createdAtDate
+        : dayjs(createdAtDate).add(2, 'days').toDate(),
     householdSize: householdSize,
-    income: '40000',
+    income: randomInt(500, 100000).toString(),
     incomePeriod: randomBoolean()
       ? IncomePeriodEnum.perYear
       : IncomePeriodEnum.perMonth,
-    preferences: preferenceFactory(
-      optionalParams?.multiselectQuestions
-        ? optionalParams.multiselectQuestions.filter(
-            (question) =>
-              question.applicationSection ===
-              MultiselectQuestionsApplicationSectionEnum.preferences,
-          )
-        : [],
-    ),
-    programs: preferenceFactory(
-      optionalParams?.multiselectQuestions
-        ? optionalParams.multiselectQuestions.filter(
-            (question) =>
-              question.applicationSection ===
-              MultiselectQuestionsApplicationSectionEnum.programs,
-          )
-        : [],
-    ),
+    preferences: optionalParams?.enableV2MSQ
+      ? []
+      : preferenceFactory(
+          optionalParams?.multiselectQuestions
+            ? optionalParams.multiselectQuestions.filter(
+                (question) =>
+                  question.applicationSection ===
+                  MultiselectQuestionsApplicationSectionEnum.preferences,
+              )
+            : [],
+        ),
+    programs: optionalParams?.enableV2MSQ
+      ? []
+      : preferenceFactory(
+          optionalParams?.multiselectQuestions
+            ? optionalParams.multiselectQuestions.filter(
+                (question) =>
+                  question.applicationSection ===
+                  MultiselectQuestionsApplicationSectionEnum.programs,
+              )
+            : [],
+        ),
     preferredUnitTypes,
     sendMailToMailingAddress: true,
     applicationsMailingAddress: {
@@ -113,7 +132,7 @@ export const applicationFactory = async (optionalParams?: {
           },
         }
       : undefined,
-    incomeVouchers: randomBoolean(),
+    incomeVouchers: randomBoolean() ? ['incomeVoucher'] : [],
     additionalPhoneNumber: includeAdditionalPhone
       ? optionalParams?.additionalPhone || '(456) 456-4564'
       : undefined,
@@ -151,4 +170,25 @@ export const applicantFactory = (
     },
     ...overrides,
   };
+};
+
+export const applicationFactoryMany = async (
+  count: number,
+  optionalParams?:
+    | Parameters<typeof applicationFactory>[0]
+    | ((
+        index: number,
+      ) =>
+        | Parameters<typeof applicationFactory>[0]
+        | Promise<Parameters<typeof applicationFactory>[0]>),
+): Promise<Prisma.ApplicationsCreateInput[]> => {
+  return Promise.all(
+    Array.from({ length: count }, async (_, index) =>
+      applicationFactory(
+        typeof optionalParams === 'function'
+          ? await optionalParams(index)
+          : optionalParams,
+      ),
+    ),
+  );
 };

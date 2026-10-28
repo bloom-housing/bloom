@@ -1,49 +1,103 @@
 import React from "react"
-import Link from "next/link"
-import { t } from "@bloom-housing/ui-components"
+import { Link } from "@bloom-housing/ui-seeds"
 import MaxWidthLayout from "../../layouts/max-width"
+import {
+  FooterContent,
+  FooterLinks,
+  getGenericFooterLinksContent,
+  getGenericFooterTextContent,
+} from "../../static_content/generic_footer_content"
+import {
+  getJurisdictionFooterLinksContent,
+  getJurisdictionFooterTextContent,
+} from "../../static_content/jurisdiction_footer_content"
+import {
+  getStoredFooterLinksContent,
+  getStoredFooterTextContent,
+} from "../../static_content/stored_content"
+import { useJurisdictionContent } from "../../lib/JurisdictionContentContext"
 import styles from "./CustomSiteFooter.module.scss"
+import { t } from "@bloom-housing/ui-components"
 
 const CustomSiteFooter = () => {
+  const jurisdictionContent = useJurisdictionContent()
+
+  const textContent: FooterContent = {
+    ...getGenericFooterTextContent(),
+    ...getJurisdictionFooterTextContent(),
+    ...getStoredFooterTextContent(jurisdictionContent),
+  }
+  const footerLinksContent: FooterLinks = {
+    ...getGenericFooterLinksContent(),
+    ...getJurisdictionFooterLinksContent(),
+    ...getStoredFooterLinksContent(jurisdictionContent),
+  }
+
+  const showContentFooter =
+    textContent.logo || textContent.textSections?.length > 0 || textContent.socialLinks?.length > 0
+  const showLinksFooter =
+    footerLinksContent.links?.length > 0 ||
+    footerLinksContent.cityString ||
+    footerLinksContent.equalHousingOpportunity
+
+  if (!showContentFooter && !showLinksFooter) return <></>
+
   return (
     <footer>
-      <MaxWidthLayout className={styles["footer-container"]}>
-        <div className={styles["footer-content-container"]}>
-          <div className={styles["footer"]}>
-            <div className={styles["icon-container"]}>
-              <a href={"/"} className={styles["jurisdiction-icon"]}>
-                <img src="/images/default-housing-logo.svg" alt={"Jurisdiction Logo"} />
-              </a>
-            </div>
-            <div className={styles["text-container"]}>
-              <span>{t("footer.content.projectOf")}</span>
-              <Link href={"/"}>Mayor's Office of Housing Development</Link>
-            </div>
-            <div className={styles["text-container"]}>
-              <span>{t("footer.content.partnership")}</span>
-              <Link href={"/"}>Bloomington Department of Technology</Link>
-              <Link href={"/"}>Mayor's Office of Civic Innovation</Link>
-            </div>
-            <div className={styles["text-container"]}>
-              <p>{t("footer.content.applicationQuestions")}</p>
-              <p>{t("footer.content.programQuestions")}</p>
+      {showContentFooter && (
+        <MaxWidthLayout className={styles["footer-container"]}>
+          <div className={styles["footer-content-container"]}>
+            <div className={styles["footer"]}>
+              {textContent.logo && (
+                <div className={styles["icon-container"]}>
+                  <a href={textContent.logo.logoUrl || "/"} className={styles["jurisdiction-icon"]}>
+                    <img
+                      src={textContent.logo.logoSrc}
+                      alt={textContent.logo.logoAltText || "Jurisdiction Logo"}
+                    />
+                  </a>
+                </div>
+              )}
+              {textContent.textSections.map((section, index) => (
+                <div key={index} className={styles["text-container"]}>
+                  {section}
+                </div>
+              ))}
+              {textContent.socialLinks?.length > 0 && (
+                <div className={styles["icon-container"]}>
+                  {textContent.socialLinks.map((social) => (
+                    <a href={social.href} target="_blank" key={social.icon}>
+                      <img
+                        src={`/images/logo-${social.icon}.svg`}
+                        alt={t(`footer.alt.${social.icon}`)}
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </MaxWidthLayout>
-      <MaxWidthLayout
-        className={`${styles["footer-content-container"]} ${styles["copyright-content-container"]}`}
-      >
-        <div className={`${styles["footer"]} ${styles["copyright"]}`}>
-          <div className={styles["copyright-text"]}>{t("footer.copyright")}</div>
-          <div className={styles.links}>
-            <Link href="/">{t("footer.giveFeedback")}</Link>
-            <Link href="/">{t("footer.contact")}</Link>
-            <Link href="/privacy">{t("pageTitle.privacy")}</Link>
-            <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
+        </MaxWidthLayout>
+      )}
+      {showLinksFooter && (
+        <MaxWidthLayout
+          className={`${styles["footer-content-container"]} ${styles["copyright-content-container"]}`}
+        >
+          <div className={`${styles["footer"]} ${styles["copyright"]}`}>
+            <div className={styles["copyright-text"]}>{footerLinksContent.cityString || ""}</div>
+            <div className={styles.links}>
+              {footerLinksContent.links?.map((link, index) => (
+                <Link key={index} href={link.href}>
+                  {link.text}
+                </Link>
+              ))}
+              {footerLinksContent.equalHousingOpportunity && (
+                <img src={`/images/logo-eho.svg`} alt={t(`footer.alt.equalHousingOpportunity`)} />
+              )}
+            </div>
           </div>
-        </div>
-      </MaxWidthLayout>
+        </MaxWidthLayout>
+      )}
     </footer>
   )
 }

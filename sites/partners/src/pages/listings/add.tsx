@@ -3,18 +3,15 @@ import Head from "next/head"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../components/listings/PaperListingForm"
-import { MetaTags } from "../../components/shared/MetaTags"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import ListingGuard from "../../components/shared/ListingGuard"
 import { useRouter } from "next/router"
 
 const NewListing = () => {
-  const metaDescription = ""
-  const metaImage = "" // TODO: replace with hero image
-
   const router = useRouter()
   const selectedJurisdiction = router.query.jurisdictionId as string
   const isNonRegulated = !!router.query.nonRegulated
+  const isLandUse = !!router.query.landUse
 
   useEffect(() => {
     if (!selectedJurisdiction) {
@@ -28,11 +25,6 @@ const NewListing = () => {
         <Head>
           <title>{`Add listing - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <MetaTags
-          title={t("nav.siteTitlePartners")}
-          image={metaImage}
-          description={metaDescription}
-        />
         <NavigationHeader
           className="relative"
           title={t("listings.newListing")}
@@ -45,7 +37,11 @@ const NewListing = () => {
             </Breadcrumbs>
           }
         />
-        <PaperListingForm jurisdictionId={selectedJurisdiction} isNonRegulated={isNonRegulated} />
+        <PaperListingForm
+          jurisdictionId={selectedJurisdiction}
+          isNonRegulated={isNonRegulated}
+          isLandUse={isLandUse}
+        />
       </Layout>
     </ListingGuard>
   )

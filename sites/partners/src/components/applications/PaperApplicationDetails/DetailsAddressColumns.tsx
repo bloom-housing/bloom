@@ -44,20 +44,20 @@ const DetailsAddressColumns = ({
 
   Object.keys(address).forEach((item) => {
     if (type === AddressColsType.residence) {
-      address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
+      address[item] = application.applicant.applicantAddress?.[item] || t("t.n/a")
     }
 
     if (type === AddressColsType.mailing) {
       if (application.sendMailToMailingAddress) {
-        address[item] = application.applicationsMailingAddress[item] || t("t.n/a")
+        address[item] = application.applicationsMailingAddress?.[item] || t("t.n/a")
       } else {
-        address[item] = application.applicant.applicantAddress[item] || t("t.n/a")
+        address[item] = application.applicant.applicantAddress?.[item] || t("t.n/a")
       }
     }
 
     if (type === AddressColsType.work) {
       if (application.applicant.workInRegion === YesNoEnum.yes) {
-        address[item] = application.applicant.applicantWorkAddress[item] || t("t.n/a")
+        address[item] = application.applicant.applicantWorkAddress?.[item] || t("t.n/a")
       } else {
         address[item] = t("t.n/a")
       }
@@ -65,25 +65,25 @@ const DetailsAddressColumns = ({
 
     if (type === AddressColsType.alternateAddress) {
       address[item] =
-        application.alternateContact && application.alternateContact.address[item]
-          ? application.alternateContact.address[item]
+        application.alternateContact && application.alternateContact.address?.[item]
+          ? application.alternateContact.address?.[item]
           : t("t.n/a")
     }
 
     if (type === AddressColsType.memberWork) {
-      address[item] = householdMember?.householdMemberWorkAddress[item]
-        ? householdMember.householdMemberWorkAddress[item]
+      address[item] = householdMember?.householdMemberWorkAddress?.[item]
+        ? householdMember.householdMemberWorkAddress?.[item]
         : t("t.n/a")
     }
 
     if (type === AddressColsType.memberResidence) {
       if (householdMember?.sameAddress === "yes") {
-        address[item] = application.applicant.applicantAddress[item]
-          ? application.applicant.applicantAddress[item]
+        address[item] = application.applicant.applicantAddress?.[item]
+          ? application.applicant.applicantAddress?.[item]
           : t("t.n/a")
       } else {
-        address[item] = householdMember?.householdMemberAddress[item]
-          ? householdMember.householdMemberAddress[item]
+        address[item] = householdMember?.householdMemberAddress?.[item]
+          ? householdMember.householdMemberAddress?.[item]
           : t("t.n/a")
       }
     }
@@ -100,31 +100,31 @@ const DetailsAddressColumns = ({
           label={t("application.contact.streetAddress")}
           testId={`${dataTestId}.streetAddress`}
         >
-          {address.street}
+          {address?.street}
         </FieldValue>
       </Grid.Cell>
 
       <Grid.Cell className={small ? "seeds-grid-span-3" : "seeds-grid-span-2"}>
         <FieldValue label={t("application.contact.apt")} testId={`${dataTestId}.street2`}>
-          {address.street2}
+          {address?.street2}
         </FieldValue>
       </Grid.Cell>
 
       <Grid.Cell className={small && "seeds-grid-span-2"}>
         <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
-          {address.city}
+          {address?.city}
         </FieldValue>
       </Grid.Cell>
 
       <Grid.Cell>
         <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
-          {address.state}
+          {address?.state}
         </FieldValue>
       </Grid.Cell>
 
       <Grid.Cell className={small && "seeds-grid-span-3"}>
         <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
-          {address.zipCode}
+          {address?.zipCode}
         </FieldValue>
       </Grid.Cell>
     </>

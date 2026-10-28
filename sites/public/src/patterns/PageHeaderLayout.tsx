@@ -19,6 +19,8 @@ export interface PageHeaderLayoutProps extends PageHeaderProps {
   inverse?: boolean
   /** Class name applied to container */
   className?: string
+  /** Applies full height styling */
+  fullHeight?: boolean
 }
 
 export const PageHeaderSection = (props: Omit<PageHeaderLayoutProps, "children">) => {
@@ -61,6 +63,7 @@ const PageHeader = (props: PageHeaderProps) => {
 export const PageHeaderLayout = (props: PageHeaderLayoutProps) => {
   const classNames = [styles["page-header-layout"]]
   if (props.inverse) classNames.push(styles["is-inverse"])
+  if (props.fullHeight) classNames.push(styles["full-height"])
   if (props.className) classNames.push(props.className)
 
   return (

@@ -1,12 +1,11 @@
 /* eslint-disable import/no-named-as-default */
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { fireEvent, mockNextRouter, queryByText, render, screen, within } from "../../../testUtils"
+import { fireEvent, mockNextRouter, render, screen, within } from "../../../testUtils"
 import { ListingContext } from "../../../../src/components/listings/ListingContext"
 import { jurisdiction, listing, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import DetailListingData from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../../src/components/listings/PaperListingDetails/sections/DetailListingIntro"
-import DetailBuildingDetails from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailCommunityType from "../../../../src/components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailUnits from "../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import DetailPreferences from "../../../../src/components/listings/PaperListingDetails/sections/DetailPreferences"
@@ -20,11 +19,10 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestionsStatusEnum,
-  RegionEnum,
   ReviewOrderTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import DetailAdditionalFees from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalFees"
-import DetailBuildingFeatures from "../../../../src/components/listings/PaperListingDetails/sections/DetailBuildingFeatures"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { rest } from "msw"
 import DetailAdditionalEligibility from "../../../../src/components/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
@@ -371,74 +369,6 @@ describe("listing data", () => {
       })
     })
 
-    describe("should display Building Details section", () => {
-      it("should display Building Details section - without region", () => {
-        render(
-          <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-            <DetailBuildingDetails />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building details")).toBeInTheDocument()
-        expect(screen.getByText("Building address")).toBeInTheDocument()
-        expect(screen.getByText("Street address")).toBeInTheDocument()
-        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-        expect(screen.getByText("City")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
-        expect(screen.getByText("Longitude")).toBeInTheDocument()
-        expect(screen.getByText("-121.91071")).toBeInTheDocument()
-        expect(screen.getByText("State")).toBeInTheDocument()
-        expect(screen.getByText("CA")).toBeInTheDocument()
-        expect(screen.getByText("Latitude")).toBeInTheDocument()
-        expect(screen.getByText("37.36537")).toBeInTheDocument()
-        expect(screen.getByText("Zip code")).toBeInTheDocument()
-        expect(screen.getByText("95112")).toBeInTheDocument()
-        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-        expect(screen.getByText("Year built")).toBeInTheDocument()
-        expect(screen.getByText("2012")).toBeInTheDocument()
-        expect(screen.queryByText("Region")).not.toBeInTheDocument()
-        expect(screen.queryByText("Southwest")).not.toBeInTheDocument()
-      })
-
-      it("should display Building Details section - with region", () => {
-        render(
-          <AuthContext.Provider
-            value={{
-              profile: { ...user, jurisdictions: [], listings: [] },
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-            }}
-          >
-            <ListingContext.Provider value={{ ...listing, region: RegionEnum.Southwest }}>
-              <DetailBuildingDetails />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
-        )
-
-        expect(screen.getByText("Building details")).toBeInTheDocument()
-        expect(screen.getByText("Building address")).toBeInTheDocument()
-        expect(screen.getByText("Street address")).toBeInTheDocument()
-        expect(screen.getByText("98 Archer Street")).toBeInTheDocument()
-        expect(screen.getByText("City")).toBeInTheDocument()
-        expect(screen.getByText("San Jose")).toBeInTheDocument()
-        expect(screen.getByText("Longitude")).toBeInTheDocument()
-        expect(screen.getByText("-121.91071")).toBeInTheDocument()
-        expect(screen.getByText("State")).toBeInTheDocument()
-        expect(screen.getByText("CA")).toBeInTheDocument()
-        expect(screen.getByText("Latitude")).toBeInTheDocument()
-        expect(screen.getByText("37.36537")).toBeInTheDocument()
-        expect(screen.getByText("Zip code")).toBeInTheDocument()
-        expect(screen.getByText("95112")).toBeInTheDocument()
-        expect(screen.getByText("Neighborhood")).toBeInTheDocument()
-        expect(screen.getByText("Rosemary Gardens Park")).toBeInTheDocument()
-        expect(screen.getByText("Year built")).toBeInTheDocument()
-        expect(screen.getByText("2012")).toBeInTheDocument()
-        expect(screen.getByText("Region")).toBeInTheDocument()
-        expect(screen.getByText("Southwest")).toBeInTheDocument()
-      })
-    })
-
     describe("should display Community Type section", () => {
       it("should display all section data - without disclaimer", () => {
         render(
@@ -593,7 +523,7 @@ describe("listing data", () => {
       expect(screen.queryByText("Unit type")).not.toBeInTheDocument()
       expect(screen.queryByText("AMI")).not.toBeInTheDocument()
       expect(screen.queryByText("Rent")).not.toBeInTheDocument()
-      expect(screen.queryByText("SQ FT")).not.toBeInTheDocument()
+      expect(screen.queryByText("Sq ft")).not.toBeInTheDocument()
       expect(screen.queryByText("ADA")).not.toBeInTheDocument()
       expect(
         screen.queryByText("Do you accept Section 8 Housing Choice Vouchers?")
@@ -616,12 +546,7 @@ describe("listing data", () => {
               units: listing.units.map((entry, idx) => ({
                 ...entry,
                 number: `#${idx + 1}`,
-                unitAccessibilityPriorityTypes: {
-                  id: `ada_${idx}`,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  name: `Test ADA_${idx}`,
-                },
+                accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
               })),
               section8Acceptance: true,
             }}
@@ -642,15 +567,15 @@ describe("listing data", () => {
       expect(screen.getByText("Unit type")).toBeInTheDocument()
       expect(screen.getByText("AMI")).toBeInTheDocument()
       expect(screen.getByText("Rent")).toBeInTheDocument()
-      expect(screen.getByText("SQ FT")).toBeInTheDocument()
-      expect(screen.getByText("ADA")).toBeInTheDocument()
+      expect(screen.getByText("Sq ft")).toBeInTheDocument()
+      expect(screen.getByText("Accessibility priority type")).toBeInTheDocument()
 
       expect(screen.getAllByText(/#[1-9]/i)).toHaveLength(6)
       expect(screen.getAllByText("Studio")).toHaveLength(6)
       expect(screen.getAllByText("45.0")).toHaveLength(6)
-      expect(screen.getAllByText("1104.0")).toHaveLength(6)
+      expect(screen.getAllByText("$1104.0")).toHaveLength(6)
       expect(screen.getAllByText("285")).toHaveLength(6)
-      expect(screen.getAllByText(/Test ADA_\d{1}/)).toHaveLength(6)
+      expect(screen.getAllByText("Mobility")).toHaveLength(6)
       expect(screen.getAllByText("View")).toHaveLength(6)
 
       expect(
@@ -798,122 +723,6 @@ describe("listing data", () => {
       ).toBeInTheDocument()
     })
 
-    describe("should display Building Features section", () => {
-      it("should display data with no accessibility features", () => {
-        render(
-          <ListingContext.Provider
-            value={{
-              ...listing,
-              servicesOffered: "Professional Help",
-            }}
-          >
-            <DetailBuildingFeatures />
-          </ListingContext.Provider>
-        )
-
-        expect(screen.getByText("Building features")).toBeInTheDocument()
-        expect(screen.getByText("Property amenities")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator"
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Unit amenities")).toBeInTheDocument()
-        expect(screen.getByText("Dishwasher")).toBeInTheDocument()
-        expect(screen.getByText("Additional accessibility")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)"
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Smoking policy")).toBeInTheDocument()
-        expect(screen.getByText("Non-smoking building")).toBeInTheDocument()
-        expect(screen.getByText("Pets policy")).toBeInTheDocument()
-        expect(
-          screen.getByText(
-            "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request."
-          )
-        ).toBeInTheDocument()
-        expect(screen.getByText("Services offered")).toBeInTheDocument()
-        expect(screen.getByText("Services offered")).toBeInTheDocument()
-        expect(screen.getByText("Professional Help")).toBeInTheDocument()
-      })
-
-      it("should display accessibility features", () => {
-        document.cookie = "access-token-available=True"
-        server.use(
-          rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
-            return res(ctx.json(user))
-          })
-        )
-
-        render(
-          <AuthContext.Provider
-            value={{
-              profile: {
-                ...user,
-                jurisdictions: [],
-                listings: [],
-              },
-              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                mockJurisdictionsHaveFeatureFlagOn(featureFlag),
-            }}
-          >
-            <ListingContext.Provider
-              value={{
-                ...listing,
-                listingFeatures: {
-                  elevator: true,
-                  wheelchairRamp: true,
-                  serviceAnimalsAllowed: true,
-                  accessibleParking: true,
-                  parkingOnSite: true,
-                  inUnitWasherDryer: true,
-                  laundryInBuilding: true,
-                  barrierFreeEntrance: true,
-                  rollInShower: true,
-                  grabBars: true,
-                  heatingInUnit: true,
-                  acInUnit: true,
-                  hearing: true,
-                  visual: true,
-                  mobility: true,
-                  barrierFreeUnitEntrance: true,
-                  loweredLightSwitch: true,
-                  barrierFreeBathroom: true,
-                  wideDoorways: true,
-                  loweredCabinets: true,
-                },
-              }}
-            >
-              <DetailBuildingFeatures />
-            </ListingContext.Provider>
-          </AuthContext.Provider>
-        )
-
-        expect(screen.getByText("Elevator")).toBeInTheDocument()
-        expect(screen.getByText("Wheelchair ramp")).toBeInTheDocument()
-        expect(screen.getByText("Service animals allowed")).toBeInTheDocument()
-        expect(screen.getByText("Accessible parking spots")).toBeInTheDocument()
-        expect(screen.getByText("Parking on site")).toBeInTheDocument()
-        expect(screen.getByText("In-unit washer/dryer")).toBeInTheDocument()
-        expect(screen.getByText("Laundry in building")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free (no-step) property entrance")).toBeInTheDocument()
-        expect(screen.getByText("Roll-in showers")).toBeInTheDocument()
-        expect(screen.getByText("Grab bars in bathrooms")).toBeInTheDocument()
-        expect(screen.getByText("Heating in unit")).toBeInTheDocument()
-        expect(screen.getByText("AC in unit")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with hearing disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with visual disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Units for those with mobility disabilities")).toBeInTheDocument()
-        expect(screen.getByText("Lowered cabinets and countertops")).toBeInTheDocument()
-        expect(screen.getByText("Lowered light switches")).toBeInTheDocument()
-        expect(screen.getByText("Wide unit doorways for wheelchairs")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free bathrooms")).toBeInTheDocument()
-        expect(screen.getByText("Barrier-free (no-step) unit entrances"))
-      })
-    })
-
     describe("should display Additional Eligibility Rules section", () => {
       it("should display data with selection criteria", () => {
         render(
@@ -931,7 +740,7 @@ describe("listing data", () => {
         expect(
           // Look only for part of the text to verify that content rendered properly
           screen.getByText(
-            /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency./
+            /Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant performance information provided to the credit reporting agency./
           )
         ).toBeInTheDocument()
         expect(screen.getByText("Rental history")).toBeInTheDocument()
@@ -1574,7 +1383,7 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag: FeatureFlagEnum) =>
-                featureFlag !== FeatureFlagEnum.enableReferralQuestionUnits,
+                featureFlag === FeatureFlagEnum.disableCommonApplication,
             }}
           >
             <ListingContext.Provider
@@ -1664,8 +1473,6 @@ describe("listing data", () => {
               ...listing,
               listingsApplicationMailingAddress: {
                 id: "mailing_adress_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
                 city: "Warrensville Heights",
                 state: "Ohio",
                 street: "1598 Peaceful Lane",
@@ -1674,8 +1481,6 @@ describe("listing data", () => {
               applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
               listingsApplicationPickUpAddress: {
                 id: "mailing_adress_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
                 city: "Doral",
                 state: "Florida",
                 street: "2560 Barnes Street",
@@ -1685,8 +1490,6 @@ describe("listing data", () => {
               applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
               listingsApplicationDropOffAddress: {
                 id: "mailing_adress_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
                 city: "Zurich",
                 state: "Montana",
                 street: "3897 Benson Street",
@@ -1755,6 +1558,7 @@ describe("listing data", () => {
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 featureFlag === FeatureFlagEnum.enableMarketingFlyer,
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1772,6 +1576,7 @@ describe("listing data", () => {
         expect(screen.getByText("Application dates")).toBeInTheDocument()
         expect(screen.getByText("Application due date")).toBeInTheDocument()
         expect(screen.getByText("Application due time")).toBeInTheDocument()
+        expect(screen.queryByText("Scheduled listing publish date")).not.toBeInTheDocument()
         expect(screen.getAllByText("None")).toHaveLength(2)
         expect(screen.queryByText("Open houses")).not.toBeInTheDocument()
         expect(screen.queryByText("Open house")).not.toBeInTheDocument()
@@ -1793,13 +1598,16 @@ describe("listing data", () => {
             value={{
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-                featureFlag === FeatureFlagEnum.enableMarketingFlyer,
+                featureFlag === FeatureFlagEnum.enableMarketingFlyer ||
+                featureFlag === FeatureFlagEnum.enableAutopublish,
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
               value={{
                 ...listing,
                 applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                scheduledPublishAt: new Date("2030-06-15T00:00:00.000Z"),
                 listingEvents: [
                   {
                     id: "event_id_1",
@@ -1841,6 +1649,8 @@ describe("listing data", () => {
         expect(screen.getByText("12/20/2024")).toBeInTheDocument()
         expect(screen.getByText("Application due time")).toBeInTheDocument()
         expect(screen.getByText("03:30 PM")).toBeInTheDocument()
+        expect(screen.getByText("Scheduled listing publish date")).toBeInTheDocument()
+        expect(screen.getByText("06/15/2030")).toBeInTheDocument()
         expect(screen.getByText("Open houses")).toBeInTheDocument()
         expect(screen.getByText("Date")).toBeInTheDocument()
         expect(screen.getByText("02/18/2024")).toBeInTheDocument()
@@ -1862,6 +1672,34 @@ describe("listing data", () => {
         expect(screen.getByText("Accessible marketing flyer")).toBeInTheDocument()
         expect(screen.getByText("file_id_2.pdf")).toBeInTheDocument()
       })
+
+      it("should display scheduled application open date only when enableAutoOpenDate is enabled", () => {
+        render(
+          <AuthContext.Provider
+            value={{
+              profile: { ...user, jurisdictions: [], listings: [] },
+              doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+                featureFlag === FeatureFlagEnum.enableAutoOpenDate,
+              getJurisdiction: () => jurisdiction,
+            }}
+          >
+            <ListingContext.Provider
+              value={{
+                ...listing,
+                applicationDueDate: new Date(2024, 11, 20, 15, 30),
+                scheduledApplicationOpenAt: new Date("2030-06-16T00:00:00.000Z"),
+                listingEvents: [],
+              }}
+            >
+              <DetailApplicationDates />
+            </ListingContext.Provider>
+          </AuthContext.Provider>
+        )
+
+        expect(screen.queryByText("Scheduled listing publish date")).not.toBeInTheDocument()
+        expect(screen.getByText("Scheduled application open date")).toBeInTheDocument()
+        expect(screen.getByText("06/16/2030")).toBeInTheDocument()
+      })
     })
 
     describe("should display Verification section", () => {
@@ -1877,6 +1715,7 @@ describe("listing data", () => {
                   enableUnitGroups: false,
                   enableIsVerified: false,
                 }),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1904,6 +1743,7 @@ describe("listing data", () => {
               profile: { ...user, jurisdictions: [], listings: [] },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingContext.Provider
@@ -1980,6 +1820,7 @@ describe("listing data", () => {
               },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingDetail
@@ -2022,6 +1863,7 @@ describe("listing data", () => {
             },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+            getJurisdiction: () => jurisdiction,
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -2058,6 +1900,7 @@ describe("listing data", () => {
               },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -2117,6 +1960,7 @@ describe("listing data", () => {
               },
               doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
                 mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+              getJurisdiction: () => jurisdiction,
             }}
           >
             <ListingDetail listing={result.props.listing} />
@@ -2168,6 +2012,7 @@ describe("listing data", () => {
             },
             doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
               mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+            getJurisdiction: () => jurisdiction,
           }}
         >
           <ListingDetail listing={result.props.listing} />
@@ -2204,6 +2049,7 @@ describe("listing data", () => {
           },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdiction: () => jurisdiction,
         }}
       >
         <ListingDetail
@@ -2214,12 +2060,7 @@ describe("listing data", () => {
                 ...result.props.listing.units[0],
                 number: `#1`,
                 numBathrooms: 1,
-                unitAccessibilityPriorityTypes: {
-                  id: `ada_1`,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  name: `Test ADA_1`,
-                },
+                accessibilityPriorityType: UnitAccessibilityPriorityTypeEnum.mobility,
               },
             ],
           }}
@@ -2282,7 +2123,7 @@ describe("listing data", () => {
     expect(
       within(accessibilitySection).getByText("Accessibility priority type")
     ).toBeInTheDocument()
-    expect(within(accessibilitySection).getByText("Test ADA_1")).toBeInTheDocument()
+    expect(within(accessibilitySection).getByText("Mobility")).toBeInTheDocument()
 
     // Should close on done
     const doneButton = within(unitDrawer).getByText("Done", {
@@ -2308,6 +2149,7 @@ describe("listing data", () => {
           },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdiction: () => jurisdiction,
         }}
       >
         <ListingDetail listing={listing} />
@@ -2326,6 +2168,7 @@ describe("listing data", () => {
   })
 
   it("should display correct nav links for lottery", async () => {
+    process.env.showLottery = "true"
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     render(
@@ -2338,6 +2181,7 @@ describe("listing data", () => {
           },
           doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
             mockJurisdictionsHaveFeatureFlagOn(featureFlag),
+          getJurisdiction: () => jurisdiction,
         }}
       >
         <ListingDetail
@@ -2359,6 +2203,7 @@ describe("listing data", () => {
     expect(
       within(secondaryNavigation).getByRole("link", { name: "Applications" })
     ).toBeInTheDocument()
+    await within(secondaryNavigation).findByRole("link", { name: "Lottery" })
     expect(within(secondaryNavigation).getByRole("link", { name: "Lottery" })).toBeInTheDocument()
   })
 })

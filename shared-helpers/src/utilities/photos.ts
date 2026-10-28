@@ -1,11 +1,16 @@
 import { Asset, Listing } from "../types/backend-swagger"
 
 export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
+export const BUILDING_LABEL = "building"
 export const IMAGE_FALLBACK_URL = "/images/listing-fallback.png"
 
 export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
-  const cloudName = process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
-  return `https://res.cloudinary.com/${cloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
+  const cloudinaryCloudName: string | undefined =
+    process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
+  if (!cloudinaryCloudName) {
+    return publicId
+  }
+  return `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
 }
 
 export const getUrlForListingImage = (image: Asset, size = 400) => {
@@ -25,15 +30,18 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
     imageAssets = listing.listingImages
       .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
       .map((imageObj) => imageObj.assets)
-  } else if (Array.isArray(listing?.assets)) {
-    imageAssets = listing.assets
   }
 
-  const imageUrls = imageAssets
-    ?.filter(
-      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
-    )
-    ?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")
+  const cloudinaryCloudName: string | undefined =
+    process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
 
-  return imageUrls?.length > 0 ? imageUrls : [IMAGE_FALLBACK_URL]
+  let imageUrls = imageAssets
+  if (cloudinaryCloudName) {
+    imageUrls = imageUrls.filter(
+      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === BUILDING_LABEL
+    )
+  }
+  const assets = imageUrls?.map((asset: Asset) => getUrlForListingImage(asset, size) || "")
+
+  return assets?.length > 0 ? assets : [IMAGE_FALLBACK_URL]
 }

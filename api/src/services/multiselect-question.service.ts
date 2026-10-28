@@ -19,6 +19,7 @@ import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-q
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';
+import { PaginatedMultiselectQuestionDto } from '../dtos/multiselect-questions/paginated-multiselect-question.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
@@ -29,7 +30,11 @@ import { buildFilter } from '../utilities/build-filter';
 import { buildOrderByForMultiselectQuestions } from '../utilities/build-order-by';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
 import { mapTo } from '../utilities/mapTo';
-import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
+import {
+  buildPaginationMetaInfo,
+  calculateSkip,
+  calculateTake,
+} from '../utilities/pagination-helpers';
 
 export const includeViews: Partial<
   Record<MultiselectQuestionViews, Prisma.MultiselectQuestionsInclude>
@@ -75,7 +80,7 @@ export class MultiselectQuestionService {
   */
   async list(
     params: MultiselectQuestionQueryParams,
-  ): Promise<MultiselectQuestion[]> {
+  ): Promise<PaginatedMultiselectQuestionDto> {
     const whereClause = this.buildWhere(params);
 
     const count = await this.prisma.multiselectQuestions.count({
@@ -116,7 +121,22 @@ export class MultiselectQuestionService {
         };
       },
     );
-    return mapTo(MultiselectQuestion, multiselectQuestionsWithJurisdictions);
+
+    const multiselectQuestions = mapTo(
+      MultiselectQuestion,
+      multiselectQuestionsWithJurisdictions,
+    );
+
+    const paginationInfo = buildPaginationMetaInfo(
+      params,
+      count,
+      multiselectQuestions.length,
+    );
+
+    return {
+      items: multiselectQuestions,
+      meta: paginationInfo,
+    };
   }
 
   /*
@@ -157,7 +177,6 @@ export class MultiselectQuestionService {
             })),
           });
         } else if (filter[MultiselectQuestionFilterKeys.status]) {
-          console.log(filter[MultiselectQuestionFilterKeys.status]);
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -189,12 +208,32 @@ export class MultiselectQuestionService {
   }
 
   /*
-    this will return 1 multiselect question or error
+    this will return 1 mapped multiselect question or error
   */
   async findOne(
     multiselectQuestionId: string,
     view: MultiselectQuestionViews = MultiselectQuestionViews.fundamentals,
   ): Promise<MultiselectQuestion> {
+    const rawMultiselectQuestion = await this.findOrThrow(
+      multiselectQuestionId,
+      view,
+    );
+
+    // TODO: Can be removed after MSQ refactor
+    rawMultiselectQuestion['jurisdictions'] = [
+      rawMultiselectQuestion.jurisdiction,
+    ];
+
+    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+  }
+
+  /*
+    this will return 1 multiselect question or error
+  */
+  async findOrThrow(
+    multiselectQuestionId: string,
+    view: MultiselectQuestionViews = MultiselectQuestionViews.fundamentals,
+  ) {
     const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.findUnique({
         include: includeViews[view],
@@ -208,13 +247,7 @@ export class MultiselectQuestionService {
         `multiselectQuestionId ${multiselectQuestionId} was requested but not found`,
       );
     }
-
-    // TODO: Can be removed after MSQ refactor
-    rawMultiselectQuestion['jurisdictions'] = [
-      rawMultiselectQuestion.jurisdiction,
-    ];
-
-    return mapTo(MultiselectQuestion, rawMultiselectQuestion);
+    return rawMultiselectQuestion;
   }
 
   /*
@@ -276,49 +309,50 @@ export class MultiselectQuestionService {
       );
     }
 
-    const rawMultiselectQuestion =
-      await this.prisma.multiselectQuestions.create({
-        data: {
-          ...createData,
-          jurisdiction: {
-            connect: { id: rawJurisdiction.id },
-          },
-          links: links
-            ? (links as unknown as Prisma.InputJsonArray)
-            : undefined,
+    const finalCreateData = {
+      data: {
+        ...createData,
+        jurisdiction: {
+          connect: { id: rawJurisdiction.id },
+        },
+        links: links ? (links as unknown as Prisma.InputJsonArray) : undefined,
 
-          // TODO: Can be removed after MSQ refactor
-          options: options
+        // TODO: Can be removed after MSQ refactor
+        options:
+          !enableV2MSQ && options
             ? (options as unknown as Prisma.InputJsonArray)
             : undefined,
 
-          // TODO: Use of the feature flag is temporary until after MSQ refactor
-          isExclusive: enableV2MSQ ? isExclusive : false,
-          name: enableV2MSQ ? name : createData.text,
-          status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
+        // TODO: Use of the feature flag is temporary until after MSQ refactor
+        isExclusive: enableV2MSQ ? isExclusive : false,
+        name: enableV2MSQ ? name : createData.text,
+        status: enableV2MSQ ? status : MultiselectQuestionsStatusEnum.draft,
 
-          multiselectOptions: enableV2MSQ
-            ? {
-                createMany: {
-                  data: multiselectOptions?.map((option) => {
-                    // TODO: Can be removed after MSQ refactor
-                    delete option['collectAddress'];
-                    delete option['collectName'];
-                    delete option['collectRelationship'];
-                    delete option['exclusive'];
-                    delete option['text'];
-                    return {
-                      ...option,
-                      links: option.links as unknown as Prisma.InputJsonArray,
-                      name: option.name,
-                    };
-                  }),
-                },
-              }
-            : undefined,
-        },
-        include: includeViews.fundamentals,
-      });
+        multiselectOptions: enableV2MSQ
+          ? {
+              createMany: {
+                data: multiselectOptions?.map((option) => {
+                  // TODO: Can be removed after MSQ refactor
+                  delete option['collectAddress'];
+                  delete option['collectName'];
+                  delete option['collectRelationship'];
+                  delete option['exclusive'];
+                  delete option['text'];
+                  return {
+                    ...option,
+                    links: option.links as unknown as Prisma.InputJsonArray,
+                    name: option.name,
+                  };
+                }),
+              },
+            }
+          : undefined,
+      },
+      include: includeViews.fundamentals,
+    };
+
+    const rawMultiselectQuestion =
+      await this.prisma.multiselectQuestions.create(finalCreateData);
 
     // TODO: Can be removed after MSQ refactor
     rawMultiselectQuestion['jurisdictions'] = [
@@ -348,7 +382,10 @@ export class MultiselectQuestionService {
       ...updateData
     } = incomingData;
 
-    const currentMultiselectQuestion = await this.findOne(id);
+    const currentMultiselectQuestion = await this.findOrThrow(
+      id,
+      MultiselectQuestionViews.base,
+    );
 
     const rawJurisdiction = await this.prisma.jurisdictions.findFirstOrThrow({
       select: {
@@ -383,6 +420,7 @@ export class MultiselectQuestionService {
       this.validateStatusStateTransition(
         currentMultiselectQuestion.status,
         status,
+        currentMultiselectQuestion.listings,
       );
     }
 
@@ -526,6 +564,7 @@ export class MultiselectQuestionService {
   validateStatusStateTransition(
     currentState: MultiselectQuestionsStatusEnum,
     nextState: MultiselectQuestionsStatusEnum,
+    listings = [],
   ) {
     if (currentState === nextState) {
       if (
@@ -555,6 +594,13 @@ export class MultiselectQuestionService {
         ) {
           throw new BadRequestException(
             "status 'visible' can only change to 'draft' or 'active'",
+          );
+        } else if (
+          nextState === MultiselectQuestionsStatusEnum.draft &&
+          listings.length > 0
+        ) {
+          throw new BadRequestException(
+            "status 'visible' can not return to 'draft' when attached to a listing",
           );
         }
         break;

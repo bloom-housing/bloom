@@ -27,6 +27,9 @@
   flex-direction: column;
   align-items: flex-start;
   margin: auto;
+  a {
+    text-decoration: none;
+  }
 }
 
 .icon-container {
@@ -74,9 +77,10 @@
 }
 
 .text-container {
-  display: flex;
-  flex-direction: column;
   margin-block-end: var(--seeds-s4);
+  a {
+    text-decoration: underline;
+  }
 }
 
 .text-container:last-of-type {

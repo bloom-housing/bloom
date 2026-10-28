@@ -1,0 +1,49 @@
+{{#> layout_default }}
+  <h1>{{t "applicationUpdate.title" appOptions}}</h1>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td align="left">
+          <p>
+            {{t "applicationUpdate.greeting"}}{{#if recipientName}} {{recipientName}}{{/if}},
+          </p>
+          <p>
+            {{updateNoticeText}}
+          </p>
+          <p><strong>{{t "applicationUpdate.summaryTitle"}}</strong></p>
+          <ul>
+            {{#each summaryItems}}
+              <li>{{this}}</li>
+            {{/each}}
+          </ul>
+          {{#if contactNoticeText}}
+            <p>
+              {{contactNoticeText}}
+              {{#if contactEmail}}
+                <a href="mailto:{{contactEmail}}">{{contactEmail}}</a>.
+              {{/if}}
+            </p>
+          {{/if}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  {{#if showViewSection}}
+    <p><strong>{{viewPromptText}}</strong></p>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td align="center">
+            <a
+              class="btn btn-primary"
+              href="{{actionUrl}}"
+              target="_blank"
+              style="color:white"
+              >{{viewLinkText}}</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  {{/if}}
+{{/layout_default }}

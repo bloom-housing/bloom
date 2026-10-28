@@ -1,4 +1,9 @@
-import { FeatureFlag } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationAccessibilityFeatureEnum,
+  FeatureFlag,
+  HouseholdMemberRelationship,
+  RaceEthnicityConfiguration,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import StepDefinition from "./StepDefinition"
 
 export interface StepRoute {
@@ -8,6 +13,7 @@ export interface StepRoute {
 
 export interface StepConfig {
   name: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config?: Record<string, any>
 }
 
@@ -16,4 +22,10 @@ export interface ApplicationFormConfig {
   languages: string[]
   steps: StepConfig[]
   featureFlags: FeatureFlag[]
+  isAdvocate: boolean
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
+  visibleSpokenLanguages?: string[]
+  visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]
+  visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[]
+  enabledStopLightRuleKeys?: string[]
 }

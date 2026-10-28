@@ -8,9 +8,9 @@ describe("Listings approval feature", () => {
     })
     cy.intercept(
       "GET",
-      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg.jpg",
+      "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
       {
-        fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+        fixture: "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpg",
       }
     )
     // Partner: Submit a listing for approval
@@ -51,7 +51,10 @@ describe("Listings approval feature", () => {
     cy.getByID("listingEditButton").click()
     cy.getByID("saveAndContinueButton").should("be.visible")
     cy.getByID("listing-status-pending-review").should("be.visible")
+    cy.getByID("listingsExitButton").click()
+    cy.getByID("saveBeforeExitConfirm").click()
     cy.getByID("approveAndPublishButton").click()
+    cy.findAndOpenListing(uniqueListingNameEdited)
     cy.getByID("listing-status-active").should("be.visible")
     cy.signOutApi()
   })

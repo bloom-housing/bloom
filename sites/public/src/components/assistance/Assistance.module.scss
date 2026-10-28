@@ -13,7 +13,7 @@
       gap: var(--seeds-s4);
 
       @media (--md-and-up) {
-        width: var(--seeds-width-2-3rd); 
+        width: var(--seeds-width-2-3rd);
       }
     }
 
@@ -48,30 +48,5 @@
     padding-inline-start: var(--seeds-s8);
     margin-block-start: unset;
     width: var(--seeds-width-1-3rd);
-  }
-
-  .contact-card {
-    padding: var(--seeds-spacer-content);
-    display: flex;
-    flex-direction: column;
-    gap: var(--seeds-spacer-content);
-  
-    .contact-card-subsection {
-      display: flex;
-      flex-direction: column;
-      gap: var(--seeds-s4);
-    }
-  
-    .contact-card-title {
-      font-weight: var(--seeds-font-weight-semibold);
-    }
-  
-    .contact-card-description {
-      color: var(--seeds-text-color-light);
-    }
-  
-    .contact-card-info {
-      font-weight: var(--seeds-font-weight-bold);
-    }
   }
 }

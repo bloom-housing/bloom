@@ -1,17 +1,21 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
+import React, { useContext, useState, useEffect, useCallback, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Form, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import {
-  blankApplication,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
+  blankApplication,
   getPreferredUnitTypes,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { Button, LoadingState } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { UserStatus } from "../../../lib/constants"
@@ -22,8 +26,6 @@ import {
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
-import { Button } from "@bloom-housing/ui-seeds"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const Autofill = () => {
   const router = useRouter()
@@ -32,11 +34,11 @@ const Autofill = () => {
   const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
   const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
+  const useDetailsRef = useRef(false)
 
   const currentPageSection = 1
-  let useDetails = false
-
   const mounted = OnClientSide()
+  const isAdvocate = conductor.config?.isAdvocate
 
   const enableUnitGroups = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)
   const preferredUnits = getPreferredUnitTypes(application, listing, enableUnitGroups)
@@ -46,7 +48,7 @@ const Autofill = () => {
     if (!submitted) {
       // Necessary to avoid infinite rerenders
       setSubmitted(true)
-      if (previousApplication && useDetails) {
+      if (previousApplication && useDetailsRef.current) {
         const withUpdatedLang = {
           ...JSON.parse(JSON.stringify(previousApplication)),
           language: router.locale,
@@ -68,7 +70,7 @@ const Autofill = () => {
   }, [
     submitted,
     previousApplication,
-    useDetails,
+    useDetailsRef,
     context,
     conductor,
     router.locale,
@@ -84,6 +86,10 @@ const Autofill = () => {
   }, [profile])
 
   useEffect(() => {
+    if (isAdvocate) {
+      onSubmit()
+      return
+    }
     if (!previousApplication && initialStateLoaded) {
       if (profile) {
         void applicationsService
@@ -101,84 +107,90 @@ const Autofill = () => {
         onSubmit()
       }
     }
-  }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])
+  }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded, isAdvocate])
 
-  return previousApplication ? (
+  return (
     <FormsLayout
       pageTitle={`${t("pageTitle.autofill")} - ${t("listings.apply.applyOnline")} - ${
         listing?.name
       }`}
     >
-      <ApplicationFormLayout
-        listingName={listing?.name}
-        heading={t("application.autofill.saveTime")}
-        subheading={t("application.autofill.prefillYourApplication")}
-        progressNavProps={{
-          currentPageSection: currentPageSection,
-          completedSections: application.completedSections,
-          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
-          mounted: mounted,
-        }}
-        backLink={{
-          url: `/applications/start/what-to-expect`,
-        }}
-        hideBorder={true}
-      >
-        <FormSummaryDetails
-          application={previousApplication}
-          listing={listing}
-          editMode={false}
-          hidePreferences={true}
-          hidePrograms={true}
-          enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
-          enableFullTimeStudentQuestion={isFeatureFlagOn(
-            conductor.config,
-            FeatureFlagEnum.enableFullTimeStudentQuestion
-          )}
-          enableAdaOtherOption={isFeatureFlagOn(
-            conductor.config,
-            FeatureFlagEnum.enableAdaOtherOption
-          )}
-          swapCommunityTypeWithPrograms={isFeatureFlagOn(
-            conductor.config,
-            FeatureFlagEnum.swapCommunityTypeWithPrograms
-          )}
-        />
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <CardSection
-            id={"application-initial-page"}
-            className={`${styles["application-form-action-footer"]} border-none`}
-            divider={"flush"}
-          >
-            <Button
-              variant={"primary"}
-              onClick={() => {
-                useDetails = true
-              }}
-              id={"autofill-accept"}
-              type={"submit"}
+      <LoadingState loading={!previousApplication}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.autofill.saveTime")}
+          subheading={t("application.autofill.prefillYourApplication")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: mounted,
+          }}
+          backLink={{
+            url: `/applications/start/what-to-expect`,
+          }}
+          hideBorder={true}
+        >
+          <FormSummaryDetails
+            application={previousApplication}
+            listing={listing}
+            editMode={false}
+            hidePreferences={true}
+            hidePrograms={true}
+            enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
+            enableFullTimeStudentQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableFullTimeStudentQuestion
+            )}
+            enableReasonableAccommodations={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableReasonableAccommodations
+            )}
+            enableMultiselectVoucherQuestion={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.enableMultiselectVoucherQuestion
+            )}
+            swapCommunityTypeWithPrograms={isFeatureFlagOn(
+              conductor.config,
+              FeatureFlagEnum.swapCommunityTypeWithPrograms
+            )}
+          />
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <CardSection
+              id={"application-initial-page"}
+              className={`${styles["application-form-action-footer"]} border-none`}
+              divider={"flush"}
             >
-              {t("application.autofill.start")}
-            </Button>
-          </CardSection>
-          <CardSection>
-            <Button
-              variant={"text"}
-              onClick={() => {
-                useDetails = false
-              }}
-              type={"submit"}
-              id={"autofill-decline"}
-            >
-              {t("application.autofill.reset")}
-            </Button>
-          </CardSection>
-        </Form>
-      </ApplicationFormLayout>
+              <Button
+                variant={"primary"}
+                onClick={() => {
+                  useDetailsRef.current = true
+                }}
+                id={"autofill-accept"}
+                type={"submit"}
+              >
+                {t("application.autofill.start")}
+              </Button>
+            </CardSection>
+            <CardSection>
+              <Button
+                variant={"text"}
+                onClick={() => {
+                  useDetailsRef.current = false
+                }}
+                type={"submit"}
+                id={"autofill-decline"}
+              >
+                {t("application.autofill.reset")}
+              </Button>
+            </CardSection>
+          </Form>
+        </ApplicationFormLayout>
+      </LoadingState>
     </FormsLayout>
-  ) : (
-    <FormsLayout></FormsLayout>
   )
 }
 
 export default Autofill
+
+export const getStaticProps = sharedGetStaticProps

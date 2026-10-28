@@ -6,13 +6,13 @@ import { ApplicationContext } from "../../ApplicationContext"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsHouseholdDetailsProps = {
-  enableAdaOtherOption: boolean
   enableFullTimeStudentQuestion?: boolean
+  enableReasonableAccommodations?: boolean
 }
 
 const DetailsHouseholdDetails = ({
-  enableAdaOtherOption,
   enableFullTimeStudentQuestion,
+  enableReasonableAccommodations,
 }: DetailsHouseholdDetailsProps) => {
   const application = useContext(ApplicationContext)
 
@@ -21,7 +21,8 @@ const DetailsHouseholdDetails = ({
     if (accessibility.mobility) labels.push(t("application.ada.mobility"))
     if (accessibility.vision) labels.push(t("application.ada.vision"))
     if (accessibility.hearing) labels.push(t("application.ada.hearing"))
-    if (enableAdaOtherOption && accessibility.other) labels.push(t("application.ada.other"))
+    if (accessibility.hearingAndVision) labels.push(t("application.ada.hearingAndVision"))
+    if (accessibility.other) labels.push(t("application.ada.other"))
     if (labels.length === 0) labels.push(t("t.no"))
 
     return labels
@@ -88,6 +89,19 @@ const DetailsHouseholdDetails = ({
           </FieldValue>
         </Grid.Cell>
       </Grid.Row>
+      {enableReasonableAccommodations && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue
+              id="reasonableAccommodations"
+              label={t("application.details.reasonableAccommodations")}
+              testId="reasonableAccommodations"
+            >
+              {application.reasonableAccommodations || t("t.n/a")}
+            </FieldValue>
+          </Grid.Cell>
+        </Grid.Row>
+      )}
     </SectionWithGrid>
   )
 }

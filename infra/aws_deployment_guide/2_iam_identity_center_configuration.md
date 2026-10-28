@@ -9,6 +9,7 @@ organization. The guide is broken down into a series of files that should be fol
 4. [Fork the Bloom Repo](./4_fork_bloom_repo.md)
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md)
+7. [Operations Playbook](./7_operations_playbook.md)
 
 The steps in this file create the following resources:
 
@@ -125,15 +126,17 @@ graph TB
 1. Create an IAM Identity Center user for every person who will be interacting with the Bloom
    deployments, if they do not already have a user.
 2. Create a `bloom-dev-deployers` IAM Identity Center group. Add the users who should have access to
-   manage the dev Bloom deployment.
+   manage the dev Bloom deployment. **Note the Group ID** (visible on the group detail page in IAM
+   Identity Center).
 3. Create a `bloom-prod-iam-admins` IAM Identity Center group. Add the users who should have access
    to manage the `bloom-prod-deployers` permission set policy.
 4. Create a `bloom-prod-deployers` IAM Identity Center group. Add the users who should have access
-   to manage the prod Bloom deployment.
+   to manage the prod Bloom deployment. **Note the Group ID** (visible on the group detail page in
+   IAM Identity Center).
 
 Optionally, create a `bloom-dev-iam-admins` if the group of people who should have access to manage
-the `bloom-dev-deployer` permission set policy is different from the group of people should should
-have the `bloom-dev-deployer` permissions.
+the `bloom-dev-deployer` permission set policy is different from the group of people should have the
+`bloom-dev-deployer` permissions.
 
 ### 2. Create IAM Identity Center Permission Sets
 
@@ -288,3 +291,5 @@ set was assigned to. These roles need access to a S3 bucket that will be created
 2. The dev Bloom account should have the bloom-dev-deployers permission set assigned.
 3. The prod Bloom account should have the bloom-prod-deployers permission set assigned.
 4. Your notes should have the ARNs for 4 AWS-generated roles.
+5. Your notes should have the Group IDs for the `bloom-dev-deployers` and `bloom-prod-deployers`
+   groups.

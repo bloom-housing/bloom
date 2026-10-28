@@ -38,17 +38,21 @@ export const featureFlagFactory = (
   active = randomBoolean(),
   description = `${randomAdjective()} feature flag`,
   jurisdictionIds?: string[],
-): Prisma.FeatureFlagsCreateInput => ({
-  name: name,
-  description: description,
-  active: active,
-  jurisdictions: jurisdictionIds
-    ? {
-        connect: jurisdictionIds.map((jurisdiction) => {
-          return {
-            id: jurisdiction,
-          };
-        }),
-      }
-    : undefined,
-});
+): Prisma.FeatureFlagsCreateInput => {
+  const uniqueName = `${name}-${Math.random().toString(36).slice(2, 10)}`;
+
+  return {
+    name: uniqueName,
+    description: description,
+    active: active,
+    jurisdictions: jurisdictionIds
+      ? {
+          connect: jurisdictionIds.map((jurisdiction) => {
+            return {
+              id: jurisdiction,
+            };
+          }),
+        }
+      : undefined,
+  };
+};

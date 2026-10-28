@@ -1,14 +1,9 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
-import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 import { render, screen } from "@testing-library/react"
-import {
-  EnumListingListingType,
-  FeatureFlagEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { EnumListingListingType } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import AdditionalDetails from "../../../../../src/components/listings/PaperListingForm/sections/AdditionalDetails"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { jurisdiction, user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { FormProviderWrapper, mockNextRouter } from "../../../../testUtils"
 
 const server = setupServer()
 
@@ -27,31 +22,24 @@ afterAll(() => server.close())
 describe("AdditionalDetails", () => {
   it("should render the AdditionalDetails section with default/regulated fields", async () => {
     render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
-        }}
-      >
-        <FormProviderWrapper>
-          <AdditionalDetails
-            defaultText="This is a mock default text"
-            existingDocuments={{
-              socialSecurityCard: true,
-              currentLandlordReference: true,
-              birthCertificate: true,
-              previousLandlordReference: true,
-              governmentIssuedId: true,
-              proofOfAssets: true,
-              proofOfIncome: true,
-              residencyDocuments: true,
-              proofOfCustody: true,
-            }}
-            requiredFields={[]}
-          />
-        </FormProviderWrapper>
-      </AuthContext.Provider>
+      <FormProviderWrapper>
+        <AdditionalDetails
+          defaultText="This is a mock default text"
+          enableNonRegulatedListings={true}
+          existingDocuments={{
+            socialSecurityCard: true,
+            currentLandlordReference: true,
+            birthCertificate: true,
+            previousLandlordReference: true,
+            governmentIssuedId: true,
+            proofOfAssets: true,
+            proofOfIncome: true,
+            residencyDocuments: true,
+            proofOfCustody: true,
+          }}
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
     )
 
     // Check for the section heading
@@ -74,35 +62,28 @@ describe("AdditionalDetails", () => {
 
   it("should render the AdditionalDetails section with non-regulated fields", async () => {
     render(
-      <AuthContext.Provider
-        value={{
-          profile: { ...user, listings: [], jurisdictions: [jurisdiction] },
-          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
-            featureFlag === FeatureFlagEnum.enableNonRegulatedListings,
+      <FormProviderWrapper
+        values={{
+          listingType: EnumListingListingType.nonRegulated,
         }}
       >
-        <FormProviderWrapper
-          values={{
-            listingType: EnumListingListingType.nonRegulated,
+        <AdditionalDetails
+          defaultText="This is a mock default text"
+          enableNonRegulatedListings={true}
+          existingDocuments={{
+            socialSecurityCard: true,
+            currentLandlordReference: true,
+            birthCertificate: true,
+            previousLandlordReference: true,
+            governmentIssuedId: false,
+            proofOfAssets: false,
+            proofOfIncome: false,
+            residencyDocuments: false,
+            proofOfCustody: false,
           }}
-        >
-          <AdditionalDetails
-            defaultText="This is a mock default text"
-            existingDocuments={{
-              socialSecurityCard: true,
-              currentLandlordReference: true,
-              birthCertificate: true,
-              previousLandlordReference: true,
-              governmentIssuedId: false,
-              proofOfAssets: false,
-              proofOfIncome: false,
-              residencyDocuments: false,
-              proofOfCustody: false,
-            }}
-            requiredFields={[]}
-          />
-        </FormProviderWrapper>
-      </AuthContext.Provider>
+          requiredFields={[]}
+        />
+      </FormProviderWrapper>
     )
 
     // Check for the section heading

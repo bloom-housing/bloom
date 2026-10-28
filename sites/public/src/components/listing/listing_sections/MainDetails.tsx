@@ -6,6 +6,7 @@ import {
   Listing,
   MarketingTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
+  Property,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Heading, Link, Tag, Icon } from "@bloom-housing/ui-seeds"
@@ -21,6 +22,7 @@ import { Availability } from "./Availability"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./MainDetails.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { PropertyDetailsCard } from "./PropertyDetailsCard"
 
 type MainDetailsProps = {
   listing: Listing
@@ -29,6 +31,7 @@ type MainDetailsProps = {
   setListingFavorited?: Dispatch<SetStateAction<boolean>>
   showFavoriteButton?: boolean
   showHomeType?: boolean
+  property?: Property
 }
 
 type ListingTag = {
@@ -39,15 +42,18 @@ type ListingTag = {
 
 export const getListingTags = (
   listing: Listing,
-  hideReviewTags?: boolean,
-  hideHomeTypeTag?: boolean,
-  hideAccessibilityTag?: boolean,
-  enableIsVerified?: boolean,
-  swapCommunityTypeWithPrograms?: boolean
+  enabledFeatures: {
+    hideReviewTags?: boolean
+    hideHomeTypeTag?: boolean
+    hideAccessibilityFeaturesTag?: boolean
+    enableUnitAccessibilityTypeTags?: boolean
+    enableIsVerified?: boolean
+    swapCommunityTypeWithPrograms?: boolean
+  }
 ): ListingTag[] => {
   const listingTags: ListingTag[] = []
 
-  if (enableIsVerified && listing.isVerified) {
+  if (enabledFeatures.enableIsVerified && listing.isVerified) {
     listingTags.push({
       title: t("listings.verifiedListing"),
       variant: "warn-inverse",
@@ -55,14 +61,14 @@ export const getListingTags = (
     })
   }
 
-  if (!hideHomeTypeTag && listing.homeType) {
+  if (!enabledFeatures.hideHomeTypeTag && listing.homeType) {
     listingTags.push({
       title: t(`listings.homeType.${listing.homeType}`),
       variant: "highlight-cool",
     })
   }
 
-  if (swapCommunityTypeWithPrograms) {
+  if (enabledFeatures.swapCommunityTypeWithPrograms) {
     listing.listingMultiselectQuestions
       .filter(
         (question) =>
@@ -84,7 +90,7 @@ export const getListingTags = (
     })
   }
 
-  if (!hideReviewTags) {
+  if (!enabledFeatures.hideReviewTags) {
     if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
       listingTags.push({
         title: t("listings.waitlist.open"),
@@ -105,14 +111,25 @@ export const getListingTags = (
     }
   }
 
-  if (!hideAccessibilityTag && listing.listingFeatures) {
-    if (Object.values(listing.listingFeatures).some((feature) => feature)) {
+  if (enabledFeatures.enableUnitAccessibilityTypeTags) {
+    listing?.unitsSummarized?.priorityTypes?.forEach((priorityType) => {
       listingTags.push({
-        title: t("listing.tags.accessible"),
-        variant: "warn",
-        icon: <HandRaisedIcon />,
+        title: `${t(`listings.unit.accessibilityType.${priorityType}`)} ${t("t.units")}`,
+        variant: "secondary",
       })
-    }
+    })
+  }
+
+  if (
+    !enabledFeatures.hideAccessibilityFeaturesTag &&
+    listing.listingFeatures &&
+    Object.values(listing.listingFeatures).some((feature) => feature)
+  ) {
+    listingTags.push({
+      title: t("listings.sections.accessibilityFeatures"),
+      variant: "warn",
+      icon: <HandRaisedIcon />,
+    })
   }
 
   return listingTags
@@ -125,19 +142,29 @@ export const MainDetails = ({
   setListingFavorited,
   showFavoriteButton,
   showHomeType,
+  property,
 }: MainDetailsProps) => {
   if (!listing) return
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + oneLineAddress(listing.listingsBuildingAddress)
-  const listingTags = getListingTags(
-    listing,
-    true,
-    !showHomeType,
-    !isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableAccessibilityFeatures),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
-    isFeatureFlagOn(jurisdiction, FeatureFlagEnum.swapCommunityTypeWithPrograms)
-  )
+  const listingTags = getListingTags(listing, {
+    hideReviewTags: true,
+    hideHomeTypeTag: !showHomeType,
+    hideAccessibilityFeaturesTag: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.disableAccessibilityFeaturesTag
+    ),
+    enableUnitAccessibilityTypeTags: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.enableUnitAccessibilityTypeTags
+    ),
+    enableIsVerified: isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableIsVerified),
+    swapCommunityTypeWithPrograms: isFeatureFlagOn(
+      jurisdiction,
+      FeatureFlagEnum.swapCommunityTypeWithPrograms
+    ),
+  })
   return (
     <div>
       <ImageCard
@@ -206,6 +233,14 @@ export const MainDetails = ({
       </div>
 
       <div className={`${listingStyles["hide-desktop"]} seeds-m-bs-content`}>
+        {isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableProperties) && (
+          <PropertyDetailsCard
+            heading={t("listings.propertyCardTitle")}
+            linkText={property?.urlTitle}
+            linkUrl={property?.url}
+            propertyDescription={property?.description}
+          />
+        )}
         <Availability listing={listing} jurisdiction={jurisdiction} />
       </div>
     </div>

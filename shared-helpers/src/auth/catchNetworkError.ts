@@ -12,7 +12,7 @@ export type NetworkStatusType = AlertTypes
 
 export type NetworkStatusError = AxiosError
 
-type CatchNetworkError = {
+export type CatchNetworkError = {
   failureCountRemaining?: number
   message?: string
 }
@@ -98,7 +98,9 @@ export const useCatchNetworkError = () => {
       default:
         setNetworkError({
           title: t("errors.somethingWentWrong"),
-          description: t("authentication.signIn.errorGenericMessage"),
+          description: t("authentication.signIn.errorGenericMessage", {
+            contactEmail: t("resources.contactEmail"),
+          }),
           error,
         })
     }

@@ -131,80 +131,21 @@ export const buildWhereClause = (
           },
         });
       }
-    } else if ('isPortalUser' in filter) {
+    }
+
+    if ('isAdvocateUser' in filter) {
       filters.push({
         AND: [
           {
-            OR: [
-              {
-                userRoles: {
-                  isPartner: null,
-                },
-              },
-              {
-                userRoles: {
-                  isPartner: false,
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                userRoles: {
-                  isLimitedJurisdictionalAdmin: null,
-                },
-              },
-              {
-                userRoles: {
-                  isLimitedJurisdictionalAdmin: false,
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                userRoles: {
-                  isJurisdictionalAdmin: null,
-                },
-              },
-              {
-                userRoles: {
-                  isJurisdictionalAdmin: false,
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                userRoles: {
-                  isSupportAdmin: null,
-                },
-              },
-              {
-                userRoles: {
-                  isSupportAdmin: false,
-                },
-              },
-            ],
-          },
-          {
-            OR: [
-              {
-                userRoles: {
-                  isAdmin: null,
-                },
-              },
-              {
-                userRoles: {
-                  isAdmin: false,
-                },
-              },
-            ],
+            isAdvocate: filter['isAdvocateUser'],
           },
         ],
+      });
+    }
+
+    if ('agencyId' in filter && filter['agencyId']) {
+      filters.push({
+        agencyId: filter['agencyId'],
       });
     }
   });

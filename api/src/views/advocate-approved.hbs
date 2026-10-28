@@ -1,0 +1,44 @@
+{{#> layout_default }}
+    <h1>
+        <span style="font-family: Arial, Helvetica, sans-serif; font-size: 24px">
+            {{t "advocateApproved.hello"}}
+        </span>
+        <br />
+
+        {{> user-name }}
+    </h1>
+
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="left">
+            <p>
+                <strong>{{t "advocateApproved.approvalMessage" appOptions}}</strong>
+                <br/><br/>
+                {{{t "advocateApproved.approvalInfo"}}}
+                <br/><br/>
+                <strong>{{t "advocateApproved.completeMessage"}}</strong>
+            </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td align="center">
+            <a
+                class="btn btn-primary"
+                href="{{formUrl}}"
+                target="_blank"
+                style="color:white"
+                >
+                  {{t "advocateApproved.createAccount"}}
+                </a
+            >
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{{/layout_default }}

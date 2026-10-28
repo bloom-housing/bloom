@@ -1,10 +1,11 @@
 import React from "react"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, within } from "@testing-library/react"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingViewSeeds } from "../../../src/components/listing/ListingViewSeeds"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
@@ -286,7 +287,7 @@ describe("<ListingViewSeeds>", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("doesnt render HUD EBLL clearance when non regulated listings feature flag is turned off", () => {
+  it("doesn't render HUD EBLL clearance when non regulated listings feature flag is turned off", () => {
     render(
       <AuthContext.Provider
         value={{
@@ -330,7 +331,7 @@ describe("<ListingViewSeeds>", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("doesnt render HUD EBLL clearance when listing is regulated", () => {
+  it("doesn't render HUD EBLL clearance when listing is regulated", () => {
     render(
       <AuthContext.Provider
         value={{
@@ -372,5 +373,248 @@ describe("<ListingViewSeeds>", () => {
     expect(
       screen.queryByText("This property has received HUD EBLL clearance.")
     ).not.toBeInTheDocument()
+  })
+
+  it("should render pet policy list when enabled", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            allowsDogs: true,
+            allowsCats: true,
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              {
+                id: "test_id",
+                name: FeatureFlagEnum.enablePetPolicyCheckbox,
+                active: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "",
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    expect(screen.getAllByRole("heading", { level: 3, name: /^pets policy$/i })).toHaveLength(1)
+
+    const list = screen.getByTestId("pet-policy-list")
+    const listItems = within(list).getAllByRole("listitem")
+    expect(listItems[0]).toHaveTextContent("Allows dogs")
+    expect(listItems[1]).toHaveTextContent("Allows cats")
+  })
+
+  it("doesn't render the parking types in features section when feature flag is disabled", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            parkType: {
+              id: "parking_types_id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              offStreet: true,
+              onStreet: true,
+              garage: true,
+              carport: true,
+            },
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              {
+                id: "test_id",
+                name: FeatureFlagEnum.enableParkingType,
+                active: false,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "",
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    expect(
+      screen.queryByRole("heading", { level: 3, name: /^parking types$/i })
+    ).not.toBeInTheDocument()
+  })
+
+  it("doesn't render the parking types in features section when none are available", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            parkType: {
+              id: "parking_types_id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              offStreet: false,
+              onStreet: false,
+              garage: false,
+              carport: false,
+            },
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              {
+                id: "test_id",
+                name: FeatureFlagEnum.enableParkingType,
+                active: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "",
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    expect(
+      screen.queryByRole("heading", { level: 3, name: /^parking types$/i })
+    ).not.toBeInTheDocument()
+  })
+
+  it("renders the parking types in feature section when available", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => true,
+        }}
+      >
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            parkType: {
+              id: "parking_types_id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              onStreet: true,
+              offStreet: true,
+              garage: true,
+              carport: true,
+            },
+          }}
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              {
+                id: "test_id",
+                name: FeatureFlagEnum.enableParkingType,
+                active: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                description: "",
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      </AuthContext.Provider>
+    )
+
+    expect(
+      screen.getByRole("heading", {
+        level: 3,
+        name: /^parking types$/i,
+      })
+    ).toBeInTheDocument()
+    const parkingTypeList = screen.getByTestId("parking-types-list")
+    expect(parkingTypeList).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("On street")).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("Off street")).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("Garage")).toBeInTheDocument()
+    expect(within(parkingTypeList).getByText("Carport")).toBeInTheDocument()
+  })
+
+  describe("Rent and HMI sections", () => {
+    it("should render the rent and HMI sections on active listings", () => {
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingViewSeeds
+            listing={{
+              ...listing,
+              status: ListingsStatusEnum.active,
+            }}
+            jurisdiction={jurisdiction}
+          />
+        </AuthContext.Provider>
+      )
+
+      expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
+
+      const rentSectionTitle = screen.getByRole("heading", { level: 2, name: /rent/i })
+      expect(rentSectionTitle).toBeInTheDocument()
+      expect(within(rentSectionTitle.parentElement).getByRole("table")).toBeInTheDocument()
+
+      const hmiSectionTitle = screen.getByRole("heading", {
+        level: 3,
+        name: /household maximum income/i,
+      })
+      expect(hmiSectionTitle).toBeInTheDocument()
+      expect(
+        within(hmiSectionTitle.parentElement).getByText(
+          /For income calculations, household size includes everyone \(all ages\) living in the unit\./i
+        )
+      ).toBeInTheDocument()
+      expect(
+        within(hmiSectionTitle.parentElement.parentElement).getByRole("table")
+      ).toBeInTheDocument()
+    })
+
+    it("should not render the rent and HMI sections on closed listings", () => {
+      render(
+        <AuthContext.Provider
+          value={{
+            doJurisdictionsHaveFeatureFlagOn: () => true,
+          }}
+        >
+          <ListingViewSeeds
+            listing={{
+              ...listing,
+              status: ListingsStatusEnum.closed,
+            }}
+            jurisdiction={jurisdiction}
+          />
+        </AuthContext.Provider>
+      )
+      expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
+      expect(screen.queryByRole("heading", { level: 2, name: /rent/i })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole("heading", {
+          level: 3,
+          name: /household maximum income/i,
+        })
+      ).not.toBeInTheDocument()
+    })
   })
 })

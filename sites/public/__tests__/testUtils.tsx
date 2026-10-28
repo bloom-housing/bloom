@@ -17,7 +17,7 @@ import ApplicationConductor from "../src/lib/applications/ApplicationConductor"
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => {
   const conductor = new ApplicationConductor({}, {})
-  const applicationConfig = retrieveApplicationConfig(conductor.listing)
+  const applicationConfig = retrieveApplicationConfig(conductor.listing, [])
   conductor.config = applicationConfig
 
   const ToastProvider = (props) => {
@@ -71,17 +71,25 @@ export { customRender as render }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mockNextRouter = (query?: any) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const useRouter = jest.spyOn(require("next/router"), "useRouter")
-  const pushMock = jest.fn()
+  const router = require("next/router")
+  const useRouter = jest.spyOn(router, "useRouter")
+  const pushMock = jest.fn().mockResolvedValue(true)
   const backMock = jest.fn()
   const replaceMock = jest.fn()
+  const prefetchMock = jest.fn().mockResolvedValue(undefined)
   useRouter.mockImplementation(() => ({
     pathname: "/",
     query: query ?? "",
     push: pushMock,
     back: backMock,
     replace: replaceMock,
+    prefetch: prefetchMock,
   }))
+  if (router.default) {
+    router.default.push = pushMock
+    router.default.replace = replaceMock
+    router.default.prefetch = prefetchMock
+  }
 
-  return { useRouter, pushMock, backMock, replaceMock }
+  return { useRouter, pushMock, backMock, replaceMock, prefetchMock }
 }

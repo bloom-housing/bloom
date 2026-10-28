@@ -4,6 +4,10 @@ import Head from "next/head"
 import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import Layout from "../../../layouts"
 import {
   DetailsMemberDrawer,
@@ -20,10 +24,6 @@ import { DetailsMultiselectQuestions } from "../../../components/applications/Pa
 import { DetailsHouseholdIncome } from "../../../components/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../components/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../components/applications/Aside"
-import {
-  FeatureFlagEnum,
-  MultiselectQuestionsApplicationSectionEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { ApplicationStatusTag } from "../../../components/listings/PaperListingDetails/sections/helpers"
 
@@ -35,21 +35,43 @@ const ApplicationsList = () => {
 
   const { applicationsService, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableAdaOtherOption = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableAdaOtherOption,
+  const disableHowToContact = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.disableHowToContact,
     listingDto?.jurisdictions.id
   )
-
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
     listingDto?.jurisdictions.id
   )
 
+  const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationStatus,
+    listingDto?.jurisdictions.id
+  )
   const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableFullTimeStudentQuestion,
     listingDto?.jurisdictions.id
   )
-
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate,
+    listingDto?.jurisdictions.id
+  )
+  const enableMultiselectVoucherQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    listingDto?.jurisdictions.id
+  )
+  const enableReasonableAccommodations = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReasonableAccommodations,
+    listingDto?.jurisdictions.id
+  )
+  const enableReceivedAtAndByFields = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableReceivedAtAndByFields,
+    listingDto?.jurisdictions.id
+  )
+  const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableV2MSQ,
+    listingDto?.jurisdictions.id
+  )
   const swapCommunityTypeWithPrograms = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.swapCommunityTypeWithPrograms,
     listingDto?.jurisdictions.id
@@ -108,7 +130,7 @@ const ApplicationsList = () => {
           <ApplicationStatusTag status={application?.status} />
         </StatusBar>
 
-        <section className="bg-primary-lighter">
+        <section className="form-container">
           <div className="mx-auto px-5 mt-5 max-w-screen-xl">
             {errorAlert && (
               <AlertBox
@@ -117,20 +139,27 @@ const ApplicationsList = () => {
                 closeable
                 type="alert"
               >
-                {t("authentication.signIn.errorGenericMessage")}
+                {t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("resources.contactEmail"),
+                })}
               </AlertBox>
             )}
 
             <div className="flex flex-row flex-wrap ">
               <div className="info-card md:w-9/12">
-                <DetailsApplicationData />
-
-                <DetailsPrimaryApplicant
-                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
-                  disableWorkInRegion={disableWorkInRegion}
+                <DetailsApplicationData
+                  enableApplicationStatus={enableApplicationStatus}
+                  enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+                  reviewOrderType={listingDto?.reviewOrderType}
                 />
 
-                <DetailsAlternateContact />
+                <DetailsPrimaryApplicant
+                  disableHowToContact={disableHowToContact}
+                  disableWorkInRegion={disableWorkInRegion}
+                  enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
+                />
+
+                <DetailsAlternateContact enableHousingAdvocate={enableHousingAdvocate} />
 
                 <DetailsHouseholdMembers
                   setMembersDrawer={setMembersDrawer}
@@ -140,7 +169,7 @@ const ApplicationsList = () => {
 
                 <DetailsHouseholdDetails
                   enableFullTimeStudentQuestion={enableFullTimeStudentQuestion}
-                  enableAdaOtherOption={enableAdaOtherOption}
+                  enableReasonableAccommodations={enableReasonableAccommodations}
                 />
 
                 <DetailsMultiselectQuestions
@@ -151,14 +180,18 @@ const ApplicationsList = () => {
                       ? t("application.details.communityTypes")
                       : t("application.details.programs")
                   }
+                  enableV2MSQ={enableV2MSQ}
                 />
 
-                <DetailsHouseholdIncome />
+                <DetailsHouseholdIncome
+                  enableMultiselectVoucherQuestion={enableMultiselectVoucherQuestion}
+                />
 
                 <DetailsMultiselectQuestions
                   listingId={application?.listings?.id}
                   applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                   title={t("application.details.preferences")}
+                  enableV2MSQ={enableV2MSQ}
                 />
 
                 <DetailsTerms />

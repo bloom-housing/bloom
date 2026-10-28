@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   Header,
+  MessageEvent,
   Param,
   Post,
   Put,
   Query,
   Request,
   Res,
+  Sse,
   StreamableFile,
   UseGuards,
   UseInterceptors,
@@ -23,6 +25,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request as ExpressRequest, Response } from 'express';
+import { map, Observable } from 'rxjs';
 import { ApplicationService } from '../services/application.service';
 import { Application } from '../dtos/applications/application.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -31,6 +34,7 @@ import { PaginatedApplicationDto } from '../dtos/applications/paginated-applicat
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
+import { ApplicationUpdateEmailDto } from '../dtos/applications/application-update-email.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import {
   AddressInput,
@@ -52,6 +56,10 @@ import { ExportLogInterceptor } from '../interceptors/export-log.interceptor';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
 import { PublicAppsViewResponse } from '../dtos/applications/public-apps-view-response.dto';
+import { ApplicationBulkUploadService } from '../services/application-bulk-upload.service';
+import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
+import { ApplicationBulkUrl } from '../dtos/applications/application-bulk-url.dto';
+import { ApplicationBulkPresignedUrl } from '../dtos/applications/application-bulk-presigned-url.dto';
 
 @Controller('applications')
 @ApiTags('applications')
@@ -69,6 +77,7 @@ export class ApplicationController {
   constructor(
     private readonly applicationService: ApplicationService,
     private readonly applicationExportService: ApplicationExporterService,
+    private readonly applicationBulkUploadService: ApplicationBulkUploadService,
   ) {}
 
   @Get()
@@ -203,6 +212,25 @@ export class ApplicationController {
     return this.applicationService.findOne(applicationId, req);
   }
 
+  @Get('bulk-update/template')
+  @ApiOperation({
+    summary:
+      'Download a template CSV for bulk updating applications for a listing',
+    operationId: 'downloadBulkUpdateTemplate',
+  })
+  @Header('Content-Type', 'application/zip')
+  @UseInterceptors(ExportLogInterceptor)
+  @ApiOkResponse({ type: String })
+  async downloadBulkUpdateTemplate(
+    @Request() req: ExpressRequest,
+    @Query('listingId') listingId: string,
+  ): Promise<string> {
+    return await this.applicationBulkUploadService.downloadBulkUpdateTemplate(
+      listingId,
+      mapTo(User, req['user']),
+    );
+  }
+
   @Post()
   @ApiOperation({
     summary:
@@ -266,6 +294,21 @@ export class ApplicationController {
     };
   }
 
+  @Post('bulk-update')
+  @ApiOperation({
+    summary: 'allows user to update applications in bulk using a CSV file',
+    operationId: 'bulkUpdateApplications',
+  })
+  async bulkUpdateApplications(
+    @Body() dto: ApplicationBulkUpdate,
+    @Request() req: ExpressRequest,
+  ) {
+    return this.applicationBulkUploadService.processBulkUpload(
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
   @Put('removePIICronJob')
   @ApiOperation({
     summary: 'trigger the remove PII cron job',
@@ -287,6 +330,40 @@ export class ApplicationController {
     return await this.applicationService.update(dto, mapTo(User, req['user']));
   }
 
+  @Post(':id/notify-update')
+  @ApiOperation({
+    summary: 'Send application update email by id',
+    operationId: 'notifyUpdate',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async notifyUpdate(
+    @Param('id') applicationId: string,
+    @Body() dto: ApplicationUpdateEmailDto,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.applicationService.sendApplicationUpdateEmail(
+      applicationId,
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
+  @Post('bulk-update/upload-url')
+  @ApiOperation({
+    summary: 'Generates an presigned URL link to a private S3 bucket',
+    operationId: 'uploadBulkUpdate',
+  })
+  @ApiOkResponse({ type: ApplicationBulkPresignedUrl })
+  async uploadBulkUpdate(
+    @Body() dto: ApplicationBulkUrl,
+    @Request() req: ExpressRequest,
+  ): Promise<ApplicationBulkPresignedUrl> {
+    return await this.applicationBulkUploadService.uploadUrl(
+      dto,
+      mapTo(User, req['user']),
+    );
+  }
+
   @Delete()
   @ApiOperation({ summary: 'Delete application by id', operationId: 'delete' })
   @ApiOkResponse({ type: SuccessDTO })
@@ -295,5 +372,19 @@ export class ApplicationController {
       dto.id,
       mapTo(User, req['user']),
     );
+  }
+
+  @Sse('bulk-update/notifications')
+  @ApiOperation({
+    summary:
+      'Subscribed for server side events notifications from the application processes',
+    operationId: 'uploadBulkNotifications',
+  })
+  applicationNotifications(
+    @Query('jobId') jobId: string,
+  ): Observable<MessageEvent> {
+    return this.applicationBulkUploadService
+      .getUploadJobNotification(jobId)
+      .pipe(map((notification) => ({ data: notification })));
   }
 }

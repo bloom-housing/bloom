@@ -5,12 +5,23 @@
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
 // @ts-nocheck
-import axiosStatic, { AxiosInstance, AxiosRequestConfig } from "axios"
+import axiosStatic from "axios"
+import type { AxiosInstance, AxiosRequestConfig } from "axios"
 
 export interface IRequestOptions extends AxiosRequestConfig {
-  /** only in axios interceptor config*/
+  /**
+   * show loading status
+   */
   loading?: boolean
+  /**
+   * display error message
+   */
   showError?: boolean
+  /**
+   * indicates whether Authorization credentials are required for the request
+   * @default true
+   */
+  withAuthorization?: boolean
 }
 
 export interface IRequestConfig {
@@ -112,8 +123,6 @@ export class RootService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -126,7 +135,17 @@ export class RootService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Prisma database metrics in Prometheus format
+   */
+  prismaMetrics(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/prisma_metrics"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -139,10 +158,6 @@ export class RootService {
       let url = basePath + "/clearTempFiles"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -186,8 +201,6 @@ export class ListingsService {
         search: params["search"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -227,6 +240,10 @@ export class ListingsService {
       let url = basePath + "/listings"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
 
       let data = params.body
 
@@ -273,7 +290,24 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { timeZone: params["timeZone"] }
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get listings and units as secured zip
+   */
+  listAsCsvSecure(
+    params: {
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/csvSecure"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { timeZone: params["timeZone"] }
 
       axios(configs, resolve, reject)
     })
@@ -281,13 +315,21 @@ export class ListingsService {
   /**
    * Get listing map markers
    */
-  mapMarkers(options: IRequestOptions = {}): Promise<ListingMapMarker[]> {
+  mapMarkers(
+    params: {
+      /** requestBody */
+      body?: ListingsQueryBody
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ListingMapMarker[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/mapMarkers"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -310,8 +352,6 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { view: params["view"] }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -347,7 +387,25 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update listing status by id
+   */
+  updateListingStatus(
+    params: {
+      /** requestBody */
+      body?: ListingUpdateStatus
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/updateListingStatus"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
 
@@ -398,8 +456,6 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { view: params["view"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -419,13 +475,11 @@ export class ListingsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
   /**
-   * Get listings by assigned porperty ID
+   * Get listings by assigned property ID
    */
   retrieveListingsByProperty(
     params: {
@@ -439,8 +493,6 @@ export class ListingsService {
       url = url.replace("{propertyId}", params["propertyId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -478,8 +530,6 @@ export class ApplicationFlaggedSetsService {
         search: params["search"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -513,8 +563,6 @@ export class ApplicationFlaggedSetsService {
         search: params["search"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -533,8 +581,6 @@ export class ApplicationFlaggedSetsService {
       url = url.replace("{afsId}", params["afsId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -564,22 +610,6 @@ export class ApplicationFlaggedSetsService {
   /**
    * Trigger the duplicate check process
    */
-  process(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/process"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Trigger the duplicate check process
-   */
   processDuplicates(
     params: {
       /**  */
@@ -594,10 +624,6 @@ export class ApplicationFlaggedSetsService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
       configs.params = { listingId: params["listingId"], force: params["force"] }
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -626,668 +652,6 @@ export class ApplicationFlaggedSetsService {
   }
 }
 
-export class AmiChartsService {
-  /**
-   * List amiCharts
-   */
-  list(
-    params: {
-      /**  */
-      jurisdictionId?: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jurisdictionId: params["jurisdictionId"] }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create amiChart
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: AmiChartCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete amiChart by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get amiChart by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      amiChartId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts/{amiChartId}"
-      url = url.replace("{amiChartId}", params["amiChartId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update amiChart
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: AmiChartUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts/{amiChartId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ReservedCommunityTypesService {
-  /**
-   * List reservedCommunityTypes
-   */
-  list(
-    params: {
-      /**  */
-      jurisdictionId?: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ReservedCommunityType[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jurisdictionId: params["jurisdictionId"] }
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create reservedCommunityType
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ReservedCommunityTypeCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ReservedCommunityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete reservedCommunityType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get reservedCommunityType by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      reservedCommunityTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ReservedCommunityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes/{reservedCommunityTypeId}"
-      url = url.replace("{reservedCommunityTypeId}", params["reservedCommunityTypeId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update reservedCommunityType
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ReservedCommunityTypeUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ReservedCommunityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes/{reservedCommunityTypeId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UnitTypesService {
-  /**
-   * List unitTypes
-   */
-  list(options: IRequestOptions = {}): Promise<UnitType[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create unitType
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: UnitTypeCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete unitType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get unitType by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      unitTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes/{unitTypeId}"
-      url = url.replace("{unitTypeId}", params["unitTypeId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update unitType
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UnitTypeUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes/{unitTypeId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UnitAccessibilityPriorityTypesService {
-  /**
-   * List unitAccessibilityPriorityTypes
-   */
-  list(options: IRequestOptions = {}): Promise<UnitAccessibilityPriorityType[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create unitAccessibilityPriorityType
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: UnitAccessibilityPriorityTypeCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitAccessibilityPriorityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete unitAccessibilityPriorityType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get unitAccessibilityPriorityType by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      unitAccessibilityPriorityTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitAccessibilityPriorityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}"
-      url = url.replace(
-        "{unitAccessibilityPriorityTypeId}",
-        params["unitAccessibilityPriorityTypeId"] + ""
-      )
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update unitAccessibilityPriorityType
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UnitAccessibilityPriorityTypeUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitAccessibilityPriorityType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UnitRentTypesService {
-  /**
-   * List unitRentTypes
-   */
-  list(options: IRequestOptions = {}): Promise<UnitRentType[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitRentTypes"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create unitRentType
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: UnitRentTypeCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitRentType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitRentTypes"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete unitRentType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitRentTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get unitRentType by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      unitRentTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitRentType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitRentTypes/{unitRentTypeId}"
-      url = url.replace("{unitRentTypeId}", params["unitRentTypeId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update unitRentType
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UnitRentTypeUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UnitRentType> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitRentTypes/{unitRentTypeId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class JurisdictionsService {
-  /**
-   * List jurisdictions
-   */
-  list(options: IRequestOptions = {}): Promise<Jurisdiction[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create jurisdiction
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: JurisdictionCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Jurisdiction> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete jurisdiction by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: IdDTO
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get jurisdiction by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      jurisdictionId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Jurisdiction> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions/{jurisdictionId}"
-      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update jurisdiction
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: JurisdictionUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Jurisdiction> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions/{jurisdictionId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get jurisdiction by name
-   */
-  retrieveByName(
-    params: {
-      /**  */
-      jurisdictionName: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Jurisdiction> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
-      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
 export class MultiselectQuestionsService {
   /**
    * List multiselect questions
@@ -1310,7 +674,7 @@ export class MultiselectQuestionsService {
       view?: MultiselectQuestionViews
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion[]> {
+  ): Promise<PaginatedMultiselectQuestion> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/multiselectQuestions"
 
@@ -1324,8 +688,6 @@ export class MultiselectQuestionsService {
         search: params["search"],
         view: params["view"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1389,6 +751,10 @@ export class MultiselectQuestionsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1449,10 +815,6 @@ export class MultiselectQuestionsService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -1472,7 +834,652 @@ export class MultiselectQuestionsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class SnapshotService {
+  /**
+   * Create User Snapshot
+   */
+  createUserSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createUserSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create Listing Snapshot
+   */
+  createListingSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createListingSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create Application Snapshot
+   */
+  createApplicationSnapshot(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/snapshot/createApplicationSnapshot"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class AmiChartsService {
+  /**
+   * List amiCharts
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionId?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jurisdictionId: params["jurisdictionId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create amiChart
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AmiChartCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete amiChart by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get amiChart by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      amiChartId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts/{amiChartId}"
+      url = url.replace("{amiChartId}", params["amiChartId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update amiChart
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AmiChartUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts/{amiChartId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class ReservedCommunityTypesService {
+  /**
+   * List reservedCommunityTypes
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionId?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jurisdictionId: params["jurisdictionId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create reservedCommunityType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ReservedCommunityTypeCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete reservedCommunityType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get reservedCommunityType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      reservedCommunityTypeId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes/{reservedCommunityTypeId}"
+      url = url.replace("{reservedCommunityTypeId}", params["reservedCommunityTypeId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update reservedCommunityType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ReservedCommunityTypeUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes/{reservedCommunityTypeId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class UnitTypesService {
+  /**
+   * List unitTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create unitType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitTypeCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete unitType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get unitType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitTypeId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes/{unitTypeId}"
+      url = url.replace("{unitTypeId}", params["unitTypeId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update unitType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitTypeUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes/{unitTypeId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class UnitRentTypesService {
+  /**
+   * List unitRentTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitRentType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitRentTypes"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create unitRentType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitRentTypes"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete unitRentType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitRentTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get unitRentType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitRentTypeId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitRentTypes/{unitRentTypeId}"
+      url = url.replace("{unitRentTypeId}", params["unitRentTypeId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update unitRentType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitRentTypes/{unitRentTypeId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class JurisdictionsService {
+  /**
+   * List jurisdictions
+   */
+  list(options: IRequestOptions = {}): Promise<Jurisdiction[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create jurisdiction
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: JurisdictionCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete jurisdiction by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get jurisdiction by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/{jurisdictionId}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update jurisdiction
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: JurisdictionUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/{jurisdictionId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update a jurisdiction's branding
+   */
+  updateBrand(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /** requestBody */
+      body?: JurisdictionBrandUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/{jurisdictionId}/brand"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -1519,8 +1526,6 @@ export class ApplicationsService {
         markedAsDuplicate: params["markedAsDuplicate"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1561,6 +1566,10 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -1584,8 +1593,6 @@ export class ApplicationsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { userId: params["userId"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1595,11 +1602,17 @@ export class ApplicationsService {
   publicAppsView(
     params: {
       /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
       userId: string
       /**  */
       filterType?: ApplicationsFilterEnum
       /**  */
       includeLotteryApps?: boolean
+      /**  */
+      applicantNameSearch?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PublicAppsViewResponse> {
@@ -1608,12 +1621,13 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
+        page: params["page"],
+        limit: params["limit"],
         userId: params["userId"],
         filterType: params["filterType"],
         includeLotteryApps: params["includeLotteryApps"],
+        applicantNameSearch: params["applicantNameSearch"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1642,8 +1656,6 @@ export class ApplicationsService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1670,8 +1682,6 @@ export class ApplicationsService {
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1700,8 +1710,6 @@ export class ApplicationsService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1729,8 +1737,6 @@ export class ApplicationsService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -1750,7 +1756,24 @@ export class ApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Download a template CSV for bulk updating applications for a listing
+   */
+  downloadBulkUpdateTemplate(
+    params: {
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/template"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
 
       axios(configs, resolve, reject)
     })
@@ -1800,6 +1823,28 @@ export class ApplicationsService {
     })
   }
   /**
+   * allows user to update applications in bulk using a CSV file
+   */
+  bulkUpdateApplications(
+    params: {
+      /** requestBody */
+      body?: ApplicationBulkUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * trigger the remove PII cron job
    */
   removePiiCronJob(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -1807,10 +1852,6 @@ export class ApplicationsService {
       let url = basePath + "/applications/removePIICronJob"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -1840,6 +1881,147 @@ export class ApplicationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Send application update email by id
+   */
+  notifyUpdate(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ApplicationUpdateEmail
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/{id}/notify-update"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Generates an presigned URL link to a private S3 bucket
+   */
+  uploadBulkUpdate(
+    params: {
+      /** requestBody */
+      body?: ApplicationBulkUrl
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationBulkPresignedUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Subscribed for server side events notifications from the application processes
+   */
+  uploadBulkNotifications(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/bulk-update/notifications"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jobId: params["jobId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class JobsService {
+  /**
+   * Creates a new background job record in the database
+   */
+  createBackgroundJob(
+    params: {
+      /** requestBody */
+      body?: BackgroundJobCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get an active background job for a listing
+   */
+  findActiveJobForListing(
+    params: {
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { listingId: params["listingId"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get info if any jobs are currently running
+   */
+  activeJobStatus(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/active"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a background job data by its ID
+   */
+  getBackgroundJob(
+    params: {
+      /**  */
+      jobId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<BackgroundJob> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jobs/{jobId}"
+      url = url.replace("{jobId}", params["jobId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AssetsService {
@@ -1865,6 +2047,28 @@ export class AssetsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Create a S3 file upload URL
+   */
+  createS3UploadUrl(
+    params: {
+      /** requestBody */
+      body?: CreateS3UploadMetadata
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<CreateS3UploadUrl> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/s3-upload-url"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -1876,33 +2080,6 @@ export class UserService {
       let url = basePath + "/user"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Creates a public only user
-   */
-  create(
-    params: {
-      /**  */
-      noWelcomeEmail?: boolean
-      /** requestBody */
-      body?: UserCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
-
-      let data = params.body
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -1921,6 +2098,10 @@ export class UserService {
       let url = basePath + "/user"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
 
       let data = params.body
 
@@ -1942,6 +2123,10 @@ export class UserService {
       filter?: UserFilterParams[]
       /**  */
       search?: string
+      /**  */
+      orderBy?: UserOrderByKeys[]
+      /**  */
+      orderDir?: OrderByEnum[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUser> {
@@ -1954,9 +2139,9 @@ export class UserService {
         limit: params["limit"],
         filter: params["filter"],
         search: params["search"],
+        orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -1970,7 +2155,17 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List advocate users in CSV
+   */
+  listAdvocatesAsCsv(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
@@ -1991,23 +2186,193 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the notification preferences of the requesting user
+   */
+  getNotificationPreferences(options: IRequestOptions = {}): Promise<UserNotificationPreferences> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       axios(configs, resolve, reject)
     })
   }
   /**
-   * Invite partner user
+   * Update user notification preferences
    */
-  invite(
+  updateNotificationPreferences(
     params: {
       /** requestBody */
-      body?: UserInvite
+      body?: UserNotificationPreferences
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/preferences"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a public only user
+   */
+  createPublic(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean
+      /** requestBody */
+      body?: PublicUserCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<User> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/user/invite"
+      let url = basePath + "/user/public"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  updatePublic(
+    params: {
+      /** requestBody */
+      body?: PublicUserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/public"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a partner only user
+   */
+  createPartner(
+    params: {
+      /** requestBody */
+      body?: PartnerUserCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/partner"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  updatePartner(
+    params: {
+      /** requestBody */
+      body?: PartnerUserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/partner"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a advocate only user
+   */
+  createAdvocate(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean
+      /** requestBody */
+      body?: AdvocateUserCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  updateAdvocate(
+    params: {
+      /** requestBody */
+      body?: AdvocateUserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Accept or decline advocate user request
+   */
+  approveAdvocate(
+    params: {
+      /** requestBody */
+      body?: AdvocateUserAccept
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate/approve"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -2107,6 +2472,50 @@ export class UserService {
     })
   }
   /**
+   * Get advocate user from confirmation token
+   */
+  getAdvocateFromConfirmationToken(
+    params: {
+      /** requestBody */
+      body?: ConfirmationRequest
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate-from-token"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend advocate account creation email
+   */
+  resendAdvocateConfirmation(
+    params: {
+      /** requestBody */
+      body?: EmailAndAppUrl
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/advocate-resend-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Forgot Password
    */
   forgotPassword(
@@ -2159,10 +2568,6 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2174,32 +2579,6 @@ export class UserService {
       let url = basePath + "/user/deleteInactiveUsersCronJob"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2219,8 +2598,6 @@ export class UserService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2281,8 +2658,6 @@ export class AuthService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2316,8 +2691,6 @@ export class AuthService {
       let url = basePath + "/auth/requestNewToken"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2385,8 +2758,6 @@ export class MapLayersService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { jurisdictionId: params["jurisdictionId"] }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2401,10 +2772,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/exampleScript"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2476,38 +2843,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that adds lottery translations to the db
-   */
-  lotteryTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/lotteryTranslations"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * A script that adds lottery translations to the db and creates them if it does not exist
-   */
-  lotteryTranslations1(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/lotteryTranslationsCreateIfEmpty"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that opts out existing lottery listings
    */
   optOutExistingLotteries(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2515,10 +2850,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/optOutExistingLotteries"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2546,22 +2877,6 @@ export class ScriptRunnerService {
     })
   }
   /**
-   * A script that updates single use code translations to show extended expiration time
-   */
-  updateCodeExpirationTranslations(options: IRequestOptions = {}): Promise<SuccessDTO> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/updateCodeExpirationTranslations"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * A script that hides program multiselect questions from the public detail page
    */
   hideProgramsFromListings(options: IRequestOptions = {}): Promise<SuccessDTO> {
@@ -2570,23 +2885,25 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
   /**
-   * A script that updates the "what happens next" content in lottery email
+   * A script that loads the bundled site override files into translation_strings
    */
-  updatesWhatHappensInLotteryEmail(options: IRequestOptions = {}): Promise<SuccessDTO> {
+  migrateTranslationOverridesToKeyRows(
+    params: {
+      /** requestBody */
+      body?: TranslationOverrideMigrationDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/scriptRunner/updatesWhatHappensInLotteryEmail"
+      let url = basePath + "/scriptRunner/migrateTranslationOverridesToKeyRows"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
+      let data = params.body
 
       configs.data = data
 
@@ -2602,10 +2919,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2618,10 +2931,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2633,10 +2942,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/migrateMultiselectDataToRefactor"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2672,10 +2977,6 @@ export class ScriptRunnerService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2687,10 +2988,6 @@ export class ScriptRunnerService {
       let url = basePath + "/scriptRunner/setIsNewestApplicationValues"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -2706,8 +3003,6 @@ export class FeatureFlagsService {
       let url = basePath + "/featureFlags"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2771,6 +3066,10 @@ export class FeatureFlagsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -2809,10 +3108,6 @@ export class FeatureFlagsService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2831,8 +3126,6 @@ export class FeatureFlagsService {
       url = url.replace("{featureFlagId}", params["featureFlagId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2886,8 +3179,6 @@ export class LotteryService {
         timeZone: params["timeZone"],
       }
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2914,8 +3205,6 @@ export class LotteryService {
         includeDemographics: params["includeDemographics"],
         timeZone: params["timeZone"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -2958,8 +3247,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -2972,10 +3259,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
-
-      configs.data = data
-
       axios(configs, resolve, reject)
     })
   }
@@ -2987,10 +3270,6 @@ export class LotteryService {
       let url = basePath + "/lottery/expireLotteries"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
 
       axios(configs, resolve, reject)
     })
@@ -3011,8 +3290,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -3032,8 +3309,6 @@ export class LotteryService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      /** 适配ios13，get请求不允许带body */
-
       axios(configs, resolve, reject)
     })
   }
@@ -3052,7 +3327,7 @@ export class PropertiesService {
       /**  */
       search?: string
       /**  */
-      filter?: any | null[]
+      filter?: PropertyFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedProperty> {
@@ -3066,8 +3341,6 @@ export class PropertiesService {
         search: params["search"],
         filter: params["filter"],
       }
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3131,6 +3404,10 @@ export class PropertiesService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
       let data = params.body
 
       configs.data = data
@@ -3147,14 +3424,12 @@ export class PropertiesService {
       id: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<any> {
+  ): Promise<Property> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/properties/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      /** 适配ios13，get请求不允许带body */
 
       axios(configs, resolve, reject)
     })
@@ -3183,11 +3458,556 @@ export class PropertiesService {
   }
 }
 
+export class AgencyService {
+  /**
+   * Get a paginated set of agencies
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      search?: string
+      /**  */
+      filter?: AgencyFilterParams[]
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAgency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        filter: params["filter"],
+      }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Creates a new agency entry in the database
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AgencyCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Updates an existing agency entry in the database
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AgencyUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Deletes an agency entry from the database by its ID
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      /** 适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body */
+
+      console.warn("适配移动开发（iOS13 等版本），只有 POST、PUT 等请求允许带body")
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a single agency by its ID
+   */
+  getById(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Agency> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/agency/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class ExternalListingsService {
+  /**
+   * Get an object of externalized system data details
+   */
+  externalize(options: IRequestOptions = {}): Promise<ExternalizedDetails> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/externalListings"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Ingest listing data from an external Bloom instance
+   */
+  ingest(
+    params: {
+      /** requestBody */
+      body?: IngestParams
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/externalListings/ingest"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class TranslationsService {
+  /**
+   * Get a jurisdiction's site translation overrides
+   */
+  jurisdictionOverrides(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language?: LanguagesEnum
+      /**  */
+      site: SiteEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"], site: params["site"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a jurisdiction's site translation overrides by name
+   */
+  jurisdictionOverridesByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+      /**  */
+      language?: LanguagesEnum
+      /**  */
+      site: SiteEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"], site: params["site"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the global Partners translation overrides
+   */
+  partnersOverrides(
+    params: {
+      /**  */
+      language?: LanguagesEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the email strings shipped with the api
+   */
+  emailBaseTranslations(
+    params: {
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/base/email/{language}"
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List a jurisdiction's override keys
+   */
+  listRawTranslations(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationOverrideRow[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}/raw"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a scope's editable override keys. stale = true, if its English source changed since it was translated
+   */
+  getRawTranslations(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      site: string
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationRawKey[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert a scope's override keys with per-key optimistic locking
+   */
+  updateRawTranslations(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      site: string
+      /**  */
+      language: string
+      /** requestBody */
+      body?: TranslationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete one override key (revert to base)
+   */
+  deleteRawTranslation(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      site: string
+      /**  */
+      language: string
+      /**  */
+      key: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url =
+        basePath + "/translations/jurisdictions/{jurisdictionId}/raw/{site}/{language}/{key}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+      url = url.replace("{key}", params["key"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get the global override keys for a site. stale = true, if its English source changed since it was translated
+   */
+  getRawGlobalTranslations(
+    params: {
+      /**  */
+      site: string
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<TranslationRawKey[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/global/raw/{site}/{language}"
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert the global override keys for a site with per-key optimistic locking
+   */
+  updateRawGlobalTranslations(
+    params: {
+      /**  */
+      site: string
+      /**  */
+      language: string
+      /** requestBody */
+      body?: TranslationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/global/raw/{site}/{language}"
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete one global override key for a site (revert to base)
+   */
+  deleteRawGlobalTranslation(
+    params: {
+      /**  */
+      site: string
+      /**  */
+      language: string
+      /**  */
+      key: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations/global/raw/{site}/{language}/{key}"
+      url = url.replace("{site}", params["site"] + "")
+      url = url.replace("{language}", params["language"] + "")
+      url = url.replace("{key}", params["key"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class JurisdictionContentService {
+  /**
+   * Get a jurisdiction's merged structured content
+   */
+  jurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language?: LanguagesEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContentFields> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get a jurisdiction's merged structured content by name
+   */
+  jurisdictionContentByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+      /**  */
+      language?: LanguagesEnum
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContentFields> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { language: params["language"] }
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List a jurisdiction's content rows across languages
+   */
+  listJurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContent[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}/admin"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get one language's content row for editing
+   */
+  getJurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}/admin/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Upsert one language's content row with an optimistic-lock check
+   */
+  updateJurisdictionContent(
+    params: {
+      /**  */
+      jurisdictionId: string
+      /**  */
+      language: string
+      /** requestBody */
+      body?: JurisdictionContentUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<JurisdictionContent> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictionContent/jurisdictions/{jurisdictionId}/admin/{language}"
+      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
+      url = url.replace("{language}", params["language"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+/** SuccessDTO */
 export interface SuccessDTO {
   /**  */
   success: boolean
 }
 
+/** ListingFilterParams */
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
@@ -3211,19 +4031,22 @@ export interface ListingFilterParams {
   city?: string
 
   /**  */
-  counties?: string[]
-
-  /**  */
   homeTypes?: HomeTypeEnum[]
 
   /**  */
   ids?: string[]
 
   /**  */
+  includeExternal?: boolean
+
+  /**  */
   isVerified?: boolean
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  jurisdictions?: string[]
 
   /**  */
   leasingAgent?: string
@@ -3247,6 +4070,9 @@ export interface ListingFilterParams {
   regions?: RegionEnum[]
 
   /**  */
+  configurableRegions?: []
+
+  /**  */
   reservedCommunityTypes?: string[]
 
   /**  */
@@ -3260,8 +4086,15 @@ export interface ListingFilterParams {
 
   /**  */
   listingType?: ListingTypeEnum
+
+  /**  */
+  parkingType?: ParkingTypeEnum
+
+  /**  */
+  accessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[]
 }
 
+/** ListingsQueryBody */
 export interface ListingsQueryBody {
   /**  */
   page?: number
@@ -3285,6 +4118,7 @@ export interface ListingsQueryBody {
   search?: string
 }
 
+/** ListingsQueryParams */
 export interface ListingsQueryParams {
   /**  */
   page?: number
@@ -3308,16 +4142,19 @@ export interface ListingsQueryParams {
   search?: string
 }
 
+/** ListingFilterKeyDTO */
 export interface ListingFilterKeyDTO {
   /**  */
   value?: ListingFilterKeys
 }
 
+/** ListingsRetrieveParams */
 export interface ListingsRetrieveParams {
   /**  */
   view?: ListingViews
 }
 
+/** PaginationAllowsAllQueryParams */
 export interface PaginationAllowsAllQueryParams {
   /**  */
   page?: number
@@ -3326,6 +4163,7 @@ export interface PaginationAllowsAllQueryParams {
   limit?: number | "all"
 }
 
+/** IdDTO */
 export interface IdDTO {
   /**  */
   id: string
@@ -3337,35 +4175,283 @@ export interface IdDTO {
   ordinal?: number
 }
 
-export interface ListingDocuments {
+/** ApplicationLotteryTotal */
+export interface ApplicationLotteryTotal {
   /**  */
-  socialSecurityCard?: boolean
+  listingId: string
 
   /**  */
-  currentLandlordReference?: boolean
+  multiselectQuestionId?: string
 
   /**  */
-  birthCertificate?: boolean
-
-  /**  */
-  previousLandlordReference?: boolean
-
-  /**  */
-  governmentIssuedId?: boolean
-
-  /**  */
-  proofOfAssets?: boolean
-
-  /**  */
-  proofOfIncome?: boolean
-
-  /**  */
-  residencyDocuments?: boolean
-
-  /**  */
-  proofOfCustody?: boolean
+  total: number
 }
 
+/** Asset */
+export interface Asset {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+/** PaperApplication */
+export interface PaperApplication {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  assets: Asset
+}
+
+/** ApplicationMethod */
+export interface ApplicationMethod {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  type: ApplicationMethodsTypeEnum
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  paperApplications?: PaperApplication[]
+}
+
+/** ListingEvent */
+export interface ListingEvent {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  type: ListingEventsTypeEnum
+
+  /**  */
+  startDate?: Date
+
+  /**  */
+  startTime?: Date
+
+  /**  */
+  endTime?: Date
+
+  /**  */
+  url?: string
+
+  /**  */
+  note?: string
+
+  /**  */
+  label?: string
+
+  /**  */
+  assets?: Asset
+}
+
+/** ListingFeatures */
+export interface ListingFeatures {
+  /**  */
+  id: string
+
+  /**  */
+  accessibleHeightToilet?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  barrierFreeBathroom?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
+
+  /**  */
+  loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+}
+
+/** ListingImage */
+export interface ListingImage {
+  /**  */
+  assets: Asset
+
+  /**  */
+  ordinal?: number
+
+  /**  */
+  description?: string
+}
+
+/** MultiselectLink */
 export interface MultiselectLink {
   /**  */
   title: string
@@ -3374,6 +4460,7 @@ export interface MultiselectLink {
   url: string
 }
 
+/** MultiselectOption */
 export interface MultiselectOption {
   /**  */
   id: string
@@ -3445,6 +4532,7 @@ export interface MultiselectOption {
   validationMethod?: ValidationMethodEnum
 }
 
+/** MultiselectQuestion */
 export interface MultiselectQuestion {
   /**  */
   id: string
@@ -3507,6 +4595,7 @@ export interface MultiselectQuestion {
   untranslatedOptOutText?: string
 }
 
+/** ListingMultiselectQuestion */
 export interface ListingMultiselectQuestion {
   /**  */
   multiselectQuestions: MultiselectQuestion
@@ -3515,113 +4604,82 @@ export interface ListingMultiselectQuestion {
   ordinal?: number
 }
 
-export interface Asset {
+/** ListingNeighborhoodAmenities */
+export interface ListingNeighborhoodAmenities {
   /**  */
   id: string
 
   /**  */
-  createdAt: Date
+  groceryStores?: string
 
   /**  */
-  updatedAt: Date
+  publicTransportation?: string
 
   /**  */
-  fileId: string
+  schools?: string
 
   /**  */
-  label: string
+  parksAndCommunityCenters?: string
+
+  /**  */
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
+
+  /**  */
+  shoppingVenues?: string
+
+  /**  */
+  hospitals?: string
+
+  /**  */
+  seniorCenters?: string
+
+  /**  */
+  recreationalFacilities?: string
+
+  /**  */
+  playgrounds?: string
+
+  /**  */
+  busStops?: string
 }
 
-export interface PaperApplication {
+/** ListingUtilities */
+export interface ListingUtilities {
   /**  */
   id: string
 
   /**  */
-  createdAt: Date
+  water?: boolean
 
   /**  */
-  updatedAt: Date
+  gas?: boolean
 
   /**  */
-  language: LanguagesEnum
+  trash?: boolean
 
   /**  */
-  assets: Asset
+  sewer?: boolean
+
+  /**  */
+  electricity?: boolean
+
+  /**  */
+  cable?: boolean
+
+  /**  */
+  phone?: boolean
+
+  /**  */
+  internet?: boolean
 }
 
-export interface ApplicationMethod {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  type: ApplicationMethodsTypeEnum
-
-  /**  */
-  label?: string
-
-  /**  */
-  externalReference?: string
-
-  /**  */
-  acceptsPostmarkedApplications?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  paperApplications?: PaperApplication[]
-}
-
-export interface ListingEvent {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  type: ListingEventsTypeEnum
-
-  /**  */
-  startDate?: Date
-
-  /**  */
-  startTime?: Date
-
-  /**  */
-  endTime?: Date
-
-  /**  */
-  url?: string
-
-  /**  */
-  note?: string
-
-  /**  */
-  label?: string
-
-  /**  */
-  assets?: Asset
-}
-
+/** Address */
 export interface Address {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   placeName?: string
@@ -3651,123 +4709,88 @@ export interface Address {
   longitude?: number
 }
 
-export interface ListingImage {
+/** ListingParkingType */
+export interface ListingParkingType {
   /**  */
-  assets: Asset
+  id: string
 
   /**  */
-  ordinal?: number
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+}
+
+/** Property */
+export interface Property {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
 
   /**  */
   description?: string
+
+  /**  */
+  url?: string
+
+  /**  */
+  urlTitle?: string
+
+  /**  */
+  jurisdictions?: IdDTO
 }
 
-export interface ListingFeatures {
+/** ListingDocuments */
+export interface ListingDocuments {
   /**  */
-  id: string
+  socialSecurityCard?: boolean
 
   /**  */
-  createdAt: Date
+  currentLandlordReference?: boolean
 
   /**  */
-  updatedAt: Date
+  birthCertificate?: boolean
 
   /**  */
-  elevator?: boolean
+  previousLandlordReference?: boolean
 
   /**  */
-  wheelchairRamp?: boolean
+  governmentIssuedId?: boolean
 
   /**  */
-  serviceAnimalsAllowed?: boolean
+  proofOfAssets?: boolean
 
   /**  */
-  accessibleParking?: boolean
+  proofOfIncome?: boolean
 
   /**  */
-  parkingOnSite?: boolean
+  residencyDocuments?: boolean
 
   /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
-  acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
-
-  /**  */
-  barrierFreeBathroom?: boolean
-
-  /**  */
-  wideDoorways?: boolean
-
-  /**  */
-  loweredCabinets?: boolean
+  proofOfCustody?: boolean
 }
 
-export interface ListingUtilities {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  water?: boolean
-
-  /**  */
-  gas?: boolean
-
-  /**  */
-  trash?: boolean
-
-  /**  */
-  sewer?: boolean
-
-  /**  */
-  electricity?: boolean
-
-  /**  */
-  cable?: boolean
-
-  /**  */
-  phone?: boolean
-
-  /**  */
-  internet?: boolean
-}
-
+/** AmiChartItem */
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number
@@ -3779,6 +4802,7 @@ export interface AmiChartItem {
   income: number
 }
 
+/** AmiChart */
 export interface AmiChart {
   /**  */
   id: string
@@ -3799,6 +4823,34 @@ export interface AmiChart {
   jurisdictions: IdDTO
 }
 
+/** UnitGroupAmiLevel */
+export interface UnitGroupAmiLevel {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  amiPercentage?: number
+
+  /**  */
+  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
+
+  /**  */
+  percentageOfIncomeValue?: number
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  amiChart?: AmiChart
+}
+
+/** UnitType */
 export interface UnitType {
   /**  */
   id: string
@@ -3816,6 +4868,193 @@ export interface UnitType {
   numBedrooms: number
 }
 
+/** UnitGroup */
+export interface UnitGroup {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  flatRentValueFrom?: number
+
+  /**  */
+  flatRentValueTo?: number
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist?: boolean
+
+  /**  */
+  sqFeetMin?: number
+
+  /**  */
+  sqFeetMax?: number
+
+  /**  */
+  rentType?: RentTypeEnum
+
+  /**  */
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
+
+  /**  */
+  unitGroupAmiLevels?: UnitGroupAmiLevel[]
+
+  /**  */
+  unitTypes?: UnitType[]
+}
+
+/** MinMax */
+export interface MinMax {
+  /**  */
+  min: number
+
+  /**  */
+  max: number
+}
+
+/** MinMaxCurrency */
+export interface MinMaxCurrency {
+  /**  */
+  min: string
+
+  /**  */
+  max: string
+}
+
+/** UnitGroupSummary */
+export interface UnitGroupSummary {
+  /**  */
+  unitTypes?: UnitType[]
+
+  /**  */
+  rentAsPercentIncomeRange?: MinMax
+
+  /**  */
+  rentRange?: MinMaxCurrency
+
+  /**  */
+  amiPercentageRange: MinMax
+
+  /**  */
+  openWaitlist: boolean
+
+  /**  */
+  unitVacancies: number
+
+  /**  */
+  floorRange?: MinMax
+
+  /**  */
+  sqFeetRange?: MinMax
+
+  /**  */
+  bathroomRange?: MinMax
+}
+
+/** HMIColumns */
+export interface HMIColumns {
+  /**  */
+  "20"?: number
+
+  /**  */
+  "25"?: number
+
+  /**  */
+  "30"?: number
+
+  /**  */
+  "35"?: number
+
+  /**  */
+  "40"?: number
+
+  /**  */
+  "45"?: number
+
+  /**  */
+  "50"?: number
+
+  /**  */
+  "55"?: number
+
+  /**  */
+  "60"?: number
+
+  /**  */
+  "70"?: number
+
+  /**  */
+  "80"?: number
+
+  /**  */
+  "100"?: number
+
+  /**  */
+  "120"?: number
+
+  /**  */
+  "125"?: number
+
+  /**  */
+  "140"?: number
+
+  /**  */
+  "150"?: number
+
+  /**  */
+  householdSize: string
+}
+
+/** HouseholdMaxIncomeSummary */
+export interface HouseholdMaxIncomeSummary {
+  /**  */
+  columns: HMIColumns
+
+  /**  */
+  rows: HMIColumns[]
+}
+
+/** UnitGroupsSummarized */
+export interface UnitGroupsSummarized {
+  /**  */
+  unitGroupSummary: UnitGroupSummary[]
+
+  /**  */
+  householdMaxIncomeSummary: HouseholdMaxIncomeSummary
+}
+
+/** UnitRentType */
 export interface UnitRentType {
   /**  */
   id: string
@@ -3830,20 +5069,7 @@ export interface UnitRentType {
   name: UnitRentTypeEnum
 }
 
-export interface UnitAccessibilityPriorityType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-}
-
+/** UnitAmiChartOverride */
 export interface UnitAmiChartOverride {
   /**  */
   id: string
@@ -3858,6 +5084,7 @@ export interface UnitAmiChartOverride {
   items: AmiChartItem[]
 }
 
+/** Unit */
 export interface Unit {
   /**  */
   id: string
@@ -3920,119 +5147,13 @@ export interface Unit {
   unitRentTypes?: UnitRentType
 
   /**  */
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitAmiChartOverrides?: UnitAmiChartOverride
 }
 
-export interface UnitGroupAmiLevel {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  amiPercentage?: number
-
-  /**  */
-  monthlyRentDeterminationType?: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
-
-  /**  */
-  percentageOfIncomeValue?: number
-
-  /**  */
-  flatRentValue?: number
-
-  /**  */
-  amiChart?: AmiChart
-}
-
-export interface UnitGroup {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  maxOccupancy?: number
-
-  /**  */
-  minOccupancy?: number
-
-  /**  */
-  flatRentValueFrom?: number
-
-  /**  */
-  flatRentValueTo?: number
-
-  /**  */
-  monthlyRent?: number
-
-  /**  */
-  floorMin?: number
-
-  /**  */
-  floorMax?: number
-
-  /**  */
-  totalCount?: number
-
-  /**  */
-  totalAvailable?: number
-
-  /**  */
-  bathroomMin?: number
-
-  /**  */
-  bathroomMax?: number
-
-  /**  */
-  openWaitlist?: boolean
-
-  /**  */
-  sqFeetMin?: number
-
-  /**  */
-  sqFeetMax?: number
-
-  /**  */
-  rentType?: RentTypeEnum
-
-  /**  */
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType
-
-  /**  */
-  unitGroupAmiLevels?: UnitGroupAmiLevel[]
-
-  /**  */
-  unitTypes?: UnitType[]
-}
-
-export interface MinMaxCurrency {
-  /**  */
-  min: string
-
-  /**  */
-  max: string
-}
-
-export interface MinMax {
-  /**  */
-  min: number
-
-  /**  */
-  max: number
-}
-
+/** UnitSummary */
 export interface UnitSummary {
   /**  */
   unitTypes: UnitType
@@ -4059,6 +5180,7 @@ export interface UnitSummary {
   floorRange?: MinMax
 }
 
+/** UnitSummaryByAMI */
 export interface UnitSummaryByAMI {
   /**  */
   percent: string
@@ -4067,6 +5189,7 @@ export interface UnitSummaryByAMI {
   byUnitType: UnitSummary[]
 }
 
+/** HMI */
 export interface HMI {
   /**  */
   columns: object
@@ -4075,12 +5198,13 @@ export interface HMI {
   rows: object[]
 }
 
+/** UnitsSummarized */
 export interface UnitsSummarized {
   /**  */
   unitTypes: UnitType[]
 
   /**  */
-  priorityTypes: UnitAccessibilityPriorityType[]
+  priorityTypes: UnitAccessibilityPriorityTypeEnum[]
 
   /**  */
   amiPercentages: string[]
@@ -4098,104 +5222,7 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
-export interface UnitGroupSummary {
-  /**  */
-  unitTypes?: UnitType[]
-
-  /**  */
-  rentAsPercentIncomeRange?: MinMax
-
-  /**  */
-  rentRange?: MinMaxCurrency
-
-  /**  */
-  amiPercentageRange: MinMax
-
-  /**  */
-  openWaitlist: boolean
-
-  /**  */
-  unitVacancies: number
-
-  /**  */
-  floorRange?: MinMax
-
-  /**  */
-  sqFeetRange?: MinMax
-
-  /**  */
-  bathroomRange?: MinMax
-}
-
-export interface HMIColumns {
-  /**  */
-  "20"?: number
-
-  /**  */
-  "25"?: number
-
-  /**  */
-  "30"?: number
-
-  /**  */
-  "35"?: number
-
-  /**  */
-  "40"?: number
-
-  /**  */
-  "45"?: number
-
-  /**  */
-  "50"?: number
-
-  /**  */
-  "55"?: number
-
-  /**  */
-  "60"?: number
-
-  /**  */
-  "70"?: number
-
-  /**  */
-  "80"?: number
-
-  /**  */
-  "100"?: number
-
-  /**  */
-  "120"?: number
-
-  /**  */
-  "125"?: number
-
-  /**  */
-  "140"?: number
-
-  /**  */
-  "150"?: number
-
-  /**  */
-  householdSize: string
-}
-
-export interface HouseholdMaxIncomeSummary {
-  /**  */
-  columns: HMIColumns
-
-  /**  */
-  rows: HMIColumns[]
-}
-
-export interface UnitGroupsSummarized {
-  /**  */
-  unitGroupSummary: UnitGroupSummary[]
-
-  /**  */
-  householdMaxIncomeSummary: HouseholdMaxIncomeSummary
-}
-
+/** UnitsSummary */
 export interface UnitsSummary {
   /**  */
   id: string
@@ -4240,7 +5267,7 @@ export interface UnitsSummary {
   sqFeetMax?: string
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   totalCount?: number
@@ -4261,90 +5288,7 @@ export interface UnitsSummary {
   monthlyRent?: number
 }
 
-export interface ApplicationLotteryTotal {
-  /**  */
-  listingId: string
-
-  /**  */
-  multiselectQuestionId?: string
-
-  /**  */
-  total: number
-}
-
-export interface ListingNeighborhoodAmenities {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  groceryStores?: string
-
-  /**  */
-  publicTransportation?: string
-
-  /**  */
-  schools?: string
-
-  /**  */
-  parksAndCommunityCenters?: string
-
-  /**  */
-  pharmacies?: string
-
-  /**  */
-  healthCareResources?: string
-
-  /**  */
-  shoppingVenues?: string
-
-  /**  */
-  hospitals?: string
-
-  /**  */
-  seniorCenters?: string
-
-  /**  */
-  recreationalFacilities?: string
-
-  /**  */
-  playgrounds?: string
-
-  /**  */
-  busStops?: string
-}
-
-export interface Property {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  url?: string
-
-  /**  */
-  urlTitle?: string
-
-  /**  */
-  jurisdictions?: IdDTO
-}
-
+/** Listing */
 export interface Listing {
   /**  */
   id: string
@@ -4356,76 +5300,52 @@ export interface Listing {
   updatedAt: Date
 
   /**  */
+  accessibility?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
+
+  /**  */
   additionalApplicationSubmissionNotes?: string
 
   /**  */
-  digitalApplication?: boolean
+  afsLastRunAt?: Date
 
   /**  */
-  commonDigitalApplication?: boolean
+  allowsCats?: boolean
 
   /**  */
-  paperApplication?: boolean
-
-  /**  */
-  referralOpportunity?: boolean
-
-  /**  */
-  accessibility?: string
+  allowsDogs?: boolean
 
   /**  */
   amenities?: string
 
   /**  */
-  buildingTotalUnits?: number
+  applicationConfig?: object
 
   /**  */
-  developer?: string
+  applicationDropOffAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  listingFileNumber?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  region?: RegionEnum
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
+  applicationDropOffAddressOfficeHours?: string
 
   /**  */
   applicationDueDate?: Date
 
   /**  */
-  applicationOpenDate?: Date
-
-  /**  */
   applicationFee?: string
 
   /**  */
-  creditScreeningFee?: string
+  applicationLotteryTotals: ApplicationLotteryTotal[]
+
+  /**  */
+  applicationMailingAddressType?: ApplicationAddressTypeEnum
+
+  /**  */
+  applicationMethods: ApplicationMethod[]
+
+  /**  */
+  applicationOpenDate?: Date
 
   /**  */
   applicationOrganization?: string
@@ -4437,28 +5357,37 @@ export interface Listing {
   applicationPickUpAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  applicationDropOffAddressOfficeHours?: string
-
-  /**  */
-  applicationDropOffAddressType?: ApplicationAddressTypeEnum
-
-  /**  */
-  applicationMailingAddressType?: ApplicationAddressTypeEnum
-
-  /**  */
   buildingSelectionCriteria?: string
 
   /**  */
-  marketingFlyer?: string
-
-  /**  */
-  accessibleMarketingFlyer?: string
+  buildingTotalUnits?: number
 
   /**  */
   cocInfo?: string
 
   /**  */
+  closedAt?: Date
+
+  /**  */
+  commonDigitalApplication?: boolean
+
+  /**  */
+  communityDisclaimerDescription?: string
+
+  /**  */
+  communityDisclaimerTitle?: string
+
+  /**  */
+  configurableRegion?: string
+
+  /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
   costsNotIncluded?: string
+
+  /**  */
+  creditScreeningFee?: string
 
   /**  */
   creditHistory?: string
@@ -4467,10 +5396,16 @@ export interface Listing {
   criminalBackground?: string
 
   /**  */
-  depositMin?: string
+  customMapPin?: boolean
+
+  /**  */
+  depositHelperText?: string
 
   /**  */
   depositMax?: string
+
+  /**  */
+  depositMin?: string
 
   /**  */
   depositType?: EnumListingDepositType
@@ -4479,13 +5414,55 @@ export interface Listing {
   depositValue?: number
 
   /**  */
-  depositHelperText?: string
+  developer?: string
+
+  /**  */
+  digitalApplication?: boolean
 
   /**  */
   disableUnitsAccordion?: boolean
 
   /**  */
+  displayWaitlistSize: boolean
+
+  /**  */
+  externalJurisdictionId?: string
+
+  /**  */
+  externalListingId?: string
+
+  /**  */
+  externalURL?: string
+
+  /**  */
   hasHudEbllClearance?: boolean
+
+  /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  includeCommunityDisclaimer?: boolean
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  isWaitlistOpen?: boolean
+
+  /**  */
+  jurisdictions: IdDTO
+
+  /**  */
+  lastApplicationUpdateAt?: Date
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   leasingAgentEmail?: string
@@ -4503,127 +5480,31 @@ export interface Listing {
   leasingAgentTitle?: string
 
   /**  */
-  listingType?: EnumListingListingType
+  listingEvents: ListingEvent[]
 
   /**  */
-  managementWebsite?: string
+  listingFeatures?: ListingFeatures
 
   /**  */
-  name: string
+  listingFileNumber?: string
 
   /**  */
-  parkingFee?: string
-
-  /**  */
-  postmarkedApplicationsReceivedByDate?: Date
-
-  /**  */
-  programRules?: string
-
-  /**  */
-  rentalAssistance?: string
-
-  /**  */
-  rentalHistory?: string
-
-  /**  */
-  requiredDocuments?: string
-
-  /**  */
-  requiredDocumentsList?: ListingDocuments
-
-  /**  */
-  specialNotes?: string
-
-  /**  */
-  waitlistCurrentSize?: number
-
-  /**  */
-  waitlistMaxSize?: number
-
-  /**  */
-  whatToExpect?: string
-
-  /**  */
-  whatToExpectAdditionalText?: string
-
-  /**  */
-  status: ListingsStatusEnum
-
-  /**  */
-  reviewOrderType?: ReviewOrderTypeEnum
-
-  /**  */
-  applicationConfig?: object
-
-  /**  */
-  displayWaitlistSize: boolean
-
-  /**  */
-  showWaitlist?: boolean
-
-  /**  */
-  reservedCommunityDescription?: string
-
-  /**  */
-  reservedCommunityMinAge?: number
-
-  /**  */
-  resultLink?: string
-
-  /**  */
-  isWaitlistOpen?: boolean
-
-  /**  */
-  waitlistOpenSpots?: number
-
-  /**  */
-  customMapPin?: boolean
-
-  /**  */
-  contentUpdatedAt?: Date
-
-  /**  */
-  publishedAt?: Date
-
-  /**  */
-  closedAt?: Date
-
-  /**  */
-  afsLastRunAt?: Date
-
-  /**  */
-  lotteryLastPublishedAt?: Date
-
-  /**  */
-  lotteryLastRunAt?: Date
-
-  /**  */
-  lotteryStatus?: LotteryStatusEnum
-
-  /**  */
-  lastApplicationUpdateAt?: Date
+  listingImages?: ListingImage[]
 
   /**  */
   listingMultiselectQuestions?: ListingMultiselectQuestion[]
 
   /**  */
-  applicationMethods: ApplicationMethod[]
+  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
-  referralApplication?: ApplicationMethod
+  listingType?: EnumListingListingType
 
   /**  */
-  assets: Asset[]
+  listingUtilities?: ListingUtilities
 
   /**  */
-  listingEvents: ListingEvent[]
-
-  /**  */
-  listingsBuildingAddress: Address
-
-  /**  */
-  listingsApplicationPickUpAddress?: Address
+  listingsAccessibleMarketingFlyerFile?: Asset
 
   /**  */
   listingsApplicationDropOffAddress?: Address
@@ -4632,52 +5513,100 @@ export interface Listing {
   listingsApplicationMailingAddress?: Address
 
   /**  */
-  listingsLeasingAgentAddress?: Address
+  listingsApplicationPickUpAddress?: Address
+
+  /**  */
+  listingsBuildingAddress: Address
 
   /**  */
   listingsBuildingSelectionCriteriaFile?: Asset
 
   /**  */
+  listingsLeasingAgentAddress?: Address
+
+  /**  */
   listingsMarketingFlyerFile?: Asset
-
-  /**  */
-  listingsAccessibleMarketingFlyerFile?: Asset
-
-  /**  */
-  jurisdictions: IdDTO
 
   /**  */
   listingsResult?: Asset
 
   /**  */
+  lotteryLastPublishedAt?: Date
+
+  /**  */
+  lotteryLastRunAt?: Date
+
+  /**  */
+  lotteryOptIn?: boolean
+
+  /**  */
+  lotteryStatus?: LotteryStatusEnum
+
+  /**  */
+  managementWebsite?: string
+
+  /**  */
+  marketingFlyer?: string
+
+  /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingYear?: number
+
+  /**  */
+  name: string
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  parkingFee?: string
+
+  /**  */
+  parkType?: ListingParkingType
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  postmarkedApplicationsReceivedByDate?: Date
+
+  /**  */
+  programRules?: string
+
+  /**  */
+  property?: Property
+
+  /**  */
+  publishedAt?: Date
+
+  /**  */
+  referralApplication?: ApplicationMethod
+
+  /**  */
+  referralOpportunity?: boolean
+
+  /**  */
+  region?: RegionEnum
+
+  /**  */
+  rentalAssistance?: string
+
+  /**  */
+  rentalHistory?: string
+
+  /**  */
   reservedCommunityTypes?: IdDTO
-
-  /**  */
-  listingImages?: ListingImage[]
-
-  /**  */
-  listingFeatures?: ListingFeatures
-
-  /**  */
-  listingUtilities?: ListingUtilities
-
-  /**  */
-  units: Unit[]
-
-  /**  */
-  unitGroups?: UnitGroup[]
-
-  /**  */
-  unitsSummarized?: UnitsSummarized
-
-  /**  */
-  unitGroupsSummarized?: UnitGroupsSummarized
-
-  /**  */
-  unitsSummary?: UnitsSummary[]
-
-  /**  */
-  urlSlug?: string
 
   /**  */
   requestedChanges?: string
@@ -4689,51 +5618,91 @@ export interface Listing {
   requestedChangesUser?: IdDTO
 
   /**  */
-  lotteryOptIn?: boolean
+  requiredDocuments?: string
 
   /**  */
-  applicationLotteryTotals: ApplicationLotteryTotal[]
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
-  includeCommunityDisclaimer?: boolean
+  reviewOrderType?: ReviewOrderTypeEnum
 
   /**  */
-  communityDisclaimerTitle?: string
+  reservedCommunityDescription?: string
 
   /**  */
-  communityDisclaimerDescription?: string
+  reservedCommunityMinAge?: number
 
   /**  */
-  marketingType?: MarketingTypeEnum
+  resultLink?: string
 
   /**  */
-  marketingYear?: number
+  scheduledPublishAt?: Date
 
   /**  */
-  marketingSeason?: MarketingSeasonEnum
-
-  /**  */
-  marketingMonth?: MonthEnum
-
-  /**  */
-  homeType?: HomeTypeEnum
-
-  /**  */
-  isVerified?: boolean
+  scheduledApplicationOpenAt?: Date
 
   /**  */
   section8Acceptance?: boolean
 
   /**  */
-  listingNeighborhoodAmenities?: ListingNeighborhoodAmenities
+  servicesOffered?: string
 
   /**  */
-  lastUpdatedByUser?: IdDTO
+  showWaitlist?: boolean
 
   /**  */
-  property?: Property
+  smokingPolicy?: string
+
+  /**  */
+  specialNotes?: string
+
+  /**  */
+  status: ListingsStatusEnum
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  unitGroups?: UnitGroup[]
+
+  /**  */
+  unitGroupsSummarized?: UnitGroupsSummarized
+
+  /**  */
+  units: Unit[]
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  unitsSummarized?: UnitsSummarized
+
+  /**  */
+  unitsSummary?: UnitsSummary[]
+
+  /**  */
+  urlSlug?: string
+
+  /**  */
+  waitlistCurrentSize?: number
+
+  /**  */
+  waitlistMaxSize?: number
+
+  /**  */
+  waitlistOpenSpots?: number
+
+  /**  */
+  whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
+  yearBuilt?: number
 }
 
+/** PaginationMeta */
 export interface PaginationMeta {
   /**  */
   currentPage: number
@@ -4751,6 +5720,7 @@ export interface PaginationMeta {
   totalPages: number
 }
 
+/** PaginatedListing */
 export interface PaginatedListing {
   /**  */
   items: Listing[]
@@ -4759,6 +5729,7 @@ export interface PaginatedListing {
   meta: PaginationMeta
 }
 
+/** ListingMapMarker */
 export interface ListingMapMarker {
   /**  */
   id: string
@@ -4770,17 +5741,7 @@ export interface ListingMapMarker {
   lng: number
 }
 
-export interface AssetCreate {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-
-  /**  */
-  id?: string
-}
-
+/** UnitsSummaryCreate */
 export interface UnitsSummaryCreate {
   /**  */
   unitTypes: IdDTO
@@ -4822,7 +5783,7 @@ export interface UnitsSummaryCreate {
   sqFeetMax?: string
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   totalCount?: number
@@ -4843,6 +5804,19 @@ export interface UnitsSummaryCreate {
   monthlyRent?: number
 }
 
+/** AssetCreate */
+export interface AssetCreate {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+
+  /**  */
+  id?: string
+}
+
+/** ListingImageCreate */
 export interface ListingImageCreate {
   /**  */
   ordinal?: number
@@ -4854,73 +5828,175 @@ export interface ListingImageCreate {
   description?: string
 }
 
+/** ListingFeaturesCreate */
 export interface ListingFeaturesCreate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
+
+  /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
 }
 
+/** ListingParkingTypeCreate */
+export interface ListingParkingTypeCreate {
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+}
+
+/** UnitAmiChartOverrideCreate */
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
 }
 
+/** UnitCreate */
 export interface UnitCreate {
   /**  */
   amiPercentage?: string
@@ -4971,7 +6047,7 @@ export interface UnitCreate {
   amiChart?: IdDTO
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitRentTypes?: IdDTO
@@ -4980,6 +6056,7 @@ export interface UnitCreate {
   unitAmiChartOverrides?: UnitAmiChartOverrideCreate
 }
 
+/** UnitGroupAmiLevelCreate */
 export interface UnitGroupAmiLevelCreate {
   /**  */
   amiPercentage?: number
@@ -4997,6 +6074,7 @@ export interface UnitGroupAmiLevelCreate {
   amiChart?: IdDTO
 }
 
+/** UnitGroupCreate */
 export interface UnitGroupCreate {
   /**  */
   maxOccupancy?: number
@@ -5044,7 +6122,7 @@ export interface UnitGroupCreate {
   rentType?: RentTypeEnum
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitTypes?: IdDTO[]
@@ -5053,6 +6131,7 @@ export interface UnitGroupCreate {
   unitGroupAmiLevels?: UnitGroupAmiLevelCreate[]
 }
 
+/** PaperApplicationCreate */
 export interface PaperApplicationCreate {
   /**  */
   language: LanguagesEnum
@@ -5061,6 +6140,7 @@ export interface PaperApplicationCreate {
   assets?: AssetCreate
 }
 
+/** ApplicationMethodCreate */
 export interface ApplicationMethodCreate {
   /**  */
   type: ApplicationMethodsTypeEnum
@@ -5081,6 +6161,7 @@ export interface ApplicationMethodCreate {
   paperApplications?: PaperApplicationCreate[]
 }
 
+/** AddressCreate */
 export interface AddressCreate {
   /**  */
   placeName?: string
@@ -5110,6 +6191,7 @@ export interface AddressCreate {
   longitude?: number
 }
 
+/** ListingEventCreate */
 export interface ListingEventCreate {
   /**  */
   type: ListingEventsTypeEnum
@@ -5136,6 +6218,7 @@ export interface ListingEventCreate {
   assets?: AssetCreate
 }
 
+/** ListingUtilitiesCreate */
 export interface ListingUtilitiesCreate {
   /**  */
   water?: boolean
@@ -5162,6 +6245,7 @@ export interface ListingUtilitiesCreate {
   internet?: boolean
 }
 
+/** ListingNeighborhoodAmenitiesCreate */
 export interface ListingNeighborhoodAmenitiesCreate {
   /**  */
   groceryStores?: string
@@ -5200,78 +6284,43 @@ export interface ListingNeighborhoodAmenitiesCreate {
   busStops?: string
 }
 
+/** ListingCreate */
 export interface ListingCreate {
+  /**  */
+  accessibility?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
+
   /**  */
   additionalApplicationSubmissionNotes?: string
 
   /**  */
-  digitalApplication?: boolean
+  allowsCats?: boolean
 
   /**  */
-  commonDigitalApplication?: boolean
-
-  /**  */
-  paperApplication?: boolean
-
-  /**  */
-  referralOpportunity?: boolean
-
-  /**  */
-  accessibility?: string
+  allowsDogs?: boolean
 
   /**  */
   amenities?: string
 
   /**  */
-  buildingTotalUnits?: number
+  applicationDropOffAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  developer?: string
-
-  /**  */
-  listingFileNumber?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  region?: RegionEnum
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
+  applicationDropOffAddressOfficeHours?: string
 
   /**  */
   applicationDueDate?: Date
 
   /**  */
-  applicationOpenDate?: Date
-
-  /**  */
   applicationFee?: string
 
   /**  */
-  creditScreeningFee?: string
+  applicationMailingAddressType?: ApplicationAddressTypeEnum
+
+  /**  */
+  applicationOpenDate?: Date
 
   /**  */
   applicationOrganization?: string
@@ -5283,28 +6332,34 @@ export interface ListingCreate {
   applicationPickUpAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  applicationDropOffAddressOfficeHours?: string
-
-  /**  */
-  applicationDropOffAddressType?: ApplicationAddressTypeEnum
-
-  /**  */
-  applicationMailingAddressType?: ApplicationAddressTypeEnum
-
-  /**  */
   buildingSelectionCriteria?: string
 
   /**  */
-  marketingFlyer?: string
-
-  /**  */
-  accessibleMarketingFlyer?: string
+  buildingTotalUnits?: number
 
   /**  */
   cocInfo?: string
 
   /**  */
+  commonDigitalApplication?: boolean
+
+  /**  */
+  communityDisclaimerDescription?: string
+
+  /**  */
+  communityDisclaimerTitle?: string
+
+  /**  */
+  configurableRegion?: string
+
+  /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
   costsNotIncluded?: string
+
+  /**  */
+  creditScreeningFee?: string
 
   /**  */
   creditHistory?: string
@@ -5313,10 +6368,16 @@ export interface ListingCreate {
   criminalBackground?: string
 
   /**  */
-  depositMin?: string
+  customMapPin?: boolean
+
+  /**  */
+  depositHelperText?: string
 
   /**  */
   depositMax?: string
+
+  /**  */
+  depositMin?: string
 
   /**  */
   depositType?: EnumListingCreateDepositType
@@ -5325,13 +6386,46 @@ export interface ListingCreate {
   depositValue?: number
 
   /**  */
-  depositHelperText?: string
+  developer?: string
+
+  /**  */
+  digitalApplication?: boolean
 
   /**  */
   disableUnitsAccordion?: boolean
 
   /**  */
+  displayWaitlistSize: boolean
+
+  /**  */
   hasHudEbllClearance?: boolean
+
+  /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  includeCommunityDisclaimer?: boolean
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  isWaitlistOpen?: boolean
+
+  /**  */
+  jurisdictions: IdDTO
+
+  /**  */
+  lastApplicationUpdateAt?: Date
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   leasingAgentEmail?: string
@@ -5349,79 +6443,10 @@ export interface ListingCreate {
   leasingAgentTitle?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   listingType?: EnumListingCreateListingType
-
-  /**  */
-  managementWebsite?: string
-
-  /**  */
-  name: string
-
-  /**  */
-  parkingFee?: string
-
-  /**  */
-  postmarkedApplicationsReceivedByDate?: Date
-
-  /**  */
-  programRules?: string
-
-  /**  */
-  rentalAssistance?: string
-
-  /**  */
-  rentalHistory?: string
-
-  /**  */
-  requiredDocuments?: string
-
-  /**  */
-  requiredDocumentsList?: ListingDocuments
-
-  /**  */
-  specialNotes?: string
-
-  /**  */
-  waitlistCurrentSize?: number
-
-  /**  */
-  waitlistMaxSize?: number
-
-  /**  */
-  whatToExpect?: string
-
-  /**  */
-  whatToExpectAdditionalText?: string
-
-  /**  */
-  status: ListingsStatusEnum
-
-  /**  */
-  reviewOrderType?: ReviewOrderTypeEnum
-
-  /**  */
-  displayWaitlistSize: boolean
-
-  /**  */
-  reservedCommunityDescription?: string
-
-  /**  */
-  reservedCommunityMinAge?: number
-
-  /**  */
-  resultLink?: string
-
-  /**  */
-  isWaitlistOpen?: boolean
-
-  /**  */
-  waitlistOpenSpots?: number
-
-  /**  */
-  customMapPin?: boolean
-
-  /**  */
-  contentUpdatedAt?: Date
 
   /**  */
   lotteryLastPublishedAt?: Date
@@ -5430,13 +6455,61 @@ export interface ListingCreate {
   lotteryLastRunAt?: Date
 
   /**  */
+  lotteryOptIn?: boolean
+
+  /**  */
   lotteryStatus?: LotteryStatusEnum
 
   /**  */
-  lastApplicationUpdateAt?: Date
+  managementWebsite?: string
 
   /**  */
-  jurisdictions: IdDTO
+  marketingFlyer?: string
+
+  /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingYear?: number
+
+  /**  */
+  name: string
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  parkingFee?: string
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  postmarkedApplicationsReceivedByDate?: Date
+
+  /**  */
+  programRules?: string
+
+  /**  */
+  referralOpportunity?: boolean
+
+  /**  */
+  region?: RegionEnum
+
+  /**  */
+  rentalAssistance?: string
+
+  /**  */
+  rentalHistory?: string
 
   /**  */
   reservedCommunityTypes?: IdDTO
@@ -5448,49 +6521,70 @@ export interface ListingCreate {
   requestedChangesDate?: Date
 
   /**  */
-  lotteryOptIn?: boolean
+  requiredDocuments?: string
 
   /**  */
-  includeCommunityDisclaimer?: boolean
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
-  communityDisclaimerTitle?: string
+  reviewOrderType?: ReviewOrderTypeEnum
 
   /**  */
-  communityDisclaimerDescription?: string
+  reservedCommunityDescription?: string
 
   /**  */
-  marketingType?: MarketingTypeEnum
+  reservedCommunityMinAge?: number
 
   /**  */
-  marketingYear?: number
+  resultLink?: string
 
   /**  */
-  marketingSeason?: MarketingSeasonEnum
+  scheduledPublishAt?: Date
 
   /**  */
-  marketingMonth?: MonthEnum
-
-  /**  */
-  homeType?: HomeTypeEnum
-
-  /**  */
-  isVerified?: boolean
+  scheduledApplicationOpenAt?: Date
 
   /**  */
   section8Acceptance?: boolean
 
   /**  */
-  lastUpdatedByUser?: IdDTO
+  servicesOffered?: string
 
   /**  */
-  property?: Property
+  smokingPolicy?: string
+
+  /**  */
+  specialNotes?: string
+
+  /**  */
+  status: ListingsStatusEnum
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  waitlistCurrentSize?: number
+
+  /**  */
+  waitlistMaxSize?: number
+
+  /**  */
+  waitlistOpenSpots?: number
+
+  /**  */
+  whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
+  yearBuilt?: number
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
-
-  /**  */
-  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -5514,7 +6608,13 @@ export interface ListingCreate {
   listingFeatures?: ListingFeaturesCreate
 
   /**  */
+  parkType?: ListingParkingTypeCreate
+
+  /**  */
   requestedChangesUser?: IdDTO
+
+  /**  */
+  property?: IdDTO
 
   /**  */
   units?: UnitCreate[]
@@ -5550,6 +6650,7 @@ export interface ListingCreate {
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesCreate
 }
 
+/** ListingDuplicate */
 export interface ListingDuplicate {
   /**  */
   name: string
@@ -5561,6 +6662,19 @@ export interface ListingDuplicate {
   storedListing: IdDTO
 }
 
+/** ListingUpdateStatus */
+export interface ListingUpdateStatus {
+  /**  */
+  id: string
+
+  /**  */
+  status: ListingsStatusEnum
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** UnitAmiChartOverrideUpdate */
 export interface UnitAmiChartOverrideUpdate {
   /**  */
   items: AmiChartItem[]
@@ -5569,6 +6683,7 @@ export interface UnitAmiChartOverrideUpdate {
   id?: string
 }
 
+/** UnitUpdate */
 export interface UnitUpdate {
   /**  */
   amiPercentage?: string
@@ -5622,7 +6737,7 @@ export interface UnitUpdate {
   amiChart?: IdDTO
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitRentTypes?: IdDTO
@@ -5631,6 +6746,7 @@ export interface UnitUpdate {
   unitAmiChartOverrides?: UnitAmiChartOverrideUpdate
 }
 
+/** UnitGroupAmiLevelUpdate */
 export interface UnitGroupAmiLevelUpdate {
   /**  */
   amiPercentage?: number
@@ -5651,6 +6767,7 @@ export interface UnitGroupAmiLevelUpdate {
   amiChart?: IdDTO
 }
 
+/** UnitGroupUpdate */
 export interface UnitGroupUpdate {
   /**  */
   maxOccupancy?: number
@@ -5701,7 +6818,7 @@ export interface UnitGroupUpdate {
   id?: string
 
   /**  */
-  unitAccessibilityPriorityTypes?: IdDTO
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum
 
   /**  */
   unitTypes?: IdDTO[]
@@ -5710,6 +6827,7 @@ export interface UnitGroupUpdate {
   unitGroupAmiLevels?: UnitGroupAmiLevelUpdate[]
 }
 
+/** PaperApplicationUpdate */
 export interface PaperApplicationUpdate {
   /**  */
   language: LanguagesEnum
@@ -5721,6 +6839,7 @@ export interface PaperApplicationUpdate {
   assets?: AssetCreate
 }
 
+/** ApplicationMethodUpdate */
 export interface ApplicationMethodUpdate {
   /**  */
   type: ApplicationMethodsTypeEnum
@@ -5744,6 +6863,7 @@ export interface ApplicationMethodUpdate {
   paperApplications?: PaperApplicationUpdate[]
 }
 
+/** AddressUpdate */
 export interface AddressUpdate {
   /**  */
   placeName?: string
@@ -5776,6 +6896,7 @@ export interface AddressUpdate {
   id?: string
 }
 
+/** ListingEventUpdate */
 export interface ListingEventUpdate {
   /**  */
   type: ListingEventsTypeEnum
@@ -5805,71 +6926,157 @@ export interface ListingEventUpdate {
   id?: string
 }
 
+/** ListingFeaturesUpdate */
 export interface ListingFeaturesUpdate {
   /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
+  accessibleHeightToilet?: boolean
 
   /**  */
   accessibleParking?: boolean
 
   /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
   acInUnit?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  visual?: boolean
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  barrierFreeUnitEntrance?: boolean
-
-  /**  */
-  loweredLightSwitch?: boolean
 
   /**  */
   barrierFreeBathroom?: boolean
 
   /**  */
-  wideDoorways?: boolean
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  barrierFreePropertyEntrance?: boolean
+
+  /**  */
+  barrierFreeUnitEntrance?: boolean
+
+  /**  */
+  bathGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  bathroomCounterLowered?: boolean
+
+  /**  */
+  brailleSignageInBuilding?: boolean
+
+  /**  */
+  carbonMonoxideDetectorWithStrobe?: boolean
+
+  /**  */
+  carpetInUnit?: boolean
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  extraAudibleCarbonMonoxideDetector?: boolean
+
+  /**  */
+  extraAudibleSmokeDetector?: boolean
+
+  /**  */
+  fireSuppressionSprinklerSystem?: boolean
+
+  /**  */
+  frontControlsDishwasher?: boolean
+
+  /**  */
+  frontControlsStoveCookTop?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  hardFlooringInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  kitchenCounterLowered?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  leverHandlesOnDoors?: boolean
+
+  /**  */
+  leverHandlesOnFaucets?: boolean
 
   /**  */
   loweredCabinets?: boolean
 
   /**  */
+  loweredLightSwitch?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  noEntryStairs?: boolean
+
+  /**  */
+  nonDigitalKitchenAppliances?: boolean
+
+  /**  */
+  noStairsToParkingSpots?: boolean
+
+  /**  */
+  noStairsWithinUnit?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  refrigeratorWithBottomDoorFreezer?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  smokeDetectorWithStrobe?: boolean
+
+  /**  */
+  streetLevelEntrance?: boolean
+
+  /**  */
+  toiletGrabBarsOrReinforcements?: boolean
+
+  /**  */
+  ttyAmplifiedPhone?: boolean
+
+  /**  */
+  turningCircleInBathrooms?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  walkInShower?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  wideDoorways?: boolean
+
+  /**  */
   id?: string
 }
 
+/** ListingUtilitiesUpdate */
 export interface ListingUtilitiesUpdate {
   /**  */
   water?: boolean
@@ -5899,6 +7106,25 @@ export interface ListingUtilitiesUpdate {
   id?: string
 }
 
+/** ListingParkingTypeUpdate */
+export interface ListingParkingTypeUpdate {
+  /**  */
+  onStreet?: boolean
+
+  /**  */
+  offStreet?: boolean
+
+  /**  */
+  garage?: boolean
+
+  /**  */
+  carport?: boolean
+
+  /**  */
+  id?: string
+}
+
+/** ListingNeighborhoodAmenitiesUpdate */
 export interface ListingNeighborhoodAmenitiesUpdate {
   /**  */
   groceryStores?: string
@@ -5940,81 +7166,46 @@ export interface ListingNeighborhoodAmenitiesUpdate {
   id?: string
 }
 
+/** ListingUpdate */
 export interface ListingUpdate {
   /**  */
   id: string
 
   /**  */
+  accessibility?: string
+
+  /**  */
+  accessibleMarketingFlyer?: string
+
+  /**  */
   additionalApplicationSubmissionNotes?: string
 
   /**  */
-  digitalApplication?: boolean
+  allowsCats?: boolean
 
   /**  */
-  commonDigitalApplication?: boolean
-
-  /**  */
-  paperApplication?: boolean
-
-  /**  */
-  referralOpportunity?: boolean
-
-  /**  */
-  accessibility?: string
+  allowsDogs?: boolean
 
   /**  */
   amenities?: string
 
   /**  */
-  buildingTotalUnits?: number
+  applicationDropOffAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  developer?: string
-
-  /**  */
-  listingFileNumber?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  region?: RegionEnum
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
+  applicationDropOffAddressOfficeHours?: string
 
   /**  */
   applicationDueDate?: Date
 
   /**  */
-  applicationOpenDate?: Date
-
-  /**  */
   applicationFee?: string
 
   /**  */
-  creditScreeningFee?: string
+  applicationMailingAddressType?: ApplicationAddressTypeEnum
+
+  /**  */
+  applicationOpenDate?: Date
 
   /**  */
   applicationOrganization?: string
@@ -6026,28 +7217,34 @@ export interface ListingUpdate {
   applicationPickUpAddressType?: ApplicationAddressTypeEnum
 
   /**  */
-  applicationDropOffAddressOfficeHours?: string
-
-  /**  */
-  applicationDropOffAddressType?: ApplicationAddressTypeEnum
-
-  /**  */
-  applicationMailingAddressType?: ApplicationAddressTypeEnum
-
-  /**  */
   buildingSelectionCriteria?: string
 
   /**  */
-  marketingFlyer?: string
-
-  /**  */
-  accessibleMarketingFlyer?: string
+  buildingTotalUnits?: number
 
   /**  */
   cocInfo?: string
 
   /**  */
+  commonDigitalApplication?: boolean
+
+  /**  */
+  communityDisclaimerDescription?: string
+
+  /**  */
+  communityDisclaimerTitle?: string
+
+  /**  */
+  configurableRegion?: string
+
+  /**  */
+  contentUpdatedAt?: Date
+
+  /**  */
   costsNotIncluded?: string
+
+  /**  */
+  creditScreeningFee?: string
 
   /**  */
   creditHistory?: string
@@ -6056,10 +7253,16 @@ export interface ListingUpdate {
   criminalBackground?: string
 
   /**  */
-  depositMin?: string
+  customMapPin?: boolean
+
+  /**  */
+  depositHelperText?: string
 
   /**  */
   depositMax?: string
+
+  /**  */
+  depositMin?: string
 
   /**  */
   depositType?: EnumListingUpdateDepositType
@@ -6068,13 +7271,46 @@ export interface ListingUpdate {
   depositValue?: number
 
   /**  */
-  depositHelperText?: string
+  developer?: string
+
+  /**  */
+  digitalApplication?: boolean
 
   /**  */
   disableUnitsAccordion?: boolean
 
   /**  */
+  displayWaitlistSize: boolean
+
+  /**  */
   hasHudEbllClearance?: boolean
+
+  /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  includeCommunityDisclaimer?: boolean
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  isWaitlistOpen?: boolean
+
+  /**  */
+  jurisdictions: IdDTO
+
+  /**  */
+  lastApplicationUpdateAt?: Date
+
+  /**  */
+  lastUpdatedByUser?: IdDTO
 
   /**  */
   leasingAgentEmail?: string
@@ -6092,79 +7328,10 @@ export interface ListingUpdate {
   leasingAgentTitle?: string
 
   /**  */
+  listingFileNumber?: string
+
+  /**  */
   listingType?: EnumListingUpdateListingType
-
-  /**  */
-  managementWebsite?: string
-
-  /**  */
-  name: string
-
-  /**  */
-  parkingFee?: string
-
-  /**  */
-  postmarkedApplicationsReceivedByDate?: Date
-
-  /**  */
-  programRules?: string
-
-  /**  */
-  rentalAssistance?: string
-
-  /**  */
-  rentalHistory?: string
-
-  /**  */
-  requiredDocuments?: string
-
-  /**  */
-  requiredDocumentsList?: ListingDocuments
-
-  /**  */
-  specialNotes?: string
-
-  /**  */
-  waitlistCurrentSize?: number
-
-  /**  */
-  waitlistMaxSize?: number
-
-  /**  */
-  whatToExpect?: string
-
-  /**  */
-  whatToExpectAdditionalText?: string
-
-  /**  */
-  status: ListingsStatusEnum
-
-  /**  */
-  reviewOrderType?: ReviewOrderTypeEnum
-
-  /**  */
-  displayWaitlistSize: boolean
-
-  /**  */
-  reservedCommunityDescription?: string
-
-  /**  */
-  reservedCommunityMinAge?: number
-
-  /**  */
-  resultLink?: string
-
-  /**  */
-  isWaitlistOpen?: boolean
-
-  /**  */
-  waitlistOpenSpots?: number
-
-  /**  */
-  customMapPin?: boolean
-
-  /**  */
-  contentUpdatedAt?: Date
 
   /**  */
   lotteryLastPublishedAt?: Date
@@ -6173,13 +7340,61 @@ export interface ListingUpdate {
   lotteryLastRunAt?: Date
 
   /**  */
+  lotteryOptIn?: boolean
+
+  /**  */
   lotteryStatus?: LotteryStatusEnum
 
   /**  */
-  lastApplicationUpdateAt?: Date
+  managementWebsite?: string
 
   /**  */
-  jurisdictions: IdDTO
+  marketingFlyer?: string
+
+  /**  */
+  marketingMonth?: MonthEnum
+
+  /**  */
+  marketingSeason?: MarketingSeasonEnum
+
+  /**  */
+  marketingType?: MarketingTypeEnum
+
+  /**  */
+  marketingYear?: number
+
+  /**  */
+  name: string
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  parkingFee?: string
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  postmarkedApplicationsReceivedByDate?: Date
+
+  /**  */
+  programRules?: string
+
+  /**  */
+  referralOpportunity?: boolean
+
+  /**  */
+  region?: RegionEnum
+
+  /**  */
+  rentalAssistance?: string
+
+  /**  */
+  rentalHistory?: string
 
   /**  */
   reservedCommunityTypes?: IdDTO
@@ -6191,43 +7406,67 @@ export interface ListingUpdate {
   requestedChangesDate?: Date
 
   /**  */
-  lotteryOptIn?: boolean
+  requiredDocuments?: string
 
   /**  */
-  includeCommunityDisclaimer?: boolean
+  requiredDocumentsList?: ListingDocuments
 
   /**  */
-  communityDisclaimerTitle?: string
+  reviewOrderType?: ReviewOrderTypeEnum
 
   /**  */
-  communityDisclaimerDescription?: string
+  reservedCommunityDescription?: string
 
   /**  */
-  marketingType?: MarketingTypeEnum
+  reservedCommunityMinAge?: number
 
   /**  */
-  marketingYear?: number
+  resultLink?: string
 
   /**  */
-  marketingSeason?: MarketingSeasonEnum
+  scheduledPublishAt?: Date
 
   /**  */
-  marketingMonth?: MonthEnum
-
-  /**  */
-  homeType?: HomeTypeEnum
-
-  /**  */
-  isVerified?: boolean
+  scheduledApplicationOpenAt?: Date
 
   /**  */
   section8Acceptance?: boolean
 
   /**  */
-  lastUpdatedByUser?: IdDTO
+  servicesOffered?: string
 
   /**  */
-  property?: Property
+  smokingPolicy?: string
+
+  /**  */
+  specialNotes?: string
+
+  /**  */
+  status: ListingsStatusEnum
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  waitlistCurrentSize?: number
+
+  /**  */
+  waitlistMaxSize?: number
+
+  /**  */
+  waitlistOpenSpots?: number
+
+  /**  */
+  whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
+  yearBuilt?: number
 
   /**  */
   listingMultiselectQuestions?: IdDTO[]
@@ -6240,9 +7479,6 @@ export interface ListingUpdate {
 
   /**  */
   applicationMethods?: ApplicationMethodUpdate[]
-
-  /**  */
-  assets?: AssetCreate[]
 
   /**  */
   unitsSummary: UnitsSummaryCreate[]
@@ -6287,21 +7523,22 @@ export interface ListingUpdate {
   listingUtilities?: ListingUtilitiesUpdate
 
   /**  */
+  parkType?: ListingParkingTypeUpdate
+
+  /**  */
   requestedChangesUser?: IdDTO
 
   /**  */
   listingNeighborhoodAmenities?: ListingNeighborhoodAmenitiesUpdate
+
+  /**  */
+  property?: IdDTO
 }
 
+/** Accessibility */
 export interface Accessibility {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   mobility?: boolean
@@ -6313,18 +7550,16 @@ export interface Accessibility {
   hearing?: boolean
 
   /**  */
+  hearingAndVision?: boolean
+
+  /**  */
   other?: boolean
 }
 
+/** Demographic */
 export interface Demographic {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   ethnicity?: string
@@ -6340,17 +7575,15 @@ export interface Demographic {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
 }
 
+/** Applicant */
 export interface Applicant {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   firstName?: string
@@ -6398,15 +7631,10 @@ export interface Applicant {
   applicantAddress: Address
 }
 
+/** AlternateContact */
 export interface AlternateContact {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   type?: AlternateContactRelationship
@@ -6433,15 +7661,10 @@ export interface AlternateContact {
   address: Address
 }
 
+/** HouseholdMember */
 export interface HouseholdMember {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   orderId?: number
@@ -6483,15 +7706,10 @@ export interface HouseholdMember {
   householdMemberAddress: Address
 }
 
+/** ApplicationSelectionOption */
 export interface ApplicationSelectionOption {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   addressHolderAddress: Address
@@ -6512,15 +7730,10 @@ export interface ApplicationSelectionOption {
   multiselectOption: IdDTO
 }
 
+/** ApplicationSelection */
 export interface ApplicationSelection {
   /**  */
   id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 
   /**  */
   application: IdDTO
@@ -6532,9 +7745,10 @@ export interface ApplicationSelection {
   multiselectQuestion: IdDTO
 
   /**  */
-  selections: ApplicationSelectionOption
+  selections: ApplicationSelectionOption[]
 }
 
+/** ApplicationMultiselectQuestionOption */
 export interface ApplicationMultiselectQuestionOption {
   /**  */
   key: string
@@ -6549,6 +7763,7 @@ export interface ApplicationMultiselectQuestionOption {
   extraData?: AllExtraDataTypes[]
 }
 
+/** ApplicationMultiselectQuestion */
 export interface ApplicationMultiselectQuestion {
   /**  */
   multiselectQuestionId: string
@@ -6563,6 +7778,7 @@ export interface ApplicationMultiselectQuestion {
   options: ApplicationMultiselectQuestionOption[]
 }
 
+/** ApplicationLotteryPosition */
 export interface ApplicationLotteryPosition {
   /**  */
   listingId: string
@@ -6577,6 +7793,7 @@ export interface ApplicationLotteryPosition {
   ordinal: number
 }
 
+/** Application */
 export interface Application {
   /**  */
   id: string
@@ -6621,7 +7838,10 @@ export interface Application {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  reasonableAccommodations?: string
+
+  /**  */
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -6631,6 +7851,12 @@ export interface Application {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
 
   /**  */
   accessibleUnitWaitlistNumber?: number
@@ -6652,6 +7878,12 @@ export interface Application {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
 
   /**  */
   markedAsDuplicate: boolean
@@ -6708,6 +7940,7 @@ export interface Application {
   isNewest?: boolean
 }
 
+/** ApplicationFlaggedSet */
 export interface ApplicationFlaggedSet {
   /**  */
   id: string
@@ -6746,6 +7979,7 @@ export interface ApplicationFlaggedSet {
   applications: Application[]
 }
 
+/** ApplicationFlaggedSetPaginationMeta */
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
   currentPage: number
@@ -6766,6 +8000,7 @@ export interface ApplicationFlaggedSetPaginationMeta {
   totalFlagged: number
 }
 
+/** PaginatedAfs */
 export interface PaginatedAfs {
   /**  */
   items: ApplicationFlaggedSet[]
@@ -6774,6 +8009,7 @@ export interface PaginatedAfs {
   meta: ApplicationFlaggedSetPaginationMeta
 }
 
+/** AfsMeta */
 export interface AfsMeta {
   /**  */
   totalCount?: number
@@ -6791,6 +8027,7 @@ export interface AfsMeta {
   totalEmailPendingCount?: number
 }
 
+/** AfsResolve */
 export interface AfsResolve {
   /**  */
   afsId: string
@@ -6802,352 +8039,7 @@ export interface AfsResolve {
   applications: IdDTO[]
 }
 
-export interface AmiChartQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface AmiChartCreate {
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface AmiChartUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-}
-
-export interface ReservedCommunityTypeQueryParams {
-  /**  */
-  jurisdictionId?: string
-}
-
-export interface ReservedCommunityType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  jurisdictions: IdDTO
-}
-
-export interface ReservedCommunityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  description?: string
-}
-
-export interface UnitTypeCreate {
-  /**  */
-  name: UnitTypeEnum
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitTypeEnum
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: UnitRentTypeEnum
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: UnitRentTypeEnum
-}
-
-export interface JurisdictionCreate {
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  minimumListingPublishImagesRequired?: number
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  whatToExpect: string
-
-  /**  */
-  whatToExpectAdditionalText: string
-
-  /**  */
-  whatToExpectUnderConstruction: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: UserRoleEnum[]
-
-  /**  */
-  duplicateListingPermissions: UserRoleEnum[]
-
-  /**  */
-  requiredListingFields: []
-
-  /**  */
-  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
-}
-
-export interface JurisdictionUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  minimumListingPublishImagesRequired?: number
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  whatToExpect: string
-
-  /**  */
-  whatToExpectAdditionalText: string
-
-  /**  */
-  whatToExpectUnderConstruction: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: UserRoleEnum[]
-
-  /**  */
-  duplicateListingPermissions: UserRoleEnum[]
-
-  /**  */
-  requiredListingFields: []
-
-  /**  */
-  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
-}
-
-export interface FeatureFlag {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: FeatureFlagEnum
-
-  /**  */
-  description: string
-
-  /**  */
-  active: boolean
-
-  /**  */
-  jurisdictions: IdDTO[]
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  multiselectQuestions: IdDTO[]
-
-  /**  */
-  minimumListingPublishImagesRequired?: number
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  whatToExpect: string
-
-  /**  */
-  whatToExpectAdditionalText: string
-
-  /**  */
-  whatToExpectUnderConstruction: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enablePartnerDemographics?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableGeocodingRadiusMethod?: boolean
-
-  /**  */
-  allowSingleUseCodeLogin: boolean
-
-  /**  */
-  listingApprovalPermissions: UserRoleEnum[]
-
-  /**  */
-  duplicateListingPermissions: UserRoleEnum[]
-
-  /**  */
-  featureFlags: FeatureFlag[]
-
-  /**  */
-  requiredListingFields: []
-
-  /**  */
-  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
-}
-
+/** MultiselectOptionCreate */
 export interface MultiselectOptionCreate {
   /**  */
   collectAddress?: boolean
@@ -7204,6 +8096,7 @@ export interface MultiselectOptionCreate {
   validationMethod?: ValidationMethodEnum
 }
 
+/** MultiselectQuestionCreate */
 export interface MultiselectQuestionCreate {
   /**  */
   applicationSection: MultiselectQuestionsApplicationSectionEnum
@@ -7251,6 +8144,7 @@ export interface MultiselectQuestionCreate {
   options?: MultiselectOptionCreate[]
 }
 
+/** MultiselectOptionUpdate */
 export interface MultiselectOptionUpdate {
   /**  */
   collectAddress?: boolean
@@ -7310,6 +8204,7 @@ export interface MultiselectOptionUpdate {
   id?: string
 }
 
+/** MultiselectQuestionUpdate */
 export interface MultiselectQuestionUpdate {
   /**  */
   id: string
@@ -7360,6 +8255,7 @@ export interface MultiselectQuestionUpdate {
   options?: MultiselectOptionUpdate[]
 }
 
+/** MultiselectQuestionQueryParams */
 export interface MultiselectQuestionQueryParams {
   /**  */
   page?: number
@@ -7383,6 +8279,7 @@ export interface MultiselectQuestionQueryParams {
   view?: MultiselectQuestionViews
 }
 
+/** MultiselectQuestionFilterParams */
 export interface MultiselectQuestionFilterParams {
   /**  */
   $comparison: EnumMultiselectQuestionFilterParamsComparison
@@ -7397,6 +8294,589 @@ export interface MultiselectQuestionFilterParams {
   status?: MultiselectQuestionsStatusEnum
 }
 
+/** PaginatedMultiselectQuestion */
+export interface PaginatedMultiselectQuestion {
+  /**  */
+  items: MultiselectQuestion[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+/** AmiChartQueryParams */
+export interface AmiChartQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
+/** AmiChartCreate */
+export interface AmiChartCreate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** AmiChartUpdate */
+export interface AmiChartUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+}
+
+/** ReservedCommunityTypeQueryParams */
+export interface ReservedCommunityTypeQueryParams {
+  /**  */
+  jurisdictionId?: string
+}
+
+/** ReservedCommunityType */
+export interface ReservedCommunityType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** ReservedCommunityTypeCreate */
+export interface ReservedCommunityTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** ReservedCommunityTypeUpdate */
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  description?: string
+}
+
+/** UnitTypeCreate */
+export interface UnitTypeCreate {
+  /**  */
+  name: UnitTypeEnum
+
+  /**  */
+  numBedrooms: number
+}
+
+/** UnitTypeUpdate */
+export interface UnitTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitTypeEnum
+
+  /**  */
+  numBedrooms: number
+}
+
+/** UnitRentTypeCreate */
+export interface UnitRentTypeCreate {
+  /**  */
+  name: UnitRentTypeEnum
+}
+
+/** UnitRentTypeUpdate */
+export interface UnitRentTypeUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: UnitRentTypeEnum
+}
+
+/** ListingFeatureField */
+export interface ListingFeatureField {
+  /**  */
+  id: string
+}
+
+/** ListingFeatureCategory */
+export interface ListingFeatureCategory {
+  /**  */
+  id: string
+
+  /**  */
+  fields: ListingFeatureField[]
+
+  /**  */
+  required?: boolean
+}
+
+/** ListingFeaturesConfiguration */
+export interface ListingFeaturesConfiguration {
+  /** Categorized features (use this or the flat list, not both) */
+  categories?: ListingFeatureCategory[]
+
+  /** Flat list of features (use this or the categories, not both) */
+  fields?: ListingFeatureField[]
+}
+
+/** RaceEthnicitySubOption */
+export interface RaceEthnicitySubOption {
+  /**  */
+  id: string
+
+  /**  */
+  allowOtherText?: boolean
+}
+
+/** RaceEthnicityOption */
+export interface RaceEthnicityOption {
+  /**  */
+  id: string
+
+  /** The list of suboptions if this option has them */
+  subOptions?: RaceEthnicitySubOption[]
+
+  /** Whether this option allows free text input */
+  allowOtherText?: boolean
+}
+
+/** RaceEthnicityConfiguration */
+export interface RaceEthnicityConfiguration {
+  /** List of race\/ethnicity options available for this jurisdiction */
+  options: RaceEthnicityOption[]
+}
+
+/** BrandRampDTO */
+export interface BrandRampDTO {
+  /**  */
+  base: string
+
+  /**  */
+  dark?: string
+
+  /**  */
+  darker?: string
+
+  /**  */
+  light?: string
+
+  /**  */
+  lighter?: string
+}
+
+/** BrandDTO */
+export interface BrandDTO {
+  /**  */
+  primary?: BrandRampDTO
+
+  /**  */
+  secondary?: BrandRampDTO
+
+  /**  */
+  fontFamily?: string
+
+  /**  */
+  headingFontFamily?: string
+
+  /**  */
+  fontUrl?: string
+
+  /**  */
+  serifFontFamily?: string
+
+  /**  */
+  buttonRadius?: BrandRadiusEnum
+
+  /**  */
+  logoUrl?: string
+
+  /**  */
+  faviconUrl?: string
+}
+
+/** JurisdictionCreate */
+export interface JurisdictionCreate {
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  referralSummaryDefault?: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
+
+  /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
+
+  /**  */
+  regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
+}
+
+/** JurisdictionUpdate */
+export interface JurisdictionUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  referralSummaryDefault?: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
+
+  /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
+
+  /**  */
+  regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
+}
+
+/** JurisdictionBrandUpdate */
+export interface JurisdictionBrandUpdate {
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  logoFileId?: string
+
+  /**  */
+  faviconFileId?: string
+}
+
+/** FeatureFlag */
+export interface FeatureFlag {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: FeatureFlagEnum
+
+  /**  */
+  description: string
+
+  /**  */
+  active: boolean
+
+  /**  */
+  jurisdictions: IdDTO[]
+}
+
+/** Jurisdiction */
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  multiselectQuestions: IdDTO[]
+
+  /**  */
+  minimumListingPublishImagesRequired?: number
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  referralSummaryDefault?: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  whatToExpect: string
+
+  /**  */
+  whatToExpectAdditionalText: string
+
+  /**  */
+  whatToExpectUnderConstruction: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enablePartnerDemographics?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableGeocodingRadiusMethod?: boolean
+
+  /**  */
+  allowSingleUseCodeLogin: boolean
+
+  /**  */
+  listingApprovalPermissions: UserRoleEnum[]
+
+  /**  */
+  duplicateListingPermissions: UserRoleEnum[]
+
+  /**  */
+  featureFlags: FeatureFlag[]
+
+  /**  */
+  requiredListingFields: []
+
+  /**  */
+  visibleNeighborhoodAmenities: NeighborhoodAmenitiesEnum[]
+
+  /**  */
+  visibleAccessibilityPriorityTypes: UnitAccessibilityPriorityTypeEnum[]
+
+  /**  */
+  visibleSpokenLanguages: SpokenLanguageEnum[]
+
+  /**  */
+  visibleApplicationAccessibilityFeatures: ApplicationAccessibilityFeatureEnum[]
+
+  /**  */
+  visibleHouseholdMemberRelationships: HouseholdMemberRelationship[]
+
+  /**  */
+  regions: []
+
+  /**  */
+  enabledStopLightRuleKeys?: string[]
+
+  /**  */
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
+
+  /**  */
+  raceEthnicityConfiguration?: RaceEthnicityConfiguration
+
+  /**  */
+  subJurisdictions?: IdDTO[]
+
+  /**  */
+  brand?: CombinedBrandTypes
+
+  /**  */
+  brandLogoAssetId?: string
+
+  /**  */
+  brandFaviconAssetId?: string
+}
+
+/** AddressInput */
 export interface AddressInput {
   /**  */
   type: InputType
@@ -7408,6 +8888,7 @@ export interface AddressInput {
   value: AddressCreate
 }
 
+/** BooleanInput */
 export interface BooleanInput {
   /**  */
   type: InputType
@@ -7419,6 +8900,7 @@ export interface BooleanInput {
   value: boolean
 }
 
+/** TextInput */
 export interface TextInput {
   /**  */
   type: InputType
@@ -7430,6 +8912,7 @@ export interface TextInput {
   value: string
 }
 
+/** PaginatedApplication */
 export interface PaginatedApplication {
   /**  */
   items: Application[]
@@ -7438,6 +8921,7 @@ export interface PaginatedApplication {
   meta: PaginationMeta
 }
 
+/** PublicAppsFiltered */
 export interface PublicAppsFiltered {
   /**  */
   id: string
@@ -7482,7 +8966,10 @@ export interface PublicAppsFiltered {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  reasonableAccommodations?: string
+
+  /**  */
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -7492,6 +8979,12 @@ export interface PublicAppsFiltered {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
 
   /**  */
   accessibleUnitWaitlistNumber?: number
@@ -7513,6 +9006,12 @@ export interface PublicAppsFiltered {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
 
   /**  */
   markedAsDuplicate: boolean
@@ -7569,6 +9068,7 @@ export interface PublicAppsFiltered {
   listings: Listing
 }
 
+/** PublicAppsCount */
 export interface PublicAppsCount {
   /**  */
   total: number
@@ -7583,15 +9083,53 @@ export interface PublicAppsCount {
   open: number
 }
 
+/** PublicAppsViewResponse */
 export interface PublicAppsViewResponse {
   /**  */
-  displayApplications: PublicAppsFiltered[]
+  items: PublicAppsFiltered[]
+
+  /**  */
+  meta: PaginationMeta
 
   /**  */
   applicationsCount: PublicAppsCount
 }
 
-export interface AccessibilityUpdate {
+/** ApplicationSelectionOptionCreate */
+export interface ApplicationSelectionOptionCreate {
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+
+  /**  */
+  applicationSelection?: IdDTO
+
+  /**  */
+  addressHolderAddress?: AddressCreate
+}
+
+/** ApplicationSelectionCreate */
+export interface ApplicationSelectionCreate {
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  selections: ApplicationSelectionOptionCreate[]
+}
+
+/** AccessibilityCreate */
+export interface AccessibilityCreate {
   /**  */
   mobility?: boolean
 
@@ -7602,10 +9140,14 @@ export interface AccessibilityUpdate {
   hearing?: boolean
 
   /**  */
+  hearingAndVision?: boolean
+
+  /**  */
   other?: boolean
 }
 
-export interface AlternateContactUpdate {
+/** AlternateContactCreate */
+export interface AlternateContactCreate {
   /**  */
   type?: AlternateContactRelationship
 
@@ -7631,7 +9173,8 @@ export interface AlternateContactUpdate {
   address: AddressCreate
 }
 
-export interface ApplicantUpdate {
+/** ApplicantCreate */
+export interface ApplicantCreate {
   /**  */
   firstName?: string
 
@@ -7678,6 +9221,343 @@ export interface ApplicantUpdate {
   applicantWorkAddress: AddressCreate
 }
 
+/** DemographicCreate */
+export interface DemographicCreate {
+  /**  */
+  ethnicity?: string
+
+  /**  */
+  gender?: string
+
+  /**  */
+  sexualOrientation?: string
+
+  /**  */
+  howDidYouHear: string[]
+
+  /**  */
+  race: string[]
+
+  /**  */
+  spokenLanguage?: string
+}
+
+/** HouseholdMemberCreate */
+export interface HouseholdMemberCreate {
+  /**  */
+  orderId?: number
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  sameAddress?: YesNoEnum
+
+  /**  */
+  relationship?: HouseholdMemberRelationship
+
+  /**  */
+  workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
+  householdMemberAddress: AddressCreate
+
+  /**  */
+  householdMemberWorkAddress?: AddressCreate
+}
+
+/** ApplicationCreate */
+export interface ApplicationCreate {
+  /**  */
+  appUrl?: string
+
+  /**  */
+  additionalPhone?: boolean
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  contactPreferences: string[]
+
+  /**  */
+  householdSize: number
+
+  /**  */
+  housingStatus?: string
+
+  /**  */
+  sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
+  reasonableAccommodations?: string
+
+  /**  */
+  incomeVouchers?: string[]
+
+  /**  */
+  income?: string
+
+  /**  */
+  incomePeriod?: IncomePeriodEnum
+
+  /**  */
+  status: ApplicationStatusEnum
+
+  /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
+
+  /**  */
+  accessibleUnitWaitlistNumber?: number
+
+  /**  */
+  conventionalUnitWaitlistNumber?: number
+
+  /**  */
+  manualLotteryPositionNumber?: number
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  acceptedTerms?: boolean
+
+  /**  */
+  submissionType: ApplicationSubmissionTypeEnum
+
+  /**  */
+  submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatusEnum
+
+  /**  */
+  preferences?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  listings: IdDTO
+
+  /**  */
+  isNewest?: boolean
+
+  /**  */
+  preferredUnitTypes: IdDTO[]
+
+  /**  */
+  applicationSelections?: ApplicationSelectionCreate[]
+
+  /**  */
+  accessibility: AccessibilityCreate
+
+  /**  */
+  alternateContact: AlternateContactCreate
+
+  /**  */
+  applicant: ApplicantCreate
+
+  /**  */
+  applicationsMailingAddress: AddressCreate
+
+  /**  */
+  applicationsAlternateAddress: AddressCreate
+
+  /**  */
+  demographics: DemographicCreate
+
+  /**  */
+  householdMember: HouseholdMemberCreate[]
+}
+
+/** ApplicationBulkUpdate */
+export interface ApplicationBulkUpdate {
+  /**  */
+  s3Key: string
+
+  /**  */
+  listingId: string
+}
+
+/** AccessibilityUpdate */
+export interface AccessibilityUpdate {
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  other?: boolean
+
+  /**  */
+  id?: string
+}
+
+/** AlternateContactUpdate */
+export interface AlternateContactUpdate {
+  /**  */
+  type?: AlternateContactRelationship
+
+  /**  */
+  otherType?: string
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  agency?: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  id?: string
+
+  /**  */
+  address: AddressUpdate
+}
+
+/** ApplicantUpdate */
+export interface ApplicantUpdate {
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  workInRegion?: YesNoEnum
+
+  /**  */
+  fullTimeStudent?: YesNoEnum
+
+  /**  */
+  id?: string
+
+  /**  */
+  applicantAddress: AddressUpdate
+
+  /**  */
+  applicantWorkAddress: AddressUpdate
+}
+
+/** ApplicationSelectionOptionUpdate */
+export interface ApplicationSelectionOptionUpdate {
+  /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
+  isGeocodingVerified?: boolean
+
+  /**  */
+  multiselectOption: IdDTO
+
+  /**  */
+  id?: string
+
+  /**  */
+  addressHolderAddress?: AddressUpdate
+
+  /**  */
+  applicationSelection?: IdDTO
+}
+
+/** ApplicationSelectionUpdate */
+export interface ApplicationSelectionUpdate {
+  /**  */
+  hasOptedOut?: boolean
+
+  /**  */
+  multiselectQuestion: IdDTO
+
+  /**  */
+  id?: string
+
+  /**  */
+  selections: ApplicationSelectionOptionUpdate[]
+}
+
+/** DemographicUpdate */
 export interface DemographicUpdate {
   /**  */
   ethnicity?: string
@@ -7693,8 +9573,15 @@ export interface DemographicUpdate {
 
   /**  */
   race: string[]
+
+  /**  */
+  spokenLanguage?: string
+
+  /**  */
+  id?: string
 }
 
+/** HouseholdMemberUpdate */
 export interface HouseholdMemberUpdate {
   /**  */
   orderId?: number
@@ -7733,222 +9620,13 @@ export interface HouseholdMemberUpdate {
   id?: string
 
   /**  */
-  householdMemberAddress: AddressCreate
+  householdMemberAddress: AddressUpdate
 
   /**  */
-  householdMemberWorkAddress?: AddressCreate
+  householdMemberWorkAddress?: AddressUpdate
 }
 
-export interface AddressUpdate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-
-  /**  */
-  id?: string
-}
-
-export interface ApplicationSelectionOptionCreate {
-  /**  */
-  addressHolderName?: string
-
-  /**  */
-  addressHolderRelationship?: string
-
-  /**  */
-  isGeocodingVerified?: boolean
-
-  /**  */
-  multiselectOption: IdDTO
-
-  /**  */
-  addressHolderAddress?: AddressUpdate
-
-  /**  */
-  applicationSelection?: IdDTO
-}
-
-export interface ApplicationSelectionCreate {
-  /**  */
-  hasOptedOut?: boolean
-
-  /**  */
-  multiselectQuestion: IdDTO
-
-  /**  */
-  selections: ApplicationSelectionOptionCreate[]
-}
-
-export interface ApplicationCreate {
-  /**  */
-  appUrl?: string
-
-  /**  */
-  additionalPhone?: boolean
-
-  /**  */
-  additionalPhoneNumber?: string
-
-  /**  */
-  additionalPhoneNumberType?: string
-
-  /**  */
-  contactPreferences: string[]
-
-  /**  */
-  householdSize: number
-
-  /**  */
-  housingStatus?: string
-
-  /**  */
-  sendMailToMailingAddress?: boolean
-
-  /**  */
-  householdExpectingChanges?: boolean
-
-  /**  */
-  householdStudent?: boolean
-
-  /**  */
-  incomeVouchers?: boolean
-
-  /**  */
-  income?: string
-
-  /**  */
-  incomePeriod?: IncomePeriodEnum
-
-  /**  */
-  status: ApplicationStatusEnum
-
-  /**  */
-  accessibleUnitWaitlistNumber?: number
-
-  /**  */
-  conventionalUnitWaitlistNumber?: number
-
-  /**  */
-  manualLotteryPositionNumber?: number
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  acceptedTerms?: boolean
-
-  /**  */
-  submissionType: ApplicationSubmissionTypeEnum
-
-  /**  */
-  submissionDate?: Date
-
-  /**  */
-  reviewStatus?: ApplicationReviewStatusEnum
-
-  /**  */
-  preferences?: ApplicationMultiselectQuestion[]
-
-  /**  */
-  programs?: ApplicationMultiselectQuestion[]
-
-  /**  */
-  listings: IdDTO
-
-  /**  */
-  isNewest?: boolean
-
-  /**  */
-  accessibility: AccessibilityUpdate
-
-  /**  */
-  alternateContact: AlternateContactUpdate
-
-  /**  */
-  applicant: ApplicantUpdate
-
-  /**  */
-  applicationsMailingAddress: AddressCreate
-
-  /**  */
-  applicationsAlternateAddress: AddressCreate
-
-  /**  */
-  demographics: DemographicUpdate
-
-  /**  */
-  householdMember: HouseholdMemberUpdate[]
-
-  /**  */
-  preferredUnitTypes: IdDTO[]
-
-  /**  */
-  applicationSelections?: ApplicationSelectionCreate[]
-}
-
-export interface ApplicationSelectionOptionUpdate {
-  /**  */
-  addressHolderName?: string
-
-  /**  */
-  addressHolderRelationship?: string
-
-  /**  */
-  isGeocodingVerified?: boolean
-
-  /**  */
-  multiselectOption: IdDTO
-
-  /**  */
-  id?: string
-
-  /**  */
-  addressHolderAddress?: AddressUpdate
-
-  /**  */
-  applicationSelection?: IdDTO
-}
-
-export interface ApplicationSelectionUpdate {
-  /**  */
-  application: IdDTO
-
-  /**  */
-  hasOptedOut?: boolean
-
-  /**  */
-  multiselectQuestion: IdDTO
-
-  /**  */
-  id?: string
-
-  /**  */
-  selections: ApplicationSelectionOptionUpdate[]
-}
-
+/** ApplicationUpdate */
 export interface ApplicationUpdate {
   /**  */
   id: string
@@ -7984,7 +9662,10 @@ export interface ApplicationUpdate {
   householdStudent?: boolean
 
   /**  */
-  incomeVouchers?: boolean
+  reasonableAccommodations?: string
+
+  /**  */
+  incomeVouchers?: string[]
 
   /**  */
   income?: string
@@ -7994,6 +9675,12 @@ export interface ApplicationUpdate {
 
   /**  */
   status: ApplicationStatusEnum
+
+  /**  */
+  applicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  applicationDeclineReasonAdditionalDetails?: string
 
   /**  */
   accessibleUnitWaitlistNumber?: number
@@ -8015,6 +9702,12 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  receivedBy?: string
+
+  /**  */
+  receivedAt?: Date
 
   /**  */
   reviewStatus?: ApplicationReviewStatusEnum
@@ -8044,10 +9737,10 @@ export interface ApplicationUpdate {
   applicationSelections?: ApplicationSelectionUpdate[]
 
   /**  */
-  applicationsMailingAddress: AddressCreate
+  applicationsMailingAddress: AddressUpdate
 
   /**  */
-  applicationsAlternateAddress: AddressCreate
+  applicationsAlternateAddress: AddressUpdate
 
   /**  */
   demographics: DemographicUpdate
@@ -8059,16 +9752,121 @@ export interface ApplicationUpdate {
   preferredUnitTypes: IdDTO[]
 }
 
+/** ApplicationUpdateEmail */
+export interface ApplicationUpdateEmail {
+  /**  */
+  previousStatus?: ApplicationStatusEnum
+
+  /**  */
+  previousApplicationDeclineReason?: ApplicationDeclineReasonEnum
+
+  /**  */
+  previousAccessibleUnitWaitlistNumber?: number
+
+  /**  */
+  previousConventionalUnitWaitlistNumber?: number
+}
+
+/** ApplicationBulkUrl */
+export interface ApplicationBulkUrl {
+  /**  */
+  listingId: string
+
+  /**  */
+  contentType: string
+
+  /**  */
+  contentDisposition: string
+}
+
+/** ApplicationBulkPresignedUrl */
+export interface ApplicationBulkPresignedUrl {
+  /**  */
+  key: string
+
+  /**  */
+  presignedUrl: string
+}
+
+/** BackgroundJob */
+export interface BackgroundJob {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  listingId: string
+
+  /**  */
+  requestedByUserId: string
+
+  /**  */
+  status: BackgroundJobStatusEnum
+
+  /**  */
+  totalRecords?: number
+
+  /**  */
+  inputS3Key: string
+
+  /**  */
+  errorMessage?: string
+
+  /**  */
+  errorRow?: number
+
+  /**  */
+  completedAt?: Date
+}
+
+/** BackgroundJobCreate */
+export interface BackgroundJobCreate {
+  /**  */
+  listingId: string
+
+  /**  */
+  inputS3Key: string
+}
+
+/** CreatePresignedUploadMetadata */
 export interface CreatePresignedUploadMetadata {
   /**  */
   parametersToSign: object
 }
 
+/** CreatePresignedUploadMetadataResponse */
 export interface CreatePresignedUploadMetadataResponse {
   /**  */
   signature: string
 }
 
+/** CreateS3UploadUrl */
+export interface CreateS3UploadUrl {
+  /**  */
+  fileId: string
+
+  /**  */
+  uploadUrl: string
+
+  /**  */
+  publicUrl: string
+}
+
+/** CreateS3UploadMetadata */
+export interface CreateS3UploadMetadata {
+  /**  */
+  contentType: string
+
+  /**  */
+  contentDisposition: string
+}
+
+/** EmailAndAppUrl */
 export interface EmailAndAppUrl {
   /**  */
   email: string
@@ -8077,6 +9875,43 @@ export interface EmailAndAppUrl {
   appUrl?: string
 }
 
+/** UserNotificationPreferences */
+export interface UserNotificationPreferences {
+  /**  */
+  lottery?: boolean
+
+  /**  */
+  waitlist?: boolean
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearingAndVision?: boolean
+
+  /**  */
+  mobilityAndHearing?: boolean
+
+  /**  */
+  mobilityAndVision?: boolean
+
+  /**  */
+  mobilityHearingAndVision?: boolean
+
+  /**  */
+  wantsRegionNotifs?: boolean
+
+  /**  */
+  regions: string[]
+}
+
+/** UserRole */
 export interface UserRole {
   /**  */
   isAdmin?: boolean
@@ -8097,6 +9932,625 @@ export interface UserRole {
   isSupportAdmin?: boolean
 }
 
+/** PublicUserCreate */
+export interface PublicUserCreate {
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  agency?: IdDTO
+
+  /**  */
+  address?: Address
+
+  /**  */
+  phoneType?: string
+
+  /**  */
+  phoneExtension?: string
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  dob: Date
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
+
+  /**  */
+  password: string
+
+  /**  */
+  emailConfirmation?: string
+}
+
+/** PartnerUserCreate */
+export interface PartnerUserCreate {
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  agency?: IdDTO
+
+  /**  */
+  address?: Address
+
+  /**  */
+  phoneType?: string
+
+  /**  */
+  phoneExtension?: string
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  userRoles: UserRole
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions: IdDTO[]
+}
+
+/** AdvocateUserCreate */
+export interface AdvocateUserCreate {
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  agency: IdDTO
+
+  /**  */
+  address: AddressUpdate
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
+}
+
+/** PublicUserUpdate */
+export interface PublicUserUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  agency?: IdDTO
+
+  /**  */
+  address?: Address
+
+  /**  */
+  phoneType?: string
+
+  /**  */
+  phoneExtension?: string
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  dob: Date
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
+}
+
+/** PartnerUserUpdate */
+export interface PartnerUserUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  agency?: IdDTO
+
+  /**  */
+  address?: Address
+
+  /**  */
+  phoneType?: string
+
+  /**  */
+  phoneExtension?: string
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
+
+  /**  */
+  userRoles: UserRole
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
+}
+
+/** AdvocateUserUpdate */
+export interface AdvocateUserUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+
+  /**  */
+  favoriteListings?: IdDTO[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  phoneType?: string
+
+  /**  */
+  phoneExtension?: string
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  agency: IdDTO
+
+  /**  */
+  address: AddressUpdate
+
+  /**  */
+  phoneNumber: string
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
+}
+
+/** AdvocateUserAccept */
+export interface AdvocateUserAccept {
+  /**  */
+  advocateId: IdDTO
+
+  /**  */
+  isAccepted: boolean
+}
+
+/** User */
 export interface User {
   /**  */
   id: string
@@ -8138,6 +10592,9 @@ export interface User {
   listings: IdDTO[]
 
   /**  */
+  notificationPreferences?: UserNotificationPreferences
+
+  /**  */
   userRoles?: UserRole
 
   /**  */
@@ -8172,13 +10629,51 @@ export interface User {
 
   /**  */
   favoriteListings?: IdDTO[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  agency?: IdDTO
+
+  /**  */
+  address?: Address
+
+  /**  */
+  phoneType?: string
+
+  /**  */
+  phoneExtension?: string
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  additionalPhoneExtension?: string
+
+  /**  */
+  isApproved?: boolean
+
+  /**  */
+  isAdvocate?: boolean
 }
 
+/** UserFilterParams */
 export interface UserFilterParams {
   /**  */
   isPortalUser?: boolean
+
+  /**  */
+  isAdvocateUser?: boolean
+
+  /**  */
+  agencyId?: string
 }
 
+/** PaginatedUser */
 export interface PaginatedUser {
   /**  */
   items: User[]
@@ -8187,56 +10682,7 @@ export interface PaginatedUser {
   meta: PaginationMeta
 }
 
-export interface UserCreate {
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  favoriteListings?: IdDTO[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  email: string
-
-  /**  */
-  emailConfirmation?: string
-
-  /**  */
-  jurisdictions?: IdDTO[]
-}
-
+/** UserDeleteDTO */
 export interface UserDeleteDTO {
   /**  */
   id: string
@@ -8245,57 +10691,19 @@ export interface UserDeleteDTO {
   shouldRemoveApplication?: boolean
 }
 
-export interface UserInvite {
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  favoriteListings?: IdDTO[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  email: string
-
-  /**  */
-  jurisdictions: IdDTO[]
-}
-
+/** RequestSingleUseCode */
 export interface RequestSingleUseCode {
   /**  */
   email: string
 }
 
+/** ConfirmationRequest */
 export interface ConfirmationRequest {
   /**  */
   token: string
 }
 
+/** UserFavoriteListing */
 export interface UserFavoriteListing {
   /**  */
   id: string
@@ -8304,59 +10712,7 @@ export interface UserFavoriteListing {
   action: ModificationEnum
 }
 
-export interface UserUpdate {
-  /**  */
-  id: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  favoriteListings?: IdDTO[]
-
-  /**  */
-  email?: string
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions?: IdDTO[]
-}
-
+/** Login */
 export interface Login {
   /**  */
   email: string
@@ -8372,16 +10728,24 @@ export interface Login {
 
   /**  */
   reCaptchaToken?: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
+/** LoginViaSingleUseCode */
 export interface LoginViaSingleUseCode {
   /**  */
   email: string
 
   /**  */
   singleUseCode: string
+
+  /**  */
+  agreedToTermsOfService?: boolean
 }
 
+/** RequestMfaCode */
 export interface RequestMfaCode {
   /**  */
   email: string
@@ -8396,6 +10760,7 @@ export interface RequestMfaCode {
   phoneNumber?: string
 }
 
+/** RequestMfaCodeResponse */
 export interface RequestMfaCodeResponse {
   /**  */
   phoneNumber?: string
@@ -8407,17 +10772,19 @@ export interface RequestMfaCodeResponse {
   phoneNumberVerified?: boolean
 }
 
+/** UpdatePassword */
 export interface UpdatePassword {
   /**  */
   password: string
 
   /**  */
-  passwordConfirmation: string
+  token: string
 
   /**  */
-  token: string
+  agreedToTermsOfService?: boolean
 }
 
+/** Confirm */
 export interface Confirm {
   /**  */
   token: string
@@ -8426,6 +10793,7 @@ export interface Confirm {
   password?: string
 }
 
+/** MapLayer */
 export interface MapLayer {
   /**  */
   id: string
@@ -8437,11 +10805,13 @@ export interface MapLayer {
   jurisdictionId: string
 }
 
+/** BulkApplicationResendDTO */
 export interface BulkApplicationResendDTO {
   /**  */
   listingId: string
 }
 
+/** AmiChartImportDTO */
 export interface AmiChartImportDTO {
   /**  */
   values: string
@@ -8453,6 +10823,7 @@ export interface AmiChartImportDTO {
   jurisdictionId: string
 }
 
+/** AmiChartUpdateImportDTO */
 export interface AmiChartUpdateImportDTO {
   /**  */
   values: string
@@ -8461,6 +10832,7 @@ export interface AmiChartUpdateImportDTO {
   amiId: string
 }
 
+/** CommunityTypeDTO */
 export interface CommunityTypeDTO {
   /**  */
   id: string
@@ -8472,6 +10844,34 @@ export interface CommunityTypeDTO {
   description?: string
 }
 
+/** TranslationOverrideMigrationDTO */
+export interface TranslationOverrideMigrationDTO {
+  /**  */
+  jurisdictionName: string
+
+  /**  */
+  commit: boolean
+
+  /**  */
+  skipExisting: boolean
+
+  /**  */
+  languages?: LanguagesEnum[]
+
+  /**  */
+  repositoryUrl?: string
+
+  /**  */
+  gitRef?: string
+
+  /**  */
+  publicPath?: string
+
+  /**  */
+  partnersPath?: string
+}
+
+/** PaginationDTO */
 export interface PaginationDTO {
   /**  */
   page?: number
@@ -8480,6 +10880,7 @@ export interface PaginationDTO {
   pageSize?: number
 }
 
+/** FeatureFlagAssociate */
 export interface FeatureFlagAssociate {
   /**  */
   id: string
@@ -8491,6 +10892,7 @@ export interface FeatureFlagAssociate {
   remove: string[]
 }
 
+/** FeatureFlagCreate */
 export interface FeatureFlagCreate {
   /**  */
   name: FeatureFlagEnum
@@ -8502,6 +10904,7 @@ export interface FeatureFlagCreate {
   active: boolean
 }
 
+/** FeatureFlagUpdate */
 export interface FeatureFlagUpdate {
   /**  */
   id: string
@@ -8513,6 +10916,7 @@ export interface FeatureFlagUpdate {
   active: boolean
 }
 
+/** ApplicationCsvQueryParams */
 export interface ApplicationCsvQueryParams {
   /**  */
   id: string
@@ -8524,6 +10928,7 @@ export interface ApplicationCsvQueryParams {
   timeZone?: string
 }
 
+/** ListingLotteryStatus */
 export interface ListingLotteryStatus {
   /**  */
   id: string
@@ -8532,6 +10937,7 @@ export interface ListingLotteryStatus {
   lotteryStatus: LotteryStatusEnum
 }
 
+/** LotteryActivityLogItem */
 export interface LotteryActivityLogItem {
   /**  */
   status: string
@@ -8543,6 +10949,7 @@ export interface LotteryActivityLogItem {
   logDate: Date
 }
 
+/** PublicLotteryResult */
 export interface PublicLotteryResult {
   /**  */
   ordinal: number
@@ -8551,6 +10958,7 @@ export interface PublicLotteryResult {
   multiselectQuestionId?: string
 }
 
+/** PublicLotteryTotal */
 export interface PublicLotteryTotal {
   /**  */
   total: number
@@ -8559,6 +10967,7 @@ export interface PublicLotteryTotal {
   multiselectQuestionId?: string
 }
 
+/** PropertyCreate */
 export interface PropertyCreate {
   /**  */
   name: string
@@ -8576,9 +10985,13 @@ export interface PropertyCreate {
   jurisdictions?: IdDTO
 }
 
+/** PropertyUpdate */
 export interface PropertyUpdate {
   /**  */
   id: string
+
+  /**  */
+  name: string
 
   /**  */
   description?: string
@@ -8591,11 +11004,18 @@ export interface PropertyUpdate {
 
   /**  */
   jurisdictions?: IdDTO
-
-  /**  */
-  name?: string
 }
 
+/** PropertyFilterParams */
+export interface PropertyFilterParams {
+  /**  */
+  $comparison: EnumPropertyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
+/** PropertyQueryParams */
 export interface PropertyQueryParams {
   /**  */
   page?: number
@@ -8610,20 +11030,424 @@ export interface PropertyQueryParams {
   filter?: string[]
 }
 
-export interface PropertyFilterParams {
-  /**  */
-  $comparison: EnumPropertyFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-}
-
+/** PaginatedProperty */
 export interface PaginatedProperty {
   /**  */
   items: Property[]
 
   /**  */
   meta: PaginationMeta
+}
+
+/** AgencyCreate */
+export interface AgencyCreate {
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** Agency */
+export interface Agency {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** AgencyUpdate */
+export interface AgencyUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdictions: IdDTO
+}
+
+/** AgencyQueryParams */
+export interface AgencyQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  search?: string
+
+  /**  */
+  filter?: string[]
+}
+
+/** AgencyFilterParams */
+export interface AgencyFilterParams {
+  /**  */
+  $comparison: EnumAgencyFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
+/** PaginatedAgency */
+export interface PaginatedAgency {
+  /**  */
+  items: Agency[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+/** ExternalizedListing */
+export interface ExternalizedListing {
+  /**  */
+  id: string
+
+  /**  */
+  name?: string
+
+  /**  */
+  ordinal?: number
+
+  /**  */
+  contentUpdatedAt: Date
+
+  /**  */
+  jurisdictionId: string
+}
+
+/** ExternalizedDetails */
+export interface ExternalizedDetails {
+  /**  */
+  jurisdictions: IdDTO[]
+
+  /**  */
+  listings: ExternalizedListing[]
+
+  /**  */
+  reservedCommunityTypes: IdDTO[]
+
+  /**  */
+  unitRentTypes: IdDTO[]
+
+  /**  */
+  unitTypes: IdDTO[]
+}
+
+/** IngestParams */
+export interface IngestParams {
+  /**  */
+  externalURL: string
+
+  /**  */
+  jurisdictionId: string
+
+  /**  */
+  targetName: string
+}
+
+/** TranslationOverrideRow */
+export interface TranslationOverrideRow {
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  origin: TranslationOrigin
+
+  /**  */
+  site: SiteEnum
+
+  /**  */
+  language: LanguagesEnum
+}
+
+/** TranslationRawKey */
+export interface TranslationRawKey {
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  origin: TranslationOrigin
+
+  /**  */
+  stale: boolean
+}
+
+/** TranslationKeyEdit */
+export interface TranslationKeyEdit {
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+
+  /**  */
+  lastUpdatedAt?: Date
+}
+
+/** TranslationUpdate */
+export interface TranslationUpdate {
+  /**  */
+  edits: TranslationKeyEdit[]
+}
+
+/** FooterLinkDTO */
+export interface FooterLinkDTO {
+  /**  */
+  id: string
+
+  /**  */
+  text: string
+
+  /**  */
+  href: string
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** FooterLogoDTO */
+export interface FooterLogoDTO {
+  /**  */
+  logoSrc?: string
+
+  /**  */
+  logoFileId?: string
+
+  /**  */
+  logoAltText?: string
+
+  /**  */
+  logoUrl?: string
+}
+
+/** FooterContentDTO */
+export interface FooterContentDTO {
+  /**  */
+  textSectionsHtml?: string[]
+
+  /**  */
+  links?: FooterLinkDTO[]
+
+  /**  */
+  logo?: FooterLogoDTO
+}
+
+/** FaqItemDTO */
+export interface FaqItemDTO {
+  /**  */
+  id: string
+
+  /**  */
+  question: string
+
+  /**  */
+  answerHtml: string
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** FaqCategoryDTO */
+export interface FaqCategoryDTO {
+  /**  */
+  id: string
+
+  /**  */
+  title?: string
+
+  /**  */
+  items?: FaqItemDTO[]
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** FaqContentDTO */
+export interface FaqContentDTO {
+  /**  */
+  categories?: FaqCategoryDTO[]
+}
+
+/** ContactCardDTO */
+export interface ContactCardDTO {
+  /**  */
+  departmentTitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  email?: string
+}
+
+/** ResourceCardDTO */
+export interface ResourceCardDTO {
+  /**  */
+  id: string
+
+  /**  */
+  title: string
+
+  /**  */
+  href?: string
+
+  /**  */
+  contentHtml: string
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** ResourceSectionDTO */
+export interface ResourceSectionDTO {
+  /**  */
+  id: string
+
+  /**  */
+  sectionTitle: string
+
+  /**  */
+  sectionSubtitle?: string
+
+  /**  */
+  cards?: ResourceCardDTO[]
+
+  /**  */
+  _deleted?: boolean
+}
+
+/** ResourcesContentDTO */
+export interface ResourcesContentDTO {
+  /**  */
+  contactCard?: ContactCardDTO
+
+  /**  */
+  resourceSections?: ResourceSectionDTO[]
+}
+
+/** DisclaimersContentDTO */
+export interface DisclaimersContentDTO {
+  /**  */
+  privacyHtml?: string
+
+  /**  */
+  disclaimerHtml?: string
+}
+
+/** ContactContentDTO */
+export interface ContactContentDTO {
+  /**  */
+  phone?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  addressHtml?: string
+
+  /**  */
+  hours?: string
+}
+
+/** JurisdictionContentFields */
+export interface JurisdictionContentFields {
+  /**  */
+  footer?: FooterContentDTO
+
+  /**  */
+  faq?: FaqContentDTO
+
+  /**  */
+  resources?: ResourcesContentDTO
+
+  /**  */
+  disclaimers?: DisclaimersContentDTO
+
+  /**  */
+  contact?: ContactContentDTO
+}
+
+/** JurisdictionContent */
+export interface JurisdictionContent {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  footer?: FooterContentDTO
+
+  /**  */
+  faq?: FaqContentDTO
+
+  /**  */
+  resources?: ResourcesContentDTO
+
+  /**  */
+  disclaimers?: DisclaimersContentDTO
+
+  /**  */
+  contact?: ContactContentDTO
+
+  /**  */
+  jurisdictionId: string
+
+  /**  */
+  language: LanguagesEnum
+
+  /**  */
+  staleFields: string[]
+}
+
+/** JurisdictionContentUpdate */
+export interface JurisdictionContentUpdate {
+  /**  */
+  footer?: FooterContentDTO
+
+  /**  */
+  faq?: FaqContentDTO
+
+  /**  */
+  resources?: ResourcesContentDTO
+
+  /**  */
+  disclaimers?: DisclaimersContentDTO
+
+  /**  */
+  contact?: ContactContentDTO
+
+  /**  */
+  lastUpdatedAt?: Date
 }
 
 export enum FilterAvailabilityEnum {
@@ -8651,6 +11475,7 @@ export enum RegionEnum {
 export enum ListingsStatusEnum {
   "active" = "active",
   "pending" = "pending",
+  "scheduled" = "scheduled",
   "closed" = "closed",
   "pendingReview" = "pendingReview",
   "changesRequested" = "changesRequested",
@@ -8659,6 +11484,24 @@ export enum ListingsStatusEnum {
 export enum ListingTypeEnum {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
+}
+
+export enum ParkingTypeEnum {
+  "onStreet" = "onStreet",
+  "offStreet" = "offStreet",
+  "garage" = "garage",
+  "carport" = "carport",
+}
+
+export enum UnitAccessibilityPriorityTypeEnum {
+  "mobility" = "mobility",
+  "hearing" = "hearing",
+  "vision" = "vision",
+  "hearingAndVision" = "hearingAndVision",
+  "mobilityAndHearing" = "mobilityAndHearing",
+  "mobilityAndVision" = "mobilityAndVision",
+  "mobilityHearingAndVision" = "mobilityHearingAndVision",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
@@ -8675,6 +11518,7 @@ export enum ListingViews {
   "csv" = "csv",
   "full" = "full",
   "fundamentals" = "fundamentals",
+  "map" = "map",
   "name" = "name",
 }
 
@@ -8699,49 +11543,66 @@ export enum OrderByEnum {
 }
 
 export enum ListingFilterKeys {
+  "accessibilityPriorityTypes" = "accessibilityPriorityTypes",
   "availabilities" = "availabilities",
   "availability" = "availability",
   "bathrooms" = "bathrooms",
   "bedrooms" = "bedrooms",
   "bedroomTypes" = "bedroomTypes",
   "city" = "city",
-  "counties" = "counties",
+  "configurableRegions" = "configurableRegions",
   "homeTypes" = "homeTypes",
   "ids" = "ids",
+  "includeExternal" = "includeExternal",
   "isVerified" = "isVerified",
   "jurisdiction" = "jurisdiction",
+  "jurisdictions" = "jurisdictions",
   "leasingAgent" = "leasingAgent",
   "listingFeatures" = "listingFeatures",
+  "listingType" = "listingType",
   "monthlyRent" = "monthlyRent",
   "multiselectQuestions" = "multiselectQuestions",
   "name" = "name",
   "neighborhood" = "neighborhood",
+  "parkingType" = "parkingType",
   "regions" = "regions",
   "reservedCommunityTypes" = "reservedCommunityTypes",
   "section8Acceptance" = "section8Acceptance",
   "status" = "status",
   "zipCode" = "zipCode",
-  "listingType" = "listingType",
 }
 
 export enum ApplicationAddressTypeEnum {
   "leasingAgent" = "leasingAgent",
 }
 
-export enum ReviewOrderTypeEnum {
-  "lottery" = "lottery",
-  "firstComeFirstServe" = "firstComeFirstServe",
-  "waitlist" = "waitlist",
-  "waitlistLottery" = "waitlistLottery",
+export enum ApplicationMethodsTypeEnum {
+  "Internal" = "Internal",
+  "FileDownload" = "FileDownload",
+  "ExternalLink" = "ExternalLink",
+  "PaperPickup" = "PaperPickup",
+  "POBox" = "POBox",
+  "LeasingAgent" = "LeasingAgent",
+  "Referral" = "Referral",
 }
 
-export enum LotteryStatusEnum {
-  "errored" = "errored",
-  "ran" = "ran",
-  "approved" = "approved",
-  "releasedToPartners" = "releasedToPartners",
-  "publishedToPublic" = "publishedToPublic",
-  "expired" = "expired",
+export enum LanguagesEnum {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+  "bn" = "bn",
+  "ar" = "ar",
+  "ko" = "ko",
+  "hy" = "hy",
+  "fa" = "fa",
+}
+
+export enum ListingEventsTypeEnum {
+  "openHouse" = "openHouse",
+  "publicLottery" = "publicLottery",
+  "lotteryResults" = "lotteryResults",
 }
 
 export enum MultiselectQuestionsApplicationSectionEnum {
@@ -8763,65 +11624,13 @@ export enum MultiselectQuestionsStatusEnum {
   "retired" = "retired",
 }
 
-export enum ApplicationMethodsTypeEnum {
-  "Internal" = "Internal",
-  "FileDownload" = "FileDownload",
-  "ExternalLink" = "ExternalLink",
-  "PaperPickup" = "PaperPickup",
-  "POBox" = "POBox",
-  "LeasingAgent" = "LeasingAgent",
-  "Referral" = "Referral",
-}
-
-export enum LanguagesEnum {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-  "bn" = "bn",
-  "ar" = "ar",
-}
-
-export enum ListingEventsTypeEnum {
-  "openHouse" = "openHouse",
-  "publicLottery" = "publicLottery",
-  "lotteryResults" = "lotteryResults",
-}
-
-export enum UnitTypeEnum {
-  "studio" = "studio",
-  "oneBdrm" = "oneBdrm",
-  "twoBdrm" = "twoBdrm",
-  "threeBdrm" = "threeBdrm",
-  "fourBdrm" = "fourBdrm",
-  "SRO" = "SRO",
-  "fiveBdrm" = "fiveBdrm",
-}
-
-export enum UnitRentTypeEnum {
-  "fixed" = "fixed",
-  "percentageOfIncome" = "percentageOfIncome",
-}
-
-export enum RentTypeEnum {
-  "fixedRent" = "fixedRent",
-  "rentRange" = "rentRange",
-}
-export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
-}
-export enum MarketingTypeEnum {
-  "marketing" = "marketing",
-  "comingSoon" = "comingSoon",
-}
-
-export enum MarketingSeasonEnum {
-  "spring" = "spring",
-  "summer" = "summer",
-  "fall" = "fall",
-  "winter" = "winter",
+export enum LotteryStatusEnum {
+  "errored" = "errored",
+  "ran" = "ran",
+  "approved" = "approved",
+  "releasedToPartners" = "releasedToPartners",
+  "publishedToPublic" = "publishedToPublic",
+  "expired" = "expired",
 }
 
 export enum MonthEnum {
@@ -8838,6 +11647,50 @@ export enum MonthEnum {
   "november" = "november",
   "december" = "december",
 }
+
+export enum MarketingSeasonEnum {
+  "spring" = "spring",
+  "summer" = "summer",
+  "fall" = "fall",
+  "winter" = "winter",
+}
+
+export enum MarketingTypeEnum {
+  "marketing" = "marketing",
+  "comingSoon" = "comingSoon",
+}
+
+export enum ReviewOrderTypeEnum {
+  "lottery" = "lottery",
+  "firstComeFirstServe" = "firstComeFirstServe",
+  "waitlist" = "waitlist",
+  "waitlistLottery" = "waitlistLottery",
+}
+
+export enum RentTypeEnum {
+  "fixedRent" = "fixedRent",
+  "rentRange" = "rentRange",
+}
+export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
+export enum UnitTypeEnum {
+  "studio" = "studio",
+  "oneBdrm" = "oneBdrm",
+  "twoBdrm" = "twoBdrm",
+  "threeBdrm" = "threeBdrm",
+  "fourBdrm" = "fourBdrm",
+  "SRO" = "SRO",
+  "fiveBdrm" = "fiveBdrm",
+  "sixBdrm" = "sixBdrm",
+  "sevenBdrm" = "sevenBdrm",
+}
+
+export enum UnitRentTypeEnum {
+  "fixed" = "fixed",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export enum EnumListingDepositType {
   "fixedDeposit" = "fixedDeposit",
   "depositRange" = "depositRange",
@@ -8845,6 +11698,7 @@ export enum EnumListingDepositType {
 export enum EnumListingListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
@@ -8857,6 +11711,7 @@ export enum EnumListingCreateDepositType {
 export enum EnumListingCreateListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 export enum EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType {
   "flatRent" = "flatRent",
@@ -8869,6 +11724,7 @@ export enum EnumListingUpdateDepositType {
 export enum EnumListingUpdateListingType {
   "regulated" = "regulated",
   "nonRegulated" = "nonRegulated",
+  "landUse" = "landUse",
 }
 export enum AfsView {
   "pending" = "pending",
@@ -8900,6 +11756,18 @@ export enum ApplicationStatusEnum {
   "receivedUnit" = "receivedUnit",
   "waitlist" = "waitlist",
   "waitlistDeclined" = "waitlistDeclined",
+}
+
+export enum ApplicationDeclineReasonEnum {
+  "householdIncomeTooHigh" = "householdIncomeTooHigh",
+  "householdIncomeTooLow" = "householdIncomeTooLow",
+  "householdSizeTooLarge" = "householdSizeTooLarge",
+  "householdSizeTooSmall" = "householdSizeTooSmall",
+  "attemptedToContactNoResponse" = "attemptedToContactNoResponse",
+  "applicantDeclinedUnit" = "applicantDeclinedUnit",
+  "doesNotMeetSeniorBuildingRequirement" = "doesNotMeetSeniorBuildingRequirement",
+  "householdDoesNotNeedAccessibleUnit" = "householdDoesNotNeedAccessibleUnit",
+  "other" = "other",
 }
 
 export enum ApplicationSubmissionTypeEnum {
@@ -8942,9 +11810,37 @@ export enum HouseholdMemberRelationship {
   "greatGrandparent" = "greatGrandparent",
   "inLaw" = "inLaw",
   "friend" = "friend",
+  "aideOrAttendant" = "aideOrAttendant",
+  "spousePartner" = "spousePartner",
+  "girlfriendBoyfriend" = "girlfriendBoyfriend",
+  "brotherSister" = "brotherSister",
+  "auntUncle" = "auntUncle",
+  "nephewNiece" = "nephewNiece",
+  "grandparentGreatGrandparent" = "grandparentGreatGrandparent",
+  "liveInAide" = "liveInAide",
   "other" = "other",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum MultiselectQuestionOrderByKeys {
+  "jurisdiction" = "jurisdiction",
+  "name" = "name",
+  "status" = "status",
+  "updatedAt" = "updatedAt",
+}
+
+export enum MultiselectQuestionViews {
+  "base" = "base",
+  "fundamentals" = "fundamentals",
+}
+export enum EnumMultiselectQuestionFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
 export enum UserRoleEnum {
   "user" = "user",
   "partner" = "partner",
@@ -8969,81 +11865,142 @@ export enum NeighborhoodAmenitiesEnum {
   "busStops" = "busStops",
 }
 
+export enum SpokenLanguageEnum {
+  "chineseCantonese" = "chineseCantonese",
+  "chineseMandarin" = "chineseMandarin",
+  "english" = "english",
+  "filipino" = "filipino",
+  "korean" = "korean",
+  "russian" = "russian",
+  "spanish" = "spanish",
+  "vietnamese" = "vietnamese",
+  "farsi" = "farsi",
+  "afghani" = "afghani",
+  "notListed" = "notListed",
+}
+
+export enum ApplicationAccessibilityFeatureEnum {
+  "hearing" = "hearing",
+  "hearingAndVision" = "hearingAndVision",
+  "mobility" = "mobility",
+  "other" = "other",
+  "vision" = "vision",
+}
+
+export enum BrandRadiusEnum {
+  "sm" = "sm",
+  "base" = "base",
+  "md" = "md",
+  "lg" = "lg",
+  "xl" = "xl",
+  "2xl" = "2xl",
+  "3xl" = "3xl",
+  "full" = "full",
+}
+export type CombinedBrandTypes = BrandDTO
 export enum FeatureFlagEnum {
+  "disableAccessibilityFeaturesTag" = "disableAccessibilityFeaturesTag",
   "disableBuildingSelectionCriteria" = "disableBuildingSelectionCriteria",
   "disableCommonApplication" = "disableCommonApplication",
+  "disableEthnicityQuestion" = "disableEthnicityQuestion",
+  "disableHowToContact" = "disableHowToContact",
   "disableJurisdictionalAdmin" = "disableJurisdictionalAdmin",
   "disableListingPreferences" = "disableListingPreferences",
+  "disablePartnerPublicListingEdits" = "disablePartnerPublicListingEdits",
+  "disableReferralOpportunity" = "disableReferralOpportunity",
+  "disableReservedCommunityTypeEdit" = "disableReservedCommunityTypeEdit",
   "disableWorkInRegion" = "disableWorkInRegion",
   "enableAccessibilityFeatures" = "enableAccessibilityFeatures",
-  "enableAdaOtherOption" = "enableAdaOtherOption",
   "enableAdditionalResources" = "enableAdditionalResources",
+  "enableApplicationBulkCSVUpdates" = "enableApplicationBulkCSVUpdates",
+  "enableApplicationExpirationNonAdmins" = "enableApplicationExpirationNonAdmins",
   "enableApplicationStatus" = "enableApplicationStatus",
+  "enableApproveAndPublishOnEdit" = "enableApproveAndPublishOnEdit",
+  "enableAutoOpenDate" = "enableAutoOpenDate",
+  "enableAutopublish" = "enableAutopublish",
   "enableCompanyWebsite" = "enableCompanyWebsite",
+  "enableConfigurableRegions" = "enableConfigurableRegions",
   "enableCreditScreeningFee" = "enableCreditScreeningFee",
+  "enableCustomListingNotifications" = "enableCustomListingNotifications",
+  "enableDbDrivenBranding" = "enableDbDrivenBranding",
+  "enableDbDrivenContent" = "enableDbDrivenContent",
+  "enableDuplicatesDetailsInEmail" = "enableDuplicatesDetailsInEmail",
+  "enableExportTerms" = "enableExportTerms",
+  "enableFaq" = "enableFaq",
+  "enableFilterByBathroom" = "enableFilterByBathroom",
+  "enableFilterByCounty" = "enableFilterByCounty",
+  "enableFilterByStatus" = "enableFilterByStatus",
   "enableFullTimeStudentQuestion" = "enableFullTimeStudentQuestion",
+  "enableGenderQuestion" = "enableGenderQuestion",
   "enableGeocodingPreferences" = "enableGeocodingPreferences",
   "enableGeocodingRadiusMethod" = "enableGeocodingRadiusMethod",
+  "enableGetAssistanceCard" = "enableGetAssistanceCard",
+  "enableGetAssistancePage" = "enableGetAssistancePage",
   "enableHomeType" = "enableHomeType",
+  "enableHomePageSearchHero" = "enableHomePageSearchHero",
+  "enableHousingAdvocate" = "enableHousingAdvocate",
+  "enableHousingBasics" = "enableHousingBasics",
   "enableHousingDeveloperOwner" = "enableHousingDeveloperOwner",
   "enableIsVerified" = "enableIsVerified",
+  "enableLandUse" = "enableLandUse",
+  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableLimitedHowDidYouHear" = "enableLimitedHowDidYouHear",
   "enableListingFavoriting" = "enableListingFavoriting",
   "enableListingFileNumber" = "enableListingFileNumber",
   "enableListingFiltering" = "enableListingFiltering",
-  "enableLeasingAgentAltText" = "enableLeasingAgentAltText",
   "enableListingImageAltText" = "enableListingImageAltText",
+  "enableListingMap" = "enableListingMap",
   "enableListingOpportunity" = "enableListingOpportunity",
   "enableListingPagination" = "enableListingPagination",
   "enableListingUpdatedAt" = "enableListingUpdatedAt",
   "enableMarketingFlyer" = "enableMarketingFlyer",
   "enableMarketingStatus" = "enableMarketingStatus",
   "enableMarketingStatusMonths" = "enableMarketingStatusMonths",
+  "enableMultiselectVoucherQuestion" = "enableMultiselectVoucherQuestion",
   "enableNeighborhoodAmenities" = "enableNeighborhoodAmenities",
   "enableNeighborhoodAmenitiesDropdown" = "enableNeighborhoodAmenitiesDropdown",
+  "enableNonAdminLotteries" = "enableNonAdminLotteries",
   "enableNonRegulatedListings" = "enableNonRegulatedListings",
+  "enableOnlyAdminCanAddAppsAfterClose" = "enableOnlyAdminCanAddAppsAfterClose",
+  "enableOnlyAdminCanEditListingDates" = "enableOnlyAdminCanEditListingDates",
+  "enableOnlyAdminCanManageUsers" = "enableOnlyAdminCanManageUsers",
   "enableParkingFee" = "enableParkingFee",
+  "enableParkingType" = "enableParkingType",
   "enablePartnerDemographics" = "enablePartnerDemographics",
+  "enablePartnerLotteryExport" = "enablePartnerLotteryExport",
   "enablePartnerSettings" = "enablePartnerSettings",
+  "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
+  "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",
   "enableProperties" = "enableProperties",
+  "enablePublicTermsOfUse" = "enablePublicTermsOfUse",
+  "enableReasonableAccommodations" = "enableReasonableAccommodations",
+  "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
+  "enableResources" = "enableResources",
+  "enableResourcesCard" = "enableResourcesCard",
   "enableSection8Question" = "enableSection8Question",
+  "enableSeeOurData" = "enableSeeOurData",
+  "enableSexualOrientationQuestion" = "enableSexualOrientationQuestion",
   "enableSingleUseCode" = "enableSingleUseCode",
   "enableSmokingPolicyRadio" = "enableSmokingPolicyRadio",
+  "enableSpokenLanguage" = "enableSpokenLanguage",
+  "enableStopLights" = "enableStopLights",
   "enableSupportAdmin" = "enableSupportAdmin",
   "enableUnderConstructionHome" = "enableUnderConstructionHome",
+  "enableUnitAccessibilityTypeTags" = "enableUnitAccessibilityTypeTags",
   "enableUnitGroups" = "enableUnitGroups",
   "enableUtilitiesIncluded" = "enableUtilitiesIncluded",
+  "enableV2MSQ" = "enableV2MSQ",
+  "enableVerifyIncome" = "enableVerifyIncome",
   "enableWaitlistAdditionalFields" = "enableWaitlistAdditionalFields",
   "enableWaitlistLottery" = "enableWaitlistLottery",
   "enableWhatToExpectAdditionalField" = "enableWhatToExpectAdditionalField",
-  "enableV2MSQ" = "enableV2MSQ",
   "example" = "example",
   "hideCloseListingButton" = "hideCloseListingButton",
   "swapCommunityTypeWithPrograms" = "swapCommunityTypeWithPrograms",
 }
 
-export enum MultiselectQuestionOrderByKeys {
-  "jurisdiction" = "jurisdiction",
-  "name" = "name",
-  "status" = "status",
-  "updatedAt" = "updatedAt",
-}
-
-export enum MultiselectQuestionViews {
-  "base" = "base",
-  "fundamentals" = "fundamentals",
-}
-export enum EnumMultiselectQuestionFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "<=" = "<=",
-  "LIKE" = "LIKE",
-  "NA" = "NA",
-}
 export enum InputType {
   "boolean" = "boolean",
   "text" = "text",
@@ -9065,6 +12022,16 @@ export enum ApplicationsFilterEnum {
   "open" = "open",
 }
 
+export enum BackgroundJobStatusEnum {
+  "processing" = "processing",
+  "completed" = "completed",
+  "failed" = "failed",
+}
+
+export enum UserOrderByKeys {
+  "isApproved" = "isApproved",
+}
+
 export enum ModificationEnum {
   "add" = "add",
   "remove" = "remove",
@@ -9082,4 +12049,23 @@ export enum EnumPropertyFilterParamsComparison {
   "<=" = "<=",
   "LIKE" = "LIKE",
   "NA" = "NA",
+}
+export enum EnumAgencyFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "LIKE" = "LIKE",
+  "NA" = "NA",
+}
+export enum SiteEnum {
+  "public" = "public",
+  "partners" = "partners",
+  "email" = "email",
+}
+
+export enum TranslationOrigin {
+  "machine" = "machine",
+  "human" = "human",
 }

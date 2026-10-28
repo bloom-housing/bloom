@@ -1,6 +1,11 @@
 import { INestApplication, Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { of, throwError } from 'rxjs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ListingsStatusEnum } from '@prisma/client';
+import {
+  ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from '@prisma/client';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import { PrismaService } from '../../src/services/prisma.service';
@@ -12,12 +17,15 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { reservedCommunityTypeFactoryAll } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import dayjs from 'dayjs';
+import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 
 describe('Script Runner Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let cookies = '';
+  let adminUserId: string;
   let logger: Logger;
+  const httpServiceMock = { get: jest.fn() };
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -27,6 +35,8 @@ describe('Script Runner Controller Tests', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider(HttpService)
+      .useValue(httpServiceMock)
       .overrideProvider(Logger)
       .useValue({
         log: jest.fn(),
@@ -59,11 +69,254 @@ describe('Script Runner Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+    adminUserId = storedUser.id;
   });
 
   afterAll(async () => {
     await prisma.$disconnect();
     await app.close();
+  });
+
+  describe('migrateTranslationOverridesToKeyRows endpoint', () => {
+    const call = (body: Record<string, unknown>) =>
+      request(app.getHttpServer())
+        .put('/scriptRunner/migrateTranslationOverridesToKeyRows')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .send(body);
+
+    const valid = {
+      jurisdictionName: 'nonexistent jurisdiction for this spec',
+      commit: false,
+      skipExisting: false,
+    };
+
+    it('refuses a jurisdictional admin, who has no grant on translations', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const jurisAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isJurisdictionalAdmin: true },
+          jurisdictionIds: [jurisdiction.id],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const logIn = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email: jurisAdmin.email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .put('/scriptRunner/migrateTranslationOverridesToKeyRows')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', logIn.headers['set-cookie'])
+        .send({
+          jurisdictionName: jurisdiction.name,
+          commit: false,
+          skipExisting: false,
+        })
+        .expect(403);
+    });
+
+    const KEY_PREFIX = 'spec.migration';
+
+    const serveOverrides = (hero: string, title: string) =>
+      httpServiceMock.get.mockImplementation((url: string) => {
+        if (url.includes('locale_overrides/general.json')) {
+          return of({ data: { [KEY_PREFIX]: { hero } } });
+        }
+        if (url.includes('overrides/general.json')) {
+          return of({ data: { [KEY_PREFIX]: { title } } });
+        }
+        return throwError(
+          () => new Error('Request failed with status code 404'),
+        );
+      });
+
+    const storedRows = async () =>
+      await prisma.translationStrings.findMany({
+        where: { key: { startsWith: `${KEY_PREFIX}.` } },
+        select: { jurisdictionId: true, site: true, key: true, value: true },
+      });
+
+    beforeEach(() => {
+      serveOverrides('First hero', 'First title');
+    });
+
+    afterAll(async () => {
+      await prisma.translationStrings.deleteMany({
+        where: { key: { startsWith: `${KEY_PREFIX}.` } },
+      });
+    });
+
+    it('writes the rows, then updates them on a second run', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      const scriptName = `migrate translation overrides to key rows for ${jurisdiction.name}`;
+      serveOverrides('First hero', 'First title');
+
+      await call({
+        jurisdictionName: jurisdiction.name,
+        commit: true,
+        skipExisting: false,
+        languages: ['es'],
+      }).expect(200);
+
+      expect(await storedRows()).toEqual(
+        expect.arrayContaining([
+          {
+            jurisdictionId: jurisdiction.id,
+            site: 'public',
+            key: `${KEY_PREFIX}.hero`,
+            value: 'First hero',
+          },
+          {
+            jurisdictionId: null,
+            site: 'partners',
+            key: `${KEY_PREFIX}.title`,
+            value: 'First title',
+          },
+        ]),
+      );
+
+      await prisma.scriptRuns.delete({ where: { scriptName } });
+      serveOverrides('Second hero', 'Second title');
+
+      await call({
+        jurisdictionName: jurisdiction.name,
+        commit: true,
+        skipExisting: false,
+        languages: ['es'],
+      }).expect(200);
+
+      const rows = await storedRows();
+      expect(rows).toHaveLength(2);
+      expect(rows.map((row) => row.value).sort()).toEqual([
+        'Second hero',
+        'Second title',
+      ]);
+    });
+
+    it('rejects a body with commit missing', async () => {
+      // The validation pipe drops unknown properties, so a misspelled field must not
+      // fall through to a default.
+      const res = await call({
+        jurisdictionName: 'Bloomington',
+        skipExisting: false,
+      }).expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain('commit');
+    });
+
+    it('rejects a body with skipExisting missing', async () => {
+      const res = await call({
+        jurisdictionName: 'Bloomington',
+        commit: false,
+      }).expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain('skipExisting');
+    });
+
+    // A body naming a jurisdiction that does not exist also answers 400, so each of these
+    // asserts the field the pipe complained about.
+    const rejects = async (body: Record<string, unknown>, field: string) => {
+      const res = await call({ ...valid, ...body }).expect(400);
+
+      expect(JSON.stringify(res.body.message)).toContain(field);
+    };
+
+    it('rejects a git ref that climbs out of the repository', async () => {
+      await rejects(
+        { gitRef: 'main/../../../attacker/bloom-fork/main' },
+        'gitRef',
+      );
+    });
+
+    it('rejects a git ref that is not a ref', async () => {
+      await rejects({ gitRef: 'main; rm -rf /' }, 'gitRef');
+    });
+
+    it('rejects an override path that climbs out of the repository', async () => {
+      await rejects(
+        { publicPath: 'sites/public/../../../attacker/overrides' },
+        'publicPath',
+      );
+    });
+
+    it('rejects an override path that is absolute', async () => {
+      await rejects({ partnersPath: '/etc/passwd' }, 'partnersPath');
+    });
+
+    it('rejects a repository url off the allowed host', async () => {
+      await rejects(
+        { repositoryUrl: 'https://169.254.169.254' },
+        'repositoryUrl',
+      );
+    });
+
+    it('rejects a repository url that is not https', async () => {
+      await rejects({ repositoryUrl: 'http://example.com/x' }, 'repositoryUrl');
+    });
+
+    it('rejects a language list that is a bare string', async () => {
+      await rejects({ languages: 'es' }, 'languages');
+    });
+
+    it('rejects an empty language list', async () => {
+      await rejects({ languages: [] }, 'languages');
+    });
+
+    it('rejects a language outside the enum', async () => {
+      await rejects({ languages: ['klingon'] }, 'languages');
+    });
+
+    it('rejects a missing jurisdiction name', async () => {
+      const res = await call({ commit: false, skipExisting: false }).expect(
+        400,
+      );
+
+      expect(JSON.stringify(res.body.message)).toContain('jurisdictionName');
+    });
+
+    it('rejects an unknown jurisdiction, without recording a run', async () => {
+      const res = await call(valid).expect(400);
+
+      expect(res.body.message).toContain('does not exist');
+      const recorded = await prisma.scriptRuns.findUnique({
+        where: {
+          scriptName: `migrate translation overrides to key rows for ${valid.jurisdictionName}`,
+        },
+      });
+      expect(recorded).toBeNull();
+    });
+
+    it('refuses a jurisdiction whose run already succeeded', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await prisma.scriptRuns.create({
+        data: {
+          scriptName: `migrate translation overrides to key rows for ${jurisdiction.name}`,
+          didScriptRun: true,
+          triggeringUser: adminUserId,
+        },
+      });
+
+      const res = await call({
+        ...valid,
+        jurisdictionName: jurisdiction.name,
+        commit: true,
+      }).expect(400);
+
+      expect(res.body.message).toContain('already been run');
+    });
   });
 
   describe('setInitialExpireAfterValues endpoint', () => {
@@ -255,6 +508,117 @@ describe('Script Runner Controller Tests', () => {
           })
         ).isNewest,
       ).toEqual(true);
+    });
+  });
+
+  describe('migrateMultiselectApplicationDataToRefactor endpoint', () => {
+    it('should only migrate programs/preferences with data', async () => {
+      // const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(),
+      });
+      await reservedCommunityTypeFactoryAll(jurisdiction.id, prisma);
+      const listingData = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.active,
+        closedAt: undefined,
+      });
+      const listing = await prisma.listings.create({
+        data: listingData,
+      });
+      const preference1 = await prisma.multiselectQuestions.create({
+        data: multiselectQuestionFactory(
+          jurisdiction.id,
+          {
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.preferences,
+              description: 'description of msq migration preference',
+              multiselectOptions: {
+                createMany: {
+                  data: [
+                    {
+                      name: 'msq migration preference option 1',
+                      ordinal: 1,
+                    },
+                    {
+                      name: 'msq migration preference option 2',
+                      ordinal: 2,
+                    },
+                  ],
+                },
+              },
+              text: 'msq migration preference text',
+            },
+          },
+          true,
+        ),
+      });
+      const app1 = await applicationFactory();
+      await prisma.applications.create({
+        data: { ...app1, preferences: [], programs: [] },
+      });
+      const app2 = await applicationFactory();
+      await prisma.applications.create({
+        data: { ...app2, preferences: '{}', programs: '[]' },
+      });
+      const app3 = await applicationFactory();
+      await prisma.applications.create({
+        data: { ...app3, preferences: [], programs: null },
+      });
+      const app4 = await applicationFactory({
+        listingId: listing.id,
+      });
+      const createdApp4 = await prisma.applications.create({
+        data: {
+          ...app4,
+        },
+      });
+      await prisma.applications.update({
+        where: { id: createdApp4.id },
+        data: {
+          programs: {},
+          preferences: [
+            {
+              multiselectQuestionId: preference1.id,
+              key: 'msq migration preference text',
+              claimed: true,
+              options: [
+                {
+                  key: 'msq migration preference option 1',
+                  checked: true,
+                  extraData: [],
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      await request(app.getHttpServer())
+        .put(`/scriptRunner/migrateMultiselectApplicationDataToRefactor`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', cookies)
+        .expect(200);
+
+      // Only the one application is fetched from the database
+      // expect(mockConsoleLog).toHaveBeenCalledWith(
+      // "updating 1 application's multiselect data",
+      // );
+      const updatedMultiselectData =
+        await prisma.applicationSelections.findMany({
+          include: {
+            selections: { include: { multiselectOption: true } },
+          },
+          where: { applicationId: createdApp4.id },
+        });
+      expect(updatedMultiselectData.length).toEqual(1);
+      expect(updatedMultiselectData[0].multiselectQuestionId).toEqual(
+        preference1.id,
+      );
+      expect(
+        updatedMultiselectData[0].selections[0].multiselectOption.name,
+      ).toEqual('msq migration preference option 1');
     });
   });
 });

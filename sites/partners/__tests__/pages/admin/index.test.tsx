@@ -85,7 +85,7 @@ describe("admin", () => {
     server.use(
       rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(
-          ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true, isPartner: false } })
+          ctx.json({ id: "user1", userRoles: { id: "user1", isAdmin: true, isPartner: false } })
         )
       }),
       rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
@@ -124,7 +124,9 @@ describe("admin", () => {
     )
     render(<Admin />)
     await screen.findByRole("cell", { name: "jurisdiction 1" })
-    expect(screen.getByRole("heading", { level: 1, name: "Administration" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Feature flag management" })
+    ).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: "By jurisdiction" })).toBeInTheDocument()
     expect(screen.getByRole("tabpanel", { name: "By jurisdiction" })).toBeInTheDocument()
     expect(screen.getByRole("tab", { name: "By feature flag" })).toBeInTheDocument()

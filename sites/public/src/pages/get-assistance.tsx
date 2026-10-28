@@ -1,9 +1,11 @@
 import { useContext, useEffect } from "react"
 import { AuthContext, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { UserStatus } from "../lib/constants"
 import Assistance from "../components/assistance/Assistance"
+import { fetchSharedPageProps } from "../lib/hooks"
 
-const GetAssisatance = () => {
+const GetAssistance = ({ jurisdiction }: { jurisdiction: Jurisdiction }) => {
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
@@ -14,7 +16,17 @@ const GetAssisatance = () => {
     })
   }, [profile])
 
-  return <Assistance />
+  return <Assistance jurisdiction={jurisdiction} />
 }
 
-export default GetAssisatance
+export default GetAssistance
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getStaticProps({ locale }: { locale?: string }) {
+  const shared = await fetchSharedPageProps(locale)
+
+  return {
+    props: { ...shared },
+    revalidate: Number(process.env.cacheRevalidate),
+  }
+}

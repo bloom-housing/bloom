@@ -1,19 +1,20 @@
 import {
   IsBoolean,
+  IsEnum,
   IsNumber,
   IsNumberString,
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { UnitAccessibilityPriorityTypeEnum } from '../../enums/units/accessibility-priority-type-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { AmiChart } from '../ami-charts/ami-chart.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
 import { UnitRentType } from '../unit-rent-types/unit-rent-type.dto';
-import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { UnitAmiChartOverride } from './ami-chart-override.dto';
-import { ApiPropertyOptional } from '@nestjs/swagger';
 
 class Unit extends AbstractDTO {
   @Expose()
@@ -103,10 +104,14 @@ class Unit extends AbstractDTO {
   unitRentTypes?: UnitRentType;
 
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => UnitAccessibilityPriorityType)
-  @ApiPropertyOptional({ type: UnitAccessibilityPriorityType })
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType;
+  @IsEnum(UnitAccessibilityPriorityTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiPropertyOptional({
+    enum: UnitAccessibilityPriorityTypeEnum,
+    enumName: 'UnitAccessibilityPriorityTypeEnum',
+  })
+  accessibilityPriorityType?: UnitAccessibilityPriorityTypeEnum;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

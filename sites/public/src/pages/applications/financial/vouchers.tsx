@@ -1,21 +1,31 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Form, t, FieldGroup } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { t, FieldGroup } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Alert } from "@bloom-housing/ui-seeds"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   listingSectionQuestions,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  FeatureFlagEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
@@ -27,38 +37,63 @@ const ApplicationVouchers = () => {
     ? 4
     : 3
 
+  const enableMultiselectVoucherQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableMultiselectVoucherQuestion
+  )
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, getValues, trigger } = useForm({
-    defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
+  const { register, handleSubmit, errors, getValues, trigger, setValue } = useForm({
+    defaultValues: enableMultiselectVoucherQuestion
+      ? {
+          incomeVouchers: application.incomeVouchers ?? [],
+        }
+      : {
+          incomeVouchers: application.incomeVouchers?.includes("incomeVoucher")
+            ? "incomeVoucher"
+            : application.incomeVouchers?.includes("none")
+            ? "none"
+            : undefined,
+        },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "vouchersSubsidies",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "vouchersSubsidies",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    const { incomeVouchers } = data
-    const toSave = { incomeVouchers: JSON.parse(incomeVouchers) }
+    let pendingSave: { incomeVouchers: string[] }
+    if (enableMultiselectVoucherQuestion) {
+      const selected = Object.values(data).filter((val) => val !== false)
+      pendingSave = { incomeVouchers: selected as string[] }
+    } else {
+      pendingSave = { incomeVouchers: data?.incomeVouchers ? [data.incomeVouchers] : [] }
+    }
 
-    conductor.currentStep.save(toSave)
-    conductor.routeToNextOrReturnUrl()
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
+    })
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
-
-  const incomeVouchersValues = [
-    {
-      id: "incomeVouchersYes",
-      value: "true",
-      label: t("t.yes"),
-    },
-    {
-      id: "incomeVouchersNo",
-      value: "false",
-      label: t("t.no"),
-    },
-  ]
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -74,25 +109,33 @@ const ApplicationVouchers = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
-          heading={t("application.financial.vouchers.title")}
+          heading={
+            !enableMultiselectVoucherQuestion
+              ? t("application.financial.vouchers.title")
+              : t("application.financial.vouchers.titleAlt")
+          }
           subheading={
-            <div>
-              <p className="field-note mb-4">
-                <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
-                {` ${t("application.financial.vouchers.housingVouchers.text")}`}
-              </p>
-              <p className="field-note mb-4">
-                <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
-                {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
-              </p>
-              <p className="field-note">
-                <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
-                {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
-              </p>
-            </div>
+            !enableMultiselectVoucherQuestion ? (
+              <div>
+                <p className="field-note mb-4">
+                  <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
+                  {` ${t("application.financial.vouchers.housingVouchers.text")}`}
+                </p>
+                <p className="field-note mb-4">
+                  <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
+                  {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
+                </p>
+                <p className="field-note">
+                  <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
+                  {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
+                </p>
+              </div>
+            ) : (
+              `${t("application.financial.vouchers.subtitleAlt")}`
+            )
           }
           progressNavProps={{
             currentPageSection: currentPageSection,
@@ -104,38 +147,114 @@ const ApplicationVouchers = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
-
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
-              <FieldGroup
-                fieldGroupClassName="grid grid-cols-1"
-                fieldClassName="ml-0"
-                type="radio"
-                name="incomeVouchers"
-                groupNote={t("t.pleaseSelectOne")}
-                error={errors.incomeVouchers}
-                errorMessage={t("errors.selectAnOption")}
-                register={register}
-                fields={incomeVouchersValues}
-                dataTestId={"app-income-vouchers"}
-                validation={{
-                  validate: () => {
-                    return !!Object.values(getValues()).filter((value) => value).length
-                  },
-                }}
-              />
+              {enableMultiselectVoucherQuestion ? (
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  type="checkbox"
+                  name="incomeVouchers"
+                  errorMessage={t("errors.selectAnOption")}
+                  register={register}
+                  validation={{
+                    validate: () => {
+                      return !!Object.values(getValues()).filter((value) => value).length
+                    },
+                  }}
+                  error={
+                    Object.keys(errors).length === Object.keys(getValues()).length &&
+                    Object.keys(getValues()).length > 0
+                  }
+                  fields={[
+                    {
+                      id: "issuedVouchers",
+                      value: "issuedVouchers",
+                      label: t("application.financial.vouchers.issuedVouchers"),
+                      defaultChecked: application.incomeVouchers?.includes("issuedVouchers"),
+                      uniqueName: true,
+                      inputProps: {
+                        onChange: (e) => {
+                          if (e.target.checked) {
+                            setValue("incomeVouchers-none", false)
+                            setValue("incomeVouchers-issuedVouchers", true)
+                          }
+                        },
+                      },
+                    },
+                    {
+                      id: "rentalAssistance",
+                      value: "rentalAssistance",
+                      label: t("application.financial.vouchers.rentalAssistance"),
+                      defaultChecked: application.incomeVouchers?.includes("rentalAssistance"),
+                      uniqueName: true,
+                      inputProps: {
+                        onChange: (e) => {
+                          if (e.target.checked) {
+                            setValue("incomeVouchers-none", false)
+                            setValue("incomeVouchers-rentalAssistance", true)
+                          }
+                        },
+                      },
+                    },
+                    {
+                      id: "none",
+                      value: "none",
+                      label: t("application.financial.vouchers.none"),
+                      defaultChecked:
+                        application.incomeVouchers?.length > 0 &&
+                        !application.incomeVouchers?.includes("issuedVouchers") &&
+                        !application.incomeVouchers?.includes("rentalAssistance"),
+                      uniqueName: true,
+                      inputProps: {
+                        onChange: (e) => {
+                          if (e.target.checked) {
+                            setValue("incomeVouchers-none", true)
+                            setValue("incomeVouchers-issuedVouchers", false)
+                            setValue("incomeVouchers-rentalAssistance", false)
+                          }
+                        },
+                      },
+                    },
+                  ]}
+                  dataTestId={"app-income-vouchers"}
+                />
+              ) : (
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  type="radio"
+                  name="incomeVouchers"
+                  groupNote={t("t.pleaseSelectOne")}
+                  error={errors.incomeVouchers}
+                  errorMessage={t("errors.selectAnOption")}
+                  register={register}
+                  fields={[
+                    {
+                      id: "incomeVouchersYes",
+                      value: "incomeVoucher",
+                      label: t("t.yes"),
+                      defaultChecked: application.incomeVouchers?.includes("incomeVoucher"),
+                    },
+                    {
+                      id: "incomeVouchersNo",
+                      value: "none",
+                      label: t("t.no"),
+                      defaultChecked: application.incomeVouchers?.includes("none"),
+                    },
+                  ]}
+                  dataTestId={"app-income-vouchers"}
+                  validation={{
+                    validate: () => {
+                      return !!Object.values(getValues()).filter((value) => value).length
+                    },
+                  }}
+                />
+              )}
             </fieldset>
           </CardSection>
         </ApplicationFormLayout>
@@ -145,3 +264,5 @@ const ApplicationVouchers = () => {
 }
 
 export default ApplicationVouchers
+
+export const getStaticProps = sharedGetStaticProps

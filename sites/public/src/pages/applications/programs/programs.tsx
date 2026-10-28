@@ -6,6 +6,7 @@ import {
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationPrograms = () => {
   const { conductor } = useFormConductor("programs")
@@ -15,14 +16,19 @@ const ApplicationPrograms = () => {
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
 
+  const enableV2MSQ = isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableV2MSQ)
+
   return (
     <ApplicationMultiselectQuestionStep
       applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
       applicationStep={"programs"}
       applicationSectionNumber={3}
       swapCommunityTypeWithPrograms={swapCommunityTypeWithPrograms}
+      enableV2MSQ={enableV2MSQ}
     />
   )
 }
 
 export default ApplicationPrograms
+
+export const getStaticProps = sharedGetStaticProps

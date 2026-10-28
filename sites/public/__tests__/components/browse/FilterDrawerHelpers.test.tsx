@@ -1,13 +1,23 @@
 import React from "react"
 import { screen } from "@testing-library/dom"
+import userEvent from "@testing-library/user-event"
+import { useForm } from "react-hook-form"
 import {
   FilterAvailabilityEnum,
   HomeTypeEnum,
   ListingFilterKeys,
+  ListingsStatusEnum,
   RegionEnum,
+  UnitAccessibilityPriorityTypeEnum,
   UnitTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
+  defaultListingFeaturesConfiguration,
+  expandedListingFeaturesConfiguration,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import { t } from "@bloom-housing/ui-components"
+import {
+  AccessibilitySection,
   buildDefaultFilterFields,
   CheckboxGroup,
   decodeQueryToFilterData,
@@ -22,9 +32,6 @@ import {
   SearchSection,
 } from "../../../src/components/browse/FilterDrawerHelpers"
 import { mockNextRouter, render } from "../../testUtils"
-import { useForm } from "react-hook-form"
-import { t } from "@bloom-housing/ui-components"
-import userEvent from "@testing-library/user-event"
 
 describe("filter drawer helpers", () => {
   const emptyFormData: FilterData = {
@@ -49,6 +56,8 @@ describe("filter drawer helpers", () => {
       [UnitTypeEnum.threeBdrm]: false,
       [UnitTypeEnum.fourBdrm]: false,
       [UnitTypeEnum.fiveBdrm]: false,
+      [UnitTypeEnum.sixBdrm]: false,
+      [UnitTypeEnum.sevenBdrm]: false,
     },
     [ListingFilterKeys.monthlyRent]: {
       minRent: "",
@@ -94,7 +103,7 @@ describe("filter drawer helpers", () => {
 
   describe("getAvailabilityValues", () => {
     it("should return correct availability strings in order", () => {
-      expect(getAvailabilityValues()).toEqual([
+      expect(getAvailabilityValues(false)).toEqual([
         FilterAvailabilityEnum.unitsAvailable,
         FilterAvailabilityEnum.openWaitlist,
         FilterAvailabilityEnum.closedWaitlist,
@@ -331,6 +340,22 @@ describe("filter drawer helpers", () => {
       const backendFilters = encodeFilterDataToBackendFilters(filterData)
       expect(backendFilters).toStrictEqual([{ $comparison: "LIKE", name: "Listing Name" }])
     })
+    it("should return correct BE filters for bathrooms count", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.bathrooms]: "2",
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: ">=", bathrooms: 2 }])
+    })
+    it("should return no BE filters when bathrooms selection is 'Any' (empty string)", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.bathrooms]: "",
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([])
+    })
     it("should return correct BE filters for all comparison types combined", () => {
       const filterData: FilterData = {
         [ListingFilterKeys.isVerified]: true,
@@ -356,6 +381,51 @@ describe("filter drawer helpers", () => {
         { $comparison: "<=", monthlyRent: "900.00" },
         { $comparison: "LIKE", name: "Listing Name" },
       ])
+    })
+    it("should return correct backend filters for accessibilityPriorityTypes with single type", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([
+        { $comparison: "IN", accessibilityPriorityTypes: ["mobility"] },
+      ])
+    })
+    it("should return correct backend filters for jurisdictions", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.jurisdictions]: {
+          "123": true,
+          "234": true,
+          "345": false,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: "IN", jurisdictions: ["123", "234"] }])
+    })
+    it("should return correct backend filters for accessibilityPriorityTypes with multiple types", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+          [UnitAccessibilityPriorityTypeEnum.hearing]: true,
+        },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([
+        { $comparison: "IN", accessibilityPriorityTypes: ["mobility", "hearing"] },
+      ])
+    })
+    it("should return correct backend filters for closed status", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([{ $comparison: "=", status: "closed" }])
     })
   })
 
@@ -450,6 +520,12 @@ describe("filter drawer helpers", () => {
       }
       expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("name=Listing Name")
     })
+    it("should return correct filter query with bathrooms filter", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.bathrooms]: "2",
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("bathrooms=2")
+    })
     it("should return correct filter query with all filtering types", () => {
       const partialFormObject: FilterData = {
         [ListingFilterKeys.isVerified]: true,
@@ -476,6 +552,38 @@ describe("filter drawer helpers", () => {
       }
       expect(encodeFilterDataToQuery(fullFormObject)).toStrictEqual(
         "isVerified=true&homeTypes=apartment&monthlyRent=500.00-900.00&name=Listing Name"
+      )
+    })
+    it("should return correct filter query with accessibilityPriorityTypes filter", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+          [UnitAccessibilityPriorityTypeEnum.hearing]: true,
+        },
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual(
+        "accessibilityPriorityTypes=mobility,hearing"
+      )
+    })
+    it("should return correct filter query with closed status filter", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("status=closed")
+    })
+    it("should not add active status to the filter query as it is the default", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.active,
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("")
+    })
+    it("should return correct filter query with closed status combined with other filters", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+        [ListingFilterKeys.name]: "Listing Name",
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual(
+        "status=closed&name=Listing Name"
       )
     })
   })
@@ -544,10 +652,45 @@ describe("filter drawer helpers", () => {
         [ListingFilterKeys.name]: "Listing Name",
       })
     })
+    it("should return correct filter data with bathrooms filter query", () => {
+      expect(decodeQueryToFilterData({ bathrooms: "2" })).toStrictEqual({
+        [ListingFilterKeys.bathrooms]: "2",
+      })
+    })
     it("should return correct filter data with query with all filtering types", () => {
       expect(decodeQueryToFilterData({ name: "Listing Name" })).toStrictEqual({
         [ListingFilterKeys.name]: "Listing Name",
       })
+    })
+    it("should return correct filter data with accessibilityPriorityTypes single type query", () => {
+      expect(decodeQueryToFilterData({ accessibilityPriorityTypes: "mobility" })).toStrictEqual({
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+        },
+      })
+    })
+    it("should return correct filter data with accessibilityPriorityTypes multiple types query", () => {
+      expect(
+        decodeQueryToFilterData({ accessibilityPriorityTypes: "mobility,hearing" })
+      ).toStrictEqual({
+        [ListingFilterKeys.accessibilityPriorityTypes]: {
+          [UnitAccessibilityPriorityTypeEnum.mobility]: true,
+          [UnitAccessibilityPriorityTypeEnum.hearing]: true,
+        },
+      })
+    })
+    it("should return correct filter data with closed status query", () => {
+      expect(decodeQueryToFilterData({ status: "closed" })).toStrictEqual({
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      })
+    })
+    it("should drop active status from the query as it is the default", () => {
+      expect(decodeQueryToFilterData({ status: "active" })).toStrictEqual({})
+    })
+    it("should drop non public statuses from the query", () => {
+      expect(decodeQueryToFilterData({ status: "pendingReview" })).toStrictEqual({})
+      expect(decodeQueryToFilterData({ status: "pending" })).toStrictEqual({})
+      expect(decodeQueryToFilterData({ status: "not-a-status" })).toStrictEqual({})
     })
   })
 
@@ -575,6 +718,8 @@ describe("filter drawer helpers", () => {
           threeBdrm: false,
           fourBdrm: false,
           fiveBdrm: false,
+          sixBdrm: false,
+          sevenBdrm: false,
         },
         monthlyRent: {
           minRent: "",
@@ -637,6 +782,46 @@ describe("filter drawer helpers", () => {
         },
         [ListingFilterKeys.monthlyRent]: { minRent: "500.00", maxRent: "900.00" },
         [ListingFilterKeys.name]: "Listing Name",
+      })
+    })
+
+    it("should not include bathrooms when the selection is 'Any' (empty string)", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.bathrooms]: "",
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({})
+    })
+
+    it("should include bathrooms when a specific count is selected", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.bathrooms]: "2",
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({
+        [ListingFilterKeys.bathrooms]: "2",
+      })
+    })
+
+    it("should not include status when active is selected", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.status]: ListingsStatusEnum.active,
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({})
+    })
+
+    it("should include status when closed is selected", () => {
+      const fullFormObject: FilterData = {
+        ...emptyFormData,
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
+      }
+
+      expect(removeUnselectedFilterData(fullFormObject)).toStrictEqual({
+        [ListingFilterKeys.status]: ListingsStatusEnum.closed,
       })
     })
 
@@ -791,6 +976,7 @@ describe("filter drawer helpers", () => {
           setError={setError}
           clearErrors={clearErrors}
           errors={errors}
+          enableSection8={true}
         />
       )
     }
@@ -817,6 +1003,7 @@ describe("filter drawer helpers", () => {
           setError={setError}
           clearErrors={clearErrors}
           errors={errors}
+          enableSection8={true}
         />
       )
     }
@@ -904,6 +1091,57 @@ describe("filter drawer helpers", () => {
       expect(screen.getByLabelText("Listing name")).toBeInTheDocument()
       expect(screen.getByRole("textbox", { name: "Listing name" })).toHaveValue("example listing")
       expect(screen.getByText("Enter full or partial listing name")).toBeInTheDocument()
+    })
+  })
+
+  describe("AccessibilitySection", () => {
+    beforeEach(() => {
+      mockNextRouter()
+    })
+
+    const CategorizedAccessibilitySection = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return (
+        <AccessibilitySection
+          register={register}
+          filterState={{}}
+          listingFeaturesConfiguration={expandedListingFeaturesConfiguration}
+        />
+      )
+    }
+
+    const FlatAccessibilitySection = () => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const { register } = useForm()
+
+      return (
+        <AccessibilitySection
+          register={register}
+          filterState={{ [ListingFilterKeys.listingFeatures]: { wheelchairRamp: true } }}
+          listingFeaturesConfiguration={defaultListingFeaturesConfiguration}
+        />
+      )
+    }
+
+    it("should render parent section and category groups when categories exist", () => {
+      render(<CategorizedAccessibilitySection />)
+
+      expect(screen.getByRole("group", { name: "Accessibility features" })).toBeInTheDocument()
+      expect(screen.getByRole("group", { name: "Mobility" })).toBeInTheDocument()
+      expect(screen.getByRole("group", { name: "Bathroom" })).toBeInTheDocument()
+      expect(screen.getByLabelText("Wheelchair ramp")).toBeInTheDocument()
+      expect(screen.getByLabelText("Roll-in showers")).toBeInTheDocument()
+      expect(screen.queryAllByRole("group", { name: "Accessibility features" })).toHaveLength(1)
+    })
+
+    it("should render fallback accessibility checkbox group when categories are absent", () => {
+      render(<FlatAccessibilitySection />)
+
+      expect(screen.getAllByRole("group", { name: "Accessibility features" })).toHaveLength(1)
+      expect(screen.queryByRole("group", { name: "Mobility" })).not.toBeInTheDocument()
+      expect(screen.getByRole("checkbox", { name: "Wheelchair ramp" })).toBeChecked()
     })
   })
 })

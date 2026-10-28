@@ -10,6 +10,7 @@ organization. The guide is broken down into a series of files that should be fol
 5. [Apply Deployer Permission Set Tofu Modules](./5_apply_deployer_permission_set_tofu_modules.md)
    (you are here)
 6. [Apply Bloom Deployment Tofu Modules](./6_apply_bloom_deployment_tofu_modules.md)
+7. [Operations Playbook](./7_operations_playbook.md)
 
 The steps in this file create the following resources:
 
@@ -83,20 +84,22 @@ graph TB
 ## Before these steps
 
 1. Complete the steps in [Fork the Bloom Repo](./4_fork_bloom_repo.md). The infra container image
-   name build from your fork will be needed.
+   name built from the fork will be needed.
 
 ## Steps
 
 1. Apply the dev deployer OpenTofu root module:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_dev_deployer_permission_set_policy apply
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_dev_deployer_permission_set_policy apply
    ```
 
 2. Apply the prod deployer OpenTofu root module:
 
    ```bash
-   docker run --rm -it ghcr.io/<YOUR_GITHUB_ORG>/bloom/infra:gitsha-SOMESHA bloom_prod_deployer_permission_set_policy apply
+   INFRA_CONTAINER=<from your 'Fork Bloom Repo' step 8 notes>
+   docker run --rm -it "${INFRA_CONTAINER:?}" bloom_prod_deployer_permission_set_policy apply
    ```
 
 ## After these steps

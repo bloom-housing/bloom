@@ -80,7 +80,10 @@ export const unitSummariesTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = null
-    if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlist &&
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability = (
         <span>
           {unitSummary.totalAvailable > 0 ? (
@@ -94,7 +97,10 @@ export const unitSummariesTable = (
           )}
         </span>
       )
-    } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listingReviewOrder === ReviewOrderTypeEnum.waitlist ||
+      listingReviewOrder === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability = (
         <span>
           <strong>{t("listings.waitlist.open")}</strong>
@@ -155,12 +161,18 @@ export const getStackedUnitSummaryDetailsTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = ""
-    if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
+    if (
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlist &&
+      listingReviewOrder !== ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability =
         unitSummary.totalAvailable > 0
           ? `${unitSummary.totalAvailable} ${unitPluralization}`
           : t("listings.waitlist.open")
-    } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
+    } else if (
+      listingReviewOrder === ReviewOrderTypeEnum.waitlist ||
+      listingReviewOrder === ReviewOrderTypeEnum.waitlistLottery
+    ) {
       availability = t("listings.waitlist.open")
     }
 
@@ -705,8 +717,8 @@ export const getUnitTableData = (units: Unit[], unitSummary: UnitSummary) => {
       },
       floor: { content: <strong>{unit.floor}</strong> },
       accessibilityType: {
-        content: unit.unitAccessibilityPriorityTypes
-          ? t(`listings.unit.accessibilityType.${unit.unitAccessibilityPriorityTypes.name}`)
+        content: unit.accessibilityPriorityType
+          ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
           : t("t.n/a"),
       },
     }
@@ -771,7 +783,7 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
   const noSqFeet = !availableUnits.some((unit) => !!unit.sqFeet)
   const noBathrooms = !availableUnits.some((unit) => !!unit.numBathrooms)
   const noFloors = !availableUnits.some((unit) => !!unit.floor)
-  const noA11yTypes = !availableUnits.some((unit) => !!unit.unitAccessibilityPriorityTypes)
+  const noA11yTypes = !availableUnits.some((unit) => !!unit.accessibilityPriorityType)
   let unitsFormatted: FormattedUnit[] = []
 
   if (!(noNumbers && noSqFeet && noBathrooms && noFloors && noA11yTypes)) {
@@ -781,8 +793,8 @@ export const getStackedUnitTableData = (units: Unit[], unitSummary: UnitSummary)
       if (!noA11yTypes) {
         unitFormatted = {
           accessibilityType: {
-            cellText: unit.unitAccessibilityPriorityTypes
-              ? t(`listings.unit.accessibilityType.${unit.unitAccessibilityPriorityTypes.name}`)
+            cellText: unit.accessibilityPriorityType
+              ? t(`listings.unit.accessibilityType.${unit.accessibilityPriorityType}`)
               : t("t.n/a"),
           },
         }

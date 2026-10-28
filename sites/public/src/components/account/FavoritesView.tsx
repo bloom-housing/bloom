@@ -69,7 +69,10 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
 
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
-      <Layout pageTitle={t("account.myFavorites")}>
+      <Layout
+        pageTitle={t("account.myFavorites")}
+        metaDescription={t("pageDescription.myFavorites")}
+      >
         <PageHeaderLayout
           heading={t("account.myFavorites")}
           inverse
@@ -83,7 +86,8 @@ const FavoritesView = ({ jurisdiction }: FavoritesViewProps) => {
                 variant="block"
                 title={t("account.noFavorites")}
                 headingPriority={2}
-                altHeading
+                iconClass="card-icon"
+                headingClass="seeds-large-heading"
               >
                 <Card.Section>
                   <p>

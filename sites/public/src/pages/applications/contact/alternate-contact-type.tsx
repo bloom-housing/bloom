@@ -1,46 +1,96 @@
 import React, { Fragment, useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { useRouter } from "next/router"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { Field, Form, t } from "@bloom-housing/ui-components"
+import { Field, t } from "@bloom-housing/ui-components"
 import {
-  altContactRelationshipKeys,
   AuthContext,
+  Form,
   OnClientSide,
   PageView,
+  altContactRelationshipKeys,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
+import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
+  const enableHousingAdvocate = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableHousingAdvocate
+  )
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch, trigger } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, watch, trigger, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Record<string, any>
+  >({
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "alternateContactType",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "alternateContactType",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    application.alternateContact.type = data.type
-    application.alternateContact.otherType = data.otherType
+    const pendingSave = {
+      alternateContact:
+        data.type === "noContact"
+          ? { type: "noContact" }
+          : { ...application.alternateContact, type: data.type, otherType: data.otherType },
+    }
+    guardSubmit(pendingSave, () => {
+      application.alternateContact = application.alternateContact || {}
+      application.alternateContact.type = data.type
+      application.alternateContact.otherType = data.otherType
 
-    if (data.type === "noContact") conductor.completeSection(1)
+      if (data.type === "noContact") {
+        application.alternateContact = { type: "noContact" }
+        conductor.completeSection(1)
+      }
 
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
-  const type = watch("type", application.alternateContact.type)
+  const type = watch("type", application.alternateContact?.type)
+  const getOptionLabel = (option: string) => {
+    if (option === "caseManager" && enableHousingAdvocate) {
+      return t("application.alternateContact.type.options.caseManagerAdvocate")
+    }
+    return t("application.alternateContact.type.options." + option)
+  }
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -56,7 +106,11 @@ const ApplicationAlternateContactType = () => {
         listing?.name
       }`}
     >
-      <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form
+        id="applications-contact-alternate-type"
+        onSubmit={handleSubmit(onSubmit, onError)}
+        onBlur={onFieldBlur}
+      >
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.alternateContact.type.title")}
@@ -71,17 +125,9 @@ const ApplicationAlternateContactType = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
+          <ApplicationAlertBox errors={errors} />
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
@@ -97,13 +143,13 @@ const ApplicationAlternateContactType = () => {
                       type="radio"
                       id={"type-" + option}
                       name="type"
-                      label={t("application.alternateContact.type.options." + option)}
+                      label={getOptionLabel(option)}
                       register={register}
                       validation={{ required: true }}
                       error={errors.type}
                       inputProps={{
                         value: option,
-                        defaultChecked: application.alternateContact.type === option,
+                        defaultChecked: application.alternateContact?.type === option,
                       }}
                       dataTestId={"app-alternate-type"}
                     />
@@ -114,7 +160,7 @@ const ApplicationAlternateContactType = () => {
                         id="otherType"
                         name="otherType"
                         label={t("application.alternateContact.type.otherTypeFormPlaceholder")}
-                        defaultValue={application.alternateContact.otherType}
+                        defaultValue={application.alternateContact?.otherType}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.otherType}
                         errorMessage={
@@ -147,3 +193,5 @@ const ApplicationAlternateContactType = () => {
 }
 
 export default ApplicationAlternateContactType
+
+export const getStaticProps = sharedGetStaticProps

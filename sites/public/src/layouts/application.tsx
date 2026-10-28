@@ -6,13 +6,20 @@ import Head from "next/head"
 import HomeIcon from "@heroicons/react/24/solid/HomeIcon"
 import { Message, Toast, Icon } from "@bloom-housing/ui-seeds"
 import { MenuLink, t, SiteHeader as UICSiteHeader } from "@bloom-housing/ui-components"
+import { CommonMessageVariant } from "@bloom-housing/ui-seeds/src/blocks/shared/CommonMessage"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useBrand } from "../lib/BrandContext"
+import {
+  BrandDTO,
+  FeatureFlag,
+  FeatureFlagEnum,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ToastProps } from "@bloom-housing/ui-seeds/src/blocks/Toast"
-import { MetaTags } from "../components/shared/MetaTags"
+import styles from "./application.module.scss"
 import CustomSiteFooter from "../components/shared/CustomSiteFooter"
 import { HeaderLink, SiteHeader } from "../patterns/SiteHeader"
-import styles from "./application.module.scss"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
 
 const isMessageActive = (windowEnv: string) => {
   let isActive = false
@@ -134,7 +141,8 @@ const getHeaderLinks = (
   profile: User,
   signOut: () => Promise<void>,
   addToast: (message: string, props: ToastProps) => void,
-  linksBehindFlags: Record<string, boolean>
+  loggedInFlags: Record<string, boolean>,
+  featureFlags: FeatureFlag[]
 ) => {
   const headerLinks: HeaderLink[] = [
     {
@@ -148,6 +156,12 @@ const getHeaderLinks = (
       href: process.env.housingCounselorServiceUrl,
     })
   }
+  if (featureFlags?.some((flag) => flag.name === FeatureFlagEnum.enableProfessionalPartnersPage)) {
+    headerLinks.push({
+      label: t("pageTitle.professionalPartners"),
+      href: "/professional-partners",
+    })
+  }
   if (profile) {
     headerLinks.push({
       label: t("nav.myAccount"),
@@ -156,7 +170,7 @@ const getHeaderLinks = (
           label: t("nav.myDashboard"),
           href: "/account/dashboard",
         },
-        ...(linksBehindFlags["applications"]
+        ...(loggedInFlags["applications"]
           ? [
               {
                 label: t("account.myApplications"),
@@ -164,7 +178,7 @@ const getHeaderLinks = (
               },
             ]
           : []),
-        ...(linksBehindFlags["favorites"]
+        ...(loggedInFlags["favorites"]
           ? [
               {
                 label: t("account.myFavorites"),
@@ -200,15 +214,29 @@ const getHeaderLinks = (
 
 interface LayoutProps {
   children: React.ReactNode
+  hideFooter?: boolean
   metaDescription?: string
   metaImage?: string
   pageTitle?: string
 }
 
+export const headerLogo = (brand: BrandDTO | null) =>
+  brand?.logoUrl ? (
+    <img src={brand.logoUrl} alt="" data-testid="brand-header-logo" />
+  ) : (
+    <div data-testid="fallback-header-logo">
+      <Icon size={"lg"}>
+        <HomeIcon />
+      </Icon>
+    </div>
+  )
+
 const Layout = (props: LayoutProps) => {
   const { profile, signOut } = useContext(AuthContext)
+  const brand = useBrand()
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
+  const featureFlags = useJurisdictionFeatureFlags()
 
   const [showFavorites, setShowFavorites] = useState(false)
   const [showApplications, setShowApplications] = useState(true)
@@ -224,75 +252,109 @@ const Layout = (props: LayoutProps) => {
       label: t(`languages.${item}`),
     })) || []
 
-  return (
-    <div className="site-wrapper">
-      <div className="site-content">
-        <Head>
-          <title>
-            {props.pageTitle ? `${props.pageTitle} - ${t("nav.siteTitle")}` : t("nav.siteTitle")}
-          </title>
-          {props.pageTitle && (
-            <MetaTags
-              title={props.pageTitle}
-              description={props.metaDescription ?? ""}
-              image={props.metaImage ?? ""}
-            />
-          )}
-        </Head>
-        {process.env.showNewSeedsDesigns ? (
-          <SiteHeader
-            title={t("nav.siteTitle")}
-            languages={languages?.map((lang) => {
-              return {
-                label: lang.label,
-                onClick: () =>
-                  void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
-                active: t("config.routePrefix") === lang.prefix,
-              }
-            })}
-            links={getHeaderLinks(router, profile, signOut, addToast, {
-              applications: showApplications,
-              favorites: showFavorites,
-            })}
-            titleLink={"/"}
-            logo={
-              <Icon size={"lg"}>
-                <HomeIcon />
-              </Icon>
-            }
-            mainContentId="main-content"
-            showMessageBar={true}
-          />
-        ) : (
-          getSiteHeaderDeprecated(
-            router,
-            profile,
-            signOut,
-            addToast,
-            languages,
-            isMessageActive(process.env.siteMessageWindow),
-            isMessageActive(process.env.maintenanceWindow)
-          )
-        )}
-        <div
-          id="main-content"
-          tabIndex={-1}
-          aria-label={"Main content"}
-          className="md:overflow-x-hidden main-container"
-        >
-          <main>
-            {toastMessagesRef.current?.map((toastMessage) => (
-              <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
-                {toastMessage.message}
-              </Toast>
-            ))}
-            {props.children}
-          </main>
-        </div>
-      </div>
+  const metaTitle = props.pageTitle
+    ? `${props.pageTitle} - ${t("nav.siteTitle")}`
+    : t("nav.siteTitle")
+  const metaDescription = props.metaDescription ?? t("pageDescription.default")
 
-      <CustomSiteFooter />
-    </div>
+  return (
+    <>
+      <Head>
+        <title>{metaTitle}</title>
+        {process.env.allowSeoIndexing !== "TRUE" && (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
+        <meta name="description" content={metaDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={metaTitle} />
+        {props.metaImage && <meta property="og:image" content={props.metaImage} />}
+        <meta property="og:description" content={metaDescription} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={metaTitle} />
+        {props.metaImage && <meta property="twitter:image" content={props.metaImage} />}
+        <meta property="twitter:description" content={metaDescription} />
+      </Head>
+      <div className="site-wrapper">
+        <div className="site-content">
+          {process.env.showNewSeedsDesigns ? (
+            <SiteHeader
+              title={t("nav.siteTitle")}
+              languageDropdown={true}
+              languages={languages?.map((lang) => {
+                return {
+                  label: lang.label,
+                  onClick: () =>
+                    void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
+                  active: t("config.routePrefix") === lang.prefix,
+                }
+              })}
+              links={getHeaderLinks(
+                router,
+                profile,
+                signOut,
+                addToast,
+                {
+                  applications: showApplications,
+                  favorites: showFavorites,
+                },
+                featureFlags
+              )}
+              titleLink={"/"}
+              logo={headerLogo(brand)}
+              mainContentId="main-content"
+              showMessageBar={false}
+              banners={[
+                ...(process.env.nonProdBanner
+                  ? [
+                      {
+                        text: <Markdown>{t("t.nonProdBanner")}</Markdown>,
+                        variant: "alert" as CommonMessageVariant,
+                        background: "var(--seeds-color-alert-light)",
+                      },
+                    ]
+                  : []),
+                ...(isMessageActive(process.env.maintenanceWindow)
+                  ? [
+                      {
+                        text: <Markdown>{t("alert.maintenance")}</Markdown>,
+                        variant: "warn" as CommonMessageVariant,
+                        background: "var(--seeds-color-warn-light)",
+                      },
+                    ]
+                  : []),
+              ]}
+            />
+          ) : (
+            getSiteHeaderDeprecated(
+              router,
+              profile,
+              signOut,
+              addToast,
+              languages,
+              isMessageActive(process.env.siteMessageWindow),
+              isMessageActive(process.env.maintenanceWindow)
+            )
+          )}
+          <div
+            id="main-content"
+            tabIndex={-1}
+            aria-label={"Main content"}
+            className="md:overflow-x-hidden main-container"
+          >
+            <main>
+              {toastMessagesRef.current?.map((toastMessage) => (
+                <Toast {...toastMessage.props} testId="toast-alert" key={toastMessage.timestamp}>
+                  {toastMessage.message}
+                </Toast>
+              ))}
+              {props.children}
+            </main>
+          </div>
+        </div>
+
+        {!props.hideFooter && <CustomSiteFooter />}
+      </div>
+    </>
   )
 }
 

@@ -144,6 +144,11 @@
   }
 }
 
+.category-heading {
+  color: var(--seeds-text-color);
+  font-weight: var(--seeds-font-weight-bold);
+}
+
 .list-item {
   list-style: disc;
   margin-inline-start: var(--seeds-s5);

@@ -9,7 +9,7 @@ import {
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { t } from "@bloom-housing/ui-components"
-import { downloadExternalPDF } from "../../../lib/helpers"
+import { downloadExternalPDF, scheduledApplicationOpenInFuture } from "../../../lib/helpers"
 import {
   getAddress,
   getDateString,
@@ -17,6 +17,7 @@ import {
   getMethod,
   getOnlineApplicationURL,
   getPaperApplications,
+  hasMethod,
 } from "../ListingViewSeedsHelpers"
 import listingStyles from "../ListingViewSeeds.module.scss"
 import styles from "./Apply.module.scss"
@@ -31,11 +32,11 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
   const { initialStateLoaded, profile } = useContext(AuthContext)
 
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
-
   const onlineApplicationURLInfo = getOnlineApplicationURL(
     listing.applicationMethods,
     listing.id,
-    preview
+    preview,
+    listing.externalURL
   )
 
   const redirectIfLogInRequired = () =>
@@ -43,6 +44,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     initialStateLoaded &&
     !profile &&
     onlineApplicationURLInfo.isCommonApp &&
+    !listing.externalURL &&
     //previewing applications should not require admin to login
     !preview
 
@@ -116,6 +118,11 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
 
   const hasPrimaryApplicationMethod = onlineApplicationUrl || hasPaperApplication
 
+  const hasLeasingAgentMethod = hasMethod(
+    listing.applicationMethods,
+    ApplicationMethodsTypeEnum.LeasingAgent
+  )
+
   const shouldShowApplyButton = getHasNonReferralMethods(listing)
 
   const showSection =
@@ -124,15 +131,16 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
       applicationPickUpAddress ||
       applicationDropOffAddress) &&
     !applicationsClosed &&
-    validOnlineApplication &&
-    validPaperApplication &&
-    listing.status !== ListingsStatusEnum.closed
+    (validOnlineApplication || validPaperApplication) &&
+    listing.status !== ListingsStatusEnum.closed &&
+    !scheduledApplicationOpenInFuture(listing)
 
   const showSecondarySection =
-    (hasPaperApplication && onlineApplicationUrl) ||
-    applicationMailingAddress ||
-    applicationPickUpAddress ||
-    applicationDropOffAddress
+    !hasLeasingAgentMethod &&
+    ((hasPaperApplication && onlineApplicationUrl) ||
+      applicationMailingAddress ||
+      applicationPickUpAddress ||
+      applicationDropOffAddress)
 
   if (!showSection) return <></>
 
@@ -142,13 +150,31 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     >
       <Card.Section
         divider="flush"
-        className={`${hasPrimaryApplicationMethod ? styles["card-section-background"] : null}`}
+        className={`${
+          !hasLeasingAgentMethod && hasPrimaryApplicationMethod
+            ? styles["card-section-background"]
+            : null
+        }`}
       >
         <Heading priority={2} size={"lg"} className={"seeds-m-be-header"}>
           {t("listings.apply.howToApply")}
         </Heading>
-        {hasPrimaryApplicationMethod && (
-          <>{onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}</>
+        {hasLeasingAgentMethod ? (
+          <>
+            <Heading priority={3} size={"md"} className={"seeds-m-be-header"}>
+              {t("leasingAgent.contactManagerProp")}
+            </Heading>
+            <p>{t("listings.apply.referToLeasingAgentContact")}</p>
+          </>
+        ) : (
+          hasPrimaryApplicationMethod && (
+            <>
+              {onlineApplicationUrl ? ApplyOnlineButton : DownloadApplicationButton}
+              <div className={"seeds-m-bs-content"}>
+                {listing.externalURL && t("listings.apply.applyOnlineMessage")}
+              </div>
+            </>
+          )
         )}
       </Card.Section>
       {showSecondarySection && (
@@ -191,7 +217,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
               <Heading size={"md"} priority={3} className={`seeds-m-be-header`}>
                 {t("listings.apply.sendByUsMail")}
               </Heading>
-              <Address address={applicationMailingAddress} />
+              <Address address={applicationMailingAddress} getDirections={true} />
               {postmarkString && <p className={"seeds-m-bs-label"}>{postmarkString}</p>}
             </div>
           )}

@@ -1,31 +1,38 @@
 import React, { useContext, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
-
-import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
+import { Field, FieldGroup, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  Application,
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
-  ethnicityKeys,
-  raceKeys,
-  isKeyIncluded,
-  getCustomValue,
-  howDidYouHear,
-  fieldGroupObjectToArray,
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
-  listingSectionQuestions,
+  ethnicityKeys,
+  fieldGroupObjectToArray,
+  genderKeys,
+  getCustomValue,
+  getRaceEthnicityOptions,
+  howDidYouHear,
+  isKeyIncluded,
   limitedHowDidYouHear,
+  listingSectionQuestions,
+  pushGtmEvent,
+  sexualOrientationKeys,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
@@ -39,24 +46,53 @@ const ApplicationDemographics = () => {
     currentPageSection += 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, watch, getValues } = useForm<Record<string, any>>({
     defaultValues: {
-      ethnicity: application.demographics.ethnicity,
-      race: application.demographics.race,
+      ethnicity: application.demographics?.ethnicity,
+      race: application.demographics?.race,
     },
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "demographics",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "demographics",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
+
+  const spokenLanguageValue: string = watch(
+    "spokenLanguage",
+    application.demographics?.spokenLanguage
+  )
 
   const onSubmit = (data) => {
-    conductor.currentStep.save({
+    const pendingSave = {
       demographics: {
-        ethnicity: data.ethnicity,
-        gender: "",
-        sexualOrientation: "",
+        ethnicity: data.ethnicity || "",
+        gender: enableGenderQuestion ? data.gender : "",
+        sexualOrientation: enableSexualOrientationQuestion ? data.sexualOrientation : "",
         howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
+        spokenLanguage: enableSpokenLanguage
+          ? data.spokenLanguage === "notListed"
+            ? `${data.spokenLanguage}:${data.spokenLanguageNotListed}`
+            : data.spokenLanguage
+          : "",
       },
+    } as Partial<Application>
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.routeToNextOrReturnUrl()
   }
 
   const enableLimitedHowDidYouHear = isFeatureFlagOn(
@@ -64,16 +100,46 @@ const ApplicationDemographics = () => {
     FeatureFlagEnum.enableLimitedHowDidYouHear
   )
 
+  const disableEthnicityQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.disableEthnicityQuestion
+  )
+
+  const enableSpokenLanguage = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableSpokenLanguage
+  )
+
+  const enableGenderQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableGenderQuestion
+  )
+
+  const enableSexualOrientationQuestion = isFeatureFlagOn(
+    conductor.config,
+    FeatureFlagEnum.enableSexualOrientationQuestion
+  )
+
+  const getSpokenLanguageOptions = () => {
+    const availableLanguages =
+      conductor.config.visibleSpokenLanguages && conductor.config.visibleSpokenLanguages.length > 0
+        ? conductor.config.visibleSpokenLanguages
+        : []
+    return availableLanguages
+  }
+
   const howDidYouHearOptions = () => {
     return (enableLimitedHowDidYouHear ? limitedHowDidYouHear : howDidYouHear)?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: application.demographics.howDidYouHear?.includes(item.id),
+      defaultChecked: application.demographics?.howDidYouHear?.includes(item.id),
       register,
     }))
   }
 
   const raceOptions = useMemo(() => {
+    const raceKeys = getRaceEthnicityOptions(conductor.config.raceEthnicityConfiguration)
+    if (!raceKeys) return []
     return Object.keys(raceKeys).map((rootKey) => ({
       id: rootKey,
       label: t(`application.review.demographics.raceOptions.${rootKey}`),
@@ -92,6 +158,7 @@ const ApplicationDemographics = () => {
       })),
       dataTestId: rootKey,
     }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [register])
 
   useEffect(() => {
@@ -102,13 +169,18 @@ const ApplicationDemographics = () => {
     })
   }, [profile])
 
+  const showRaceQuestion = raceOptions.length > 0
+  const showEthnicitySection = !disableEthnicityQuestion
+  const showSpokenLanguageSection =
+    enableSpokenLanguage && (conductor.config?.visibleSpokenLanguages?.length ?? 0) > 0
+
   return (
     <FormsLayout
       pageTitle={`${t("pageTitle.demographics")} - ${t("listings.apply.applyOnline")} - ${
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.review.demographics.title")}
@@ -123,37 +195,129 @@ const ApplicationDemographics = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <CardSection divider={"inset"}>
-            <fieldset>
-              <legend className="text__caps-spaced">
-                {t("application.review.demographics.raceLabel")}
-              </legend>
-              <FieldGroup
-                name="race"
-                fields={raceOptions}
-                type="checkbox"
-                register={register}
-                strings={{
-                  description: "",
-                }}
-                dataTestId={"app-demographics-race"}
-              />
-            </fieldset>
-            <div className={"pt-4"}>
-              <Select
-                id="ethnicity"
-                name="ethnicity"
-                label={t("application.review.demographics.ethnicityLabel")}
-                placeholder={t("t.selectOne")}
-                register={register}
-                labelClassName="text__caps-spaced mb-3"
-                controlClassName="control"
-                options={ethnicityKeys}
-                keyPrefix="application.review.demographics.ethnicityOptions"
-                dataTestId={"app-demographics-ethnicity"}
-              />
-            </div>
+            {showRaceQuestion && (
+              <fieldset>
+                <legend className="text__caps-spaced">
+                  {!disableEthnicityQuestion
+                    ? t("application.review.demographics.raceLabelNoEthnicity")
+                    : t("application.review.demographics.raceLabel")}
+                </legend>
+
+                <FieldGroup
+                  name="race"
+                  fields={raceOptions}
+                  type="checkbox"
+                  register={register}
+                  strings={{
+                    description: "",
+                  }}
+                  dataTestId={"app-demographics-race"}
+                />
+              </fieldset>
+            )}
+            {showEthnicitySection && (
+              <div className={showRaceQuestion ? "seeds-p-bs-8" : ""}>
+                <Select
+                  id="ethnicity"
+                  name="ethnicity"
+                  label={t("application.review.demographics.ethnicityLabel")}
+                  placeholder={t("t.selectOne")}
+                  register={register}
+                  labelClassName="text__caps-spaced mb-0"
+                  controlClassName="control"
+                  options={ethnicityKeys}
+                  keyPrefix="application.review.demographics.ethnicityOptions"
+                  dataTestId={"app-demographics-ethnicity"}
+                />
+              </div>
+            )}
+            {showSpokenLanguageSection && (
+              <div className={showRaceQuestion || showEthnicitySection ? "seeds-p-bs-8" : ""}>
+                <Select
+                  id="spokenLanguage"
+                  name="spokenLanguage"
+                  defaultValue={
+                    application.demographics?.spokenLanguage?.includes("notListed")
+                      ? "notListed"
+                      : application.demographics?.spokenLanguage
+                  }
+                  label={t("application.review.demographics.spokenLanguageLabel")}
+                  placeholder={t("t.selectOne")}
+                  register={register}
+                  labelClassName="text__caps-spaced mb-0"
+                  controlClassName="control"
+                  options={getSpokenLanguageOptions()}
+                  keyPrefix="application.review.demographics.spokenLanguageOptions"
+                  dataTestId={"app-demographics-spoken-language"}
+                />
+                {spokenLanguageValue?.includes("notListed") && (
+                  <Field
+                    id="spokenLanguageNotListed"
+                    name="spokenLanguageNotListed"
+                    defaultValue={
+                      application.demographics?.spokenLanguage?.includes("notListed")
+                        ? application.demographics?.spokenLanguage.split(":")[1]
+                        : undefined
+                    }
+                    label={t("application.review.demographics.spokenLanguageSpecify")}
+                    validation={{ required: true }}
+                    register={register}
+                  />
+                )}
+              </div>
+            )}
+            {enableGenderQuestion && (
+              <div
+                className={
+                  showRaceQuestion || showEthnicitySection || showSpokenLanguageSection
+                    ? "seeds-p-bs-8"
+                    : ""
+                }
+              >
+                <Select
+                  id="gender"
+                  name="gender"
+                  label={t("application.review.demographics.genderLabel")}
+                  defaultValue={application.demographics?.gender}
+                  placeholder={t("t.selectOne")}
+                  register={register}
+                  labelClassName="text__caps-spaced mb-0"
+                  controlClassName="control"
+                  options={genderKeys}
+                  keyPrefix="application.review.demographics.genderOptions"
+                  dataTestId={"app-demographics-gender"}
+                />
+              </div>
+            )}
+            {enableSexualOrientationQuestion && (
+              <div
+                className={
+                  showRaceQuestion ||
+                  showEthnicitySection ||
+                  showSpokenLanguageSection ||
+                  enableGenderQuestion
+                    ? "seeds-p-bs-8"
+                    : ""
+                }
+              >
+                <Select
+                  id="sexualOrientation"
+                  name="sexualOrientation"
+                  label={t("application.review.demographics.sexualOrientationLabel")}
+                  defaultValue={application.demographics.sexualOrientation}
+                  placeholder={t("t.selectOne")}
+                  register={register}
+                  labelClassName="text__caps-spaced mb-0"
+                  controlClassName="control"
+                  options={sexualOrientationKeys}
+                  keyPrefix="application.review.demographics.sexualOrientationOptions"
+                  dataTestId={"app-demographics-sexual-orientation"}
+                />
+              </div>
+            )}
           </CardSection>
 
           <CardSection divider={"flush"} className={"border-none"}>
@@ -177,3 +341,5 @@ const ApplicationDemographics = () => {
 }
 
 export default ApplicationDemographics
+
+export const getStaticProps = sharedGetStaticProps

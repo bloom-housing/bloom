@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef, useEffect, useCallback } from "react"
+import Head from "next/head"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { GoogleReCaptcha } from "react-google-recaptcha-v3"
@@ -10,8 +11,9 @@ import {
   FormSignIn,
   ResendConfirmationModal,
   FormSignInDefault,
+  useMutate,
 } from "@bloom-housing/shared-helpers"
-import { useMutate, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
   EnumRenderStep,
@@ -54,6 +56,7 @@ const SignIn = () => {
   }>()
 
   const reCaptchaEnabled = !!process.env.reCaptchaKey
+  const showSmsMfa = String(process.env.showSmsMfa).toLowerCase() === "true"
 
   const {
     mutate: mutateResendConfirmation,
@@ -86,7 +89,9 @@ const SignIn = () => {
             setConfirmationStatusMessage({
               message: {
                 title: t("errors.somethingWentWrong"),
-                description: t("authentication.signIn.errorGenericMessage"),
+                description: t("authentication.signIn.errorGenericMessage", {
+                  contactEmail: t("resources.contactEmail"),
+                }),
                 error: err,
               },
               type: "alert",
@@ -152,11 +157,14 @@ const SignIn = () => {
               setEmail,
               setPassword,
               setRenderStep,
+              setMfaType,
               determineNetworkError,
               login,
+              requestMfaCode,
               router,
               resetNetworkError,
               setLoading,
+              showSmsMfa,
               reCaptchaEnabled,
               reCaptchaToken,
               setRefreshReCaptcha,
@@ -244,8 +252,21 @@ const SignIn = () => {
     )
   }
 
+  const siteTitle = t("nav.siteTitlePartners")
+  const metaDescription = t("pageDescription.partnersSignIn", { siteTitle })
+
   return (
     <>
+      <Head>
+        <title>{`Sign in - ${siteTitle}`}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={siteTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={siteTitle} />
+        <meta property="twitter:description" content={metaDescription} />
+      </Head>
       <ResendConfirmationModal
         isOpen={confirmationStatusModal}
         onClose={() => {
@@ -257,7 +278,7 @@ const SignIn = () => {
         onSubmit={(email) => onResendConfirmationSubmit(email)}
         loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
       />
-      <FormsLayout title={`Sign in - ${t("nav.siteTitlePartners")}`}>{formToRender}</FormsLayout>
+      <FormsLayout title={`Sign in - ${siteTitle}`}>{formToRender}</FormsLayout>
     </>
   )
 }

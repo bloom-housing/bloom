@@ -11,7 +11,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
 
-export default class Property extends AbstractDTO {
+export class Property extends AbstractDTO {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })

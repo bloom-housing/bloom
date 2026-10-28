@@ -15,7 +15,7 @@ import {
   FormAddress,
 } from "@bloom-housing/ui-components"
 import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
-import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import SectionWithGrid from "../../shared/SectionWithGrid"
 
@@ -72,6 +72,7 @@ type ApplicationFormMemberProps = {
   editedMemberId?: number
   enableFullTimeStudentQuestion?: boolean
   disableWorkInRegion?: boolean
+  visibleHouseholdMemberRelationships?: HouseholdMemberRelationship[]
 }
 
 const FormMember = ({
@@ -81,6 +82,7 @@ const FormMember = ({
   editedMemberId,
   enableFullTimeStudentQuestion,
   disableWorkInRegion,
+  visibleHouseholdMemberRelationships,
 }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.orderId === editedMemberId)[0]
@@ -105,6 +107,11 @@ const FormMember = ({
       fullTimeStudent: currentlyEdited?.fullTimeStudent,
     },
   })
+
+  const relationshipKeys =
+    visibleHouseholdMemberRelationships?.length > 0
+      ? ["", ...visibleHouseholdMemberRelationships]
+      : ["", ...Object.values(HouseholdMemberRelationship)]
 
   const sameAddressField = watch("sameAddress")
   const workInRegionField = watch("workInRegion")

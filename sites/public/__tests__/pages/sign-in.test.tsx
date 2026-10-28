@@ -1,13 +1,16 @@
 import React from "react"
-import { render, fireEvent, waitFor, act } from "@testing-library/react"
+import { render, fireEvent, waitFor, act, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 import { MessageContext, AuthContext } from "@bloom-housing/shared-helpers"
-import { User, UserService } from "../../../../shared-helpers/src/types/backend-swagger"
+import { jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import {
+  FeatureFlagEnum,
+  User,
+  UserService,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { SignIn as SignInComponent } from "../../src/pages/sign-in"
 import { Verify } from "../../src/pages/verify"
-
-const initialStateLoaded = false
-let profile: User | undefined
 
 let originalShowPwdless
 
@@ -19,7 +22,7 @@ const TOAST_MESSAGE = {
 const renderSignInPage = () =>
   render(
     <MessageContext.Provider value={TOAST_MESSAGE}>
-      <SignInComponent />
+      <SignInComponent jurisdiction={jurisdiction} />
     </MessageContext.Provider>
   )
 
@@ -37,6 +40,63 @@ describe("Sign In Page", () => {
     ;(useRouter as jest.Mock).mockReturnValue("")
   })
 
+  it("opens account type dialog when housing advocate feature flag is enabled", async () => {
+    const advocateJurisdiction = {
+      ...jurisdiction,
+      featureFlags: [
+        ...(jurisdiction.featureFlags || []),
+        {
+          name: FeatureFlagEnum.enableHousingAdvocate,
+          id: "flag-id",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          active: true,
+          description: "",
+          jurisdictions: [],
+        },
+      ],
+    }
+
+    render(<SignInComponent jurisdiction={advocateJurisdiction} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }))
+
+    expect(
+      await screen.findByRole("dialog", { name: "Choose an account type" })
+    ).toBeInTheDocument()
+  })
+
+  it("does not open account type dialog when housing advocate feature flag is disabled", () => {
+    const mockRouter = {
+      query: {},
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+    const advocateJurisdiction = {
+      ...jurisdiction,
+      featureFlags: [
+        ...(jurisdiction.featureFlags || []),
+        {
+          name: FeatureFlagEnum.enableHousingAdvocate,
+          id: "flag-id",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          active: false,
+          description: "",
+          jurisdictions: [],
+        },
+      ],
+    }
+
+    render(<SignInComponent jurisdiction={advocateJurisdiction} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "Create account" }))
+
+    expect(mockRouter.push).toHaveBeenCalledWith("/create-account")
+
+    expect(screen.queryByText("Choose an account type")).not.toBeInTheDocument()
+  })
+
   it("renders all page elements including fields, buttons and links", () => {
     const { getByText, getByTestId, getByLabelText, getByRole } = renderSignInPage()
 
@@ -49,7 +109,7 @@ describe("Sign In Page", () => {
     expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
 
     expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
-    expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+    expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
   })
 
   it("shows success toast with user's first name on successful login", async () => {
@@ -68,7 +128,7 @@ describe("Sign In Page", () => {
         }}
       >
         <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -86,11 +146,92 @@ describe("Sign In Page", () => {
         undefined,
         undefined,
         undefined,
+        undefined,
         undefined
       )
       expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
         variant: "success",
       })
+    })
+  })
+
+  it("redirects to the correct page on successful login", async () => {
+    const mockUser = { firstName: "User", id: "user-123" }
+    const mockLogin = jest.fn().mockResolvedValue(mockUser)
+    const mockAddToast = jest.fn()
+    const mockRouter = {
+      query: { redirectUrl: "/applications/start/choose-language", listingId: "12345" },
+      push: jest.fn(),
+    }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    const { getByLabelText, getByRole } = render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent jurisdiction={jurisdiction} />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    // Complete login
+    fireEvent.change(getByLabelText("Email"), { target: { value: "user@example.com" } })
+    fireEvent.change(getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(getByRole("button", { name: /sign in/i }))
+
+    // Verify toast is shown with the correct message
+    await waitFor(() => {
+      expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+        variant: "success",
+      })
+      expect(mockRouter.push).toHaveBeenCalledWith({
+        pathname: "/applications/start/choose-language",
+        query: { listingId: "12345" },
+      })
+    })
+  })
+
+  it("allows logging in by pressing the Enter key", async () => {
+    const mockUser = { firstName: "User", id: "user-123" }
+    const mockLogin = jest.fn().mockResolvedValue(mockUser)
+    const mockAddToast = jest.fn()
+    const mockRouter = { query: {}, push: jest.fn() }
+    ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+    render(
+      <AuthContext.Provider
+        value={{
+          initialStateLoaded: true,
+          profile: undefined,
+          login: mockLogin,
+        }}
+      >
+        <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
+          <SignInComponent jurisdiction={jurisdiction} />
+        </MessageContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    await userEvent.type(screen.getByLabelText("Email"), "user@example.com")
+    await userEvent.type(screen.getByLabelText("Password"), "password123{enter}")
+
+    // Verify toast is shown with the correct message
+    expect(mockLogin).toHaveBeenCalledWith(
+      "user@example.com",
+      "password123",
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    )
+    expect(mockAddToast).toHaveBeenCalledWith("Welcome back, User!", {
+      variant: "success",
     })
   })
 
@@ -141,18 +282,77 @@ describe("Sign In Page", () => {
     })
   })
 
-  describe("User not logged in", () => {
-    it("shows the sign-in form", () => {
-      const { getByLabelText, getByText } = render(
-        <AuthContext.Provider value={{ initialStateLoaded, profile }}>
+  describe("User already logged in", () => {
+    it("redirects to redirectUrl when already authenticated", async () => {
+      const mockRouter = { query: { redirectUrl: "/account/notifications" }, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: { firstName: "User", id: "user-123" } as User,
+          }}
+        >
           <MessageContext.Provider value={TOAST_MESSAGE}>
-            <SignInComponent />
+            <SignInComponent jurisdiction={jurisdiction} />
           </MessageContext.Provider>
         </AuthContext.Provider>
       )
-      expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
-      expect(getByLabelText("Email")).toBeInTheDocument()
-      expect(getByLabelText("Password")).toBeInTheDocument()
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith({
+          pathname: "/account/notifications",
+          query: {},
+        })
+      })
+    })
+
+    it("redirects to dashboard when no redirectUrl and already authenticated", async () => {
+      const mockRouter = { query: {}, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: { firstName: "User", id: "user-123" } as User,
+          }}
+        >
+          <MessageContext.Provider value={TOAST_MESSAGE}>
+            <SignInComponent jurisdiction={jurisdiction} />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith({ pathname: "/account/dashboard", query: {} })
+      })
+    })
+
+    it.each([
+      ["https://evil.com", "external URL"],
+      ["//evil.com", "protocol-relative URL"],
+    ])("redirects to dashboard instead of %s (%s)", async (maliciousUrl) => {
+      const mockRouter = { query: { redirectUrl: maliciousUrl }, push: jest.fn() }
+      ;(useRouter as jest.Mock).mockReturnValue(mockRouter)
+
+      render(
+        <AuthContext.Provider
+          value={{
+            initialStateLoaded: true,
+            profile: { firstName: "User", id: "user-123" } as User,
+          }}
+        >
+          <MessageContext.Provider value={TOAST_MESSAGE}>
+            <SignInComponent jurisdiction={jurisdiction} />
+          </MessageContext.Provider>
+        </AuthContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(mockRouter.push).toHaveBeenCalledWith({ pathname: "/account/dashboard", query: {} })
+      })
     })
   })
 })
@@ -166,7 +366,7 @@ describe("Passwordless Sign In page", () => {
   const renderSignInPage = () =>
     render(
       <MessageContext.Provider value={TOAST_MESSAGE}>
-        <SignInComponent />
+        <SignInComponent jurisdiction={jurisdiction} />
       </MessageContext.Provider>
     )
 
@@ -196,7 +396,7 @@ describe("Passwordless Sign In page", () => {
     expect(
       getByText("Sign up quickly with no need to remember any passwords.", { selector: "div" })
     ).toBeInTheDocument()
-    expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+    expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
   })
 
   it("shows error alert and email validation error after clicking 'Get code to sign in' button without filling out email field", async () => {
@@ -259,7 +459,7 @@ describe("Passwordless Sign In page", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -295,7 +495,7 @@ describe("Passwordless Sign In page", () => {
         }}
       >
         <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -310,6 +510,7 @@ describe("Passwordless Sign In page", () => {
       expect(mockLogin).toHaveBeenCalledWith(
         "user@example.com",
         "password123",
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -351,22 +552,22 @@ describe("Mandated accounts", () => {
   const renderSignInWithMandatedAccounts = () =>
     render(
       <MessageContext.Provider value={TOAST_MESSAGE}>
-        <SignInComponent />
+        <SignInComponent jurisdiction={jurisdiction} />
       </MessageContext.Provider>
     )
 
   describe("Desktop view", () => {
     it("shows sign-in form", () => {
-      const { getByText, getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
+      const { getByLabelText, getByRole } = renderSignInWithMandatedAccounts()
 
-      expect(getByText("Sign in", { selector: "h1" })).toBeInTheDocument()
+      expect(getByRole("heading", { name: "Sign in", level: 1 })).toBeInTheDocument()
       expect(getByLabelText("Email")).toBeInTheDocument()
       expect(getByLabelText("Password")).toBeInTheDocument()
       expect(getByRole("button", { name: /sign in/i })).toBeInTheDocument()
       expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
 
-      expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
-      expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+      expect(getByRole("heading", { name: "Don't have an account?", level: 2 })).toBeInTheDocument()
+      expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
     })
 
     it("redirects to application page with listing ID after successful sign-in", async () => {
@@ -392,7 +593,7 @@ describe("Mandated accounts", () => {
           }}
         >
           <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-            <SignInComponent />
+            <SignInComponent jurisdiction={jurisdiction} />
           </MessageContext.Provider>
         </AuthContext.Provider>
       )
@@ -448,7 +649,7 @@ describe("Mandated accounts", () => {
         expect(getByRole("link", { name: /forgot password/i })).toBeInTheDocument()
 
         expect(getByText("Don't have an account?", { selector: "h2" })).toBeInTheDocument()
-        expect(getByRole("link", { name: /create account/i })).toBeInTheDocument()
+        expect(getByRole("button", { name: /create account/i })).toBeInTheDocument()
       })
 
       it("shows success toast after successful login with password", async () => {
@@ -464,7 +665,7 @@ describe("Mandated accounts", () => {
             }}
           >
             <MessageContext.Provider value={{ ...TOAST_MESSAGE, addToast: mockAddToast }}>
-              <SignInComponent />
+              <SignInComponent jurisdiction={jurisdiction} />
             </MessageContext.Provider>
           </AuthContext.Provider>
         )
@@ -523,7 +724,7 @@ describe("User is not confirmed flow", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -575,7 +776,7 @@ describe("User's password is out of date flow", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )
@@ -692,7 +893,7 @@ describe("Resend confirmation flow", () => {
         }}
       >
         <MessageContext.Provider value={TOAST_MESSAGE}>
-          <SignInComponent />
+          <SignInComponent jurisdiction={jurisdiction} />
         </MessageContext.Provider>
       </AuthContext.Provider>
     )

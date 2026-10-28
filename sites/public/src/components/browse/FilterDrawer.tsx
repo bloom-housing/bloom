@@ -1,20 +1,28 @@
-import { Form, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Form, MAX_BATHROOMS, tIfExists } from "@bloom-housing/shared-helpers"
 import { Button, Drawer } from "@bloom-housing/ui-seeds"
 import { useForm } from "react-hook-form"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
+  FilterAvailabilityEnum,
   RegionEnum,
   HomeTypeEnum,
   ListingFilterKeys,
   MultiselectQuestion,
   FeatureFlagEnum,
+  ListingFeaturesConfiguration,
+  ParkingTypeEnum,
+  UnitAccessibilityPriorityTypeEnum,
+  IdDTO,
+  ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import styles from "./FilterDrawer.module.scss"
 import {
+  AccessibilitySection,
   buildDefaultFilterFields,
   CheckboxGroup,
   FilterData,
   getAvailabilityValues,
+  RadioGroup,
   RentSection,
   SearchSection,
   unitTypeMapping,
@@ -23,15 +31,18 @@ import {
   unitTypeUnitGroupsMapping,
 } from "./FilterDrawerHelpers"
 import { isTrue } from "../../lib/helpers"
-
 export interface FilterDrawerProps {
+  activeFeatureFlags?: FeatureFlagEnum[]
   filterState: FilterData
   isOpen: boolean
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
+  multiselectData: MultiselectQuestion[]
+  onClear: (resetFilters: (data: FilterData) => void) => void
   onClose: () => void
   onSubmit: (data: FilterData) => void
-  onClear: (resetFilters: (data: FilterData) => void) => void
-  multiselectData: MultiselectQuestion[]
-  activeFeatureFlags?: FeatureFlagEnum[]
+  regions?: string[]
+  subJurisdictions?: IdDTO[]
+  visibleAccessibilityPriorityTypes?: UnitAccessibilityPriorityTypeEnum[]
 }
 
 const FilterDrawer = (props: FilterDrawerProps) => {
@@ -44,6 +55,7 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     setError,
     clearErrors,
     reset,
+    watch,
     formState: { errors },
   } = useForm({ mode: "onBlur" })
 
@@ -51,8 +63,67 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     (entry) => entry === FeatureFlagEnum.enableUnitGroups
   )
 
-  const availabilityLabels = getAvailabilityValues(enableUnitGroups).map((key) =>
+  const enableRegions = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableRegions
+  )
+
+  const enableConfigurableRegions = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableConfigurableRegions
+  )
+
+  const enableAccessibilityFeatures = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableAccessibilityFeatures
+  )
+
+  const enableParkingType = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableParkingType
+  )
+
+  const enableIsVerified = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableIsVerified
+  )
+
+  const enableHomeType = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableHomeType
+  )
+
+  const enableSection8 = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableSection8Question
+  )
+
+  const enableFilterByBathroom = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByBathroom
+  )
+
+  const enableFilterByCounty = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByCounty
+  )
+
+  const enableFilterByStatus = props.activeFeatureFlags?.some(
+    (entry) => entry === FeatureFlagEnum.enableFilterByStatus
+  )
+
+  const statusFilterOption = watch(
+    ListingFilterKeys.status,
+    props.filterState?.[ListingFilterKeys.status] ?? ListingsStatusEnum.active
+  )
+
+  const onSubmit = (data: FilterData) => {
+    if (data[ListingFilterKeys.status] === ListingsStatusEnum.closed) {
+      delete data[ListingFilterKeys.availabilities]
+    }
+    props.onSubmit(data)
+  }
+
+  // When unit groups are off, closed waitlist has no backend signal, so hide it
+  const availabilityDisplayValues = getAvailabilityValues(enableUnitGroups).filter(
+    (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
+  )
+  const availabilityLabels = availabilityDisplayValues.map((key) =>
     t(`listings.availability.${key}`)
+  )
+  const availabilityKeys = getAvailabilityValues(false).filter(
+    (key) => enableUnitGroups || key !== FilterAvailabilityEnum.closedWaitlist
   )
 
   return (
@@ -65,107 +136,221 @@ const FilterDrawer = (props: FilterDrawerProps) => {
     >
       <Drawer.Header id="drawer-heading">{t("t.filter")}</Drawer.Header>
       <Drawer.Content id="drawer-content">
-        <Form onSubmit={handleSubmit(props.onSubmit)} id="filter">
-          <CheckboxGroup
-            groupLabel={t("listings.confirmedListings")}
-            fields={[
-              {
-                key: ListingFilterKeys.isVerified,
-                label: t("listings.confirmedListingsOnly"),
-                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.isVerified]),
-              },
-            ]}
-            register={register}
-            customColumnNumber={1}
-          />
-          <CheckboxGroup
-            groupLabel={t("t.availability")}
-            fields={buildDefaultFilterFields(
-              ListingFilterKeys.availabilities,
-              availabilityLabels,
-              getAvailabilityValues(false),
-              props.filterState
+        <div role="document">
+          <Form method="get" onSubmit={handleSubmit(onSubmit)} id="filter">
+            <SearchSection register={register} nameState={props.filterState?.name} />
+            {enableIsVerified && (
+              <CheckboxGroup
+                groupLabel={t("listings.confirmedListings")}
+                fields={[
+                  {
+                    key: ListingFilterKeys.isVerified,
+                    label: t("listings.confirmedListingsOnly"),
+                    defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.isVerified]),
+                  },
+                ]}
+                register={register}
+                customColumnNumber={1}
+              />
             )}
-            register={register}
-          />
-          <CheckboxGroup
-            groupLabel={t("listings.homeType")}
-            fields={buildDefaultFilterFields(
-              ListingFilterKeys.homeTypes,
-              "listings.homeType",
-              Object.keys(HomeTypeEnum),
-              props.filterState
+            {enableFilterByStatus && (
+              <RadioGroup
+                groupLabel={t("listingFilters.status")}
+                name={ListingFilterKeys.status}
+                fields={[ListingsStatusEnum.active, ListingsStatusEnum.closed].map((status) => {
+                  return {
+                    key: `${ListingFilterKeys.status}.${status}`,
+                    value: status,
+                    label: t(`listingFilters.statusOptions.${status}`),
+                    defaultChecked:
+                      (props.filterState?.[ListingFilterKeys.status] ??
+                        ListingsStatusEnum.active) === status,
+                  }
+                })}
+                register={register}
+              />
             )}
-            register={register}
-          />
-          <CheckboxGroup
-            groupLabel={t("listings.unitTypes.bedroomSize")}
-            fields={buildDefaultFilterFields(
-              ListingFilterKeys.bedroomTypes,
-              enableUnitGroups
-                ? unitTypesSortedByUnitGroups.map((unitType) =>
-                    t(unitTypeUnitGroupsMapping[unitType].labelKey)
-                  )
-                : unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
-              enableUnitGroups ? unitTypesSortedByUnitGroups : unitTypesSorted,
-              props.filterState
-            )}
-            register={register}
-          />
-          <RentSection
-            register={register}
-            getValues={getValues}
-            setValue={setValue}
-            filterState={props.filterState}
-            setError={setError}
-            clearErrors={clearErrors}
-            errors={errors}
-          />
-          <CheckboxGroup
-            groupLabel={t("t.region")}
-            fields={Object.keys(RegionEnum).map((region) => {
-              return {
-                key: `${ListingFilterKeys.regions}.${region}`,
-                label: region.replace("_", " "),
-                defaultChecked: isTrue(props.filterState?.[ListingFilterKeys.regions]?.[region]),
-              }
-            })}
-            register={register}
-          />
-          <CheckboxGroup
-            groupLabel={t("eligibility.accessibility.title")}
-            fields={buildDefaultFilterFields(
-              ListingFilterKeys.listingFeatures,
-              "eligibility.accessibility",
-              listingFeatures,
-              props.filterState
-            )}
-            register={register}
-          />
-          <SearchSection register={register} nameState={props.filterState?.name} />
-          {props.multiselectData?.length > 0 && (
             <CheckboxGroup
-              groupLabel={t("t.community")}
+              groupLabel={t("t.availability")}
               fields={buildDefaultFilterFields(
-                ListingFilterKeys.multiselectQuestions,
-                props.multiselectData?.map((multi) =>
-                  multi.untranslatedText
-                    ? t(`listingFilters.program.${multi.untranslatedText}`)
-                    : t(`listingFilters.program.${multi.text}`)
-                ),
-                props.multiselectData?.map((multi) => multi.id),
+                ListingFilterKeys.availabilities,
+                availabilityLabels,
+                availabilityKeys,
+                props.filterState
+              )}
+              disabled={statusFilterOption === ListingsStatusEnum.closed}
+              register={register}
+            />
+            {enableHomeType && (
+              <CheckboxGroup
+                groupLabel={t("listings.homeType")}
+                fields={buildDefaultFilterFields(
+                  ListingFilterKeys.homeTypes,
+                  "listings.homeType",
+                  Object.keys(HomeTypeEnum),
+                  props.filterState
+                )}
+                register={register}
+              />
+            )}
+            {enableParkingType && (
+              <CheckboxGroup
+                groupLabel={t("t.parkingTypes")}
+                fields={buildDefaultFilterFields(
+                  ListingFilterKeys.parkingType,
+                  "listings.parkingTypeOptions",
+                  Object.keys(ParkingTypeEnum),
+                  props.filterState
+                )}
+                register={register}
+              />
+            )}
+
+            <CheckboxGroup
+              groupLabel={t("listings.unitTypes.bedroomSize")}
+              fields={buildDefaultFilterFields(
+                ListingFilterKeys.bedroomTypes,
+                enableUnitGroups
+                  ? unitTypesSortedByUnitGroups.map((unitType) =>
+                      t(unitTypeUnitGroupsMapping[unitType].labelKey)
+                    )
+                  : unitTypesSorted.map((unitType) => t(unitTypeMapping[unitType].labelKey)),
+                enableUnitGroups ? unitTypesSortedByUnitGroups : unitTypesSorted,
                 props.filterState
               )}
               register={register}
             />
-          )}
-        </Form>
+            {enableFilterByBathroom && (
+              <RadioGroup
+                groupLabel={t("t.bathrooms")}
+                name={ListingFilterKeys.bathrooms}
+                fields={["", ...Array.from({ length: MAX_BATHROOMS }, (_, i) => `${i + 1}`)].map(
+                  (bathroomCount) => {
+                    return {
+                      key: `${ListingFilterKeys.bathrooms}.${bathroomCount || "any"}`,
+                      value: bathroomCount,
+                      label: bathroomCount ? `${bathroomCount}+` : t("t.any"),
+                      defaultChecked:
+                        (props.filterState?.[ListingFilterKeys.bathrooms] ?? "") === bathroomCount,
+                    }
+                  }
+                )}
+                register={register}
+              />
+            )}
+            <RentSection
+              register={register}
+              getValues={getValues}
+              setValue={setValue}
+              filterState={props.filterState}
+              setError={setError}
+              clearErrors={clearErrors}
+              errors={errors}
+              enableSection8={enableSection8}
+            />
+            {enableRegions && (
+              <CheckboxGroup
+                groupLabel={t("t.region")}
+                fields={Object.keys(RegionEnum).map((region) => {
+                  return {
+                    key: `${ListingFilterKeys.regions}.${region}`,
+                    label: region.replace("_", " "),
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.regions]?.[region]
+                    ),
+                  }
+                })}
+                register={register}
+              />
+            )}
+            {enableConfigurableRegions && (
+              <CheckboxGroup
+                groupLabel={t("t.region")}
+                fields={props.regions?.map((region) => {
+                  return {
+                    key: `${ListingFilterKeys.configurableRegions}.${region}`,
+                    label: region,
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.configurableRegions]?.[region]
+                    ),
+                  }
+                })}
+                register={register}
+              />
+            )}
+            {enableFilterByCounty && props.subJurisdictions?.length > 0 && (
+              <CheckboxGroup
+                groupLabel={t("t.county")}
+                fields={props.subJurisdictions?.map((county) => {
+                  return {
+                    key: `${ListingFilterKeys.jurisdictions}.${county.id}`,
+                    label: county.name,
+                    defaultChecked: isTrue(
+                      props.filterState?.[ListingFilterKeys.jurisdictions]?.[county.id]
+                    ),
+                  }
+                })}
+                register={register}
+                optionalSubNote={tIfExists("listingFilters.countyFilterNote") ?? undefined}
+              />
+            )}
+            {props.visibleAccessibilityPriorityTypes?.length > 0 && (
+              <CheckboxGroup
+                groupLabel={t("listings.accessibleUnits")}
+                fields={buildDefaultFilterFields(
+                  ListingFilterKeys.accessibilityPriorityTypes,
+                  props.visibleAccessibilityPriorityTypes.map((type) =>
+                    t(`listings.unit.accessibilityType.${type}`)
+                  ),
+                  props.visibleAccessibilityPriorityTypes,
+                  props.filterState
+                )}
+                register={register}
+              />
+            )}
+            {enableAccessibilityFeatures && props.listingFeaturesConfiguration && (
+              <AccessibilitySection
+                listingFeaturesConfiguration={props.listingFeaturesConfiguration}
+                filterState={props.filterState}
+                register={register}
+              />
+            )}
+
+            {props.multiselectData?.length > 0 && (
+              <CheckboxGroup
+                groupLabel={t("t.community")}
+                fields={buildDefaultFilterFields(
+                  ListingFilterKeys.multiselectQuestions,
+                  props.multiselectData?.map((multi) =>
+                    multi.untranslatedText
+                      ? t(`listingFilters.program.${multi.untranslatedText}`)
+                      : t(`listingFilters.program.${multi.text}`)
+                  ),
+                  props.multiselectData?.map((multi) => multi.id),
+                  props.filterState
+                )}
+                register={register}
+              />
+            )}
+          </Form>
+        </div>
       </Drawer.Content>
       <Drawer.Footer>
-        <Button type="submit" variant="primary" size="sm" nativeButtonProps={{ form: "filter" }}>
+        <Button
+          type="submit"
+          variant="primary"
+          size="sm"
+          nativeButtonProps={{ form: "filter" }}
+          id="show-listings-button"
+        >
           {t("listings.showMatchingListings")}
         </Button>
-        <Button variant="primary-outlined" size="sm" onClick={() => props.onClear(reset)}>
+        <Button
+          variant="primary-outlined"
+          size="sm"
+          onClick={() => props.onClear(reset)}
+          id="clear-listings-button"
+        >
           {t("listingFilters.clear")}
         </Button>
       </Drawer.Footer>

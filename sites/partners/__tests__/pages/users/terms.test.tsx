@@ -18,7 +18,7 @@ beforeEach(() => {
       return res(
         ctx.json({
           id: "user1",
-          roles: { id: "user1", isAdmin: true, isPartner: false },
+          userRoles: { id: "user1", isAdmin: true, isPartner: false },
           jurisdictions: [{ id: "id1", partnerTerms: "Example Terms" }],
         })
       )
@@ -26,7 +26,7 @@ beforeEach(() => {
     rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
       return res(ctx.json(""))
     }),
-    rest.put("http://localhost/api/adapter/user/%7Bid%7D", (_req, res, ctx) => {
+    rest.put("http://localhost/api/adapter/user/partner", (_req, res, ctx) => {
       return res(ctx.json(""))
     })
   )
@@ -63,9 +63,7 @@ describe("User Terms", () => {
     expect(await findByText("You must agree to the terms in order to continue")).toBeInTheDocument()
     fireEvent.click(agreeCheckbox)
     // Check if the error will disappear after user checks the agreement
-    expect(
-      await findByText("You must agree to the terms in order to continue")
-    ).not.toBeInTheDocument()
+    expect(queryByText("You must agree to the terms in order to continue")).not.toBeInTheDocument()
   })
 
   it("should navigate to dashboard on submit", async () => {

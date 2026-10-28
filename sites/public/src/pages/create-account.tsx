@@ -1,45 +1,64 @@
-import React, { useEffect, useContext, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
-import { Field, Form, t, DOBField, AlertBox } from "@bloom-housing/ui-components"
-import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
-dayjs.extend(customParseFormat)
+import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
+import React, { useEffect, useContext, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import {
   PageView,
   pushGtmEvent,
   AuthContext,
   BloomCard,
-  passwordRegex,
-  emailRegex,
+  Form,
+  tIfExists,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
-import FormsLayout from "../layouts/forms"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, AlertBox } from "@bloom-housing/ui-components"
+import { Button, Dialog, Heading } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import accountCardStyles from "./account/account.module.scss"
-import styles from "../../styles/create-account.module.scss"
-import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
+import {
+  accountNameFields,
+  createAccountPasswordFields,
+  dobFields,
+  emailFields,
+} from "../components/account/AccountFieldHelpers"
 import SignUpBenefits from "../components/account/SignUpBenefits"
 import SignUpBenefitsHeadingGroup from "../components/account/SignUpBenefitsHeadingGroup"
+import { TermsModal } from "../components/shared/TermsModal"
+import FormsLayout from "../layouts/forms"
+import { UserStatus } from "../lib/constants"
+import { useJurisdictionFeatureFlags } from "../lib/JurisdictionFeatureFlagsContext"
+import { sharedGetStaticProps } from "../lib/sharedPageProps"
+import styles from "../../styles/create-account.module.scss"
+import signUpBenefitsStyles from "../../styles/sign-up-benefits.module.scss"
+
+dayjs.extend(customParseFormat)
 
 const CreateAccount = () => {
-  const { createUser, resendConfirmation } = useContext(AuthContext)
+  const { createPublicUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   const signUpCopy = process.env.showMandatedAccounts
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { register, handleSubmit, errors, watch, clearErrors } = useForm()
   const [requestError, setRequestError] = useState<string>()
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openEmailModal, setOpenEmailModal] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const language = router.locale
   const listingId = router.query?.listingId as string
   const email = useRef({})
-  const password = useRef({})
   email.current = watch("email", "")
-  password.current = watch("password", "")
+
+  const featureFlags = useJurisdictionFeatureFlags()
+  const enablePublicTermsOfUse = featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enablePublicTermsOfUse
+  )
+
+  const [openTermsModal, setOpenTermsModal] = useState<boolean>(false)
+  const [isTermsLoading, setIsTermsLoading] = useState(false)
+  const [notChecked, setChecked] = useState(true)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -49,13 +68,22 @@ const CreateAccount = () => {
     })
   }, [])
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, isAcceptTerms) => {
+    if (!isAcceptTerms && enablePublicTermsOfUse) {
+      console.log(isAcceptTerms)
+      setOpenTermsModal(true)
+      return
+    }
+    setChecked(true)
     setLoading(true)
     try {
+      if (enablePublicTermsOfUse) {
+        setIsTermsLoading(true)
+      }
       const { dob, ...rest } = data
       const listingIdRedirect =
         process.env.showMandatedAccounts && listingId ? listingId : undefined
-      await createUser(
+      await createPublicUser(
         {
           ...rest,
           dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
@@ -76,11 +104,19 @@ const CreateAccount = () => {
           query: queryParams,
         })
       } else {
-        setOpenModal(true)
+        setOpenEmailModal(true)
+      }
+      if (enablePublicTermsOfUse) {
+        setIsTermsLoading(false)
+        setOpenTermsModal(false)
       }
       setLoading(false)
     } catch (err) {
       setLoading(false)
+      if (enablePublicTermsOfUse) {
+        setIsTermsLoading(false)
+        setOpenTermsModal(false)
+      }
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
@@ -99,6 +135,7 @@ const CreateAccount = () => {
     <FormsLayout
       className={signUpCopy ? "sm:max-w-lg md:max-w-full" : undefined}
       pageTitle={t("account.createAccount")}
+      metaDescription={t("pageDescription.createAccount")}
     >
       <div className={signUpCopy ? signUpBenefitsStyles["benefits-container"] : undefined}>
         {signUpCopy && (
@@ -107,160 +144,64 @@ const CreateAccount = () => {
           </div>
         )}
         <div className={signUpCopy ? signUpBenefitsStyles["benefits-form-container"] : undefined}>
-          <BloomCard iconSymbol="profile" title={t("account.createAccount")} headingPriority={1}>
+          <BloomCard
+            iconSymbol="userCircle"
+            title={t("account.createAccount")}
+            headingPriority={1}
+            iconClass={"card-icon"}
+            headingClass="seeds-large-heading"
+          >
             <>
               {requestError && (
                 <AlertBox onClose={() => setRequestError(undefined)} type="alert">
                   {requestError}
                 </AlertBox>
               )}
-              <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
+              <Form id="create-account" onSubmit={handleSubmit((data) => onSubmit(data, false))}>
+                {tIfExists("account.create.initialDisclaimer") && (
+                  <CardSection
+                    divider={"inset"}
+                    className={accountCardStyles["account-card-settings-section"]}
+                  >
+                    <p className={`${accountCardStyles["section-sub-note"]} seeds-m-be-6`}>
+                      {<Markdown>{t("account.create.initialDisclaimer")}</Markdown>}
+                    </p>
+                  </CardSection>
+                )}
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <fieldset id="userName">
-                    <legend className={styles["create-account-header"]}>
-                      {t("application.name.yourName")}
-                    </legend>
-
-                    <label className={styles["create-account-field"]} htmlFor="firstName">
-                      {t("application.name.firstOrGivenName")}
-                    </label>
-                    <Field
-                      controlClassName={styles["create-account-input"]}
-                      name="firstName"
-                      validation={{ required: true, maxLength: 64 }}
-                      error={errors.firstName}
-                      errorMessage={
-                        errors.firstName?.type === "maxLength"
-                          ? t("errors.maxLength", { length: 64 })
-                          : t("errors.firstNameError")
-                      }
-                      register={register}
-                    />
-
-                    <label className={styles["create-account-field"]} htmlFor="middleName">
-                      {t("application.name.middleNameOptional")}
-                    </label>
-                    <Field
-                      name="middleName"
-                      register={register}
-                      error={errors.middleName}
-                      validation={{ maxLength: 64 }}
-                      errorMessage={t("errors.maxLength", { length: 64 })}
-                      controlClassName={styles["create-account-input"]}
-                    />
-
-                    <label className={styles["create-account-field"]} htmlFor="lastName">
-                      {t("application.name.lastOrFamilyName")}
-                    </label>
-                    <Field
-                      name="lastName"
-                      validation={{ required: true, maxLength: 64 }}
-                      error={errors.lastName}
-                      register={register}
-                      errorMessage={
-                        errors.lastName?.type === "maxLength"
-                          ? t("errors.maxLength", { length: 64 })
-                          : t("errors.lastNameError")
-                      }
-                      controlClassName={styles["create-account-input"]}
-                    />
-                  </fieldset>
+                  {accountNameFields(errors, register, null, clearErrors)}
                 </CardSection>
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <DOBField
-                    register={register}
-                    required={true}
-                    error={errors.dob}
-                    name="dob"
-                    id="dob"
-                    watch={watch}
-                    validateAge18={true}
-                    errorMessage={t("errors.dateOfBirthErrorAge")}
-                    label={t("application.name.yourDateOfBirth")}
-                  />
-                  <p className={`field-note ${styles["create-account-dob-age-helper"]}`}>
-                    {t("application.name.dobHelper2")}
-                  </p>
-                  <p className={`field-note ${styles["create-account-dob-example"]}`}>
-                    {t("application.name.dobHelper")}
-                  </p>
+                  {dobFields(errors, register, watch, null, true)}
                 </CardSection>
 
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <Field
-                    type="email"
-                    name="email"
-                    label={t("application.name.yourEmailAddress")}
-                    validation={{ required: true, pattern: emailRegex }}
-                    error={errors.email}
-                    errorMessage={t("authentication.signIn.loginError")}
-                    register={register}
-                    controlClassName={styles["create-account-input"]}
-                    labelClassName={"text__caps-spaced"}
-                    note={
-                      process.env.showPwdless
-                        ? t("application.name.yourEmailAddressPwdlessHelper")
-                        : null
-                    }
-                  />
+                  {emailFields(
+                    errors,
+                    register,
+                    null,
+                    clearErrors,
+                    process.env.showPwdless
+                      ? t("application.name.yourEmailAddressPwdlessHelper")
+                      : null
+                  )}
                 </CardSection>
                 <CardSection
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <Field
-                    labelClassName={"text__caps-spaced"}
-                    type={"password"}
-                    name="password"
-                    note={t("authentication.createAccount.passwordInfo")}
-                    label={t("authentication.createAccount.password")}
-                    validation={{
-                      required: true,
-                      minLength: 8,
-                      pattern: passwordRegex,
-                    }}
-                    error={errors.password}
-                    errorMessage={t("authentication.signIn.passwordError")}
-                    register={register}
-                    controlClassName={styles["create-account-input"]}
-                  />
-                  <label className={styles["create-account-field"]} htmlFor="passwordConfirmation">
-                    {t("authentication.createAccount.reEnterPassword")}
-                  </label>
-                  <Field
-                    type="password"
-                    name="passwordConfirmation"
-                    validation={{
-                      validate: (value) =>
-                        value === password.current ||
-                        t("authentication.createAccount.errors.passwordMismatch"),
-                    }}
-                    onPaste={(e) => {
-                      e.preventDefault()
-                      e.nativeEvent.stopImmediatePropagation()
-                      return false
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault()
-                      e.nativeEvent.stopImmediatePropagation()
-                      return false
-                    }}
-                    error={errors.passwordConfirmation}
-                    errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-                    register={register}
-                    controlClassName={styles["create-account-input"]}
-                    label={t("authentication.createAccount.reEnterPassword")}
-                    readerOnly
-                  />
+                  <div className={"seeds-m-be-6"}>
+                    {createAccountPasswordFields(errors, register, styles["create-account-input"])}
+                  </div>
                   <Button
                     type="submit"
                     variant="primary"
@@ -273,13 +214,24 @@ const CreateAccount = () => {
                   divider={"inset"}
                   className={accountCardStyles["account-card-settings-section"]}
                 >
-                  <Heading priority={2} size="2xl" className="mb-6">
+                  <Heading priority={2} size="2xl" className="mb-6 seeds-medium-heading">
                     {t("account.haveAnAccount")}
                   </Heading>
                   <Button href="/sign-in" variant="primary-outlined">
                     {t("nav.signIn")}
                   </Button>
                 </CardSection>
+                {enablePublicTermsOfUse && (
+                  <TermsModal
+                    control={{ register, errors, handleSubmit }}
+                    isTermsLoading={isTermsLoading}
+                    notChecked={notChecked}
+                    onSubmit={(data) => onSubmit(data, true)}
+                    openTermsModal={openTermsModal}
+                    setChecked={setChecked}
+                    setOpenTermsModal={setOpenTermsModal}
+                  />
+                )}
               </Form>
             </>
           </BloomCard>
@@ -300,7 +252,7 @@ const CreateAccount = () => {
       </div>
 
       <Dialog
-        isOpen={openModal}
+        isOpen={openEmailModal}
         onClose={() => {
           void router.push("/sign-in")
           window.scrollTo(0, 0)
@@ -344,3 +296,5 @@ const CreateAccount = () => {
 }
 
 export default CreateAccount
+
+export const getStaticProps = sharedGetStaticProps

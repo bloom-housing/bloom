@@ -14,6 +14,7 @@ import {
   getListingStatusMessage,
   getListingStatusMessageContent,
   isFeatureFlagOn,
+  scheduledApplicationOpenInFuture,
 } from "../../../lib/helpers"
 import styles from "./Availability.module.scss"
 
@@ -131,17 +132,19 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
 
   const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
 
-  const statusMessage = getListingStatusMessageContent(
-    listing.status,
-    listing.applicationDueDate,
-    enableMarketingStatus,
-    enableMarketingStatusMonths,
-    listing.marketingType,
-    listing.marketingSeason,
-    listing.marketingMonth,
-    listing.marketingYear,
-    false
-  )
+  const statusMessage = scheduledApplicationOpenInFuture(listing)
+    ? null
+    : getListingStatusMessageContent(
+        listing.status,
+        listing.applicationDueDate,
+        enableMarketingStatus,
+        enableMarketingStatusMonths,
+        listing.marketingType,
+        listing.marketingSeason,
+        listing.marketingMonth,
+        listing.marketingYear,
+        false
+      )
   const unitsAvailable =
     listing.unitGroups.length > 0
       ? listing.unitGroups.reduce((acc, curr) => acc + curr.totalAvailable, 0)
@@ -221,7 +224,25 @@ export const Availability = ({ listing, jurisdiction }: AvailabilityProps) => {
     subheading
   )
 
+  const scheduledOpenContent = getCardSection(
+    t("listings.availability.comingSoon"),
+    undefined,
+    getListingStatusMessageContent(
+      listing.status,
+      listing.applicationDueDate,
+      enableMarketingStatus,
+      enableMarketingStatusMonths,
+      listing.marketingType,
+      listing.marketingSeason,
+      listing.marketingMonth,
+      listing.marketingYear,
+      false,
+      listing.scheduledApplicationOpenAt
+    )
+  )
+
   const getSections = () => {
+    if (scheduledApplicationOpenInFuture(listing)) return [scheduledOpenContent]
     if (enableMarketingStatus && listing.marketingType === MarketingTypeEnum.comingSoon)
       return [constructionContent]
     if (enableUnitGroups) {

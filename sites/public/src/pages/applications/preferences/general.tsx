@@ -1,15 +1,17 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { t, Form } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   listingSectionQuestions,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
@@ -68,3 +70,5 @@ const ApplicationPreferencesGeneral = () => {
 }
 
 export default ApplicationPreferencesGeneral
+
+export const getStaticProps = sharedGetStaticProps

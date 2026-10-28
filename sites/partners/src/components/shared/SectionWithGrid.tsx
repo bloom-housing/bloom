@@ -4,6 +4,7 @@ import { Grid, Heading, HeadingGroup } from "@bloom-housing/ui-seeds"
 interface SectionWithGridProps {
   bypassGrid?: boolean
   children: React.ReactNode
+  headingClassName?: string
   className?: string
   heading: React.ReactNode
   inset?: boolean
@@ -30,9 +31,14 @@ const SectionWithGrid = (props: SectionWithGridProps) => {
           headingProps={{ size: "xl" }}
           heading={props.heading}
           subheading={props.subheading}
+          className={props.headingClassName ? props.headingClassName : ""}
         />
       ) : (
-        <Heading className="spacer-content" size="xl" priority={2}>
+        <Heading
+          className={`spacer-content ${props.headingClassName ? props.headingClassName : ""}`}
+          size="xl"
+          priority={2}
+        >
           {props.heading}
         </Heading>
       )}

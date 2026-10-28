@@ -14,17 +14,12 @@ import { Button, Card, Drawer, Grid } from "@bloom-housing/ui-seeds"
 import {
   ApplicationMethodCreate,
   ApplicationMethodsTypeEnum,
-  FeatureFlagEnum,
+  EnumListingListingType,
   LanguagesEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  cloudinaryFileUploader,
-  fieldMessage,
-  fieldHasError,
-  getLabel,
-} from "../../../../lib/helpers"
+import { fileUploader, fieldMessage, fieldHasError, getLabel } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import styles from "../ListingForm.module.scss"
@@ -33,6 +28,7 @@ interface Methods {
   digital: ApplicationMethodCreate
   paper: ApplicationMethodCreate
   referral: ApplicationMethodCreate
+  leasingAgent: ApplicationMethodCreate
 }
 
 /**
@@ -78,26 +74,33 @@ export const phoneMask = (incomingNewValue: string): string => {
 
 type ApplicationTypesProps = {
   disableCommonApplication: boolean
+  disableReferralOpportunity: boolean
+  enableReferralQuestionUnits: boolean
   jurisdiction: string
   listing: FormListing
   requiredFields: string[]
+  defaultReferralText?: string
 }
 
 const ApplicationTypes = ({
   disableCommonApplication,
+  disableReferralOpportunity,
+  enableReferralQuestionUnits,
   jurisdiction,
   listing,
   requiredFields,
+  defaultReferralText,
 }: ApplicationTypesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, getValues } = useFormContext()
-  const { getJurisdictionLanguages, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { getJurisdictionLanguages } = useContext(AuthContext)
 
   const getDefaultMethods = () => {
     const temp: Methods = {
       digital: null,
       paper: null,
       referral: null,
+      leasingAgent: null,
     }
     const applicationMethods =
       getValues()?.applicationMethods?.length > 0
@@ -116,6 +119,9 @@ const ApplicationTypes = ({
         case ApplicationMethodsTypeEnum.Referral:
           temp["referral"] = method
           break
+        case ApplicationMethodsTypeEnum.LeasingAgent:
+          temp["leasingAgent"] = method
+          break
         default:
           break
       }
@@ -124,10 +130,12 @@ const ApplicationTypes = ({
   }
 
   // watch fields
+  const listingType = watch("listingType")
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
+  const leasingAgentApplicationChoice = watch("leasingAgentApplicationChoice")
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -136,24 +144,20 @@ const ApplicationTypes = ({
   const [selectedLanguage, setSelectedLanguage] = useState("")
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
-  const [cloudinaryData, setCloudinaryData] = useState({
+  const [fileUploadData, setFileUploadData] = useState({
     id: "",
     url: "",
   })
   const referralPhoneRef = React.useRef("")
   const resetDrawerState = () => {
     setProgressValue(0)
-    setCloudinaryData({
+    setFileUploadData({
       id: "",
       url: "",
     })
     setDrawerState(false)
   }
 
-  const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableReferralQuestionUnits,
-    jurisdiction
-  )
   const availableJurisdictionLanguages = jurisdiction ? getJurisdictionLanguages(jurisdiction) : []
 
   const yesNoRadioOptions = [
@@ -177,7 +181,7 @@ const ApplicationTypes = ({
     const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
       assets: {
-        fileId: cloudinaryData.id,
+        fileId: fileUploadData.id,
         label: selectedLanguage,
       },
       language: selectedLanguage as LanguagesEnum,
@@ -195,7 +199,13 @@ const ApplicationTypes = ({
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
+    void (await fileUploader({
+      file,
+      setFileUploadData,
+      setProgressValue,
+      contentType: "application/pdf",
+      contentDisposition: "inline",
+    }))
   }
 
   /*
@@ -203,9 +213,9 @@ const ApplicationTypes = ({
   */
 
   const previewPaperApplicationsTableRows: StandardTableData = []
-  if (cloudinaryData.url != "") {
+  if (fileUploadData.url != "") {
     previewPaperApplicationsTableRows.push({
-      fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
+      fileName: { content: `${fileUploadData.id.split("/").slice(-1).join()}.pdf` },
       language: { content: selectedLanguage ? t(`languages.${selectedLanguage}`) : "" },
       actions: {
         content: (
@@ -214,7 +224,7 @@ const ApplicationTypes = ({
             size="sm"
             className="font-semibold text-alert"
             onClick={() => {
-              setCloudinaryData({
+              setFileUploadData({
                 id: "",
                 url: "",
               })
@@ -251,95 +261,42 @@ const ApplicationTypes = ({
         heading={t("listings.sections.applicationTypesTitle")}
         subheading={t("listings.sections.applicationTypesSubtitle")}
       >
-        <Grid.Row columns={2}>
-          <Grid.Cell
-            className={fieldHasError(errors?.digitalApplication) ? styles["label-error"] : ""}
-          >
-            <FieldGroup
-              name="digitalApplicationChoice"
-              type="radio"
-              register={register}
-              groupLabel={getLabel(
-                "digitalApplication",
-                requiredFields,
-                t("listings.isDigitalApplication")
-              )}
-              error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
-              errorMessage={fieldMessage(errors?.digitalApplication)}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              fields={[
-                {
-                  ...yesNoRadioOptions[0],
-                  id: "digitalApplicationChoiceYes",
-                  defaultChecked: listing?.digitalApplication === true,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        digital: {
-                          ...methods.digital,
-                          type: disableCommonApplication
-                            ? ApplicationMethodsTypeEnum.ExternalLink
-                            : ApplicationMethodsTypeEnum.Internal,
-                        },
-                      })
-                    },
-                  },
-                },
-                {
-                  ...yesNoRadioOptions[1],
-                  id: "digitalApplicationChoiceNo",
-                  defaultChecked: listing?.digitalApplication === false,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        digital: null,
-                      })
-                    },
-                  },
-                },
-              ]}
-            />
-          </Grid.Cell>
-          {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
+        {listingType === EnumListingListingType.landUse && (
+          <Grid.Row columns={2}>
             <Grid.Cell>
               <FieldGroup
-                name="commonDigitalApplicationChoice"
+                name="leasingAgentApplicationChoice"
                 type="radio"
-                groupLabel={t("listings.usingCommonDigitalApplication")}
                 register={register}
+                groupLabel={t("listings.isLeasingAgentApplication")}
                 fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                 fields={[
                   {
                     ...yesNoRadioOptions[0],
-                    id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: methods.digital?.type === ApplicationMethodsTypeEnum.Internal,
+                    id: "leasingAgentApplicationChoiceYes",
+                    defaultChecked: !!methods.leasingAgent,
                     inputProps: {
                       onChange: () => {
+                        setValue("digitalApplicationChoice", YesNoEnum.no)
+                        setValue("paperApplicationChoice", YesNoEnum.no)
                         setMethods({
                           ...methods,
-                          digital: {
-                            ...methods.digital,
-                            type: ApplicationMethodsTypeEnum.Internal,
-                          },
+                          leasingAgent: { type: ApplicationMethodsTypeEnum.LeasingAgent },
+                          digital: null,
+                          paper: null,
                         })
                       },
                     },
                   },
                   {
                     ...yesNoRadioOptions[1],
-                    id: "commonDigitalApplicationChoiceNo",
-                    defaultChecked:
-                      methods.digital?.type === ApplicationMethodsTypeEnum.ExternalLink,
+                    id: "leasingAgentApplicationChoiceNo",
+                    defaultChecked: !methods.leasingAgent,
                     inputProps: {
                       onChange: () => {
                         setMethods({
                           ...methods,
-                          digital: {
-                            ...methods.digital,
-                            type: ApplicationMethodsTypeEnum.ExternalLink,
-                          },
+                          leasingAgent: null,
                         })
                       },
                     },
@@ -347,246 +304,364 @@ const ApplicationTypes = ({
                 ]}
               />
             </Grid.Cell>
-          )}
-        </Grid.Row>
-        {digitalApplicationChoice === YesNoEnum.yes &&
-          (disableCommonApplication ||
-            commonDigitalApplicationChoice === YesNoEnum.no ||
-            (!commonDigitalApplicationChoice && listing?.commonDigitalApplication === false)) && (
-            <Grid.Row columns={1}>
-              <Grid.Cell>
-                <Field
-                  label={t("listings.customOnlineApplicationUrl")}
-                  name="customOnlineApplicationUrl"
-                  id="customOnlineApplicationUrl"
-                  placeholder="https://"
-                  inputProps={{
-                    value: methods.digital?.externalReference
-                      ? methods.digital.externalReference
-                      : "",
-                    onChange: (e) => {
-                      setMethods({
-                        ...methods,
-                        digital: {
-                          ...methods.digital,
-                          externalReference: e.target?.value,
+          </Grid.Row>
+        )}
+        {leasingAgentApplicationChoice !== YesNoEnum.yes && (
+          <>
+            <Grid.Row columns={2}>
+              <Grid.Cell
+                className={fieldHasError(errors?.digitalApplication) ? styles["label-error"] : ""}
+              >
+                <FieldGroup
+                  name="digitalApplicationChoice"
+                  type="radio"
+                  register={register}
+                  groupLabel={getLabel(
+                    "digitalApplication",
+                    requiredFields,
+                    t("listings.isDigitalApplication")
+                  )}
+                  error={
+                    fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null
+                  }
+                  errorMessage={fieldMessage(errors?.digitalApplication)}
+                  fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                  fields={[
+                    {
+                      ...yesNoRadioOptions[0],
+                      id: "digitalApplicationChoiceYes",
+                      defaultChecked: listing?.digitalApplication === true,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            digital: {
+                              ...methods.digital,
+                              type: disableCommonApplication
+                                ? ApplicationMethodsTypeEnum.ExternalLink
+                                : ApplicationMethodsTypeEnum.Internal,
+                            },
+                          })
                         },
-                      })
+                      },
                     },
-                  }}
-                  error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
-                  errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
+                    {
+                      ...yesNoRadioOptions[1],
+                      id: "digitalApplicationChoiceNo",
+                      defaultChecked: listing?.digitalApplication === false,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            digital: null,
+                          })
+                        },
+                      },
+                    },
+                  ]}
+                />
+              </Grid.Cell>
+              {!disableCommonApplication && digitalApplicationChoice === YesNoEnum.yes && (
+                <Grid.Cell>
+                  <FieldGroup
+                    name="commonDigitalApplicationChoice"
+                    type="radio"
+                    groupLabel={t("listings.usingCommonDigitalApplication")}
+                    register={register}
+                    fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                    fields={[
+                      {
+                        ...yesNoRadioOptions[0],
+                        id: "commonDigitalApplicationChoiceYes",
+                        defaultChecked:
+                          methods.digital?.type === ApplicationMethodsTypeEnum.Internal,
+                        inputProps: {
+                          onChange: () => {
+                            setMethods({
+                              ...methods,
+                              digital: {
+                                ...methods.digital,
+                                type: ApplicationMethodsTypeEnum.Internal,
+                              },
+                            })
+                          },
+                        },
+                      },
+                      {
+                        ...yesNoRadioOptions[1],
+                        id: "commonDigitalApplicationChoiceNo",
+                        defaultChecked:
+                          methods.digital?.type === ApplicationMethodsTypeEnum.ExternalLink,
+                        inputProps: {
+                          onChange: () => {
+                            setMethods({
+                              ...methods,
+                              digital: {
+                                ...methods.digital,
+                                type: ApplicationMethodsTypeEnum.ExternalLink,
+                              },
+                            })
+                          },
+                        },
+                      },
+                    ]}
+                  />
+                </Grid.Cell>
+              )}
+            </Grid.Row>
+            {digitalApplicationChoice === YesNoEnum.yes &&
+              (disableCommonApplication ||
+                commonDigitalApplicationChoice === YesNoEnum.no ||
+                (!commonDigitalApplicationChoice &&
+                  listing?.commonDigitalApplication === false)) && (
+                <Grid.Row columns={1}>
+                  <Grid.Cell>
+                    <Field
+                      label={t("listings.customOnlineApplicationUrl")}
+                      name="customOnlineApplicationUrl"
+                      id="customOnlineApplicationUrl"
+                      placeholder="https://"
+                      inputProps={{
+                        value: methods.digital?.externalReference
+                          ? methods.digital.externalReference
+                          : "",
+                        onChange: (e) => {
+                          setMethods({
+                            ...methods,
+                            digital: {
+                              ...methods.digital,
+                              externalReference: e.target?.value,
+                            },
+                          })
+                        },
+                      }}
+                      error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
+                      errorMessage={fieldMessage(
+                        errors?.applicationMethods?.[0]?.externalReference
+                      )}
+                    />
+                  </Grid.Cell>
+                </Grid.Row>
+              )}
+            <Grid.Row columns={2}>
+              <Grid.Cell
+                className={fieldHasError(errors?.paperApplication) ? styles["label-error"] : ""}
+              >
+                <FieldGroup
+                  name="paperApplicationChoice"
+                  type="radio"
+                  groupLabel={getLabel(
+                    "paperApplication",
+                    requiredFields,
+                    t("listings.isPaperApplication")
+                  )}
+                  error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
+                  errorMessage={fieldMessage(errors?.paperApplication)}
+                  register={register}
+                  fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                  fields={[
+                    {
+                      ...yesNoRadioOptions[0],
+                      id: "paperApplicationYes",
+                      defaultChecked: listing?.paperApplication === true,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            paper: {
+                              ...methods.paper,
+                              type: ApplicationMethodsTypeEnum.FileDownload,
+                            },
+                          })
+                        },
+                      },
+                    },
+                    {
+                      ...yesNoRadioOptions[1],
+                      id: "paperApplicationNo",
+                      defaultChecked: listing?.paperApplication === false,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            paper: null,
+                          })
+                        },
+                      },
+                    },
+                  ]}
                 />
               </Grid.Cell>
             </Grid.Row>
-          )}
-        <Grid.Row columns={2}>
-          <Grid.Cell
-            className={fieldHasError(errors?.paperApplication) ? styles["label-error"] : ""}
-          >
-            <FieldGroup
-              name="paperApplicationChoice"
-              type="radio"
-              groupLabel={getLabel(
-                "paperApplication",
-                requiredFields,
-                t("listings.isPaperApplication")
-              )}
-              error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
-              errorMessage={fieldMessage(errors?.paperApplication)}
-              register={register}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              fields={[
-                {
-                  ...yesNoRadioOptions[0],
-                  id: "paperApplicationYes",
-                  defaultChecked: listing?.paperApplication === true,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        paper: {
-                          ...methods.paper,
-                          type: ApplicationMethodsTypeEnum.FileDownload,
+            {paperApplicationChoice === YesNoEnum.yes && (
+              <Grid.Row columns={1}>
+                <Grid.Cell>
+                  {methods.paper?.paperApplications?.length > 0 && (
+                    <MinimalTable
+                      className="mb-8"
+                      headers={paperApplicationsTableHeaders}
+                      data={methods.paper.paperApplications.map((item) => ({
+                        fileName: {
+                          content: `${item.assets.fileId.split("/").slice(-1).join()}.pdf`,
                         },
-                      })
-                    },
-                  },
-                },
-                {
-                  ...yesNoRadioOptions[1],
-                  id: "paperApplicationNo",
-                  defaultChecked: listing?.paperApplication === false,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        paper: null,
-                      })
-                    },
-                  },
-                },
-              ]}
-            />
-          </Grid.Cell>
-        </Grid.Row>
-        {paperApplicationChoice === YesNoEnum.yes && (
-          <Grid.Row columns={1}>
-            <Grid.Cell>
-              {methods.paper?.paperApplications?.length > 0 && (
-                <MinimalTable
-                  className="mb-8"
-                  headers={paperApplicationsTableHeaders}
-                  data={methods.paper.paperApplications.map((item) => ({
-                    fileName: { content: `${item.assets.fileId.split("/").slice(-1).join()}.pdf` },
-                    language: { content: item.language ? t(`languages.${item.language}`) : "" },
-                    actions: {
-                      content: (
-                        <div className="flex">
-                          <Button
-                            type="button"
-                            size="sm"
-                            className="font-semibold text-alert"
-                            onClick={() => {
-                              const items = methods.paper.paperApplications.filter(
-                                (paperApp) => item !== paperApp
-                              )
+                        language: { content: item.language ? t(`languages.${item.language}`) : "" },
+                        actions: {
+                          content: (
+                            <div className="flex">
+                              <Button
+                                type="button"
+                                size="sm"
+                                className="font-semibold text-alert"
+                                onClick={() => {
+                                  const items = methods.paper.paperApplications.filter(
+                                    (paperApp) => item !== paperApp
+                                  )
 
-                              setMethods({
-                                ...methods,
-                                paper: {
-                                  ...methods.paper,
-                                  paperApplications: items,
-                                },
-                              })
-                            }}
-                            variant="text"
-                          >
-                            {t("t.delete")}
-                          </Button>
-                        </div>
-                      ),
-                    },
-                  }))}
-                />
-              )}
-              <Button
-                type="button"
-                variant="primary-outlined"
-                size="sm"
-                onClick={() => {
-                  setDrawerState(true)
-                }}
-              >
-                {t("listings.addPaperApplication")}
-              </Button>
-            </Grid.Cell>
-          </Grid.Row>
+                                  setMethods({
+                                    ...methods,
+                                    paper: {
+                                      ...methods.paper,
+                                      paperApplications: items,
+                                    },
+                                  })
+                                }}
+                                variant="text"
+                              >
+                                {t("t.delete")}
+                              </Button>
+                            </div>
+                          ),
+                        },
+                      }))}
+                    />
+                  )}
+                  <Button
+                    type="button"
+                    variant="primary-outlined"
+                    size="sm"
+                    onClick={() => {
+                      setDrawerState(true)
+                    }}
+                  >
+                    {t("listings.addPaperApplication")}
+                  </Button>
+                </Grid.Cell>
+              </Grid.Row>
+            )}
+          </>
         )}
-        <Grid.Row columns={1}>
-          <Grid.Cell
-            className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
-          >
-            <FieldGroup
-              name="referralOpportunityChoice"
-              type="radio"
-              register={register}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={getLabel(
-                "referralOpportunity",
-                requiredFields,
-                t(
-                  enableReferralQuestionUnits
-                    ? "listings.areReferralOnlyUnits"
-                    : "listings.isReferralOpportunity"
-                )
-              )}
-              error={
-                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
-              }
-              errorMessage={fieldMessage(errors?.referralOpportunity)}
-              fields={[
-                {
-                  ...yesNoRadioOptions[0],
-                  id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true,
-                  inputProps: {
-                    onChange: () => {
+        {!disableReferralOpportunity && (
+          <>
+            <Grid.Row columns={1}>
+              <Grid.Cell
+                className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
+              >
+                <FieldGroup
+                  name="referralOpportunityChoice"
+                  type="radio"
+                  register={register}
+                  fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                  groupLabel={getLabel(
+                    "referralOpportunity",
+                    requiredFields,
+                    t(
+                      enableReferralQuestionUnits
+                        ? "listings.areReferralOnlyUnits"
+                        : "listings.isReferralOpportunity"
+                    )
+                  )}
+                  error={
+                    fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
+                  }
+                  errorMessage={fieldMessage(errors?.referralOpportunity)}
+                  fields={[
+                    {
+                      ...yesNoRadioOptions[0],
+                      id: "referralOpportunityYes",
+                      defaultChecked: listing?.referralOpportunity === true,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            referral: {
+                              ...methods.referral,
+                              type: ApplicationMethodsTypeEnum.Referral,
+                              externalReference:
+                                methods.referral?.externalReference || defaultReferralText,
+                            },
+                          })
+                        },
+                      },
+                    },
+                    {
+                      ...yesNoRadioOptions[1],
+                      id: "referralOpportunityNo",
+                      defaultChecked: listing?.referralOpportunity === false,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            referral: null,
+                          })
+                        },
+                      },
+                    },
+                  ]}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+            {referralOpportunityChoice === YesNoEnum.yes && (
+              <Grid.Row columns={3}>
+                <Grid.Cell>
+                  <Field
+                    label={t("listings.referralContactPhone")}
+                    name="referralContactPhone"
+                    id="referralContactPhone"
+                    defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
+                    register={register}
+                    placeholder={t("t.phoneNumberPlaceholder")}
+                    onChange={(e) => {
+                      const newValue = phoneMask(e.target.value)
+                      referralPhoneRef.current = newValue
+                      e.target.value = newValue
                       setMethods({
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          type: ApplicationMethodsTypeEnum.Referral,
+                          phoneNumber: e.target.value,
                         },
                       })
-                    },
-                  },
-                },
-                {
-                  ...yesNoRadioOptions[1],
-                  id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        referral: null,
-                      })
-                    },
-                  },
-                },
-              ]}
-            />
-          </Grid.Cell>
-        </Grid.Row>
-        {referralOpportunityChoice === YesNoEnum.yes && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <Field
-                label={t("listings.referralContactPhone")}
-                name="referralContactPhone"
-                id="referralContactPhone"
-                defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
-                register={register}
-                placeholder={t("t.phoneNumberPlaceholder")}
-                onChange={(e) => {
-                  const newValue = phoneMask(e.target.value)
-                  referralPhoneRef.current = newValue
-                  e.target.value = newValue
-                  setMethods({
-                    ...methods,
-                    referral: {
-                      ...methods.referral,
-                      phoneNumber: e.target.value,
-                    },
-                  })
-                }}
-              />
-            </Grid.Cell>
-            <Grid.Cell className="seeds-grid-span-2">
-              <Textarea
-                label={t("listings.referralSummary")}
-                rows={3}
-                fullWidth={true}
-                placeholder={""}
-                name="referralSummary"
-                id="referralSummary"
-                maxLength={500}
-                inputProps={{
-                  value: methods.referral ? methods.referral.externalReference : "",
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      referral: {
-                        ...methods.referral,
-                        externalReference: e.target?.value,
+                    }}
+                  />
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
+                  <Textarea
+                    label={t("listings.referralSummary")}
+                    rows={3}
+                    fullWidth={true}
+                    placeholder={""}
+                    name="referralSummary"
+                    id="referralSummary"
+                    maxLength={500}
+                    inputProps={{
+                      value: methods?.referral
+                        ? methods?.referral?.externalReference
+                        : defaultReferralText,
+                      onChange: (e) => {
+                        setMethods({
+                          ...methods,
+                          referral: {
+                            ...methods.referral,
+                            externalReference: e.target?.value,
+                          },
+                        })
                       },
-                    })
-                  },
-                }}
-              />
-            </Grid.Cell>
-          </Grid.Row>
+                    }}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            )}
+          </>
         )}
       </SectionWithGrid>
 
@@ -636,7 +711,7 @@ const ApplicationTypes = ({
                 />
               )}
 
-              {cloudinaryData.url !== "" && (
+              {fileUploadData.url !== "" && (
                 <MinimalTable
                   headers={paperApplicationsTableHeaders}
                   data={previewPaperApplicationsTableRows}

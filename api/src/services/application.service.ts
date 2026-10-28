@@ -2,11 +2,11 @@ import crypto from 'crypto';
 import dayjs from 'dayjs';
 import { Request as ExpressRequest } from 'express';
 import {
-  ApplicationSelections,
   ListingEventsTypeEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   Prisma,
+  PrismaClient,
   YesNoEnum,
 } from '@prisma/client';
 import {
@@ -18,15 +18,19 @@ import {
   Inject,
   HttpException,
 } from '@nestjs/common';
+import { CronJobService } from './cron-job.service';
 import { EmailService } from './email.service';
 import { GeocodingService } from './geocoding.service';
 import { PermissionService } from './permission.service';
 import { PrismaService } from './prisma.service';
+import { SnapshotCreateService } from './snapshot-create.service';
 import { Application } from '../dtos/applications/application.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
+import { ApplicationSelection } from '../dtos/applications/application-selection.dto';
 import { ApplicationSelectionCreate } from '../dtos/applications/application-selection-create.dto';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
+import { ApplicationUpdateEmailDto } from '../dtos/applications/application-update-email.dto';
 import { MostRecentApplicationQueryParams } from '../dtos/applications/most-recent-application-query-params.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
 import { PublicAppsViewQueryParams } from '../dtos/applications/public-apps-view-params.dto';
@@ -37,10 +41,10 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { User } from '../dtos/users/user.dto';
 import { ApplicationsFilterEnum } from '../enums/applications/filter-enum';
-import { CronJobService } from './cron-job.service';
 import { ApplicationViews } from '../enums/applications/view-enum';
 import { FeatureFlagEnum } from '../enums/feature-flags/feature-flags-enum';
 import { permissionActions } from '../enums/permissions/permission-actions-enum';
+import { buildApplicationStatusChanges } from '../utilities/applicationStatusChanges';
 import { buildOrderByForApplications } from '../utilities/build-order-by';
 import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
@@ -119,6 +123,7 @@ export const view: Partial<
         mobility: true,
         vision: true,
         hearing: true,
+        hearingAndVision: true,
         other: true,
       },
     },
@@ -227,6 +232,7 @@ view.base = {
       sexualOrientation: true,
       howDidYouHear: true,
       race: true,
+      spokenLanguage: true,
     },
   },
   listings: {
@@ -296,6 +302,7 @@ view.details = {
       firstName: true,
       lastName: true,
       email: true,
+      isAdvocate: true,
     },
   },
 };
@@ -316,6 +323,7 @@ export class ApplicationService {
     @Inject(Logger)
     private logger = new Logger(ApplicationService.name),
     private cronJobService: CronJobService,
+    private snapshotCreateService: SnapshotCreateService,
   ) {}
   onModuleInit() {
     this.cronJobService.startCronJob(
@@ -421,15 +429,115 @@ export class ApplicationService {
     if (!user) {
       throw new ForbiddenException();
     }
-    const whereClause = this.buildWhereClause(params);
+    const normalizedParams = {
+      ...params,
+      userId: user.id,
+    };
+    const whereClause = this.buildWhereClause(normalizedParams);
+
+    if (user.isAdvocate && normalizedParams.applicantNameSearch) {
+      const searchTerms = normalizedParams.applicantNameSearch
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (Array.isArray(whereClause.AND) && searchTerms.length > 0) {
+        whereClause.AND.push({
+          AND: searchTerms.map((term) => ({
+            OR: [
+              {
+                applicant: {
+                  firstName: {
+                    contains: term,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                applicant: {
+                  lastName: {
+                    contains: term,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          })),
+        });
+      }
+    }
+
+    const buildCountWhereClause = (filterType: ApplicationsFilterEnum) =>
+      this.buildPublicAppsViewWhereClause(
+        {
+          ...normalizedParams,
+          filterType,
+        },
+        whereClause,
+      );
+
+    const [openCount, closedCount, lotteryCount] = await Promise.all([
+      this.prisma.applications.count({
+        where: buildCountWhereClause(ApplicationsFilterEnum.open),
+      }),
+      this.prisma.applications.count({
+        where: buildCountWhereClause(ApplicationsFilterEnum.closed),
+      }),
+      params.includeLotteryApps
+        ? this.prisma.applications.count({
+            where: buildCountWhereClause(ApplicationsFilterEnum.lottery),
+          })
+        : Promise.resolve(0),
+    ]);
+
+    const totalCount = openCount + closedCount + lotteryCount;
+
+    const displayWhereClause = this.buildPublicAppsViewWhereClause(
+      normalizedParams,
+      whereClause,
+    );
+
+    let displayCount = totalCount;
+    switch (normalizedParams.filterType) {
+      case ApplicationsFilterEnum.open:
+        displayCount = openCount;
+        break;
+      case ApplicationsFilterEnum.closed:
+        displayCount = closedCount;
+        break;
+      case ApplicationsFilterEnum.lottery:
+        displayCount = lotteryCount;
+        break;
+      default:
+        displayCount = totalCount;
+        break;
+    }
+
+    const limit = normalizedParams.limit ?? 10;
+    let page = normalizedParams.page ?? 1;
+
+    if (displayCount && limit && page > 1) {
+      if (Math.ceil(displayCount / limit) < page) {
+        page = 1;
+      }
+    }
+
     const rawApps = await this.prisma.applications.findMany({
       select: {
         id: true,
         userId: true,
         confirmationCode: true,
+        accessibleUnitWaitlistNumber: true,
+        conventionalUnitWaitlistNumber: true,
         updatedAt: true,
         status: true,
         markedAsDuplicate: true,
+        applicant: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
         listings: {
           select: {
             id: true,
@@ -452,7 +560,12 @@ export class ApplicationService {
           },
         },
       },
-      where: whereClause,
+      where: displayWhereClause,
+      skip: calculateSkip(limit, page),
+      take: calculateTake(limit),
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
 
     await Promise.all(
@@ -466,39 +579,82 @@ export class ApplicationService {
       }),
     );
 
-    //filter for display applications and status counts
-    let displayApplications = [];
-    const total = rawApps.length ?? 0;
-    let lottery = 0,
-      closed = 0,
-      open = 0;
-    rawApps.forEach((app) => {
-      if (app.listings.status === ListingsStatusEnum.active) {
-        open++;
-        if (params.filterType === ApplicationsFilterEnum.open)
-          displayApplications.push(app);
-      } else if (
-        app.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
-        params.includeLotteryApps
-      ) {
-        lottery++;
-        if (params.filterType === ApplicationsFilterEnum.lottery) {
-          displayApplications.push(app);
-        }
-      } else {
-        closed++;
-        if (params.filterType === ApplicationsFilterEnum.closed)
-          displayApplications.push(app);
-      }
-    });
-
-    if (params.filterType === ApplicationsFilterEnum.all)
-      displayApplications = rawApps;
-
     return mapTo(PublicAppsViewResponse, {
-      displayApplications,
-      applicationsCount: { total, lottery, closed, open },
+      items: rawApps,
+      meta: buildPaginationInfo(limit, page, displayCount, rawApps.length),
+      applicationsCount: {
+        total: totalCount,
+        lottery: lotteryCount,
+        closed: closedCount,
+        open: openCount,
+      },
     });
+  }
+
+  buildPublicAppsViewWhereClause(
+    params: PublicAppsViewQueryParams,
+    baseWhereClause: Prisma.ApplicationsWhereInput,
+  ): Prisma.ApplicationsWhereInput {
+    const conditions: Prisma.ApplicationsWhereInput[] = Array.isArray(
+      baseWhereClause.AND,
+    )
+      ? baseWhereClause.AND.flatMap((condition) =>
+          Array.isArray(condition.AND) ? condition.AND : [condition],
+        )
+      : [baseWhereClause];
+
+    if (params.filterType === ApplicationsFilterEnum.open) {
+      conditions.push({
+        listings: {
+          is: {
+            status: ListingsStatusEnum.active,
+          },
+        },
+      });
+    }
+
+    if (params.filterType === ApplicationsFilterEnum.lottery) {
+      conditions.push({
+        listings: {
+          is: {
+            status: { not: ListingsStatusEnum.active },
+            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          },
+        },
+      });
+    }
+
+    if (params.filterType === ApplicationsFilterEnum.closed) {
+      if (params.includeLotteryApps) {
+        conditions.push({
+          listings: {
+            is: {
+              status: { not: ListingsStatusEnum.active },
+              OR: [
+                {
+                  lotteryStatus: { not: LotteryStatusEnum.publishedToPublic },
+                },
+                {
+                  lotteryStatus: null,
+                },
+              ],
+            },
+          },
+        });
+      } else {
+        conditions.push({
+          listings: {
+            is: {
+              status: { not: ListingsStatusEnum.active },
+            },
+          },
+        });
+      }
+    }
+
+    return {
+      AND: conditions,
+    };
   }
 
   /*
@@ -670,10 +826,21 @@ export class ApplicationService {
       },
     });
 
+    const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
+      listing?.jurisdictions as unknown as Jurisdiction,
+      FeatureFlagEnum.disableWorkInRegion,
+    );
+
     const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
       listing?.jurisdictions as unknown as Jurisdiction,
       FeatureFlagEnum.enableV2MSQ,
     );
+
+    const enableOnlyAdminCanAddAppsAfterClose =
+      doJurisdictionHaveFeatureFlagSet(
+        listing?.jurisdictions as unknown as Jurisdiction,
+        FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+      );
 
     if (enableV2MSQ) {
       const listingMultiselectIds = listing.listingMultiselectQuestions.map(
@@ -682,12 +849,13 @@ export class ApplicationService {
         },
       );
       if (
+        dto.applicationSelections &&
         !dto.applicationSelections.every(({ multiselectQuestion }) => {
           return listingMultiselectIds.includes(multiselectQuestion.id);
         })
       ) {
         throw new BadRequestException(
-          'Application selections contain multiselect question ids not present on the listing',
+          'Application selections contain multiselect question id(s) not present on the listing',
         );
       }
     }
@@ -706,6 +874,20 @@ export class ApplicationService {
           `Listing is not open for application submission`,
         );
       }
+    }
+
+    if (
+      listing?.status === 'closed' &&
+      enableOnlyAdminCanAddAppsAfterClose &&
+      !(
+        requestingUser.userRoles?.isAdmin ||
+        requestingUser.userRoles?.isSuperAdmin ||
+        requestingUser.userRoles?.isSupportAdmin
+      )
+    ) {
+      throw new BadRequestException(
+        `Non-administrators cannot submit applications to closed listings`,
+      );
     }
 
     // If a new application comes in after close and PII needs to be deleted
@@ -762,11 +944,15 @@ export class ApplicationService {
                       ...dto.applicant.applicantAddress,
                     },
                   },
-                  applicantWorkAddress: {
-                    create: {
-                      ...dto.applicant.applicantWorkAddress,
-                    },
-                  },
+                  applicantWorkAddress:
+                    !disableWorkInRegion &&
+                    dto.applicant.workInRegion === YesNoEnum.yes
+                      ? {
+                          create: {
+                            ...dto.applicant.applicantWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: dto.applicant.firstName?.trim(),
                   lastName: dto.applicant.lastName?.trim(),
                   birthDay: dto.applicant.birthDay
@@ -811,17 +997,27 @@ export class ApplicationService {
                 create: dto.householdMember.map((member) => ({
                   ...member,
                   sameAddress: member.sameAddress || YesNoEnum.no,
-                  workInRegion: member.workInRegion || YesNoEnum.no,
-                  householdMemberAddress: {
-                    create: {
-                      ...member.householdMemberAddress,
-                    },
-                  },
-                  householdMemberWorkAddress: {
-                    create: {
-                      ...member.householdMemberWorkAddress,
-                    },
-                  },
+                  workInRegion: !disableWorkInRegion
+                    ? member.workInRegion || YesNoEnum.no
+                    : undefined,
+                  householdMemberAddress:
+                    member.sameAddress === YesNoEnum.no
+                      ? {
+                          create: {
+                            ...member.householdMemberAddress,
+                          },
+                        }
+                      : undefined,
+                  householdMemberWorkAddress:
+                    !disableWorkInRegion &&
+                    member.workInRegion === YesNoEnum.yes &&
+                    member.householdMemberWorkAddress
+                      ? {
+                          create: {
+                            ...member.householdMemberWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: member.firstName?.trim(),
                   lastName: member.lastName?.trim(),
                   birthDay: member.birthDay
@@ -874,14 +1070,13 @@ export class ApplicationService {
     }
 
     const rawSelections = [];
-    if (enableV2MSQ) {
+    if (enableV2MSQ && dto.applicationSelections) {
       // Nested CreateManys are not supported by Prisma,
       // thus we must create the subobjects after creating the application
       try {
         for (const selection of dto.applicationSelections) {
-          const rawSelection = await this.createApplicationSelection(
-            selection,
-            rawApplication.id,
+          const rawSelection = await this.prisma.applicationSelections.create(
+            await this.createApplicationSelection(selection, rawApplication.id),
           );
           rawSelections.push(rawSelection);
         }
@@ -898,11 +1093,16 @@ export class ApplicationService {
 
     const mappedApplication = mapTo(Application, rawApplication);
     const mappedListing = mapTo(Listing, listing);
-    if (dto.applicant.emailAddress && forPublic) {
+    const isAdvocate = requestingUser?.isAdvocate ?? false;
+    if (
+      forPublic &&
+      (dto.applicant.emailAddress || (isAdvocate && requestingUser?.email))
+    ) {
       this.emailService.applicationConfirmation(
         mappedListing,
         mappedApplication,
         listing.jurisdictions?.publicUrl,
+        isAdvocate,
       );
     }
     // Update the lastApplicationUpdateAt to now after every submission
@@ -964,28 +1164,248 @@ export class ApplicationService {
       },
       include: {
         jurisdictions: { include: { featureFlags: true } },
+        // address is needed for geocoding
+        listingsBuildingAddress: true,
         listingMultiselectQuestions: {
           include: {
             multiselectQuestions: { include: { multiselectOptions: true } },
           },
         },
+        // support unit group availability logic in email
+        unitGroups: true,
       },
     });
 
-    const transactions = [];
+    await this.snapshotCreateService.createApplicationSnapshot(dto.id);
 
-    // All connected household members should be deleted so they can be recreated in the update below.
-    // This solves for all cases of deleted members, updated members, and new members
-    transactions.push(
-      this.prisma.householdMember.deleteMany({
-        where: {
-          applicationId: dto.id,
-        },
-      }),
+    const disableWorkInRegion = doJurisdictionHaveFeatureFlagSet(
+      listing?.jurisdictions as unknown as Jurisdiction,
+      FeatureFlagEnum.disableWorkInRegion,
     );
 
-    transactions.push(
-      this.prisma.applications.update({
+    const enableV2MSQ = doJurisdictionHaveFeatureFlagSet(
+      listing?.jurisdictions as unknown as Jurisdiction,
+      FeatureFlagEnum.enableV2MSQ,
+    );
+    if (enableV2MSQ) {
+      const listingMultiselectIds = listing.listingMultiselectQuestions.map(
+        (msq) => {
+          return msq.multiselectQuestionId;
+        },
+      );
+      if (
+        dto.applicationSelections &&
+        !dto.applicationSelections.every(({ multiselectQuestion }) => {
+          return listingMultiselectIds.includes(multiselectQuestion.id);
+        })
+      ) {
+        throw new BadRequestException(
+          'Application selections contain multiselect question id(s) not present on the listing',
+        );
+      }
+    }
+
+    const transactions = [];
+    // All connected household members should be deleted so they can be recreated in the update below.
+    // This solves for all cases of deleted members, updated members, and new members
+    transactions.push(async (transaction: PrismaClient) => {
+      return transaction.householdMember.deleteMany({
+        where: { applicationId: dto.id },
+      });
+    });
+
+    if (enableV2MSQ && dto.applicationSelections) {
+      const applicationSelections = dto.applicationSelections;
+      const applicationSelectionIds = applicationSelections.map(
+        (selection) => selection.id,
+      );
+
+      const existingApplicationSelections =
+        rawExistingApplication?.applicationSelections || [];
+
+      const removedSelectionIds = existingApplicationSelections
+        .map((selection) => selection.id)
+        .filter((id) => !applicationSelectionIds.includes(id));
+
+      const newSelections = [];
+      const updatedSelections = [];
+      for (const selection of applicationSelections) {
+        // A new application selection body
+        // [AddressHolderAddress at ApplicationSelectionOption creation cannot be wrapped in a transaction]
+        if (!selection.id) {
+          newSelections.push(
+            await this.createApplicationSelection(selection, dto.id),
+          );
+        }
+        // An existing application selection is updated
+        else {
+          updatedSelections.push(selection);
+        }
+      }
+
+      // Remove selections that are no longer included
+      if (removedSelectionIds.length > 0) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.deleteMany({
+            where: { id: { in: removedSelectionIds } },
+          });
+        });
+      }
+      // Add new selections
+      for (const selection of newSelections) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.create(selection);
+        });
+      }
+
+      const newSelectionOptions = [];
+      const updatedSelectionOptions = [];
+
+      const updatedSelectionBodies = [];
+
+      // Loop through existing, updated ApplicationSelections
+      for (const selection of updatedSelections) {
+        const selectionOptions = selection.selections || [];
+        const selectionOptionsIds = selectionOptions.map(
+          (selection) => selection?.id,
+        );
+        const existingSelection = existingApplicationSelections.find(
+          (existing) => existing.id === selection.id,
+        );
+        const existingSelectionOptions = mapTo(
+          ApplicationSelection,
+          existingSelection,
+        ).selections;
+
+        // Collect ids of ApplicationSelectionOptions to be removed
+        const removalIds = existingSelectionOptions
+          .map((selection) => selection.id)
+          .filter((id) => !selectionOptionsIds.includes(id));
+
+        // Loop through ApplicationSelectionOptions to be created or updated
+        for (const option of selectionOptions) {
+          // A new ApplicationSelectionOption body
+          if (!option.id) {
+            newSelectionOptions.push({
+              data: {
+                addressHolderAddress: {
+                  create: {
+                    ...option.addressHolderAddress,
+                  },
+                },
+                addressHolderName: option.addressHolderName,
+                addressHolderRelationship: option.addressHolderRelationship,
+                applicationSelection: { connect: { id: selection.id } },
+                isGeocodingVerified: option.isGeocodingVerified,
+                multiselectOption: {
+                  connect: { id: option.multiselectOption.id },
+                },
+              },
+            });
+          }
+          // An existing ApplicationSelectionOption
+          else {
+            const existingOption = existingSelectionOptions.find(
+              (existing) => existing.id === option.id,
+            );
+            let addressHolderBody = undefined;
+
+            // A new addressHolderAddress has been added
+            if (
+              option.addressHolderAddress &&
+              !option.addressHolderAddress.id
+            ) {
+              addressHolderBody = {
+                create: {
+                  ...option.addressHolderAddress,
+                },
+              };
+            }
+            // AddressHolderAddress has been removed
+            else if (
+              !option.addressHolderAddress &&
+              existingOption.addressHolderAddress
+            ) {
+              addressHolderBody = {
+                delete: {
+                  id: existingOption.addressHolderAddress.id,
+                },
+              };
+            }
+            // AddressHolderAddress has been updated
+            else if (option.addressHolderAddress?.id) {
+              addressHolderBody = {
+                update: {
+                  data: {
+                    ...option.addressHolderAddress,
+                    id: undefined,
+                  },
+                  where: {
+                    id: option.addressHolderAddress.id,
+                  },
+                },
+              };
+            }
+            // Push update body for ApplicationSelectionOption
+            updatedSelectionOptions.push({
+              data: {
+                addressHolderAddress: addressHolderBody,
+                addressHolderName: option.addressHolderName,
+                addressHolderRelationship: option.addressHolderRelationship,
+                isGeocodingVerified: option.isGeocodingVerified,
+              },
+              where: {
+                id: option.id,
+              },
+            });
+          }
+        }
+        // Push update body for ApplicationSelection
+        updatedSelectionBodies.push({
+          data: {
+            hasOptedOut: selection.hasOptedOut,
+            selections:
+              removalIds.length > 0
+                ? {
+                    deleteMany: {
+                      id: { in: removalIds },
+                    },
+                  }
+                : undefined,
+          },
+          where: {
+            id: selection.id,
+          },
+        });
+      }
+
+      // update ApplicationSelections
+      for (const selection of updatedSelectionBodies) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelections.update(selection);
+        });
+      }
+
+      // // add new ApplicationSelectionOptions
+      for (const selectionOption of newSelectionOptions) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelectionOptions.create(
+            selectionOption,
+          );
+        });
+      }
+      // update ApplicationSelectionOptions
+      for (const selectionOption of updatedSelectionOptions) {
+        transactions.push(async (transaction: PrismaClient) => {
+          return transaction.applicationSelectionOptions.update(
+            selectionOption,
+          );
+        });
+      }
+    }
+
+    transactions.push(async (transaction: PrismaClient) => {
+      return transaction.applications.update({
         where: {
           id: dto.id,
         },
@@ -1021,11 +1441,15 @@ export class ApplicationService {
                       ...dto.applicant.applicantAddress,
                     },
                   },
-                  applicantWorkAddress: {
-                    create: {
-                      ...dto.applicant.applicantWorkAddress,
-                    },
-                  },
+                  applicantWorkAddress:
+                    !disableWorkInRegion &&
+                    dto.applicant.workInRegion === YesNoEnum.yes
+                      ? {
+                          create: {
+                            ...dto.applicant.applicantWorkAddress,
+                          },
+                        }
+                      : undefined,
                   firstName: dto.applicant.firstName?.trim(),
                   lastName: dto.applicant.lastName?.trim(),
                   birthDay: dto.applicant.birthDay
@@ -1041,7 +1465,7 @@ export class ApplicationService {
                 },
               }
             : undefined,
-          applicationSelections: dto.applicationSelections ? {} : undefined,
+          applicationSelections: undefined,
           applicationsAlternateAddress: dto.applicationsAlternateAddress
             ? {
                 create: {
@@ -1067,18 +1491,31 @@ export class ApplicationService {
             ? {
                 create: dto.householdMember.map((member) => ({
                   ...member,
+                  id: undefined,
                   sameAddress: member.sameAddress || YesNoEnum.no,
-                  workInRegion: member.workInRegion || YesNoEnum.no,
-                  householdMemberAddress: {
-                    create: {
-                      ...member.householdMemberAddress,
-                    },
-                  },
-                  householdMemberWorkAddress: {
-                    create: {
-                      ...member.householdMemberWorkAddress,
-                    },
-                  },
+                  workInRegion: !disableWorkInRegion
+                    ? member.workInRegion || YesNoEnum.no
+                    : undefined,
+                  householdMemberAddress:
+                    member.sameAddress === YesNoEnum.no
+                      ? {
+                          create: {
+                            ...member.householdMemberAddress,
+                            id: undefined,
+                          },
+                        }
+                      : undefined,
+                  householdMemberWorkAddress:
+                    !disableWorkInRegion &&
+                    member.workInRegion === YesNoEnum.yes &&
+                    member.householdMemberWorkAddress
+                      ? {
+                          create: {
+                            ...member.householdMemberWorkAddress,
+                            id: undefined,
+                          },
+                        }
+                      : undefined,
                   firstName: member.firstName?.trim(),
                   lastName: member.lastName?.trim(),
                   birthDay: member.birthDay
@@ -1113,12 +1550,22 @@ export class ApplicationService {
           preferences: dto.preferences as unknown as Prisma.JsonArray,
           programs: dto.programs as unknown as Prisma.JsonArray,
         },
-      }),
+      });
+    });
+
+    const results = [];
+    await this.prisma.$transaction(
+      async (transaction) =>
+        await new Promise(async (resolve) => {
+          for (let i = 0; i < transactions.length; i++) {
+            results[i] = await transactions[i](transaction);
+          }
+          resolve(true);
+        }),
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
 
-    const prismaTransactions = await this.prisma.$transaction(transactions);
-    const rawApplication = prismaTransactions[prismaTransactions.length - 1];
-
+    const rawApplication = results[transactions.length - 1];
     if (!rawApplication) {
       throw new HttpException(
         `Application ${rawExistingApplication.id} failed to update`,
@@ -1127,14 +1574,29 @@ export class ApplicationService {
     }
 
     const application = mapTo(Application, rawApplication);
+    const mappedListing = mapTo(Listing, listing);
 
-    // Calculate geocoding preferences after save and email sent
+    // Calculate geocoding preferences after save
     if (listing?.jurisdictions?.enableGeocodingPreferences) {
       try {
-        void this.geocodingService.validateGeocodingPreferences(
-          application,
-          mapTo(Listing, listing),
-        );
+        if (enableV2MSQ) {
+          const multiselectOptions =
+            mappedListing.listingMultiselectQuestions.flatMap(
+              (multiselectQuestion) =>
+                multiselectQuestion.multiselectQuestions.multiselectOptions,
+            );
+
+          void this.geocodingService.validateGeocodingPreferencesV2(
+            application.applicationSelections,
+            mappedListing.listingsBuildingAddress,
+            multiselectOptions,
+          );
+        } else {
+          void this.geocodingService.validateGeocodingPreferences(
+            application,
+            mappedListing,
+          );
+        }
       } catch (e) {
         // If the geocoding fails it should not prevent the request from completing so
         // catching all errors here
@@ -1142,8 +1604,65 @@ export class ApplicationService {
       }
     }
 
-    await this.updateListingApplicationEditTimestamp(rawApplication.listingId);
+    await this.updateListingApplicationEditTimestamp(listing.id);
     return application;
+  }
+
+  async sendApplicationUpdateEmail(
+    applicationId: string,
+    dto: ApplicationUpdateEmailDto,
+    requestingUser: User,
+  ): Promise<SuccessDTO> {
+    const rawApplication = await this.findOrThrow(
+      applicationId,
+      ApplicationViews.details,
+    );
+    await this.authorizeAction(
+      requestingUser,
+      rawApplication.listingId,
+      permissionActions.update,
+    );
+
+    const application = mapTo(Application, rawApplication);
+    const changes = buildApplicationStatusChanges({
+      initialStatus: dto.previousStatus,
+      nextStatus: application.status,
+      initialApplicationDeclineReason: dto.previousApplicationDeclineReason,
+      nextApplicationDeclineReason: application.applicationDeclineReason,
+      initialAccessibleUnitWaitlistNumber:
+        dto.previousAccessibleUnitWaitlistNumber,
+      nextAccessibleUnitWaitlistNumber:
+        application.accessibleUnitWaitlistNumber,
+      initialConventionalUnitWaitlistNumber:
+        dto.previousConventionalUnitWaitlistNumber,
+      nextConventionalUnitWaitlistNumber:
+        application.conventionalUnitWaitlistNumber,
+    });
+
+    if (changes.length === 0) {
+      return { success: false };
+    }
+
+    const isAdvocate = rawApplication.userAccounts?.isAdvocate ?? false;
+    const advocateEmail = rawApplication.userAccounts?.email;
+    const applicantEmail = application?.applicant?.emailAddress;
+
+    if (!isAdvocate && !applicantEmail && !advocateEmail) {
+      return { success: false };
+    }
+
+    await this.emailService.applicationUpdateEmail(
+      rawApplication.listings.name,
+      (rawApplication.listings as unknown as { jurisdictions: IdDTO })
+        .jurisdictions,
+      application,
+      changes,
+      rawApplication.appUrl,
+      isAdvocate,
+      advocateEmail,
+    );
+
+    return { success: true };
   }
 
   /*
@@ -1160,7 +1679,7 @@ export class ApplicationService {
       application.listingId,
       permissionActions.delete,
     );
-
+    await this.snapshotCreateService.createApplicationSnapshot(applicationId);
     await this.updateListingApplicationEditTimestamp(application.listingId);
     await this.prisma.applications.update({
       where: {
@@ -1256,6 +1775,7 @@ export class ApplicationService {
       select: {
         id: true,
         mailingAddressId: true,
+        userId: true,
         applicant: {
           select: {
             id: true,
@@ -1285,6 +1805,11 @@ export class ApplicationService {
 
     if (!application) return;
 
+    await this.prisma.applicationSnapshot.deleteMany({
+      where: {
+        originalId: applicationId,
+      },
+    });
     const transactions = [];
 
     if (application.mailingAddressId) {
@@ -1377,9 +1902,17 @@ export class ApplicationService {
         data: {
           additionalPhoneNumber: null,
           wasPIICleared: true,
+          historicalUserId: application.userId,
         },
         where: {
           id: application.id,
+        },
+      }),
+    );
+    transactions.push(
+      this.prisma.applicationSnapshot.deleteMany({
+        where: {
+          originalId: application.id,
         },
       }),
     );
@@ -1429,7 +1962,7 @@ export class ApplicationService {
   async createApplicationSelection(
     selection: ApplicationSelectionCreate,
     applicationId: string,
-  ): Promise<ApplicationSelections> {
+  ) {
     const selectedOptions = [];
 
     for (const selectionOption of selection.selections) {
@@ -1454,7 +1987,7 @@ export class ApplicationService {
       selectedOptions.push(selectedOptionBody);
     }
     // Create the application selection with nested createMany applicationSelectionOptions
-    return await this.prisma.applicationSelections.create({
+    return {
       data: {
         applicationId: applicationId,
         hasOptedOut: selection.hasOptedOut ?? false,
@@ -1487,6 +2020,6 @@ export class ApplicationService {
           },
         },
       },
-    });
+    };
   }
 }

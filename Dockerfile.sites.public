@@ -20,6 +20,9 @@ RUN yarn install --frozen-lockfile
 # checking.
 COPY --chown=2002:2002 tsconfig.json /app/tsconfig.json
 COPY --chown=2002:2002 sites/public .
+COPY --chown=2002:2002 sites/middleware.ts /app/sites/public/src/middleware.ts
 
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
 ENV NEXT_TELEMETRY_DISABLED=1
-CMD [ "/bin/bash", "-c", "yarn build && yarn start" ]
+CMD [ "/bin/bash", "-c", "NODE_OPTIONS='--max-semi-space-size=128 --max-old-space-size=4096' yarn build && yarn start" ]

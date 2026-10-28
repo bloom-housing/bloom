@@ -1,61 +1,145 @@
-import React, { useContext, useMemo, useState } from "react"
-import { useRouter } from "next/router"
+import dayjs from "dayjs"
+import Markdown from "markdown-to-jsx"
 import Head from "next/head"
-import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
-import { Button, Dialog } from "@bloom-housing/ui-seeds"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { useRouter } from "next/router"
+import React, { useContext, useEffect, useMemo, useState } from "react"
+import { AuthContext, BloomCard, MessageContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationOrderByKeys,
+  BackgroundJobStatusEnum,
   FeatureFlagEnum,
   ListingsStatusEnum,
   LotteryStatusEnum,
   OrderByEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  useSingleListingData,
-  useFlaggedApplicationsList,
-  useApplicationsData,
-  useZipExport,
-} from "../../../../lib/hooks"
-import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
-import Layout from "../../../../layouts"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
+import { Button, Dialog, LoadingState, Message } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
-import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
+import BulkUpdateDrawer from "../../../../components/applications/BulkUpdateDrawer"
+import { getListingStatusTag } from "../../../../components/listings/helpers"
+import { ExportTermsDialog } from "../../../../components/shared/ExportTermsDialog"
+import styles from "../../../../components/shared/ExportTermsDialog.module.scss"
 import ListingGuard from "../../../../components/shared/ListingGuard"
+import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
+import { StatusBar } from "../../../../components/shared/StatusBar"
+import Layout from "../../../../layouts"
+import {
+  useApplicationsData,
+  useFlaggedApplicationsList,
+  useSingleListingData,
+  useSSE,
+  useZipExport,
+} from "../../../../lib/hooks"
+import { isAdminRole } from "../../../../lib/helpers"
+
+interface BulkUploadJobNotification {
+  jobId: string
+  status: BackgroundJobStatusEnum
+  totalRecords?: number | null
+  errorMessage?: string | null
+  errorRow?: number | null
+  completedAt?: string | null
+}
 
 const ApplicationsList = () => {
-  const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn, getJurisdiction } = useContext(AuthContext)
+  const { addToast } = useContext(MessageContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
   const [applicationConfirmAddModal, setApplicationConfirmAddModal] = useState(false)
   const [applicationConfirmAddPostLotteryModal, setApplicationConfirmAddPostLotteryModal] =
     useState(false)
+  const [bulkUpdateModalOpen, setBulkUpdateModalOpen] = useState(false)
+  const [isTermsOpen, setIsTermsOpen] = useState(false)
+  const [jobId, setJobId] = useState<string | null>(null)
+  const [jobResult, setJobResult] = useState<BulkUploadJobNotification | null>(null)
+
+  const { close: closeNotifications } = useSSE<BulkUploadJobNotification>({
+    path: "applications/bulk-update/notifications",
+    params: { jobId },
+    enabled: !!jobId,
+    onMessage: setJobResult,
+    onRetriesExhausted: () => {
+      addToast(t("applications.bulkUpdateModalProcessingError"), { variant: "alert" })
+      setJobId(null)
+    },
+  })
+
+  useEffect(() => {
+    if (!jobId) return
+    // The real "completed" notification from the listener above isn't reliable, so assume the
+    // job succeeded as soon as it's queued instead of waiting for a confirmation that may never
+    // arrive. The user will receive an email confirmation if it was successful.
+    //  This intentionally doesn't touch the listener or the backend job.
+    setJobResult({ jobId, status: BackgroundJobStatusEnum.completed })
+  }, [jobId])
+
+  useEffect(() => {
+    if (jobResult && jobResult.status !== BackgroundJobStatusEnum.processing) {
+      if (jobResult.status === BackgroundJobStatusEnum.completed) {
+        addToast(t("applications.bulkUpdateModalProcessingEmail"), { variant: "success" })
+      } else if (jobResult.status === BackgroundJobStatusEnum.failed) {
+        addToast(jobResult.errorMessage ?? t("applications.bulkUpdateModalProcessingError"), {
+          variant: "alert",
+        })
+      }
+      closeNotifications()
+      setJobResult(null)
+    }
+  }, [closeNotifications, addToast, jobResult])
 
   const tableOptions = useAgTable()
 
   /* Data Fetching */
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto, listingLoading } = useSingleListingData(listingId)
 
-  const listingJurisdiction = profile?.jurisdictions.find(
-    (jurisdiction) => jurisdiction.id === listingDto?.jurisdictions.id
-  )
-  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableFullTimeStudentQuestion,
-    listingDto?.jurisdictions.id
-  )
+  const jurisdictionData = getJurisdiction(listingDto?.jurisdictions?.id)
+
   const disableWorkInRegion = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.disableWorkInRegion,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
+  )
+  const enableApplicationBulkCSVUpdates = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationBulkCSVUpdates,
+    jurisdictionData?.id
   )
   const enableApplicationStatus = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableApplicationStatus,
-    listingDto?.jurisdictions.id
+    jurisdictionData?.id
+  )
+  const enableApplicationExpirationNonAdmins = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableApplicationExpirationNonAdmins,
+    jurisdictionData?.id
+  )
+  const enableExportTerms = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableExportTerms,
+    jurisdictionData?.id
+  )
+  const enableFullTimeStudentQuestion = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableFullTimeStudentQuestion,
+    jurisdictionData?.id
+  )
+  const enableHousingAdvocate = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableHousingAdvocate,
+    jurisdictionData?.id
+  )
+  const enableOnlyAdminCanAddAppsAfterClose = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableOnlyAdminCanAddAppsAfterClose,
+    jurisdictionData?.id
   )
   const includeDemographicsPartner =
-    profile?.userRoles?.isPartner && listingJurisdiction?.enablePartnerDemographics
+    profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
+
+  // TODO: make days till expiration configurable
+  const shouldExpireData = enableApplicationExpirationNonAdmins && !profile?.userRoles?.isAdmin
+  const expiryDate = dayjs(listingDto?.closedAt).add(45, "day")
+  const formattedExpiryDate = expiryDate.format("MMMM D, YYYY")
+
   const { onExport, exportLoading } = useZipExport(
     listingId,
     (profile?.userRoles?.isAdmin ||
@@ -69,6 +153,10 @@ const ApplicationsList = () => {
 
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
+  const disallowNewApps =
+    listingDto?.status === "closed" &&
+    enableOnlyAdminCanAddAppsAfterClose &&
+    !isAdminRole(profile.userRoles)
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -83,6 +171,16 @@ const ApplicationsList = () => {
     tableOptions.sort.sortOptions?.[0]?.orderBy as ApplicationOrderByKeys,
     tableOptions.sort.sortOptions?.[0]?.orderDir as OrderByEnum
   )
+
+  const onSubmit = async () => {
+    try {
+      await onExport()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsTermsOpen(false)
+    }
+  }
 
   class formatLinkCell {
     linkWithId: HTMLSpanElement
@@ -123,13 +221,17 @@ const ApplicationsList = () => {
       maxHouseholdSize,
       enableFullTimeStudentQuestion,
       disableWorkInRegion,
-      enableApplicationStatus
+      enableApplicationStatus,
+      listingDto?.reviewOrderType,
+      enableHousingAdvocate
     )
   }, [
     maxHouseholdSize,
     enableFullTimeStudentQuestion,
     disableWorkInRegion,
     enableApplicationStatus,
+    listingDto?.reviewOrderType,
+    enableHousingAdvocate,
   ])
 
   const gridComponents = {
@@ -146,110 +248,177 @@ const ApplicationsList = () => {
         <Head>
           <title>{`Applications - ${t("nav.siteTitlePartners")}`}</title>
         </Head>
-        <NavigationHeader
-          title={listingName}
-          listingId={listingId}
-          tabs={{
-            show: true,
-            flagsQty: flaggedApps?.meta?.totalFlagged,
-            listingLabel: t("t.listingSingle"),
-            applicationsLabel: t("nav.applications"),
-            lotteryLabel:
-              listingDto?.status === ListingsStatusEnum.closed &&
-              listingDto?.lotteryOptIn &&
-              (listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
-                listingDto?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
-                ? t("listings.lotteryTitle")
-                : undefined,
-          }}
-          breadcrumbs={
-            <Breadcrumbs>
-              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
-                {t("nav.applications")}
-              </BreadcrumbLink>
-            </Breadcrumbs>
-          }
-        />
+        <div className={"loading-state-wrapper"}>
+          <LoadingState loading={applications === undefined || listingLoading} className="w-full">
+            <NavigationHeader
+              title={listingName}
+              listingId={listingId}
+              tabs={{
+                show: true,
+                flagsQty: flaggedApps?.meta?.totalFlagged,
+                listingLabel: t("t.listingSingle"),
+                applicationsLabel: t("nav.applications"),
+                lotteryLabel:
+                  listingDto?.status === ListingsStatusEnum.closed &&
+                  listingDto?.lotteryOptIn &&
+                  (listingDto?.reviewOrderType === ReviewOrderTypeEnum.lottery ||
+                    listingDto?.reviewOrderType === ReviewOrderTypeEnum.waitlistLottery)
+                    ? t("listings.lotteryTitle")
+                    : undefined,
+              }}
+              breadcrumbs={
+                <Breadcrumbs>
+                  <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
+                    {t("nav.applications")}
+                  </BreadcrumbLink>
+                </Breadcrumbs>
+              }
+            />
 
-        <ListingStatusBar status={listingDto?.status} />
+            <StatusBar>{getListingStatusTag(listingDto?.status)}</StatusBar>
 
-        <section className={"bg-gray-200 pt-4"}>
-          <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
-            {listingDto && (
-              <>
-                <ApplicationsSideNav
-                  className="w-full md:w-72"
-                  listingId={listingId}
-                  listingOpen={isListingOpen}
-                />
+            {listingDto?.status === ListingsStatusEnum.closed &&
+            shouldExpireData &&
+            expiryDate <= dayjs() ? (
+              <section className="form-container">
+                <div className="mx-auto px-5 mt-5 max-w-screen-xl">
+                  <div className="md:w-9/12">
+                    <BloomCard
+                      iconSymbol="exclamation"
+                      title={t("applications.export.dataExpiryHeader")}
+                      headingPriority={2}
+                      iconClass={"card-icon"}
+                      iconOutlined={true}
+                      headingClass="seeds-large-heading"
+                    >
+                      <CardSection>
+                        <div>{t("applications.export.dataExpiryDescription")}</div>
+                      </CardSection>
+                    </BloomCard>
+                  </div>
+                </div>
+              </section>
+            ) : (
+              <section className={"bg-gray-200 pt-4"}>
+                <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+                  {listingDto && (
+                    <>
+                      <ApplicationsSideNav
+                        className="w-full md:w-72"
+                        listingId={listingId}
+                        listingOpen={isListingOpen}
+                      />
+                      <div className="w-full">
+                        {shouldExpireData && listingDto?.status === ListingsStatusEnum.closed && (
+                          <Message variant={"warn"} fullwidth={true} className="mb-4">
+                            {t("applications.export.dataExpiryMessage", {
+                              date: formattedExpiryDate,
+                            })}
+                          </Message>
+                        )}
+                        <AgTable
+                          className="w-full"
+                          id="applications-table"
+                          pagination={{
+                            perPage: tableOptions.pagination.itemsPerPage,
+                            setPerPage: tableOptions.pagination.setItemsPerPage,
+                            currentPage: tableOptions.pagination.currentPage,
+                            setCurrentPage: tableOptions.pagination.setCurrentPage,
+                          }}
+                          config={{
+                            gridComponents,
+                            columns: columnDefs,
+                            totalItemsLabel: t("applications.totalApplications"),
+                          }}
+                          data={{
+                            items: applications,
+                            loading: appsLoading,
+                            totalItems: appsMeta?.totalItems,
+                            totalPages: appsMeta?.totalPages,
+                          }}
+                          search={{
+                            setSearch: tableOptions.filter.setFilterValue,
+                          }}
+                          sort={{
+                            setSort: tableOptions.sort.setSortOptions,
+                          }}
+                          headerContent={
+                            <div className="flex gap-2 items-center">
+                              {!disallowNewApps && (
+                                <Button
+                                  onClick={() => {
+                                    if (
+                                      process.env.showLottery &&
+                                      (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
+                                        listingDto.lotteryStatus ===
+                                          LotteryStatusEnum.releasedToPartners ||
+                                        listingDto.lotteryStatus ===
+                                          LotteryStatusEnum.publishedToPublic)
+                                    ) {
+                                      setApplicationConfirmAddPostLotteryModal(true)
+                                    } else if (listingDto.status === ListingsStatusEnum.closed) {
+                                      setApplicationConfirmAddModal(true)
+                                    } else {
+                                      void router.push(`/listings/${listingId}/applications/add`)
+                                    }
+                                  }}
+                                  variant="primary-outlined"
+                                  size="sm"
+                                  id={"addApplicationButton"}
+                                >
+                                  {t("applications.addApplication")}
+                                </Button>
+                              )}
 
-                <AgTable
-                  className="w-full"
-                  id="applications-table"
-                  pagination={{
-                    perPage: tableOptions.pagination.itemsPerPage,
-                    setPerPage: tableOptions.pagination.setItemsPerPage,
-                    currentPage: tableOptions.pagination.currentPage,
-                    setCurrentPage: tableOptions.pagination.setCurrentPage,
-                  }}
-                  config={{
-                    gridComponents,
-                    columns: columnDefs,
-                    totalItemsLabel: t("applications.totalApplications"),
-                  }}
-                  data={{
-                    items: applications,
-                    loading: appsLoading,
-                    totalItems: appsMeta?.totalItems,
-                    totalPages: appsMeta?.totalPages,
-                  }}
-                  search={{
-                    setSearch: tableOptions.filter.setFilterValue,
-                  }}
-                  sort={{
-                    setSort: tableOptions.sort.setSortOptions,
-                  }}
-                  headerContent={
-                    <div className="flex gap-2 items-center">
-                      <Button
-                        onClick={() => {
-                          if (
-                            process.env.showLottery &&
-                            (listingDto.lotteryStatus === LotteryStatusEnum.ran ||
-                              listingDto.lotteryStatus === LotteryStatusEnum.releasedToPartners ||
-                              listingDto.lotteryStatus === LotteryStatusEnum.publishedToPublic)
-                          ) {
-                            setApplicationConfirmAddPostLotteryModal(true)
-                          } else if (listingDto.status === ListingsStatusEnum.closed) {
-                            setApplicationConfirmAddModal(true)
-                          } else {
-                            void router.push(`/listings/${listingId}/applications/add`)
+                              <Button
+                                id={"applicationExportButton"}
+                                variant="primary-outlined"
+                                size="sm"
+                                onClick={() =>
+                                  enableExportTerms ? setIsTermsOpen(true) : onExport()
+                                }
+                                loadingMessage={exportLoading && t("t.formSubmitted")}
+                              >
+                                {t("t.export")}
+                              </Button>
+
+                              {enableApplicationBulkCSVUpdates && (
+                                <Button
+                                  id={"applicationBulkUpdateButton"}
+                                  variant="primary-outlined"
+                                  size="sm"
+                                  onClick={() => setBulkUpdateModalOpen(true)}
+                                >
+                                  {t("applications.bulkUpdate")}
+                                </Button>
+                              )}
+                            </div>
                           }
-                        }}
-                        variant="primary-outlined"
-                        size="sm"
-                        id={"addApplicationButton"}
-                      >
-                        {t("applications.addApplication")}
-                      </Button>
+                        />
+                      </div>
 
-                      <Button
-                        variant="primary-outlined"
-                        size="sm"
-                        onClick={() => onExport()}
-                        loadingMessage={exportLoading && t("t.formSubmitted")}
+                      <ExportTermsDialog
+                        dialogHeader={t("applications.export.dialogHeader")}
+                        id="applicationExportTermsDialog"
+                        isOpen={isTermsOpen}
+                        onClose={() => setIsTermsOpen(false)}
+                        onSubmit={onSubmit}
                       >
-                        {t("t.export")}
-                      </Button>
-                    </div>
-                  }
-                />
-              </>
+                        <p>{t("applications.export.dialogSubheader")}</p>
+                        <h2 className={styles["terms-of-use-text"]}>
+                          {t("authentication.terms.termsOfUse")}
+                        </h2>
+                        <Markdown>{t("applications.export.termsBody")}</Markdown>
+                      </ExportTermsDialog>
+                    </>
+                  )}
+                </article>
+              </section>
             )}
-          </article>
-        </section>
+          </LoadingState>
+        </div>
 
         <Dialog
           isOpen={applicationConfirmAddModal}
@@ -316,6 +485,18 @@ const ApplicationsList = () => {
             </Button>
           </Dialog.Footer>
         </Dialog>
+
+        <BulkUpdateDrawer
+          isOpen={bulkUpdateModalOpen}
+          onClose={() => {
+            setBulkUpdateModalOpen(false)
+            setJobResult(null)
+          }}
+          jobStatus={jobResult?.status ?? null}
+          listingId={listingId}
+          jobId={jobId}
+          setJobId={setJobId}
+        />
       </Layout>
     </ListingGuard>
   )

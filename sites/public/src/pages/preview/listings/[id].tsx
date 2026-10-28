@@ -6,7 +6,7 @@ import { AuthContext, imageUrlFromListing } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts/application"
 import { ListingViewSeeds } from "../../../components/listing/ListingViewSeeds"
 import { ListingView } from "../../../components/listing/ListingView"
-import { fetchJurisdictionByName } from "../../../lib/hooks"
+import { fetchSharedPageProps } from "../../../lib/hooks"
 import { Jurisdiction, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { Alert } from "@bloom-housing/ui-seeds"
 
@@ -68,7 +68,12 @@ export async function getServerSideProps(context: {
     return { notFound: true }
   }
 
-  const jurisdiction = fetchJurisdictionByName(context.req)
+  const shared = fetchSharedPageProps(context.locale, context.req)
 
-  return { props: { listing: response.data, jurisdiction: await jurisdiction } }
+  return {
+    props: {
+      listing: response.data,
+      ...(await shared),
+    },
+  }
 }

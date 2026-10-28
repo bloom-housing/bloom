@@ -29,7 +29,6 @@ import {
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
-  getOccupancyDescription,
   imageUrlFromListing,
   occupancyTable,
   getTimeRangeString,
@@ -77,10 +76,10 @@ interface ListingProps {
 }
 
 const getUnhiddenMultiselectQuestions = (
-  arrayToSeach: ListingMultiselectQuestion[],
+  arrayToSearch: ListingMultiselectQuestion[],
   section: MultiselectQuestionsApplicationSectionEnum
 ): ListingMultiselectQuestion[] => {
-  return arrayToSeach.filter(
+  return arrayToSearch.filter(
     (elem) =>
       elem.multiselectQuestions.applicationSection === section &&
       !elem.multiselectQuestions.hideFromListing
@@ -172,7 +171,6 @@ export const ListingView = (props: ListingProps) => {
     )
   } // else condition is handled inline below
 
-  const occupancyDescription = getOccupancyDescription(listing)
   const occupancyHeaders = {
     unitType: "t.unitType",
     occupancy: "t.occupancy",
@@ -225,14 +223,18 @@ export const ListingView = (props: ListingProps) => {
     } else {
       multiselectQuestionSet = listingPreferences
     }
-    return multiselectQuestionSet.map((listingMultiselectQuestion, index) => {
-      return {
-        ordinal: index + 1,
-        links: listingMultiselectQuestion?.multiselectQuestions?.links,
-        title: listingMultiselectQuestion?.multiselectQuestions?.text,
-        description: listingMultiselectQuestion?.multiselectQuestions?.description,
-      }
-    })
+    return multiselectQuestionSet
+      .sort((a, b) => a.ordinal - b.ordinal)
+      .map((listingMultiselectQuestion, index) => {
+        return {
+          ordinal: listingMultiselectQuestion.ordinal || index + 1,
+          links: listingMultiselectQuestion?.multiselectQuestions?.links,
+          title:
+            listingMultiselectQuestion?.multiselectQuestions?.name ||
+            listingMultiselectQuestion?.multiselectQuestions?.text,
+          description: listingMultiselectQuestion?.multiselectQuestions?.description,
+        }
+      })
   }
 
   if (listingPrograms && listingPrograms?.length > 0) {
@@ -374,7 +376,7 @@ export const ListingView = (props: ListingProps) => {
     let onlineApplicationURL
     let isCommonApp = false
     if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
-      onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+      onlineApplicationURL = `${listing.externalURL}/applications/start/choose-language?listingId=${listing.id}`
       onlineApplicationURL += `${props.preview ? "&preview=true" : ""}`
       isCommonApp = true
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
@@ -433,6 +435,7 @@ export const ListingView = (props: ListingProps) => {
     initialStateLoaded &&
     !profile &&
     onlineApplicationURLInfo.isCommonApp &&
+    !listing.externalURL &&
     //previewing applications should not require admin to login
     !props.preview
 
@@ -460,6 +463,7 @@ export const ListingView = (props: ListingProps) => {
         listingName={listing.name}
         listingId={listing.id}
         listingStatus={listing.status}
+        isExternal={!listing.externalURL}
       />
       {listing.status !== ListingsStatusEnum.closed && submissionAddressExists && (
         <SubmitApplication
@@ -790,7 +794,10 @@ export const ListingView = (props: ListingProps) => {
               />
             </ListSection>
 
-            <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
+            <ListSection
+              title={t("t.occupancy")}
+              subtitle={t("listings.occupancyDescriptionNoSro")}
+            >
               <StandardTable
                 headers={occupancyHeaders}
                 data={occupancyData}

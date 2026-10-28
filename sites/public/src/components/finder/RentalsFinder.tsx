@@ -1,14 +1,15 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { useCallback, useMemo, useRef, useState } from "react"
-import { BloomCard, CustomIconMap, listingFeatures } from "@bloom-housing/shared-helpers"
+import { BloomCard, CustomIconMap, Form } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
+  ListingFeaturesConfiguration,
   ListingFilterKeys,
   MultiselectQuestion,
   RegionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Form, ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
+import { ProgressNav, StepHeader, t } from "@bloom-housing/ui-components"
 import { Button, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FinderDisclaimer from "./FinderDisclaimer"
@@ -19,6 +20,7 @@ import {
   buildDefaultFilterFields,
   encodeFilterDataToQuery,
   FilterData,
+  getAccessibilityFeatureKeys,
   ReservedCommunityTypes,
   unitTypeMapping,
   unitTypesSorted,
@@ -39,6 +41,7 @@ type FinderSection = {
 
 export type RentalsFinderProps = {
   activeFeatureFlags: FeatureFlagEnum[]
+  listingFeaturesConfiguration?: ListingFeaturesConfiguration
   multiselectData: MultiselectQuestion[]
 }
 
@@ -47,7 +50,11 @@ const setFocusToTitle = () => {
   return
 }
 
-export default function RentalsFinder({ activeFeatureFlags, multiselectData }: RentalsFinderProps) {
+export default function RentalsFinder({
+  activeFeatureFlags,
+  listingFeaturesConfiguration,
+  multiselectData,
+}: RentalsFinderProps) {
   const router = useRouter()
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [sectionIndex, setSectionIndex] = useState<number>(0)
@@ -111,7 +118,8 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
           },
         ],
       },
-      ...(activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableAccessibilityFeatures)
+      ...(activeFeatureFlags.some((flag) => flag == FeatureFlagEnum.enableAccessibilityFeatures) &&
+      listingFeaturesConfiguration
         ? [
             {
               sectionTitle: t("t.accessibility"),
@@ -126,7 +134,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
                       options={buildDefaultFilterFields(
                         ListingFilterKeys.listingFeatures,
                         "eligibility.accessibility",
-                        listingFeatures,
+                        getAccessibilityFeatureKeys(listingFeaturesConfiguration),
                         {}
                       )}
                     />
@@ -289,7 +297,7 @@ export default function RentalsFinder({ activeFeatureFlags, multiselectData }: R
           subtitle={activeQuestion.subtitle}
           headingPriority={2}
         >
-          <Form id="finderForm" onSubmit={handleSubmit(onSubmit)}>
+          <Form id="finderForm" method="get" onSubmit={handleSubmit(onSubmit)}>
             <CardSection className={styles["questions-section"]} divider="flush">
               <div className={styles["questions-wrapper"]}>
                 <FormProvider {...formMethods}>{activeQuestion.content}</FormProvider>

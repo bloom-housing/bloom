@@ -1,25 +1,32 @@
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
-import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
-import { Alert } from "@bloom-housing/ui-seeds"
+import { useRouter } from "next/router"
+import { AlertBox, AlertNotice, Field, FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
+  AuthContext,
+  Form,
   OnClientSide,
   PageView,
-  pushGtmEvent,
-  AuthContext,
   listingSectionQuestions,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import {
+  FeatureFlagEnum,
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
+import ApplicationFormLayout, {
+  ApplicationAlertBox,
+  onFormError,
+} from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -60,6 +67,10 @@ const ApplicationIncome = () => {
     ? 4
     : 3
 
+  const enableVerifyIncome = conductor.config.featureFlags?.some(
+    (flag) => flag.name === FeatureFlagEnum.enableVerifyIncome && flag.active
+  )
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue, trigger } = useForm({
     defaultValues: {
@@ -68,6 +79,22 @@ const ApplicationIncome = () => {
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "income",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "income",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
@@ -77,21 +104,23 @@ const ApplicationIncome = () => {
     const incomeValue = income.replaceAll(",", "")
     // Skip validation of total income if no units or the applicant has income vouchers.
     const validationError =
-      !listing.units?.length || application.incomeVouchers
+      !listing.units?.length || application.incomeVouchers?.length > 0 || !enableVerifyIncome
         ? null
         : verifyIncome(listing, incomeValue, incomePeriod)
     setIncomeError(validationError)
 
     if (!validationError) {
-      const toSave = { income: incomeValue, incomePeriod }
+      const pendingSave = { income: incomeValue, incomePeriod }
 
-      conductor.completeSection(currentPageSection)
-      conductor.currentStep.save(toSave)
-      conductor.routeToNextOrReturnUrl()
+      guardSubmit(pendingSave, () => {
+        conductor.completeSection(currentPageSection)
+        conductor.currentStep.save(pendingSave)
+        conductor.routeToNextOrReturnUrl()
+      })
     }
   }
   const onError = () => {
-    window.scrollTo(0, 0)
+    onFormError()
   }
 
   const incomePeriodValues = [
@@ -119,7 +148,7 @@ const ApplicationIncome = () => {
     <FormsLayout
       pageTitle={`${t("t.income")} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.income.title")}
@@ -139,18 +168,9 @@ const ApplicationIncome = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
-          {Object.entries(errors).length > 0 && (
-            <Alert
-              className={styles["message-inside-card"]}
-              variant="alert"
-              fullwidth
-              id={"application-alert-box"}
-            >
-              {t("errors.errorsToResolve")}
-            </Alert>
-          )}
-
+          <ApplicationAlertBox errors={errors} />
           {incomeError && (
             <CardSection>
               <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
@@ -175,25 +195,24 @@ const ApplicationIncome = () => {
           )}
 
           <CardSection divider={"flush"} className={"border-none"}>
-            <Field
-              id="income"
-              name="income"
-              type="currency"
-              label={t("application.financial.income.prompt")}
-              labelClassName={"text__caps-spaced"}
-              validation={{ required: true, min: 0.01 }}
-              error={errors.income}
-              register={register}
-              errorMessage={t("errors.numberError")}
-              setValue={setValue}
-              getValues={getValues}
-              prepend={"$"}
-              dataTestId={"app-income"}
-              subNote={t("application.financial.income.placeholder")}
-            />
-
             <fieldset>
-              <legend className="sr-only">{t("application.financial.income.legend")}</legend>
+              <legend className="sr-only">{t("t.income")}</legend>
+              <Field
+                id="income"
+                name="income"
+                type="currency"
+                label={t("application.financial.income.prompt")}
+                labelClassName={"text__caps-spaced"}
+                validation={{ required: true, min: 0.01 }}
+                error={errors.income}
+                register={register}
+                errorMessage={t("errors.numberError")}
+                setValue={setValue}
+                getValues={getValues}
+                prepend={"$"}
+                dataTestId={"app-income"}
+                subNote={t("application.financial.income.placeholder")}
+              />
               <FieldGroup
                 type="radio"
                 name="incomePeriod"
@@ -205,6 +224,7 @@ const ApplicationIncome = () => {
                 dataTestId={"app-income-period"}
                 fieldGroupClassName="grid grid-cols-1"
                 fieldClassName="ml-0"
+                groupLabel={t("application.financial.income.legend")}
               />
             </fieldset>
           </CardSection>
@@ -215,3 +235,5 @@ const ApplicationIncome = () => {
 }
 
 export default ApplicationIncome
+
+export const getStaticProps = sharedGetStaticProps

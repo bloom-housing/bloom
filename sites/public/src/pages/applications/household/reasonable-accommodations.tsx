@@ -1,0 +1,109 @@
+import React, { useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
+import { t, Textarea } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
+import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+
+const ApplicationReasonableAccommodations = () => {
+  const { profile } = useContext(AuthContext)
+  const { conductor, application, listing } = useFormConductor("reasonableAccommodations")
+  const currentPageSection = 2
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, handleSubmit, getValues } = useForm<Record<string, string>>({
+    defaultValues: {
+      reasonableAccommodations: application.reasonableAccommodations || "",
+    },
+  })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "reasonableAccommodations",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "reasonableAccommodations",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
+
+  const onSubmit = (data) => {
+    const pendingSave = { reasonableAccommodations: data.reasonableAccommodations }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
+    })
+  }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Reasonable Accommodations",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
+
+  return (
+    <FormsLayout
+      pageTitle={`${t("pageTitle.reasonableAccommodations")} - ${t(
+        "listings.apply.applyOnline"
+      )} - ${listing?.name}`}
+    >
+      <Form onSubmit={handleSubmit(onSubmit)} onBlur={onFieldBlur}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.household.reasonableAccommodations.question")}
+          subheading={t("application.household.reasonableAccommodations.subtitle")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+          stopLights={stopLights}
+        >
+          <CardSection divider={"flush"} className={"border-none"}>
+            <Textarea
+              id="reasonableAccommodations"
+              name="reasonableAccommodations"
+              label={t("application.household.reasonableAccommodations.label")}
+              register={register}
+              fullWidth={true}
+              maxLength={1000}
+              placeholder={""}
+              dataTestId="app-reasonable-accommodations"
+            />
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
+    </FormsLayout>
+  )
+}
+
+export default ApplicationReasonableAccommodations
+
+export const getStaticProps = sharedGetStaticProps

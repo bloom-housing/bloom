@@ -3,12 +3,19 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { t, Form } from "@bloom-housing/ui-components"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import { Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
@@ -25,6 +32,12 @@ const ApplicationWhatToExpect = () => {
   }
 
   const content = useMemo(() => {
+    if (conductor.config.isAdvocate) {
+      return {
+        steps: t("application.start.whatToExpect.advocate.steps"),
+        finePrint: t("application.start.whatToExpect.advocate.finePrint"),
+      }
+    }
     switch (listing?.reviewOrderType) {
       case ReviewOrderTypeEnum.firstComeFirstServe:
         if (isUnitGroupAppWaitlist(listing, conductor.config)) {
@@ -140,3 +153,5 @@ const ApplicationWhatToExpect = () => {
 }
 
 export default ApplicationWhatToExpect
+
+export const getStaticProps = sharedGetStaticProps

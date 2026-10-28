@@ -2,15 +2,24 @@ import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
-import { t, Form } from "@bloom-housing/ui-components"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
+import {
+  AuthContext,
+  Form,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
 import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)
@@ -20,12 +29,28 @@ const ApplicationAddMembers = () => {
   const householdSize = parseInt(application.householdMember.length) + 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, handleSubmit, register, clearErrors } = useForm()
+  const { errors, handleSubmit, register, clearErrors, getValues } = useForm()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "addMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "addMembers",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
   const onSubmit = () => {
-    conductor.currentStep.save({
-      householdSize: parseInt(application.householdMember.length) + 1,
+    const pendingSave = { householdSize: parseInt(application.householdMember.length) + 1 }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.routeToNextOrReturnUrl()
   }
 
   const onError = () => {
@@ -52,14 +77,16 @@ const ApplicationAddMembers = () => {
   const membersSection = application.householdMember.map((member, index) => {
     return (
       <CardSection divider="inset" key={index}>
-        <HouseholdMemberForm
-          editMember={editMember}
-          key={index}
-          memberFirstName={member.firstName}
-          memberId={index}
-          memberLastName={member.lastName}
-          subtitle={t("application.household.householdMember")}
-        />
+        <li>
+          <HouseholdMemberForm
+            editMember={editMember}
+            key={index}
+            memberFirstName={member.firstName}
+            memberId={index}
+            memberLastName={member.lastName}
+            subtitle={t("application.household.householdMember")}
+          />
+        </li>
       </CardSection>
     )
   })
@@ -78,7 +105,7 @@ const ApplicationAddMembers = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.addMembers.title")}
@@ -95,6 +122,7 @@ const ApplicationAddMembers = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <HouseholdSizeField
             assistanceUrl={t("application.household.assistanceUrl")}
@@ -106,16 +134,19 @@ const ApplicationAddMembers = () => {
             register={register}
             validate={true}
           />
-          <CardSection divider="inset">
-            <HouseholdMemberForm
-              editMember={editMember}
-              editMode={!application.autofilled}
-              memberFirstName={applicant.firstName}
-              memberLastName={applicant.lastName}
-              subtitle={t("application.household.primaryApplicant")}
-            />
-          </CardSection>
-          {membersSection}
+          <ul>
+            <CardSection divider="inset">
+              <li>
+                <HouseholdMemberForm
+                  editMember={editMember}
+                  memberFirstName={applicant.firstName}
+                  memberLastName={applicant.lastName}
+                  subtitle={t("application.household.primaryApplicant")}
+                />
+              </li>
+            </CardSection>
+            {membersSection}
+          </ul>
           <CardSection divider={"flush"} className={"border-none"}>
             <Button
               onClick={onAddMember}
@@ -133,3 +164,5 @@ const ApplicationAddMembers = () => {
 }
 
 export default ApplicationAddMembers
+
+export const getStaticProps = sharedGetStaticProps

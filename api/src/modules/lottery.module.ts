@@ -1,4 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ApplicationExporterModule } from './application-exporter.module';
 import { ConfigService } from '@nestjs/config';
 import { EmailModule } from './email.module';
@@ -9,16 +10,19 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
 import { PermissionModule } from './permission.module';
 import { PrismaModule } from './prisma.module';
 import { CronJobModule } from './cron-job.module';
+import { SnapshotCreateModule } from './snapshot-create.module';
 
 @Module({
   imports: [
     ApplicationExporterModule,
+    HttpModule,
     PrismaModule,
     ListingModule,
     EmailModule,
     MultiselectQuestionModule,
     PermissionModule,
     CronJobModule,
+    SnapshotCreateModule,
   ],
   controllers: [LotteryController],
   providers: [LotteryService, Logger, ConfigService],

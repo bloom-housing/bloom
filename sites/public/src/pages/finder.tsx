@@ -6,7 +6,7 @@ import {
 import { t } from "@bloom-housing/ui-components"
 import RentalsFinder from "../components/finder/RentalsFinder"
 import Layout from "../layouts/application"
-import { fetchJurisdictionByName, fetchMultiselectProgramData } from "../lib/hooks"
+import { fetchMultiselectProgramData, fetchSharedPageProps } from "../lib/hooks"
 import { isFeatureFlagOn } from "../lib/helpers"
 
 export interface FinderProps {
@@ -22,29 +22,33 @@ export default function Finder(props: FinderProps) {
     ) || []
 
   return (
-    <Layout pageTitle={t("pageTitle.rentalFinder")}>
+    <Layout
+      pageTitle={t("pageTitle.rentalFinder")}
+      metaDescription={t("pageDescription.rentalFinder")}
+    >
       <RentalsFinder
         activeFeatureFlags={activeFeatureFlags}
         multiselectData={props.multiselectData}
+        listingFeaturesConfiguration={props.jurisdiction?.listingFeaturesConfiguration}
       />
     </Layout>
   )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getStaticProps(context: { req: any; query: any }) {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getStaticProps(context: { req: any; query: any; locale?: string }) {
+  const shared = await fetchSharedPageProps(context.locale)
 
   const multiselectData = isFeatureFlagOn(
-    jurisdiction,
+    shared.jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
   )
-    ? await fetchMultiselectProgramData(context.req, jurisdiction?.id)
+    ? await fetchMultiselectProgramData(context.req, shared.jurisdiction?.id)
     : null
 
   return {
     props: {
-      jurisdiction: jurisdiction,
+      ...shared,
       multiselectData,
     },
     revalidate: Number(process.env.cacheRevalidate),

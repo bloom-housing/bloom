@@ -9,7 +9,7 @@
             <p>
                 {{t "t.hello"}},
                 <br/><br/>
-                {{t "requestApproval.partnerRequest" appOptions}}
+                {{t "requestApproval.partnerRequest" appOptions}}{{#if listingFileNumber}} {{t "requestApproval.fileNumber" appOptions}}{{/if}}
                 <br/><br/>
                 {{t "requestApproval.logInToReviewStart"}} <a href="{{ appUrl }}">{{t "t.partnersPortal"}}</a> {{t "requestApproval.logInToReviewEnd"}}
                 <br/><br/>

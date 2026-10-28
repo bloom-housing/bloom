@@ -1,3 +1,15 @@
+:global {
+  @keyframes skeleton-pulse {
+    0%,
+    100% {
+      background-color: var(--seeds-color-gray-450);
+    }
+    50% {
+      background-color: var(--seeds-color-gray-400);
+    }
+  }
+}
+
 .list-item {
   &:not(:last-child) {
     margin-block-end: var(--seeds-spacer-content);
@@ -30,22 +42,30 @@
       }
 
       .image {
+        position: relative;
         width: calc(100% / 7 * 3);
+        overflow: hidden;
+        pointer-events: none;
+        background-color: var(--seeds-color-gray-300);
+        animation: skeleton-pulse 1.5s ease-in-out infinite;
         @media (--md-down) {
           width: 100%;
-        }
-      }
-
-      .image-background {
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        @media (--md-down) {
           min-height: var(--seeds-s96);
         }
         @media (--sm-only) {
           min-height: var(--seeds-s56);
         }
+      }
+
+      .image-background {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
       }
 
       .details {

@@ -1,0 +1,50 @@
+.preview {
+  margin-block: var(--seeds-s6) var(--seeds-s4);
+}
+
+.preview__note {
+  color: var(--seeds-text-color-secondary);
+  font-size: var(--seeds-font-size-sm);
+  padding-block: var(--seeds-s2);
+}
+
+.preview__sample {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--seeds-s4);
+  padding: var(--seeds-s4);
+  border: 1px solid var(--seeds-color-gray-450);
+  border-radius: var(--seeds-rounded);
+  background-color: var(--seeds-color-white);
+
+  // TODO(ui-seeds#155): drop this once .seeds-button reads --seeds-rounded-button.
+  // Wrapped in :global because css modules would otherwise hash a class ui-seeds owns.
+  :global(.seeds-button) {
+    --button-border-radius-sm: var(--brand-button-radius, var(--seeds-rounded));
+    --button-border-radius-md: var(--brand-button-radius, var(--seeds-rounded));
+    --button-border-radius-lg: var(--brand-button-radius, var(--seeds-rounded));
+  }
+}
+
+.preview__type {
+  margin-block-start: var(--seeds-s4);
+  padding: var(--seeds-s4);
+  border: 1px solid var(--seeds-color-gray-450);
+  border-radius: var(--seeds-rounded);
+  background-color: var(--seeds-color-white);
+}
+
+.preview__heading {
+  font-family: var(--seeds-font-alt-sans);
+  margin-block-end: var(--seeds-s2);
+}
+
+.preview__body {
+  font-family: var(--seeds-font-sans);
+}
+
+.preview__serif {
+  font-family: var(--seeds-font-serif);
+  margin-block-start: var(--seeds-s2);
+}

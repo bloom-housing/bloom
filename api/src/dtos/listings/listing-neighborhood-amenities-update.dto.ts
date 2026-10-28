@@ -6,7 +6,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class ListingNeighborhoodAmenitiesUpdate extends OmitType(
   ListingNeighborhoodAmenities,
-  ['createdAt', 'id', 'updatedAt'],
+  ['id'],
 ) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

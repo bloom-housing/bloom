@@ -7,6 +7,8 @@ import { rest } from "msw"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationsService,
+  ApplicationStatusEnum,
+  FeatureFlagEnum,
   ListingsService,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import userEvent from "@testing-library/user-event"
@@ -26,7 +28,7 @@ afterAll(() => {
   server.close()
 })
 
-const renderApplicationView = () =>
+const renderApplicationView = (enableApplicationStatus = false) =>
   render(
     <AuthContext.Provider
       value={{
@@ -37,7 +39,10 @@ const renderApplicationView = () =>
         },
         applicationsService: new ApplicationsService(),
         listingsService: new ListingsService(),
-        doJurisdictionsHaveFeatureFlagOn: () => false,
+        doJurisdictionsHaveFeatureFlagOn: (flag) =>
+          flag === FeatureFlagEnum.enableApplicationStatus
+            ? enableApplicationStatus
+            : flag === FeatureFlagEnum.enableReasonableAccommodations,
       }}
     >
       <ApplicationView />
@@ -98,10 +103,14 @@ describe("Account Listing View", () => {
               vision: true,
               hearing: true,
             },
+            listings: {
+              id: "123",
+              name: "Archer Studios",
+            },
           })
         )
       }),
-      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/listings/123", (_req, res, ctx) => {
         return res(ctx.json(listing))
       })
     )
@@ -125,6 +134,8 @@ describe("Account Listing View", () => {
     expect(screen.getByText(/december 2, 2021/i)).toBeInTheDocument()
     expect(screen.getByText(/your confirmation number is:/i)).toBeInTheDocument()
     expect(screen.getByText("ABCD1234")).toBeInTheDocument()
+    expect(screen.queryByText("Your accessible wait list number is:")).not.toBeInTheDocument()
+    expect(screen.queryByText("Your conventional wait list number is:")).not.toBeInTheDocument()
 
     // --------------------------- Applicant Section ------------------------------------
     expect(await screen.findByRole("heading", { level: 3, name: /you/i })).toBeInTheDocument()
@@ -246,15 +257,9 @@ describe("Account Listing View", () => {
     const adaAccessibleUnitsSection = screen.getByTestId("app-summary-ada")
     expect(adaAccessibleUnitsSection).toBeInTheDocument()
     expect(within(adaAccessibleUnitsSection).getByText(/ada accessible units/i)).toBeInTheDocument()
-    expect(
-      within(adaAccessibleUnitsSection).getByTestId("For vision impairments")
-    ).toBeInTheDocument()
-    expect(
-      within(adaAccessibleUnitsSection).getByTestId("For hearing impairments")
-    ).toBeInTheDocument()
-    expect(
-      within(adaAccessibleUnitsSection).getByTestId("For mobility impairments")
-    ).toBeInTheDocument()
+    expect(within(adaAccessibleUnitsSection).getByTestId("ada-vision")).toBeInTheDocument()
+    expect(within(adaAccessibleUnitsSection).getByTestId("ada-hearing")).toBeInTheDocument()
+    expect(within(adaAccessibleUnitsSection).getByTestId("ada-mobility")).toBeInTheDocument()
 
     const householdChangesSection = screen.getByTestId("app-summary-household-changes")
     expect(householdChangesSection).toBeInTheDocument()
@@ -269,6 +274,19 @@ describe("Account Listing View", () => {
       within(householdStudentSection).getByText(/household includes student or member nearing 18/i)
     ).toBeInTheDocument()
     expect(within(householdStudentSection).getByText(/no/i)).toBeInTheDocument()
+
+    const reasonableAccommodationsSection = screen.getByTestId(
+      "app-summary-reasonable-accommodations"
+    )
+    expect(reasonableAccommodationsSection).toBeInTheDocument()
+    expect(
+      within(reasonableAccommodationsSection).getByText(
+        /do you require reasonable accommodations\?/i
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(reasonableAccommodationsSection).getByText(/wheelchair-accessible unit entrance/i)
+    ).toBeInTheDocument()
 
     // --------------------------- Programs ------------------------------------
 
@@ -330,6 +348,33 @@ describe("Account Listing View", () => {
     ).toBeInTheDocument()
   })
 
+  it("should display waitlist numbers when feature flag is on", async () => {
+    server.use(
+      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            ...application,
+            status: ApplicationStatusEnum.waitlist,
+            accessibleUnitWaitlistNumber: 123,
+            conventionalUnitWaitlistNumber: 456,
+          })
+        )
+      }),
+      rest.get("http://localhost/api/adapter/listings/Uvbk5qurpB2WI9V6WnNdH", (_req, res, ctx) => {
+        return res(ctx.json(listing))
+      })
+    )
+
+    renderApplicationView(true)
+
+    expect(await screen.findByText("Your accessible wait list number is:")).toBeInTheDocument()
+    expect(screen.getByText("123")).toBeInTheDocument()
+    expect(screen.getByText("Your conventional wait list number is:")).toBeInTheDocument()
+    expect(screen.getByText("456")).toBeInTheDocument()
+    expect(screen.getByText("Your confirmation number is:")).toBeInTheDocument()
+    expect(screen.getByText("ABCD1234")).toBeInTheDocument()
+  })
+
   it("should run window print on button click", async () => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const windowSpy = jest.spyOn(window, "print").mockImplementation(() => {})
@@ -354,5 +399,42 @@ describe("Account Listing View", () => {
     await waitFor(() => {
       expect(windowSpy).toHaveBeenCalled()
     })
+  })
+
+  it("should render when alternate contact is null and multiselect responses are malformed", async () => {
+    server.use(
+      rest.get("http://localhost:3100/applications/application_1", (_req, res, ctx) => {
+        return res(
+          ctx.json({
+            ...application,
+            listings: {
+              id: "123",
+              name: "Archer Studios",
+            },
+            contactPreferences: [],
+            alternateContact: null,
+            programs: {},
+            preferences: {},
+          })
+        )
+      }),
+      rest.get("http://localhost/api/adapter/listings/123", (_req, res, ctx) => {
+        return res(ctx.json(listing))
+      })
+    )
+
+    renderApplicationView()
+
+    expect(
+      await screen.findByRole("heading", { level: 1, name: /archer studios/i })
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId("app-summary-contact-preference-type")).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("heading", { level: 3, name: /alternate contact/i })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("heading", { level: 3, name: /programs/i })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("heading", { level: 3, name: /preferences/i })
+    ).not.toBeInTheDocument()
   })
 })

@@ -2,7 +2,7 @@ describe("Paper Application Tests", () => {
   beforeEach(() => {
     cy.loginApi()
     cy.visit("/")
-    cy.getByTestId("listing-status-cell-Blue Sky Apartments").click()
+    cy.getByID("listing-status-cell-Blue Sky Apartments").click()
     cy.getByID("addApplicationButton").contains("Add application").click()
   })
 
@@ -29,7 +29,6 @@ describe("Paper Application Tests", () => {
     })
   })
 
-  // TODO: unskip when application flow is connected
   it("submit with no data", () => {
     cy.fixture("emptyApplication").then((application) => {
       cy.fillTerms(application, true)

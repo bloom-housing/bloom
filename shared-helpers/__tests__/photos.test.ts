@@ -23,6 +23,15 @@ describe("photos helper", () => {
     )
   })
 
+  it("should return original id when cloudinary env is not set", () => {
+    delete process.env.CLOUDINARY_CLOUD_NAME
+    delete process.env.cloudinaryCloudName
+
+    expect(cloudinaryUrlFromId("https://aws.example.com/image.jpg")).toBe(
+      "https://aws.example.com/image.jpg"
+    )
+  })
+
   it("should return correct cloudinary url from a listing with new image field", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 
@@ -48,18 +57,50 @@ describe("photos helper", () => {
     )
   })
 
-  it("should return correct id when falling back to old field", () => {
+  it("should return building asset from listingImages when cloudinary env is set", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 
     const testListing = {
-      assets: [
+      id: "id456",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: "listing with legacy-labeled image in new field",
+      status: ListingsStatusEnum.active,
+      listingImages: [
         {
-          fileId: "5678",
-          label: "building",
+          ordinal: 0,
+          assets: {
+            fileId: "legacy-building-id",
+            label: "building",
+          },
         },
       ],
     } as Listing
 
-    expect(imageUrlFromListing(testListing)[0]).toBe("5678")
+    expect(imageUrlFromListing(testListing)[0]).toBe("legacy-building-id")
+  })
+
+  it("should return random-labeled listingImages asset when cloudinary env is not set", () => {
+    delete process.env.CLOUDINARY_CLOUD_NAME
+    delete process.env.cloudinaryCloudName
+
+    const testListing = {
+      id: "id789",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: "listing with random label",
+      status: ListingsStatusEnum.active,
+      listingImages: [
+        {
+          ordinal: 0,
+          assets: {
+            fileId: "random-label-id",
+            label: "someRandomLabel",
+          },
+        },
+      ],
+    } as Listing
+
+    expect(imageUrlFromListing(testListing)[0]).toBe("random-label-id")
   })
 })

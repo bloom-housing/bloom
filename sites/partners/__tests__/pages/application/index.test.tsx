@@ -7,7 +7,6 @@ import { application, listing, user } from "@bloom-housing/shared-helpers/__test
 import ApplicationsList from "../../../src/pages/application/[id]"
 import {
   AlternateContactRelationship,
-  LanguagesEnum,
   UnitTypeEnum,
   YesNoEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
@@ -176,7 +175,7 @@ describe("partners_application_index", () => {
           },
         }}
       >
-        <DetailsHouseholdDetails enableAdaOtherOption={false} />
+        <DetailsHouseholdDetails />
       </ApplicationContext.Provider>
     )
 
@@ -212,10 +211,7 @@ describe("partners_application_index", () => {
           },
         }}
       >
-        <DetailsHouseholdDetails
-          enableFullTimeStudentQuestion={true}
-          enableAdaOtherOption={false}
-        />
+        <DetailsHouseholdDetails enableFullTimeStudentQuestion={true} />
       </ApplicationContext.Provider>
     )
 

@@ -4,11 +4,7 @@ import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Address } from './address.dto';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
-export class AddressUpdate extends OmitType(Address, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {
+export class AddressUpdate extends OmitType(Address, ['id']) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
