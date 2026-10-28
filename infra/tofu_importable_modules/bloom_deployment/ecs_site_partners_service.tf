@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
         retries     = 10
         startPeriod = 30 # seconds
       }
-      
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
