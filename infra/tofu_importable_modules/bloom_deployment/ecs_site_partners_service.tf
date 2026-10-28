@@ -55,9 +55,9 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
         interval    = 5 # seconds
         timeout     = 2 # seconds
         retries     = 10
-        startPeriod = 5 # seconds
+        startPeriod = 30 # seconds
       }
-      # TODO healthCheck https://github.com/bloom-housing/bloom/issues/5583
+      
       logConfiguration = {
         logDriver = "awslogs"
         options = {

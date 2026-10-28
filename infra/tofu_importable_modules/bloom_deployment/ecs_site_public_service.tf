@@ -63,7 +63,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
         interval    = 5 # seconds
         timeout     = 2 # seconds
         retries     = 10
-        startPeriod = 5 # seconds
+        startPeriod = 30 # seconds
       }
       logConfiguration = {
         logDriver = "awslogs"
