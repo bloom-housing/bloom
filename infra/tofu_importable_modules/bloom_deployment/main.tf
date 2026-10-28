@@ -96,11 +96,25 @@ variable "google_translate_settings" {
     error_message = "project_id and iam_user must not be empty strings."
   }
 }
+
+variable "min_tasks" {
+  type = number
+  description = "The minimum number of tasks to run"
+  default = 2
+}
+
+variable "max_tasks" {
+  type = number
+  description = "The minimum number of tasks to run"
+  default = 4
+}
+
 variable "high_availability" {
   type        = bool
   description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."
   default     = true
 }
+
 variable "env_type" {
   type        = string
   description = "Type of environment this deployment is going in."
