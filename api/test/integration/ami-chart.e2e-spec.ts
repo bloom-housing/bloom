@@ -176,4 +176,147 @@ describe('AmiChart Controller Tests', () => {
 
     expect(res.body.success).toEqual(true);
   });
+
+  it('testing create endpoint with ordinal', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/amiCharts')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        name: 'ordinal chart',
+        items: [
+          {
+            percentOfAmi: 80,
+            householdSize: 2,
+            income: 5000,
+          },
+        ],
+        jurisdictions: {
+          id: jurisdictionAId,
+        },
+        ordinal: 3,
+      } as AmiChartCreate)
+      .set('Cookie', cookies)
+      .expect(201);
+
+    expect(res.body.ordinal).toEqual(3);
+    const stored = await prisma.amiChart.findUnique({
+      where: { id: res.body.id },
+    });
+    expect(stored.ordinal).toEqual(3);
+  });
+
+  it('testing create endpoint rejects a non-integer ordinal', async () => {
+    await request(app.getHttpServer())
+      .post('/amiCharts')
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        name: 'bad ordinal chart',
+        items: [
+          {
+            percentOfAmi: 80,
+            householdSize: 2,
+            income: 5000,
+          },
+        ],
+        jurisdictions: {
+          id: jurisdictionAId,
+        },
+        ordinal: 1.5,
+      } as AmiChartCreate)
+      .set('Cookie', cookies)
+      .expect(400);
+  });
+
+  it('testing update endpoint sets ordinal and keeps it when omitted', async () => {
+    const amiChartA = await prisma.amiChart.create({
+      data: amiChartFactory(10, jurisdictionAId),
+    });
+    const items = [
+      {
+        percentOfAmi: 80,
+        householdSize: 2,
+        income: 5000,
+      },
+    ];
+
+    const resWithOrdinal = await request(app.getHttpServer())
+      .put(`/amiCharts/${amiChartA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        id: amiChartA.id,
+        name: amiChartA.name,
+        items,
+        ordinal: 2,
+      } as AmiChartUpdate)
+      .set('Cookie', cookies)
+      .expect(200);
+
+    expect(resWithOrdinal.body.ordinal).toEqual(2);
+
+    await request(app.getHttpServer())
+      .put(`/amiCharts/${amiChartA.id}`)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .send({
+        id: amiChartA.id,
+        name: 'renamed',
+        items,
+      } as AmiChartUpdate)
+      .set('Cookie', cookies)
+      .expect(200);
+
+    const stored = await prisma.amiChart.findUnique({
+      where: { id: amiChartA.id },
+    });
+    expect(stored.name).toEqual('renamed');
+    expect(stored.ordinal).toEqual(2);
+  });
+
+  it('testing list endpoint orders by ordinal, then created_at desc, then name', async () => {
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(),
+    });
+    const chartA = await prisma.amiChart.create({
+      data: {
+        ...amiChartFactory(1, jurisdiction.id),
+        name: 'b',
+        createdAt: new Date('2024-01-01'),
+      },
+    });
+    const chartB = await prisma.amiChart.create({
+      data: { ...amiChartFactory(1, jurisdiction.id), ordinal: 2 },
+    });
+    const chartC = await prisma.amiChart.create({
+      data: { ...amiChartFactory(1, jurisdiction.id), ordinal: 1 },
+    });
+    const chartD = await prisma.amiChart.create({
+      data: {
+        ...amiChartFactory(1, jurisdiction.id),
+        createdAt: new Date('2024-01-02'),
+      },
+    });
+    const chartE = await prisma.amiChart.create({
+      data: {
+        ...amiChartFactory(1, jurisdiction.id),
+        name: 'a',
+        createdAt: new Date('2024-01-01'),
+      },
+    });
+    const query = stringify({
+      jurisdictionId: jurisdiction.id,
+    } as AmiChartQueryParams as any);
+
+    const res = await request(app.getHttpServer())
+      .get(`/amiCharts?${query}`)
+      .set('Cookie', cookies)
+      .set({ passkey: process.env.API_PASS_KEY || '' })
+      .expect(200);
+
+    expect(res.body.map((chart) => chart.id)).toEqual([
+      chartC.id,
+      chartB.id,
+      chartD.id,
+      chartE.id,
+      chartA.id,
+    ]);
+  });
 });

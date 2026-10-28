@@ -4821,6 +4821,9 @@ export interface AmiChart {
 
   /**  */
   jurisdictions: IdDTO
+
+  /**  */
+  ordinal?: number
 }
 
 /** UnitGroupAmiLevel */
@@ -8319,6 +8322,9 @@ export interface AmiChartCreate {
 
   /**  */
   jurisdictions: IdDTO
+
+  /**  */
+  ordinal?: number
 }
 
 /** AmiChartUpdate */
@@ -8331,6 +8337,9 @@ export interface AmiChartUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  ordinal?: number
 }
 
 /** ReservedCommunityTypeQueryParams */
@@ -10821,6 +10830,9 @@ export interface AmiChartImportDTO {
 
   /**  */
   jurisdictionId: string
+
+  /**  */
+  ordinal?: number
 }
 
 /** AmiChartUpdateImportDTO */
@@ -10830,6 +10842,9 @@ export interface AmiChartUpdateImportDTO {
 
   /**  */
   amiId: string
+
+  /**  */
+  ordinal?: number
 }
 
 /** CommunityTypeDTO */

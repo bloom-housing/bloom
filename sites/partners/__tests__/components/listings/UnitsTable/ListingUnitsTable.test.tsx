@@ -50,6 +50,7 @@ const unitC = makeUnit({
 const units = [unitA, unitB, unitC]
 
 const NUMBER_COLUMN = 0
+const AMI_CHART_COLUMN = 2
 const RENT_COLUMN = 4
 const SQFEET_COLUMN = 5
 
@@ -139,6 +140,33 @@ describe("ListingUnitsTable", () => {
     expect(columnValues(NUMBER_COLUMN)).toEqual(["10", "4A", "2"])
     fireEvent.click(screen.getByTestId("sort-button-number"))
     expect(columnValues(NUMBER_COLUMN)).toEqual(["10", "2", "4A"])
+  })
+
+  it("sorts AMI charts by ordinal, then alphabetically when the ordinal is missing", () => {
+    renderTable([
+      makeUnit({ id: "zeta", amiChart: { id: "chart-zeta", name: "2026 Zeta" } as AmiChart }),
+      makeUnit({ id: "bond", amiChart: { ...bondChart, ordinal: 2 } }),
+      makeUnit({ id: "none", amiChart: undefined }),
+      makeUnit({ id: "alpha", amiChart: { id: "chart-alpha", name: "2026 Alpha" } as AmiChart }),
+      makeUnit({ id: "hud", amiChart: { ...hudChart, ordinal: 1 } }),
+    ])
+
+    fireEvent.click(screen.getByTestId("sort-button-amiChart"))
+    expect(columnValues(AMI_CHART_COLUMN)).toEqual([
+      "",
+      "2026 CRA-HUD",
+      "2026 Bond",
+      "2026 Alpha",
+      "2026 Zeta",
+    ])
+    fireEvent.click(screen.getByTestId("sort-button-amiChart"))
+    expect(columnValues(AMI_CHART_COLUMN)).toEqual([
+      "2026 Zeta",
+      "2026 Alpha",
+      "2026 Bond",
+      "2026 CRA-HUD",
+      "",
+    ])
   })
 
   it("sorts rent numerically with empty values first ascending and last descending", () => {
