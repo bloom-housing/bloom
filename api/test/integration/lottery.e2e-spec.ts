@@ -699,6 +699,212 @@ describe('Lottery Controller Tests', () => {
     });
   });
 
+  describe('generateLotteryResults endpoint as a partner', () => {
+    let partnerJurisdictionId: string;
+    let partnerListingId: string;
+    let assignedPartnerCookies: string;
+    let unassignedPartnerCookies: string;
+
+    const loginAs = async (email: string): Promise<string> => {
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          email,
+          password: 'Abcdef12345!',
+        } as Login)
+        .expect(201);
+      return res.headers['set-cookie'];
+    };
+
+    beforeAll(async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(
+          `enablePartnerLotteryRun Lottery ${randomUUID()}`,
+          {
+            featureFlags: [FeatureFlagEnum.enablePartnerLotteryRun],
+          },
+        ),
+      });
+      partnerJurisdictionId = jurisdiction.id;
+
+      const listingData = await listingFactory(partnerJurisdictionId, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryOptIn: true,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+      });
+      const listing = await prisma.listings.create({ data: listingData });
+      partnerListingId = listing.id;
+
+      const otherListingData = await listingFactory(
+        partnerJurisdictionId,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          lotteryOptIn: true,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+        },
+      );
+      const otherListing = await prisma.listings.create({
+        data: otherListingData,
+      });
+
+      const assignedPartner = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          listings: [partnerListingId],
+          jurisdictionIds: [partnerJurisdictionId],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      assignedPartnerCookies = await loginAs(assignedPartner.email);
+
+      const unassignedPartner = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          listings: [otherListing.id],
+          jurisdictionIds: [partnerJurisdictionId],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      unassignedPartnerCookies = await loginAs(unassignedPartner.email);
+    });
+
+    it('should generate and re-run results for a partner assigned to the listing', async () => {
+      for (let i = 0; i < 3; i++) {
+        const application = await applicationFactory({
+          unitTypeId: unitTypeA.id,
+          listingId: partnerListingId,
+        });
+        await prisma.applications.create({
+          data: application,
+          include: { applicant: true },
+        });
+      }
+
+      await request(app.getHttpServer())
+        .put(`/lottery/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ id: partnerListingId })
+        .set('Cookie', assignedPartnerCookies)
+        .expect(200);
+
+      const lotterySpotsA = await prisma.applicationLotteryPositions.findMany({
+        where: { listingId: partnerListingId },
+      });
+      expect(lotterySpotsA).toHaveLength(3);
+
+      const ranListing = await prisma.listings.findUnique({
+        where: { id: partnerListingId },
+      });
+      expect(ranListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+      expect(ranListing.lotteryLastRunAt).not.toBeNull();
+
+      // re-run - prior positions are cleared and regenerated
+      await request(app.getHttpServer())
+        .put(`/lottery/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ id: partnerListingId })
+        .set('Cookie', assignedPartnerCookies)
+        .expect(200);
+
+      const lotterySpotsB = await prisma.applicationLotteryPositions.findMany({
+        where: { listingId: partnerListingId },
+      });
+      expect(lotterySpotsB).toHaveLength(3);
+    });
+
+    it('should error for a partner not assigned to the listing', async () => {
+      await request(app.getHttpServer())
+        .put(`/lottery/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ id: partnerListingId })
+        .set('Cookie', unassignedPartnerCookies)
+        .expect(403);
+    });
+
+    it('should update lottery status to ran for a partner assigned to the listing', async () => {
+      const listingData = await listingFactory(partnerJurisdictionId, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryOptIn: true,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+      });
+      const listing = await prisma.listings.create({ data: listingData });
+
+      const partner = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          listings: [listing.id],
+          jurisdictionIds: [partnerJurisdictionId],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const partnerCookies = await loginAs(partner.email);
+
+      await request(app.getHttpServer())
+        .put('/lottery/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: listing.id,
+          lotteryStatus: LotteryStatusEnum.ran,
+        })
+        .set('Cookie', partnerCookies)
+        .expect(200);
+
+      const updatedListing = await prisma.listings.findUnique({
+        where: { id: listing.id },
+      });
+      expect(updatedListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+    });
+
+    it('should error updating lottery status to ran for a partner not assigned to the listing', async () => {
+      await request(app.getHttpServer())
+        .put('/lottery/lotteryStatus')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({
+          id: partnerListingId,
+          lotteryStatus: LotteryStatusEnum.ran,
+        })
+        .set('Cookie', unassignedPartnerCookies)
+        .expect(403);
+    });
+
+    it('should error for an assigned partner when enablePartnerLotteryRun is off', async () => {
+      const jurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(
+          `no enablePartnerLotteryRun Lottery ${randomUUID()}`,
+        ),
+      });
+      const listingData = await listingFactory(jurisdiction.id, prisma, {
+        status: ListingsStatusEnum.closed,
+        lotteryOptIn: true,
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+      });
+      const listing = await prisma.listings.create({ data: listingData });
+
+      const partner = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          listings: [listing.id],
+          jurisdictionIds: [jurisdiction.id],
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      const partnerCookies = await loginAs(partner.email);
+
+      await request(app.getHttpServer())
+        .put(`/lottery/generateLotteryResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ id: listing.id })
+        .set('Cookie', partnerCookies)
+        .expect(403);
+    });
+  });
+
   describe('getLotteryResults endpoint', () => {
     it('should get a lottery export of application', async () => {
       const listing1 = await listingFactory(jurisdictionAId, prisma, {
