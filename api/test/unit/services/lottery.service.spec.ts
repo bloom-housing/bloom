@@ -1404,6 +1404,8 @@ describe('Testing lottery service', () => {
         },
         where: {
           lotteryLastPublishedAt: null,
+          status: 'closed',
+          reviewOrderType: 'lottery',
           lotteryStatus: {
             in: [
               LotteryStatusEnum.ran,
