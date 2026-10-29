@@ -205,14 +205,7 @@ variable "bloom_api_env_vars" {
   description = "Environment variables for the Bloom API tasks. This is merged with the default env vars set in the ecs_api_task.tf file, with these variables taking precedence."
   default     = {}
 }
-variable "bloom_api_task_count" {
-  description = "How many API tasks that should be running. Default is provided based on the high_availability setting."
-  type        = number
-  default     = null
-}
-locals {
-  bloom_api_task_count = var.bloom_api_task_count != null ? var.bloom_api_task_count : (var.high_availability ? 2 : 1)
-}
+
 variable "bloom_api_resource_limits" {
   description = "ECS task resource limits for the API contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
   type = object({
@@ -235,11 +228,13 @@ variable "bloom_site_partners_env_vars" {
   description = "Environment variables for the Bloom partners site tasks. This is merged with the default env vars set in the ecs_site_partners_task.tf file, with these variables taking precedence."
   default     = {}
 }
+
 variable "bloom_site_partners_task_count" {
   description = "How many partners site tasks that should be running. Default is provided based on the high_availability setting."
   type        = number
   default     = null
 }
+
 locals {
   bloom_site_partners_task_count = var.bloom_site_partners_task_count != null ? var.bloom_site_partners_task_count : (var.high_availability ? 2 : 1)
 }
