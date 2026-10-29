@@ -794,6 +794,8 @@ export class LotteryService {
           },
           where: {
             lotteryLastPublishedAt: null,
+            status: 'closed',
+            reviewOrderType: 'lottery',
             lotteryStatus: {
               in: [
                 LotteryStatusEnum.ran,
