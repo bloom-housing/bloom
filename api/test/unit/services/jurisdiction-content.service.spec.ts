@@ -743,18 +743,21 @@ describe('Testing jurisdiction content service', () => {
       });
     });
 
-    it('refuses a file id that is not a usable storage key', async () => {
-      prisma.jurisdictionContent.create = jest.fn();
+    it.each(['../secret', ''])(
+      'refuses the file id %j, which is not a usable storage key',
+      async (logoFileId) => {
+        prisma.jurisdictionContent.create = jest.fn();
 
-      await expect(
-        service.updateContent(
-          randomUUID(),
-          LanguagesEnum.en,
-          { footer: { logo: { logoFileId: '../secret' } } },
-          adminUser,
-        ),
-      ).rejects.toThrow(BadRequestException);
-      expect(prisma.jurisdictionContent.create).not.toHaveBeenCalled();
-    });
+        await expect(
+          service.updateContent(
+            randomUUID(),
+            LanguagesEnum.en,
+            { footer: { logo: { logoFileId } } },
+            adminUser,
+          ),
+        ).rejects.toThrow(BadRequestException);
+        expect(prisma.jurisdictionContent.create).not.toHaveBeenCalled();
+      },
+    );
   });
 });

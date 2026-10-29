@@ -192,18 +192,23 @@ export const ContentImageCard = ({
   const src = typeof value === "string" && value ? value : undefined
 
   const upload = async (file: File) => {
-    await fileUploader({
-      file,
-      setFileUploadData: ((data: FileUploadData) => {
-        if (!data.fileId) return
-        onUpdate((current) =>
-          setValueAt(setValueAt(current, fileIdPath, data.fileId), path, data.url)
-        )
-      }) as never,
-      setProgressValue: ((next: number) => onProgress(next === 100 ? 0 : next)) as never,
-      contentType: file.type,
-      contentDisposition: "inline",
-    })
+    try {
+      await fileUploader({
+        file,
+        setFileUploadData: ((data: FileUploadData) => {
+          if (!data.fileId) return
+          onUpdate((current) =>
+            setValueAt(setValueAt(current, fileIdPath, data.fileId), path, data.url)
+          )
+        }) as never,
+        setProgressValue: ((next: number) => onProgress(next === 100 ? 0 : next)) as never,
+        contentType: file.type,
+        contentDisposition: "inline",
+      })
+    } catch (error) {
+      onProgress(0)
+      console.error("footer logo upload failed:", error)
+    }
   }
 
   return (
