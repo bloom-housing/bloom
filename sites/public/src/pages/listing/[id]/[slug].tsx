@@ -108,7 +108,7 @@ export const getStaticProps: GetStaticProps = async (context: {
       },
     })
   } catch (e) {
-    return { notFound: true }
+    return { notFound: true, revalidate: Number(process.env.cacheRevalidate) }
   }
   const shared = fetchSharedPageProps(context.locale)
 
@@ -122,7 +122,7 @@ export const getStaticProps: GetStaticProps = async (context: {
       response.data.externalURL = response.data.jurisdiction.publicUrl
     } catch (e) {
       console.error(`Error fetching external listing data: ${e}`)
-      return { notFound: true }
+      return { notFound: true, revalidate: Number(process.env.cacheRevalidate) }
     }
   }
 

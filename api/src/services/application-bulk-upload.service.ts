@@ -7,9 +7,11 @@ import {
   OnModuleDestroy,
 } from '@nestjs/common';
 import {
+  Accessibility,
   Applicant,
   ApplicationStatusEnum,
   BackgroundJobStatusEnum,
+  IncomePeriodEnum,
 } from '@prisma/client';
 import { parse } from 'csv-parse';
 import fs, { createReadStream, ReadStream } from 'fs';
@@ -30,6 +32,7 @@ import {
   convertApplicationDeclineReasonToReadable,
   APPLICATION_DECLINE_REASON_MAP,
   convertReadableToApplicationDeclineReason,
+  incomeVouchersToReadable,
 } from '../utilities/application-export-helpers';
 import { ApplicationBulkUpdate } from '../dtos/applications/application-bulk-update.dto';
 import { S3Service } from './s3.service';
@@ -67,6 +70,7 @@ export const bulkUploadHeaderNames = {
   applicationId: 'Application Id',
   applicantFirstName: 'Applicant First Name',
   applicantLastName: 'Applicant Last Name',
+  applicantDateOfBirth: 'Primary DOB',
   applicationSubmissionDate: 'Application Submission Date',
   lotteryPositionNumber: 'Lottery Position Number',
   applicationStatus: 'Application Status',
@@ -75,6 +79,11 @@ export const bulkUploadHeaderNames = {
     'Application Decline Reason Additional Details',
   waitlistPositionAccessibleUnit: 'Waitlist Position (Accessible Unit)',
   waitlistPositionConventionalUnit: 'Waitlist Position (Conventional Unit)',
+  householdSize: 'Household size',
+  annualIncome: 'Declared annual income',
+  monthlyIncome: 'Declared monthly income',
+  requestedAccessibility: 'Request ADA',
+  voucherOrSubsidy: 'Subsidy/Voucher',
 };
 
 const APPLICATION_STATUS_MAP: Record<ApplicationStatusEnum, string> = {
@@ -89,9 +98,26 @@ export type CsvRow = Record<string, string>;
 
 export type ApplicationContextFields = Pick<
   Application,
-  'submissionDate' | 'id'
+  | 'submissionDate'
+  | 'id'
+  | 'householdSize'
+  | 'income'
+  | 'incomePeriod'
+  | 'incomeVouchers'
 > & {
-  applicant: Pick<Applicant, 'firstName' | 'lastName'>;
+  applicant: Pick<
+    Applicant,
+    'firstName' | 'lastName' | 'birthDay' | 'birthMonth' | 'birthYear'
+  >;
+} & {
+  accessibility: Pick<
+    Accessibility,
+    'hearing' | 'hearingAndVision' | 'mobility' | 'other' | 'vision'
+  >;
+};
+
+type OptionalFeatureFlags = {
+  enableMultiselectVoucherQuestion?: boolean;
 };
 
 const EXPECTED_HEADERS = Object.values(bulkUploadHeaderNames);
@@ -139,23 +165,6 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     this.notifications$.complete();
   }
 
-  private formatApplicationStatus(statusEnum: ApplicationStatusEnum): string {
-    switch (statusEnum) {
-      case ApplicationStatusEnum.declined:
-        return 'Declined';
-      case ApplicationStatusEnum.receivedUnit:
-        return 'Received a Unit';
-      case ApplicationStatusEnum.submitted:
-        return 'Submitted';
-      case ApplicationStatusEnum.waitlist:
-        return 'Wait list';
-      case ApplicationStatusEnum.waitlistDeclined:
-        return 'Wait list - Declined';
-      default:
-        return statusEnum;
-    }
-  }
-
   convertApplicationStatusToReadable(
     statusEnum: ApplicationStatusEnum,
   ): string {
@@ -169,7 +178,61 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       (key) => APPLICATION_STATUS_MAP[key] === readable,
     );
 
-  getBulkUploadHeaders(timeZone?: string): CsvHeader[] {
+  convertAccessibilityToReadable = (applicationADA: Accessibility) => {
+    const selectedADA: Array<string> = [];
+
+    if (!applicationADA) {
+      return '';
+    }
+
+    if (applicationADA.hearingAndVision) {
+      selectedADA.push('Hearing and vision');
+    } else {
+      if (applicationADA.hearing) {
+        selectedADA.push('Hearing');
+      }
+      if (applicationADA.vision) {
+        selectedADA.push('Vision');
+      }
+    }
+    if (applicationADA.mobility) {
+      selectedADA.push('Mobility');
+    }
+    if (applicationADA.other) {
+      selectedADA.push('Other');
+    }
+
+    return selectedADA.join(', ');
+  };
+
+  convertDateOfBirthToReadable = (applicant: Applicant) => {
+    if (
+      applicant?.birthMonth == null ||
+      applicant?.birthDay == null ||
+      applicant?.birthYear == null
+    ) {
+      return '';
+    }
+    return `${applicant.birthMonth}/${applicant.birthDay}/${applicant.birthYear}`;
+  };
+
+  convertSubsidyVoucherToReadable = (
+    voucherOrSubsidy: string[],
+    enableMultiselectVoucherQuestion: boolean,
+  ) => {
+    if (enableMultiselectVoucherQuestion) {
+      return voucherOrSubsidy
+        ?.map((v) => incomeVouchersToReadable(v))
+        .join(', ');
+    } else {
+      return voucherOrSubsidy?.includes('incomeVoucher') ? 'Yes' : 'No';
+    }
+  };
+
+  getBulkUploadHeaders(
+    activeFeatureFlags?: OptionalFeatureFlags,
+    timeZone?: string,
+  ): CsvHeader[] {
     const headers: CsvHeader[] = [
       {
         path: 'id',
@@ -182,6 +245,13 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       {
         path: 'applicant.lastName',
         label: bulkUploadHeaderNames.applicantLastName,
+      },
+      {
+        path: 'applicant',
+        label: bulkUploadHeaderNames.applicantDateOfBirth,
+        format: (val: Applicant) => {
+          return this.convertDateOfBirthToReadable(val);
+        },
       },
       {
         path: 'submissionDate',
@@ -219,6 +289,47 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
         path: 'conventionalUnitWaitlistNumber',
         label: bulkUploadHeaderNames.waitlistPositionConventionalUnit,
       },
+      {
+        path: 'householdSize',
+        label: bulkUploadHeaderNames.householdSize,
+      },
+      {
+        path: 'income',
+        label: bulkUploadHeaderNames.annualIncome,
+        format: (val: Application['income'], obj: Application) => {
+          if (obj?.incomePeriod === IncomePeriodEnum.perYear) {
+            return val;
+          }
+          return '';
+        },
+      },
+      {
+        path: 'income',
+        label: bulkUploadHeaderNames.monthlyIncome,
+        format: (val: Application['income'], obj: Application) => {
+          if (obj?.incomePeriod === IncomePeriodEnum.perMonth) {
+            return val;
+          }
+          return '';
+        },
+      },
+      {
+        path: 'accessibility',
+        label: bulkUploadHeaderNames.requestedAccessibility,
+        format: (val: Accessibility) => {
+          return this.convertAccessibilityToReadable(val);
+        },
+      },
+      {
+        path: 'incomeVouchers',
+        label: bulkUploadHeaderNames.voucherOrSubsidy,
+        format: (val: Application['incomeVouchers']) => {
+          return this.convertSubsidyVoucherToReadable(
+            val,
+            activeFeatureFlags?.enableMultiselectVoucherQuestion,
+          );
+        },
+      },
     ];
 
     return headers;
@@ -229,6 +340,31 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     user: User,
   ): Promise<string> {
     await this.authorizeExport(user, listingId);
+
+    const listingData = await this.prisma.listings.findUnique({
+      select: {
+        id: true,
+        jurisdictions: {
+          select: {
+            featureFlags: true,
+          },
+        },
+      },
+      where: {
+        id: listingId,
+      },
+    });
+
+    if (!listingData) {
+      throw new NotFoundException(
+        `Listing with id ${listingId} could not be found`,
+      );
+    }
+
+    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
+      listingData.jurisdictions as Jurisdiction,
+      FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    );
 
     const applications = await this.prisma.applications.findMany({
       select: {
@@ -250,7 +386,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     const now = new Date();
     const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
 
-    const readStream = await this.csvTemplateExport(listingId, applications);
+    const readStream = await this.csvTemplateExport(listingId, applications, {
+      enableMultiselectVoucherQuestion,
+    });
 
     const zipFilename = `listing-${listingId}-applications-bulk-update-template`;
     const filename = `applications-${listingId}-${dateString}`;
@@ -270,13 +408,19 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
   async csvTemplateExport(
     listingId: string,
     applications: Pick<Application, 'id'>[],
+    activeFeatureFlags?: OptionalFeatureFlags,
   ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
       `src/temp/listing-${listingId}-applications-bulk-update-template.csv`,
     );
 
-    await this.csvExportHelper(filename, listingId, applications);
+    await this.csvExportHelper(
+      filename,
+      listingId,
+      applications,
+      activeFeatureFlags,
+    );
     return createReadStream(filename);
   }
 
@@ -284,8 +428,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     filename: string,
     listingId: string,
     applications: Pick<Application, 'id'>[],
+    activeFeatureFlags?: OptionalFeatureFlags,
   ): Promise<void> {
-    const csvHeaders = this.getBulkUploadHeaders();
+    const csvHeaders = this.getBulkUploadHeaders(activeFeatureFlags);
 
     return new Promise(async (resolve, reject) => {
       // create stream
@@ -323,6 +468,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
                           select: {
                             firstName: true,
                             lastName: true,
+                            birthDay: true,
+                            birthMonth: true,
+                            birthYear: true,
                           },
                         },
                         submissionDate: true,
@@ -332,6 +480,19 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
                         applicationDeclineReasonAdditionalDetails: true,
                         accessibleUnitWaitlistNumber: true,
                         conventionalUnitWaitlistNumber: true,
+                        householdSize: true,
+                        income: true,
+                        incomePeriod: true,
+                        incomeVouchers: true,
+                        accessibility: {
+                          select: {
+                            vision: true,
+                            hearing: true,
+                            mobility: true,
+                            hearingAndVision: true,
+                            other: true,
+                          },
+                        },
                       },
                       where: {
                         listingId: listingId,
@@ -403,14 +564,14 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
         return acc[curr];
       }, application);
 
+      if (header.format) {
+        value = header.format(value, application);
+      }
+
       if (value === undefined) {
         value = '';
       } else if (value === null) {
         value = '';
-      }
-
-      if (header.format) {
-        value = header.format(value);
       }
 
       if (stringData !== undefined) {
@@ -586,8 +747,29 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       where: { id: { in: ids }, listingId },
       select: {
         id: true,
-        applicant: { select: { firstName: true, lastName: true } },
+        applicant: {
+          select: {
+            firstName: true,
+            lastName: true,
+            birthDay: true,
+            birthMonth: true,
+            birthYear: true,
+          },
+        },
         submissionDate: true,
+        householdSize: true,
+        income: true,
+        incomePeriod: true,
+        incomeVouchers: true,
+        accessibility: {
+          select: {
+            vision: true,
+            hearing: true,
+            mobility: true,
+            hearingAndVision: true,
+            other: true,
+          },
+        },
       },
     });
   }
@@ -626,6 +808,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     row: CsvRow,
     dbMap: Map<string, ApplicationContextFields>,
     index: number,
+    activeFeatureFlags?: OptionalFeatureFlags,
   ): void {
     const dbApp = dbMap.get(row[bulkUploadHeaderNames.applicationId]);
     if (!dbApp) return;
@@ -647,11 +830,50 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     const dateMatch =
       row[bulkUploadHeaderNames.applicationSubmissionDate] === expectedDate;
 
-    if (!firstNameMatch || !lastNameMatch || !dateMatch) {
+    const dobMatch =
+      this.convertDateOfBirthToReadable(dbApp.applicant as Applicant) ===
+      row[bulkUploadHeaderNames.applicantDateOfBirth];
+
+    // Mirror the template export: income lands in the column matching its period
+    const expectedAnnualIncome =
+      dbApp.incomePeriod === IncomePeriodEnum.perYear ? dbApp.income ?? '' : '';
+    const expectedMonthlyIncome =
+      dbApp.incomePeriod === IncomePeriodEnum.perMonth
+        ? dbApp.income ?? ''
+        : '';
+    const incomeMatch =
+      row[bulkUploadHeaderNames.annualIncome] === expectedAnnualIncome &&
+      row[bulkUploadHeaderNames.monthlyIncome] === expectedMonthlyIncome;
+
+    const adaMatch =
+      this.convertAccessibilityToReadable(
+        dbApp.accessibility as Accessibility,
+      ) === row[bulkUploadHeaderNames.requestedAccessibility];
+
+    const householdMatch =
+      (dbApp.householdSize?.toString() ?? '') ===
+      row[bulkUploadHeaderNames.householdSize];
+
+    const voucherOrSubsidyMatch =
+      (this.convertSubsidyVoucherToReadable(
+        dbApp.incomeVouchers,
+        activeFeatureFlags?.enableMultiselectVoucherQuestion,
+      ) ?? '') === row[bulkUploadHeaderNames.voucherOrSubsidy];
+
+    if (
+      !firstNameMatch ||
+      !lastNameMatch ||
+      !dateMatch ||
+      !dobMatch ||
+      !incomeMatch ||
+      !adaMatch ||
+      !householdMatch ||
+      !voucherOrSubsidyMatch
+    ) {
       throw new BadRequestException(
         `Upload Failed: One or more rows beginning on row ${
           index + 2
-        } have incorrect application details (Applicant first name, last name or submission date)`,
+        } have incorrect application details (Applicant First Name, Applicant Last Name, Primary DOB, Application Submission Date, Household size, Declared annual income, Declared monthly income, Request ADA or Subsidy/Voucher)`,
       );
     }
   }
@@ -772,6 +994,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     headers: string[],
     rows: CsvRow[],
     listingId: string,
+    activeFeatureFlags?: OptionalFeatureFlags,
   ): Promise<void> {
     this.validateHeaders(headers);
     this.validateHasDataRows(rows);
@@ -791,7 +1014,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       for (let j = 0; j < currentChunk.length; j++) {
         const entry = currentChunk[j];
         this.validateApplicationId(entry, foundIds, i + j);
-        this.validateContextFields(entry, dbMap, i + j);
+        this.validateContextFields(entry, dbMap, i + j, activeFeatureFlags);
         this.validateStatus(entry, i + j);
         this.validateDeclineReason(entry, i + j);
         this.validateDeclineConsistency(entry, i + j);
@@ -975,6 +1198,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
           select: {
             id: true,
             publicUrl: true,
+            featureFlags: true,
           },
         },
       },
@@ -988,6 +1212,11 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
         `Failed to retrieve data for listing with id: ${dto.listingId}`,
       );
     }
+
+    const enableMultiselectVoucherQuestion = doJurisdictionHaveFeatureFlagSet(
+      listingData.jurisdictions as Jurisdiction,
+      FeatureFlagEnum.enableMultiselectVoucherQuestion,
+    );
 
     let csvStream: ReadableStream;
     try {
@@ -1014,7 +1243,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
     );
 
-    await this.validateCSV(headerRow, rows, dto.listingId);
+    await this.validateCSV(headerRow, rows, dto.listingId, {
+      enableMultiselectVoucherQuestion,
+    });
 
     const backgroundJob = await this.backgroundJobsService.create(
       {
