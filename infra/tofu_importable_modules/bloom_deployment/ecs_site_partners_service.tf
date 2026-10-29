@@ -111,5 +111,4 @@ resource "aws_ecs_service" "bloom_site_partners" {
   deployment_controller {
     type = "ECS"
   }
-  deployment_maximum_percent = 200 # allow surge of up to twice desired task count.
 }
