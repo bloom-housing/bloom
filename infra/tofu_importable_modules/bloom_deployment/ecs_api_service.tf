@@ -164,7 +164,6 @@ resource "aws_appautoscaling_target" "bloom_api_autoscaling_target" {
   service_namespace  = "ecs"
 }
 
-# Scale based on ALB request count per target
 resource "aws_appautoscaling_policy" "bloom_api_appautoscaling_policy_request" {
   name               = "${aws_ecs_service.bloom_api.name}-request-scaling"
   policy_type        = "TargetTrackingScaling"

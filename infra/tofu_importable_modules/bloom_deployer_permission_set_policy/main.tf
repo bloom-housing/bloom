@@ -58,6 +58,7 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     actions = [
       "application-autoscaling:Describe*",
+      "application-autoscaling:RegisterScalableTarget",
       "aps:Describe*",
       "aps:List*",
       "cloudwatch:Describe*",
