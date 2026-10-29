@@ -58,7 +58,6 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     actions = [
       "application-autoscaling:Describe*",
-      "application-autoscaling:RegisterScalableTarget",
       "aps:Describe*",
       "aps:List*",
       "cloudwatch:Describe*",
@@ -443,6 +442,7 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     # Configure the Bloom ECS cluster.
     actions = [
+      "application-autoscaling:RegisterScalableTarget",
       "ecs:CreateCluster",
       "ecs:CreateService",
       "ecs:DeleteCluster",
