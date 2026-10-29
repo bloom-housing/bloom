@@ -175,7 +175,7 @@ describe("<ApplicationsView>", () => {
     // Dashboard heading
     expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
     expect(
-      screen.getByText("See listings for properties for which you’ve applied.")
+      screen.getByText("See listings for properties for which you've applied.")
     ).toBeInTheDocument()
 
     expect(
@@ -203,7 +203,7 @@ describe("<ApplicationsView>", () => {
         screen.getByRole("heading", { level: 1, name: /my applications/i })
       ).toBeInTheDocument()
       expect(
-        screen.getByText("See listings for properties for which you’ve applied.")
+        screen.getByText("See listings for properties for which you've applied.")
       ).toBeInTheDocument()
 
       // Application section (Missing fallback component)

@@ -2,6 +2,7 @@ import React, { FunctionComponent, useContext, useEffect, useState } from "react
 import { NavigationContext } from "@bloom-housing/ui-components"
 import { AuthContext } from "./AuthContext"
 import { useToastyRef } from "../utilities/MessageContext"
+import { isPartnerPortalRole } from "../utilities/userRoles"
 
 // See https://github.com/Microsoft/TypeScript/issues/14094
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
@@ -13,6 +14,7 @@ type RequireLoginProps = {
   signInPath: string
   signInMessage: string
   termsPath?: string // partners portal required accepted terms after sign-in
+  partnersPortal?: boolean
   children?: React.ReactNode
 } & XOR<{ requireForRoutes?: string[] }, { skipForRoutes: string[] }>
 
@@ -27,10 +29,11 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   signInPath,
   signInMessage,
   termsPath,
+  partnersPortal,
   ...rest
 }) => {
   const { router } = useContext(NavigationContext)
-  const { profile, initialStateLoaded } = useContext(AuthContext)
+  const { initialStateLoaded, profile } = useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [hasTerms, setHasTerms] = useState(false)
 
@@ -58,7 +61,11 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   useEffect(() => {
     const { addToast } = toastyRef.current
 
-    if (loginRequiredForPath && initialStateLoaded && !profile) {
+    if (
+      loginRequiredForPath &&
+      initialStateLoaded &&
+      (!profile || (partnersPortal && !isPartnerPortalRole(profile.userRoles || {})))
+    ) {
       addToast(signInMessage, { variant: "primary" })
       void router.push(signInPath)
     }
@@ -69,6 +76,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   }, [
     loginRequiredForPath,
     initialStateLoaded,
+    partnersPortal,
     profile,
     router,
     signInPath,
@@ -80,7 +88,9 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
 
   if (
     loginRequiredForPath &&
-    (!profile || (hasTerms && termsPath && !profile.agreedToTermsOfService))
+    (!profile ||
+      (partnersPortal && !isPartnerPortalRole(profile.userRoles || {})) ||
+      (hasTerms && termsPath && !profile.agreedToTermsOfService))
   ) {
     return null
   }
