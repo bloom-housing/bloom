@@ -771,27 +771,48 @@ describe('Lottery Controller Tests', () => {
   });
 
   describe('autoPublishResults endpoint', () => {
+    let legacyJurisdictionId: string;
+    let autoJurisdictionId: string;
+
+    beforeAll(async () => {
+      const legacyJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`legacyAutoPublish ${randomUUID()}`),
+      });
+      legacyJurisdictionId = legacyJurisdiction.id;
+
+      const autoJurisdiction = await prisma.jurisdictions.create({
+        data: jurisdictionFactory(`autoPublish ${randomUUID()}`, {
+          featureFlags: [FeatureFlagEnum.enableNonAdminLotteries],
+        }),
+      });
+      autoJurisdictionId = autoJurisdiction.id;
+    });
+
     it('should only publish listing lotteries that are due today', async () => {
       const today = new Date();
-      const dueListingData = await listingFactory(jurisdictionAId, prisma, {
-        status: ListingsStatusEnum.closed,
-        reviewOrderType: ReviewOrderTypeEnum.lottery,
-        lotteryOptIn: true,
-        lotteryStatus: LotteryStatusEnum.releasedToPartners,
-        listingEvents: [
-          {
-            type: ListingEventsTypeEnum.publicLottery,
-            startDate: today,
-          },
-        ],
-      });
+      const dueListingData = await listingFactory(
+        legacyJurisdictionId,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+          listingEvents: [
+            {
+              type: ListingEventsTypeEnum.publicLottery,
+              startDate: today,
+            },
+          ],
+        },
+      );
       const dueListing = await prisma.listings.create({
         include: { listingEvents: true },
         data: dueListingData,
       });
 
       const dueButNotReleasedListingData = await listingFactory(
-        jurisdictionAId,
+        legacyJurisdictionId,
         prisma,
         {
           status: ListingsStatusEnum.closed,
@@ -810,18 +831,22 @@ describe('Lottery Controller Tests', () => {
         data: dueButNotReleasedListingData,
       });
 
-      const notDueListingData = await listingFactory(jurisdictionAId, prisma, {
-        status: ListingsStatusEnum.closed,
-        reviewOrderType: ReviewOrderTypeEnum.lottery,
-        lotteryOptIn: true,
-        lotteryStatus: LotteryStatusEnum.releasedToPartners,
-        listingEvents: [
-          {
-            type: ListingEventsTypeEnum.publicLottery,
-            startDate: dayjs(today).add(5, 'days').toDate(),
-          },
-        ],
-      });
+      const notDueListingData = await listingFactory(
+        legacyJurisdictionId,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+          listingEvents: [
+            {
+              type: ListingEventsTypeEnum.publicLottery,
+              startDate: dayjs(today).add(5, 'days').toDate(),
+            },
+          ],
+        },
+      );
       const notDueListing = await prisma.listings.create({
         data: notDueListingData,
       });
@@ -867,6 +892,116 @@ describe('Lottery Controller Tests', () => {
           module: 'lottery',
           action: permissionActions.update,
           recordId: postJobListing.id,
+        },
+      });
+
+      expect(activityLogResult).not.toBeNull();
+    });
+
+    it('should publish ran lotteries once the jurisdiction auto publish window has elapsed', async () => {
+      await prisma.jurisdictions.update({
+        where: { id: autoJurisdictionId },
+        data: { lotteryAutoPublishDays: 7 },
+      });
+
+      const ranListing = async (
+        lotteryLastRunAt: Date,
+        lotteryLastPublishedAt?: Date,
+      ) => {
+        const listingData = await listingFactory(autoJurisdictionId, prisma, {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          lotteryStatus: LotteryStatusEnum.ran,
+        });
+        return prisma.listings.create({
+          data: { ...listingData, lotteryLastRunAt, lotteryLastPublishedAt },
+        });
+      };
+
+      const dueAutoListing = await ranListing(
+        dayjs(new Date()).subtract(8, 'days').toDate(),
+      );
+      const recentAutoListing = await ranListing(
+        dayjs(new Date()).subtract(2, 'days').toDate(),
+      );
+      const alreadyPublishedListing = await ranListing(
+        dayjs(new Date()).subtract(30, 'days').toDate(),
+        dayjs(new Date()).subtract(20, 'days').toDate(),
+      );
+
+      const legacyShapedListingData = await listingFactory(
+        autoJurisdictionId,
+        prisma,
+        {
+          status: ListingsStatusEnum.closed,
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          lotteryStatus: LotteryStatusEnum.releasedToPartners,
+          listingEvents: [
+            {
+              type: ListingEventsTypeEnum.publicLottery,
+              startDate: new Date(),
+            },
+          ],
+        },
+      );
+      const legacyShapedListing = await prisma.listings.create({
+        data: legacyShapedListingData,
+      });
+
+      const res = await request(app.getHttpServer())
+        .put(`/lottery/autoPublishResults`)
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      expect(res.body.success).toEqual(true);
+
+      const postJobDueListing = await prisma.listings.findUnique({
+        where: {
+          id: dueAutoListing.id,
+        },
+      });
+
+      expect(postJobDueListing.lotteryStatus).toEqual(
+        LotteryStatusEnum.publishedToPublic,
+      );
+      expect(postJobDueListing.lotteryLastPublishedAt).not.toBeNull();
+
+      const postJobRecentListing = await prisma.listings.findUnique({
+        where: {
+          id: recentAutoListing.id,
+        },
+      });
+
+      expect(postJobRecentListing.lotteryStatus).toEqual(LotteryStatusEnum.ran);
+
+      const postJobAlreadyPublishedListing = await prisma.listings.findUnique({
+        where: {
+          id: alreadyPublishedListing.id,
+        },
+      });
+
+      expect(postJobAlreadyPublishedListing.lotteryStatus).toEqual(
+        LotteryStatusEnum.ran,
+      );
+
+      const postJobLegacyShapedListing = await prisma.listings.findUnique({
+        where: {
+          id: legacyShapedListing.id,
+        },
+      });
+
+      expect(postJobLegacyShapedListing.lotteryStatus).toEqual(
+        LotteryStatusEnum.releasedToPartners,
+      );
+
+      const activityLogResult = await prisma.activityLog.findFirst({
+        where: {
+          module: 'lottery',
+          action: permissionActions.update,
+          recordId: dueAutoListing.id,
         },
       });
 

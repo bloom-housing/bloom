@@ -11,6 +11,7 @@ import {
   ValidateNested,
   IsBoolean,
   IsNumber,
+  Min,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
@@ -64,6 +65,13 @@ export class Jurisdiction extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: IdDTO, isArray: true })
   multiselectQuestions: IdDTO[];
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  lotteryAutoPublishDays?: number;
 
   @Expose()
   @IsNumber()
