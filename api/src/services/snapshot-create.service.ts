@@ -204,6 +204,7 @@ export class SnapshotCreateService {
         updatedAt: true,
         accessibility: true,
         accessibleMarketingFlyer: true,
+        accessibleUnitWaitlistOnly: true,
         additionalApplicationSubmissionNotes: true,
         allowsCats: true,
         allowsDogs: true,
