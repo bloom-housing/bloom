@@ -275,10 +275,16 @@ variable "bloom_otel_collector_image" {
   type        = string
   description = "Container image for the AWS Distro for OpenTelemetry collector sidecar."
 }
+
 variable "grafana_editor_group_ids" {
   type        = list(string)
   description = "IAM Identity Center group IDs that should have the editor role on the managed Grafana instance."
   default     = []
+}
+
+variable "observability_collection_enabled" {
+  type    = bool
+  default = false
 }
 
 variable "bloom_api_sms_config" {

@@ -47,6 +47,8 @@ const ApplicationSummary = () => {
 
   const { handleSubmit } = useForm()
 
+  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -86,11 +88,16 @@ const ApplicationSummary = () => {
             application.alternateContact?.type === "noContact"
               ? null
               : application.alternateContact,
-          reviewStatus: ApplicationReviewStatusEnum.pending,
-          listing: {
+          appUrl: window.location.origin,
+          householdMember: !disableWorkInRegion
+            ? application.householdMember
+            : application.householdMember?.map((member) => {
+                return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
+              }),
+          listings: {
             id: listing.id,
           },
-          appUrl: window.location.origin,
+          reviewStatus: ApplicationReviewStatusEnum.pending,
           ...(profile && {
             user: {
               id: profile.id,

@@ -10,6 +10,7 @@ import {
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
   BackgroundJobStatusEnum,
+  IncomePeriodEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Readable } from 'stream';
@@ -62,6 +63,11 @@ const mockApplication = ({
   markedAsDuplicate?: boolean;
   position?: number;
   manualLotteryPositionNumber?: number;
+  householdSize?: number;
+  income?: string;
+  incomePeriod?: IncomePeriodEnum;
+  incomeVouchers?: string[];
+  accessibility?: Partial<Accessibility>;
 }): Application => {
   return {
     id: options?.id || randomUUID(),
@@ -79,7 +85,7 @@ const mockApplication = ({
     applicationLotteryPositions: [],
     applicationsMailingAddress: addressFactory() as unknown as Address,
     applicationsAlternateAddress: addressFactory() as unknown as Address,
-    accessibility: {} as Accessibility,
+    accessibility: (options?.accessibility ?? {}) as Accessibility,
     demographics: { howDidYouHear: [] } as unknown as Demographic,
     preferredUnitTypes: [],
     alternateContact: {
@@ -92,6 +98,10 @@ const mockApplication = ({
       options?.applicationDeclineReasonAdditionalDetails ?? null,
     accessibleUnitWaitlistNumber: options?.accessibleUnitWaitlistNumber,
     conventionalUnitWaitlistNumber: options?.conventionalUnitWaitlistNumber,
+    householdSize: options?.householdSize,
+    income: options?.income,
+    incomePeriod: options?.incomePeriod,
+    incomeVouchers: options?.incomeVouchers,
   };
 };
 
@@ -157,13 +167,74 @@ const mockCsvResponse = (
 
 const dbContext = ({
   id,
-  applicant: { firstName = 'Andrew', lastName = 'Rust' },
+  applicant: {
+    firstName = 'Andrew',
+    lastName = 'Rust',
+    birthDay = 15,
+    birthMonth = 3,
+    birthYear = 1990,
+  } = {},
   submissionDate = new Date(),
-}: Partial<ApplicationContextFields>): ApplicationContextFields => ({
+  householdSize = 2,
+  income = '2500',
+  incomePeriod = IncomePeriodEnum.perMonth,
+  incomeVouchers = [],
+  accessibility = {},
+}: Omit<Partial<ApplicationContextFields>, 'applicant' | 'accessibility'> & {
+  applicant?: Partial<ApplicationContextFields['applicant']>;
+  accessibility?: Partial<ApplicationContextFields['accessibility']>;
+}): ApplicationContextFields => ({
   id,
-  applicant: { firstName, lastName },
+  applicant: { firstName, lastName, birthDay, birthMonth, birthYear },
   submissionDate,
+  householdSize,
+  income,
+  incomePeriod,
+  incomeVouchers,
+  accessibility: {
+    hearing: null,
+    hearingAndVision: null,
+    mobility: null,
+    other: null,
+    vision: null,
+    ...accessibility,
+  },
 });
+
+/**
+ * Builds the context cells a template export would produce for the given DB
+ * record. ADA and voucher cells default to the values for an application
+ * without accessibility needs or an income voucher - override them explicitly
+ * when the record has those set.
+ */
+const contextRow = (app: ApplicationContextFields): RowOverrides => {
+  const { firstName, lastName, birthDay, birthMonth, birthYear } =
+    app.applicant;
+  const hasDateOfBirth =
+    birthDay != null && birthMonth != null && birthYear != null;
+
+  return {
+    applicationId: app.id,
+    applicantFirstName: firstName ?? '',
+    applicantLastName: lastName ?? '',
+    applicantDateOfBirth: hasDateOfBirth
+      ? `${birthMonth}/${birthDay}/${birthYear}`
+      : '',
+    applicationSubmissionDate: app.submissionDate
+      ? expectedDate(app.submissionDate)
+      : '',
+    householdSize: app.householdSize?.toString() ?? '',
+    annualIncome:
+      app.incomePeriod === IncomePeriodEnum.perYear ? app.income ?? '' : '',
+    monthlyIncome:
+      app.incomePeriod === IncomePeriodEnum.perMonth ? app.income ?? '' : '',
+    requestedAccessibility: '',
+    voucherOrSubsidy: 'No',
+  };
+};
+
+const contextFieldsError = (row = 2): string =>
+  `Upload Failed: One or more rows beginning on row ${row} have incorrect application details (Applicant First Name, Applicant Last Name, Primary DOB, Application Submission Date, Household size, Declared annual income, Declared monthly income, Request ADA or Subsidy/Voucher)`;
 
 describe('Testing application bulk upload services', () => {
   let service: ApplicationBulkUploadService;
@@ -237,12 +308,20 @@ describe('Testing application bulk upload services', () => {
         applicant: {
           firstName: 'Colleen',
           lastName: 'Tawnee',
+          birthDay: '15',
+          birthMonth: '3',
+          birthYear: '1990',
         },
         status: ApplicationStatusEnum.declined,
         manualLotteryPositionNumber: 15,
         applicationDeclineReason:
           ApplicationDeclineReasonEnum.householdSizeTooLarge,
         applicationDeclineReasonAdditionalDetails: 'Some additional details',
+        householdSize: 2,
+        income: '55000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        incomeVouchers: ['incomeVoucher'],
+        accessibility: { mobility: true, other: true },
       }),
       mockApplication({
         id: randomUUID(),
@@ -251,9 +330,17 @@ describe('Testing application bulk upload services', () => {
         applicant: {
           firstName: 'Erin',
           lastName: 'Patsy',
+          birthDay: '2',
+          birthMonth: '11',
+          birthYear: '1985',
         },
         status: ApplicationStatusEnum.submitted,
         accessibleUnitWaitlistNumber: 2,
+        householdSize: 4,
+        income: '2500',
+        incomePeriod: IncomePeriodEnum.perMonth,
+        incomeVouchers: ['issuedVouchers'],
+        accessibility: { hearingAndVision: true, hearing: true, vision: true },
       }),
       mockApplication({
         id: randomUUID(),
@@ -265,6 +352,7 @@ describe('Testing application bulk upload services', () => {
         },
         status: ApplicationStatusEnum.waitlist,
         conventionalUnitWaitlistNumber: 5,
+        incomeVouchers: [],
       }),
     ];
 
@@ -284,16 +372,56 @@ describe('Testing application bulk upload services', () => {
       const content = fs.readFileSync('sampleTemplate.csv', 'utf8');
 
       const headers =
-        '"Application Id","Applicant First Name","Applicant Last Name","Application Submission Date","Lottery Position Number","Application Status","Application Decline Reason","Application Decline Reason Additional Details","Waitlist Position (Accessible Unit)","Waitlist Position (Conventional Unit)"';
+        '"Application Id","Applicant First Name","Applicant Last Name","Primary DOB","Application Submission Date","Lottery Position Number","Application Status","Application Decline Reason","Application Decline Reason Additional Details","Waitlist Position (Accessible Unit)","Waitlist Position (Conventional Unit)","Household size","Declared annual income","Declared monthly income","Request ADA","Subsidy/Voucher"';
 
-      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","05-19-2026 03:00:00PM PDT","15","Declined","Household size too large","Some additional details",,`;
-      const rowTwo = `"${applicationsSet[1].id}","Erin","Patsy","04-02-2026 03:00:00AM PDT",,"Submitted",,,"2",`;
-      const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley","07-23-2026 08:30:00AM PDT",,"Wait list",,,,"5"`;
+      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","3/15/1990","05-19-2026 03:00:00PM PDT","15","Declined","Household size too large","Some additional details",,,"2","55000",,"Mobility, Other","Yes"`;
+      const rowTwo = `"${applicationsSet[1].id}","Erin","Patsy","11/2/1985","04-02-2026 03:00:00AM PDT",,"Submitted",,,"2",,"4",,"2500","Hearing and vision","No"`;
+      const rowThree = `"${applicationsSet[2].id}","Nanny","Hayley",,"07-23-2026 08:30:00AM PDT",,"Wait list",,,,"5",,,,,"No"`;
 
       expect(content).toContain(headers);
       expect(content).toContain(rowOne);
       expect(content).toContain(rowTwo);
       expect(content).toContain(rowThree);
+    });
+
+    it('should export the subsidy/voucher column as Yes/No when the multiselect voucher flag is off', () => {
+      const headers = service.getBulkUploadHeaders();
+
+      expect(
+        service.populateDataForEachHeader(
+          headers,
+          mockApplication({
+            incomeVouchers: ['issuedVouchers', 'incomeVoucher'],
+          }),
+        ),
+      ).toMatch(/,"Yes"$/);
+      expect(
+        service.populateDataForEachHeader(
+          headers,
+          mockApplication({ incomeVouchers: ['issuedVouchers'] }),
+        ),
+      ).toMatch(/,"No"$/);
+    });
+
+    it('should export the readable voucher names when the multiselect voucher flag is on', () => {
+      const headers = service.getBulkUploadHeaders({
+        enableMultiselectVoucherQuestion: true,
+      });
+
+      expect(
+        service.populateDataForEachHeader(
+          headers,
+          mockApplication({
+            incomeVouchers: ['issuedVouchers', 'incomeVoucher'],
+          }),
+        ),
+      ).toMatch(/,"Section 8, Income Voucher"$/);
+      expect(
+        service.populateDataForEachHeader(
+          headers,
+          mockApplication({ incomeVouchers: [] }),
+        ),
+      ).toMatch(/,$/);
     });
   });
 
@@ -510,6 +638,30 @@ describe('Testing application bulk upload services', () => {
         );
       });
 
+      it.each([
+        bulkUploadHeaderNames.applicantDateOfBirth,
+        bulkUploadHeaderNames.householdSize,
+        bulkUploadHeaderNames.annualIncome,
+        bulkUploadHeaderNames.monthlyIncome,
+        bulkUploadHeaderNames.requestedAccessibility,
+        bulkUploadHeaderNames.voucherOrSubsidy,
+      ])(
+        'should reject a CSV missing the "%s" context column',
+        async (missingHeader) => {
+          const header = Object.values(bulkUploadHeaderNames).filter(
+            (label) => label !== missingHeader,
+          );
+
+          await expect(
+            service.validateCSV(...mockCsvInput([], { header }), listingId),
+          ).rejects.toThrow(
+            new BadRequestException(
+              'Upload Failed: CSV has additional or missing columns',
+            ),
+          );
+        },
+      );
+
       it('should reject a CSV with an unknown column swapped in at the correct count', async () => {
         const header = Object.values(bulkUploadHeaderNames);
         header[0] = 'Unknown';
@@ -567,26 +719,19 @@ describe('Testing application bulk upload services', () => {
           applicant: { firstName: 'Andrew', lastName: 'Rust' },
           submissionDate: new Date(2026, 0, 1, 10, 0, 0),
         });
+        const unknownApp = dbContext({
+          id: randomUUID(),
+          applicant: { firstName: 'Erin', lastName: 'Patsy' },
+          submissionDate: new Date(2026, 2, 15),
+        });
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
         await expect(
           service.validateCSV(
             ...mockCsvInput([
-              {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
-                applicationStatus: 'Submitted',
-              },
-              {
-                applicationId: randomUUID(),
-                applicantFirstName: 'Erin',
-                applicantLastName: 'Patsy',
-                applicationSubmissionDate: expectedDate(new Date(2026, 2, 15)),
-                applicationStatus: 'Submitted',
-              },
+              { ...contextRow(appOne), applicationStatus: 'Submitted' },
+              { ...contextRow(unknownApp), applicationStatus: 'Submitted' },
             ]),
             listingId,
           ),
@@ -598,7 +743,10 @@ describe('Testing application bulk upload services', () => {
       });
 
       it('should reject and query the DB once with the listing-scoped where clause when the id belongs to a different listing', async () => {
-        const applicationId = randomUUID();
+        const otherListingApp = dbContext({
+          id: randomUUID(),
+          submissionDate: new Date(2026, 0, 1),
+        });
 
         const findManyMock = jest.fn().mockResolvedValue([]);
         prisma.applications.findMany = findManyMock;
@@ -607,10 +755,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId,
-                applicantFirstName: 'Andrew',
-                applicantLastName: 'Rust',
-                applicationSubmissionDate: expectedDate(new Date(2026, 0, 1)),
+                ...contextRow(otherListingApp),
                 applicationStatus: 'Submitted',
               },
             ]),
@@ -625,7 +770,48 @@ describe('Testing application bulk upload services', () => {
         expect(findManyMock).toHaveBeenCalledTimes(1);
         expect(findManyMock).toHaveBeenCalledWith(
           expect.objectContaining({
-            where: { id: { in: [applicationId] }, listingId },
+            where: { id: { in: [otherListingApp.id] }, listingId },
+          }),
+        );
+      });
+
+      it('should select every context field from the DB', async () => {
+        const appOne = dbContext({ id: randomUUID() });
+
+        const findManyMock = jest.fn().mockResolvedValue([appOne]);
+        prisma.applications.findMany = findManyMock;
+
+        await service.validateCSV(
+          ...mockCsvInput([
+            { ...contextRow(appOne), applicationStatus: 'Submitted' },
+          ]),
+          listingId,
+        );
+
+        expect(findManyMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            select: expect.objectContaining({
+              applicant: {
+                select: expect.objectContaining({
+                  birthDay: true,
+                  birthMonth: true,
+                  birthYear: true,
+                }),
+              },
+              householdSize: true,
+              income: true,
+              incomePeriod: true,
+              incomeVouchers: true,
+              accessibility: {
+                select: {
+                  vision: true,
+                  hearing: true,
+                  mobility: true,
+                  hearingAndVision: true,
+                  other: true,
+                },
+              },
+            }),
           }),
         );
       });
@@ -645,20 +831,14 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
+                ...contextRow(appOne),
                 applicantFirstName: 'Mismatch',
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
                 applicationStatus: 'Submitted',
               },
             ]),
             listingId,
           ),
-        ).rejects.toThrow(
-          new BadRequestException(
-            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
-          ),
-        );
+        ).rejects.toThrow(new BadRequestException(contextFieldsError()));
       });
 
       it('should reject a row whose last name does not match the DB applicant', async () => {
@@ -674,20 +854,14 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
+                ...contextRow(appOne),
                 applicantLastName: 'Mismatch',
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
                 applicationStatus: 'Submitted',
               },
             ]),
             listingId,
           ),
-        ).rejects.toThrow(
-          new BadRequestException(
-            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
-          ),
-        );
+        ).rejects.toThrow(new BadRequestException(contextFieldsError()));
       });
 
       it('should reject a row whose submission date does not match the DB record', async () => {
@@ -703,27 +877,32 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
+                ...contextRow(appOne),
                 applicationSubmissionDate: expectedDate(new Date(2026, 5, 20)),
                 applicationStatus: 'Submitted',
               },
             ]),
             listingId,
           ),
-        ).rejects.toThrow(
-          new BadRequestException(
-            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
-          ),
-        );
+        ).rejects.toThrow(new BadRequestException(contextFieldsError()));
       });
 
-      it('should pass when first name, last name, and submission date all match', async () => {
+      it('should pass when every context field matches the DB record', async () => {
         const appOne = dbContext({
           id: randomUUID(),
-          applicant: { firstName: 'Andrew', lastName: 'Rust' },
+          applicant: {
+            firstName: 'Andrew',
+            lastName: 'Rust',
+            birthDay: 15,
+            birthMonth: 3,
+            birthYear: 1990,
+          },
           submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+          householdSize: 3,
+          income: '2500',
+          incomePeriod: IncomePeriodEnum.perMonth,
+          incomeVouchers: ['incomeVoucher'],
+          accessibility: { mobility: true },
         });
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
@@ -733,10 +912,16 @@ describe('Testing application bulk upload services', () => {
             ...mockCsvInput([
               {
                 applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
+                applicantFirstName: 'Andrew',
+                applicantLastName: 'Rust',
+                applicantDateOfBirth: '3/15/1990',
                 applicationSubmissionDate: expectedDate(appOne.submissionDate),
                 applicationStatus: 'Submitted',
+                householdSize: '3',
+                annualIncome: '',
+                monthlyIncome: '2500',
+                requestedAccessibility: 'Mobility',
+                voucherOrSubsidy: 'Yes',
               },
             ]),
             listingId,
@@ -745,11 +930,11 @@ describe('Testing application bulk upload services', () => {
       });
 
       it('should treat null DB applicant names with empty CSV name cells as a match', async () => {
-        const appOne = {
+        const appOne = dbContext({
           id: randomUUID(),
           applicant: { firstName: null, lastName: null },
           submissionDate: new Date(2026, 0, 1, 10, 0, 0),
-        } as unknown as ApplicationContextFields;
+        });
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
@@ -757,10 +942,9 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
+                ...contextRow(appOne),
                 applicantFirstName: '',
                 applicantLastName: '',
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
                 applicationStatus: 'Submitted',
               },
             ]),
@@ -770,11 +954,10 @@ describe('Testing application bulk upload services', () => {
       });
 
       it('should treat a null DB submission date with an empty CSV date cell as a match', async () => {
-        const appOne = {
+        const appOne = dbContext({
           id: randomUUID(),
-          applicant: { firstName: 'Andrew', lastName: 'Rust' },
           submissionDate: null,
-        } as unknown as ApplicationContextFields;
+        });
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
@@ -782,9 +965,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
+                ...contextRow(appOne),
                 applicationSubmissionDate: '',
                 applicationStatus: 'Submitted',
               },
@@ -795,11 +976,10 @@ describe('Testing application bulk upload services', () => {
       });
 
       it('should reject a non-empty CSV date when the DB submission date is null', async () => {
-        const appOne = {
+        const appOne = dbContext({
           id: randomUUID(),
-          applicant: { firstName: 'Andrew', lastName: 'Rust' },
           submissionDate: null,
-        } as unknown as ApplicationContextFields;
+        });
 
         prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
 
@@ -807,19 +987,434 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
+                ...contextRow(appOne),
                 applicationSubmissionDate: expectedDate(new Date(2026, 0, 1)),
                 applicationStatus: 'Submitted',
               },
             ]),
             listingId,
           ),
-        ).rejects.toThrow(
-          new BadRequestException(
-            'Upload Failed: One or more rows beginning on row 2 have incorrect application details (Applicant first name, last name or submission date)',
+        ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+      });
+
+      it('should reject a row whose date of birth does not match the DB applicant', async () => {
+        const appOne = dbContext({
+          id: randomUUID(),
+          applicant: { birthDay: 15, birthMonth: 3, birthYear: 1990 },
+        });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        await expect(
+          service.validateCSV(
+            ...mockCsvInput([
+              {
+                ...contextRow(appOne),
+                applicantDateOfBirth: '15/3/1990',
+                applicationStatus: 'Submitted',
+              },
+            ]),
+            listingId,
           ),
+        ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+      });
+
+      it('should reject a row whose household size does not match the DB record', async () => {
+        const appOne = dbContext({ id: randomUUID(), householdSize: 2 });
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        await expect(
+          service.validateCSV(
+            ...mockCsvInput([
+              {
+                ...contextRow(appOne),
+                householdSize: '3',
+                applicationStatus: 'Submitted',
+              },
+            ]),
+            listingId,
+          ),
+        ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+      });
+
+      it('should treat a null DB household size with an empty CSV cell as a match', async () => {
+        const appOne = dbContext({ id: randomUUID(), householdSize: null });
+
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+
+        await expect(
+          service.validateCSV(
+            ...mockCsvInput([
+              {
+                ...contextRow(appOne),
+                householdSize: '',
+                applicationStatus: 'Submitted',
+              },
+            ]),
+            listingId,
+          ),
+        ).resolves.toBeUndefined();
+      });
+
+      describe('declared income', () => {
+        it.each([
+          {
+            scenario: 'yearly income in the annual column',
+            income: '55000',
+            incomePeriod: IncomePeriodEnum.perYear,
+            annualIncome: '55000',
+            monthlyIncome: '',
+          },
+          {
+            scenario: 'monthly income in the monthly column',
+            income: '2500',
+            incomePeriod: IncomePeriodEnum.perMonth,
+            annualIncome: '',
+            monthlyIncome: '2500',
+          },
+          {
+            scenario: 'a null income with both columns empty',
+            income: null,
+            incomePeriod: IncomePeriodEnum.perMonth,
+            annualIncome: '',
+            monthlyIncome: '',
+          },
+          {
+            scenario: 'a null income period with both columns empty',
+            income: '2500',
+            incomePeriod: null,
+            annualIncome: '',
+            monthlyIncome: '',
+          },
+        ])(
+          'should pass for $scenario',
+          async ({ income, incomePeriod, annualIncome, monthlyIncome }) => {
+            const appOne = dbContext({
+              id: randomUUID(),
+              income,
+              incomePeriod,
+            });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    annualIncome,
+                    monthlyIncome,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+              ),
+            ).resolves.toBeUndefined();
+          },
+        );
+
+        it.each([
+          {
+            scenario: 'a different yearly income',
+            income: '55000',
+            incomePeriod: IncomePeriodEnum.perYear,
+            annualIncome: '50000',
+            monthlyIncome: '',
+          },
+          {
+            scenario: 'yearly income in the monthly column',
+            income: '55000',
+            incomePeriod: IncomePeriodEnum.perYear,
+            annualIncome: '',
+            monthlyIncome: '55000',
+          },
+          {
+            scenario: 'yearly income in both columns',
+            income: '55000',
+            incomePeriod: IncomePeriodEnum.perYear,
+            annualIncome: '55000',
+            monthlyIncome: '55000',
+          },
+          {
+            scenario: 'a different monthly income',
+            income: '2500',
+            incomePeriod: IncomePeriodEnum.perMonth,
+            annualIncome: '',
+            monthlyIncome: '3000',
+          },
+          {
+            scenario: 'monthly income in the annual column',
+            income: '2500',
+            incomePeriod: IncomePeriodEnum.perMonth,
+            annualIncome: '2500',
+            monthlyIncome: '',
+          },
+          {
+            scenario: 'an annual value next to a matching monthly income',
+            income: '2500',
+            incomePeriod: IncomePeriodEnum.perMonth,
+            annualIncome: '30000',
+            monthlyIncome: '2500',
+          },
+          {
+            scenario: 'an income value when the DB income is null',
+            income: null,
+            incomePeriod: IncomePeriodEnum.perMonth,
+            annualIncome: '',
+            monthlyIncome: '2500',
+          },
+        ])(
+          'should reject $scenario',
+          async ({ income, incomePeriod, annualIncome, monthlyIncome }) => {
+            const appOne = dbContext({
+              id: randomUUID(),
+              income,
+              incomePeriod,
+            });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    annualIncome,
+                    monthlyIncome,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+              ),
+            ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+          },
+        );
+      });
+
+      describe('requested ADA', () => {
+        it.each([
+          { accessibility: {}, requestedAccessibility: '' },
+          {
+            accessibility: { hearing: true },
+            requestedAccessibility: 'Hearing',
+          },
+          {
+            accessibility: { vision: true, mobility: true },
+            requestedAccessibility: 'Vision, Mobility',
+          },
+          {
+            accessibility: {
+              hearingAndVision: true,
+              hearing: true,
+              vision: true,
+            },
+            requestedAccessibility: 'Hearing and vision',
+          },
+          {
+            accessibility: {
+              hearing: true,
+              vision: true,
+              mobility: true,
+              other: true,
+            },
+            requestedAccessibility: 'Hearing, Vision, Mobility, Other',
+          },
+        ])(
+          'should pass when the CSV cell is "$requestedAccessibility" for %o',
+          async ({ accessibility, requestedAccessibility }) => {
+            const appOne = dbContext({ id: randomUUID(), accessibility });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    requestedAccessibility,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+              ),
+            ).resolves.toBeUndefined();
+          },
+        );
+
+        it.each([
+          { accessibility: { mobility: true }, requestedAccessibility: '' },
+          { accessibility: {}, requestedAccessibility: 'Mobility' },
+          {
+            accessibility: { hearingAndVision: true },
+            requestedAccessibility: 'Hearing, Vision',
+          },
+          {
+            accessibility: { mobility: true, other: true },
+            requestedAccessibility: 'Other, Mobility',
+          },
+        ])(
+          'should reject the CSV cell "$requestedAccessibility" for %o',
+          async ({ accessibility, requestedAccessibility }) => {
+            const appOne = dbContext({ id: randomUUID(), accessibility });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    requestedAccessibility,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+              ),
+            ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+          },
+        );
+      });
+
+      describe('subsidy/voucher', () => {
+        it.each([
+          {
+            incomeVouchers: ['incomeVoucher', 'none'],
+            voucherOrSubsidy: 'Yes',
+          },
+          { incomeVouchers: ['issuedVouchers'], voucherOrSubsidy: 'No' },
+          { incomeVouchers: [], voucherOrSubsidy: 'No' },
+          { incomeVouchers: null, voucherOrSubsidy: 'No' },
+        ])(
+          'should pass "$voucherOrSubsidy" for $incomeVouchers when the multiselect voucher flag is off',
+          async ({ incomeVouchers, voucherOrSubsidy }) => {
+            const appOne = dbContext({ id: randomUUID(), incomeVouchers });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    voucherOrSubsidy,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+              ),
+            ).resolves.toBeUndefined();
+          },
+        );
+
+        it.each([
+          { incomeVouchers: [], voucherOrSubsidy: 'Yes' },
+          { incomeVouchers: ['incomeVoucher'], voucherOrSubsidy: 'No' },
+          {
+            incomeVouchers: ['incomeVoucher'],
+            voucherOrSubsidy: 'Income Voucher',
+          },
+          { incomeVouchers: ['incomeVoucher'], voucherOrSubsidy: '' },
+        ])(
+          'should reject "$voucherOrSubsidy" for $incomeVouchers when the multiselect voucher flag is off',
+          async ({ incomeVouchers, voucherOrSubsidy }) => {
+            const appOne = dbContext({ id: randomUUID(), incomeVouchers });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    voucherOrSubsidy,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+              ),
+            ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+          },
+        );
+
+        it.each([
+          {
+            incomeVouchers: ['issuedVouchers', 'incomeVoucher'],
+            voucherOrSubsidy: 'Section 8, Income Voucher',
+          },
+          {
+            incomeVouchers: ['rentalAssistance'],
+            voucherOrSubsidy: 'Rental Assistance from other source',
+          },
+          { incomeVouchers: ['none'], voucherOrSubsidy: 'None' },
+          { incomeVouchers: [], voucherOrSubsidy: '' },
+          { incomeVouchers: null, voucherOrSubsidy: '' },
+        ])(
+          'should pass "$voucherOrSubsidy" for $incomeVouchers when the multiselect voucher flag is on',
+          async ({ incomeVouchers, voucherOrSubsidy }) => {
+            const appOne = dbContext({ id: randomUUID(), incomeVouchers });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    voucherOrSubsidy,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+                { enableMultiselectVoucherQuestion: true },
+              ),
+            ).resolves.toBeUndefined();
+          },
+        );
+
+        it.each([
+          { incomeVouchers: ['incomeVoucher'], voucherOrSubsidy: 'Yes' },
+          { incomeVouchers: [], voucherOrSubsidy: 'No' },
+          {
+            incomeVouchers: ['issuedVouchers', 'incomeVoucher'],
+            voucherOrSubsidy: 'Income Voucher, Section 8',
+          },
+        ])(
+          'should reject "$voucherOrSubsidy" for $incomeVouchers when the multiselect voucher flag is on',
+          async ({ incomeVouchers, voucherOrSubsidy }) => {
+            const appOne = dbContext({ id: randomUUID(), incomeVouchers });
+
+            prisma.applications.findMany = jest
+              .fn()
+              .mockResolvedValue([appOne]);
+
+            await expect(
+              service.validateCSV(
+                ...mockCsvInput([
+                  {
+                    ...contextRow(appOne),
+                    voucherOrSubsidy,
+                    applicationStatus: 'Submitted',
+                  },
+                ]),
+                listingId,
+                { enableMultiselectVoucherQuestion: true },
+              ),
+            ).rejects.toThrow(new BadRequestException(contextFieldsError()));
+          },
         );
       });
     });
@@ -837,13 +1432,7 @@ describe('Testing application bulk upload services', () => {
         await expect(
           service.validateCSV(
             ...mockCsvInput([
-              {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
-                applicationStatus: 'Approved',
-              },
+              { ...contextRow(appOne), applicationStatus: 'Approved' },
             ]),
             listingId,
           ),
@@ -875,12 +1464,7 @@ describe('Testing application bulk upload services', () => {
             service.validateCSV(
               ...mockCsvInput([
                 {
-                  applicationId: appOne.id,
-                  applicantFirstName: appOne.applicant.firstName,
-                  applicantLastName: appOne.applicant.lastName,
-                  applicationSubmissionDate: expectedDate(
-                    appOne.submissionDate,
-                  ),
+                  ...contextRow(appOne),
                   applicationStatus: status,
                   applicationDeclineReason: declineReason ?? '',
                 },
@@ -906,10 +1490,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: 'Not a real reason',
               },
@@ -936,10 +1517,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 applicationDeclineReason: '',
               },
@@ -964,10 +1542,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: '',
               },
@@ -994,10 +1569,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 applicationDeclineReason: 'Household size too large',
               },
@@ -1024,10 +1596,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: 'Household size too large',
               },
@@ -1058,12 +1627,7 @@ describe('Testing application bulk upload services', () => {
             service.validateCSV(
               ...mockCsvInput([
                 {
-                  applicationId: appOne.id,
-                  applicantFirstName: appOne.applicant.firstName,
-                  applicantLastName: appOne.applicant.lastName,
-                  applicationSubmissionDate: expectedDate(
-                    appOne.submissionDate,
-                  ),
+                  ...contextRow(appOne),
                   applicationStatus: 'Declined',
                   applicationDeclineReason: declineReason,
                   applicationDeclineReasonAdditionalDetails: '',
@@ -1092,10 +1656,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: 'Other',
                 applicationDeclineReasonAdditionalDetails:
@@ -1120,10 +1681,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: 'Household size too large',
                 applicationDeclineReasonAdditionalDetails: '',
@@ -1147,10 +1705,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: 'Other',
                 applicationDeclineReasonAdditionalDetails: 'a'.repeat(2000),
@@ -1174,10 +1729,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Declined',
                 applicationDeclineReason: 'Other',
                 applicationDeclineReasonAdditionalDetails: 'a'.repeat(2001),
@@ -1207,10 +1759,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 waitlistPositionAccessibleUnit: '2',
               },
@@ -1237,10 +1786,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 waitlistPositionConventionalUnit: '5',
               },
@@ -1269,12 +1815,7 @@ describe('Testing application bulk upload services', () => {
             service.validateCSV(
               ...mockCsvInput([
                 {
-                  applicationId: appOne.id,
-                  applicantFirstName: appOne.applicant.firstName,
-                  applicantLastName: appOne.applicant.lastName,
-                  applicationSubmissionDate: expectedDate(
-                    appOne.submissionDate,
-                  ),
+                  ...contextRow(appOne),
                   applicationStatus: status,
                   waitlistPositionAccessibleUnit: '2',
                 },
@@ -1300,10 +1841,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 lotteryPositionNumber: 'abc',
               },
@@ -1330,10 +1868,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 lotteryPositionNumber: '-1',
               },
@@ -1360,10 +1895,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 lotteryPositionNumber: '0',
               },
@@ -1390,10 +1922,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Wait list',
                 waitlistPositionAccessibleUnit: '0',
               },
@@ -1416,10 +1945,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 lotteryPositionNumber: '1.5',
               },
@@ -1446,10 +1972,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 lotteryPositionNumber: ' ',
               },
@@ -1472,10 +1995,7 @@ describe('Testing application bulk upload services', () => {
           service.validateCSV(
             ...mockCsvInput([
               {
-                applicationId: appOne.id,
-                applicantFirstName: appOne.applicant.firstName,
-                applicantLastName: appOne.applicant.lastName,
-                applicationSubmissionDate: expectedDate(appOne.submissionDate),
+                ...contextRow(appOne),
                 applicationStatus: 'Submitted',
                 lotteryPositionNumber: '',
                 waitlistPositionAccessibleUnit: '',
@@ -1493,16 +2013,29 @@ describe('Testing application bulk upload services', () => {
         id: randomUUID(),
         applicant: { firstName: 'Andrew', lastName: 'Rust' },
         submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+        income: '55000',
+        incomePeriod: IncomePeriodEnum.perYear,
+        accessibility: { mobility: true },
       });
       const declinedApp = dbContext({
         id: randomUUID(),
-        applicant: { firstName: 'Colleen', lastName: 'Tawnee' },
+        applicant: {
+          firstName: 'Colleen',
+          lastName: 'Tawnee',
+          birthDay: null,
+          birthMonth: null,
+          birthYear: null,
+        },
         submissionDate: new Date(2026, 3, 2, 10, 0, 0),
+        householdSize: null,
+        income: null,
       });
       const waitlistApp = dbContext({
         id: randomUUID(),
         applicant: { firstName: 'Nanny', lastName: 'Hayley' },
         submissionDate: new Date(2026, 6, 23, 15, 30, 0),
+        householdSize: 5,
+        incomeVouchers: ['incomeVoucher'],
       });
 
       prisma.applications.findMany = jest
@@ -1513,33 +2046,20 @@ describe('Testing application bulk upload services', () => {
         service.validateCSV(
           ...mockCsvInput([
             {
-              applicationId: submittedApp.id,
-              applicantFirstName: submittedApp.applicant.firstName,
-              applicantLastName: submittedApp.applicant.lastName,
-              applicationSubmissionDate: expectedDate(
-                submittedApp.submissionDate,
-              ),
+              ...contextRow(submittedApp),
+              requestedAccessibility: 'Mobility',
               applicationStatus: 'Submitted',
             },
             {
-              applicationId: declinedApp.id,
-              applicantFirstName: declinedApp.applicant.firstName,
-              applicantLastName: declinedApp.applicant.lastName,
-              applicationSubmissionDate: expectedDate(
-                declinedApp.submissionDate,
-              ),
+              ...contextRow(declinedApp),
               applicationStatus: 'Declined',
               applicationDeclineReason: 'Other',
               applicationDeclineReasonAdditionalDetails:
                 'Some additional details',
             },
             {
-              applicationId: waitlistApp.id,
-              applicantFirstName: waitlistApp.applicant.firstName,
-              applicantLastName: waitlistApp.applicant.lastName,
-              applicationSubmissionDate: expectedDate(
-                waitlistApp.submissionDate,
-              ),
+              ...contextRow(waitlistApp),
+              voucherOrSubsidy: 'Yes',
               applicationStatus: 'Wait list',
               waitlistPositionAccessibleUnit: '2',
               waitlistPositionConventionalUnit: '5',
@@ -1548,6 +2068,29 @@ describe('Testing application bulk upload services', () => {
           listingId,
         ),
       ).resolves.toBeUndefined();
+    });
+
+    it('should report the absolute row number of a context field mismatch in a later row', async () => {
+      const apps = [
+        dbContext({ id: randomUUID() }),
+        dbContext({ id: randomUUID(), householdSize: 4 }),
+      ];
+
+      prisma.applications.findMany = jest.fn().mockResolvedValue(apps);
+
+      await expect(
+        service.validateCSV(
+          ...mockCsvInput([
+            { ...contextRow(apps[0]), applicationStatus: 'Submitted' },
+            {
+              ...contextRow(apps[1]),
+              householdSize: '2',
+              applicationStatus: 'Submitted',
+            },
+          ]),
+          listingId,
+        ),
+      ).rejects.toThrow(new BadRequestException(contextFieldsError(3)));
     });
 
     it('should validate rows past the first 500-row chunk and report their absolute row number', async () => {
@@ -1566,10 +2109,7 @@ describe('Testing application bulk upload services', () => {
         service.validateCSV(
           ...mockCsvInput(
             apps.map((app, i) => ({
-              applicationId: app.id,
-              applicantFirstName: app.applicant.firstName,
-              applicantLastName: app.applicant.lastName,
-              applicationSubmissionDate: expectedDate(app.submissionDate),
+              ...contextRow(app),
               applicationStatus: i === 500 ? 'Approved' : 'Submitted',
             })),
           ),

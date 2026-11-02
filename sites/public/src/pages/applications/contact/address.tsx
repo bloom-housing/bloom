@@ -61,12 +61,14 @@ const ApplicationAddress = () => {
       "applicant.noPhone": application.applicant.noPhone,
       additionalPhone: application.additionalPhone,
       "applicant.phoneNumberType": application.applicant.phoneNumberType,
+      "applicant.applicantAddress.state": application.applicant?.applicantAddress?.state,
       sendMailToMailingAddress: application.sendMailToMailingAddress,
-      "applicant.workInRegion": application.applicant.workInRegion,
+      ...(!disableWorkInRegion && {
+        "applicant.workInRegion": application.applicant.workInRegion,
+      }),
       ...(enableFullTimeStudentQuestion && {
         "applicant.fullTimeStudent": application.applicant.fullTimeStudent,
       }),
-      "applicant.applicantAddress.state": application.applicant?.applicantAddress?.state,
     },
     shouldFocusError: false,
   })

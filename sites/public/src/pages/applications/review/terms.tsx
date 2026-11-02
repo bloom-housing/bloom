@@ -49,6 +49,8 @@ const ApplicationTerms = () => {
     currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
+  const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {
@@ -82,17 +84,21 @@ const ApplicationTerms = () => {
               application.alternateContact?.type === "noContact"
                 ? null
                 : application.alternateContact,
-            reviewStatus: ApplicationReviewStatusEnum.pending,
+            appUrl: window.location.origin,
+            householdMember: !disableWorkInRegion
+              ? application.householdMember
+              : application.householdMember?.map((member) => {
+                  return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
+                }),
             listings: {
               id: listing.id,
             },
-            appUrl: window.location.origin,
+            reviewStatus: ApplicationReviewStatusEnum.pending,
             ...(profile && {
               user: {
                 id: profile.id,
               },
             }),
-            // TODO remove this once this call is changed to the new backend
           },
         })
         .then((result) => {

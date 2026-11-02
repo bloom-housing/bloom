@@ -18,13 +18,13 @@ class AutofillCleaner {
     this.
       addDefaults().
       removeAdditionalKeys().
-      removeLiveWorkAddresses()
+      removeWorkInRegion()
 
     return this.application
   }
 
   addDefaults() {
-    ;["id", "createdAt", "updatedAt", "deletedAt", "listing", "submissionDate", "user"].forEach(
+    ;["id", "createdAt", "updatedAt", "deletedAt", "listings", "submissionDate", "user"].forEach(
       (key) => {
         delete this.application[key]
       }
@@ -36,8 +36,6 @@ class AutofillCleaner {
     this.application.submissionType = ApplicationSubmissionTypeEnum.electronical
     this.application.acceptedTerms = false
     this.application.status = ApplicationStatusEnum.submitted
-    this.application.preferences = []
-    this.application.programs = []
     this.application.applicationSelections = []
     this.application.accessibleUnitWaitlistNumber = null
     this.application.conventionalUnitWaitlistNumber = null
@@ -66,7 +64,6 @@ class AutofillCleaner {
           unsetIdentifiers(member)
           member.orderId = index
           unsetIdentifiers(member.householdMemberAddress)
-          unsetIdentifiers(member.householdMemberWorkAddress)
         })
     }
 
@@ -82,11 +79,13 @@ class AutofillCleaner {
     return this
   }
 
-  removeLiveWorkAddresses() {
+  removeWorkInRegion() {
     this.application.applicant.workInRegion = null
     this.application.applicant.applicantWorkAddress = blankApplication.applicant
       .applicantWorkAddress as Address
-
+    this.application.householdMember = this.application.householdMember?.map((member) => {
+      return { ...member, householdMemberWorkAddress: undefined, workInRegion: null }
+    })
     return this
   }
 }
