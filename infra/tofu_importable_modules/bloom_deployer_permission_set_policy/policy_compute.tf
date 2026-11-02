@@ -1,22 +1,17 @@
+# ECS cluster, services, task definitions, task roles and log groups.
 data "aws_iam_policy_document" "compute" {
   statement {
+    # For some reason the task APIs operate on the * resouce and don't support targeting the
+    # resource directly in the IAM policy.
     actions = [
-      "servicediscovery:Discover*",
-      "servicediscovery:Get*",
-      "servicediscovery:List*",
-
-      # For some reason the task APIs operate on the * resource and don't support targeting the
-      # resource directly in the IAM policy.
       "ecs:DeregisterTaskDefinition",
       "ecs:DescribeTaskDefinition",
     ]
     resources = ["*"]
   }
-
   statement {
     # Configure the Bloom ECS cluster.
     actions = [
-      "application-autoscaling:Describe*",
       "application-autoscaling:RegisterScalableTarget",
       "ecs:CreateCluster",
       "ecs:CreateService",
@@ -59,10 +54,19 @@ data "aws_iam_policy_document" "compute" {
       "arn:aws:ecs:${local.region_account}:task-definition/bloom-*",
       "arn:aws:ecs:${local.region_account}:task/bloom/*",
       "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-*",
-      "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/bloom-*",
       "arn:aws:logs:${local.region_account}:log-group::log-stream:",
       "arn:aws:logs:${local.region_account}:log-group:bloom-*",
       "arn:aws:servicediscovery:${local.region_account}:*/*",
+    ]
+  }
+  statement {
+    # Only allow triggering one-off runs of the dbinit and dbseed tasks.
+    actions = [
+      "ecs:RunTask",
+    ]
+    resources = [
+      "arn:aws:ecs:${local.region_account}:task-definition/bloom-dbinit:*",
+      "arn:aws:ecs:${local.region_account}:task-definition/bloom-dbseed:*",
     ]
   }
 }

@@ -1,95 +1,5 @@
+# VPC, load balancer and certificate permissions.
 data "aws_iam_policy_document" "network" {
-
-  statement {
-    actions = [
-      "ec2:Describe*",
-      "ec2:Get*",
-      "ecs:List*",
-      "elasticloadbalancing:Describe*",
-
-    ]
-  }
-
-  statement {
-    # Allow any cloudshell action.
-    actions = [
-      "cloudshell:*"
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    # Allow creating cloudshell instances attached to a VPC.
-    actions = [
-      "ec2:CreateNetworkInterface",
-    ]
-    resources = [
-      "arn:aws:ec2:${local.region_account}:network-interface/*",
-    ]
-    condition {
-      test     = "ForAnyValue:StringEquals"
-      variable = "aws:TagKeys"
-      values   = ["ManagedByCloudShell"]
-    }
-  }
-
-  statement {
-    # Allow creating a cloudshell instance attached to one of the bloom-private subnets.
-    actions = [
-      "ec2:CreateNetworkInterface",
-    ]
-    resources = [
-      "arn:aws:ec2:${local.region_account}:subnet/*",
-    ]
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/Name"
-      values   = ["bloom-private-*"]
-    }
-  }
-
-  statement {
-    # Allow creating a cloudshell instance with the bloom-cloudshell security group.
-    actions = [
-      "ec2:CreateNetworkInterface",
-    ]
-    resources = [
-      "arn:aws:ec2:${local.region_account}:security-group/*",
-    ]
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/Name"
-      values   = ["bloom-cloudshell"]
-    }
-  }
-
-  statement {
-    # Allow cloudshell to tag the network interfaces it creates.
-    actions = [
-      "ec2:CreateTags",
-    ]
-    resources = ["arn:aws:ec2:${local.region_account}:network-interface/*"]
-    condition {
-      test     = "ForAnyValue:StringEquals"
-      variable = "aws:TagKeys"
-      values   = ["ManagedByCloudShell"]
-    }
-  }
-
-  statement {
-    # Allow cloudshell to configure and delete the network interfaces it creates.
-    actions = [
-      "ec2:CreateNetworkInterfacePermission",
-      "ec2:DeleteNetworkInterface",
-    ]
-    resources = ["arn:aws:ec2:${local.region_account}:network-interface/*"]
-    condition {
-      test     = "StringEquals"
-      variable = "aws:ResourceTag/ManagedByCloudShell"
-      values   = [""]
-    }
-  }
-
   statement {
     # Allow creating ServiceLinkedRole for ECS and ELB.
     actions = [
@@ -103,7 +13,6 @@ data "aws_iam_policy_document" "network" {
       "arn:aws:iam::${var.bloom_deployment_aws_account_number}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing",
     ]
   }
-
   statement {
     # Describe calls are not scoped to a specific resource.
     actions = [
@@ -113,13 +22,6 @@ data "aws_iam_policy_document" "network" {
     ]
     resources = ["*"]
   }
-
-  statement {
-    actions = ["ec2:DisassociateAddress"]
-    # For some reason the DisassociateAdress calls use this resource pattern.
-    resources = ["arn:aws:ec2:${local.region_account}:*/*"]
-  }
-
   statement {
     # Configure the Bloom VPC.
     actions = [
@@ -135,13 +37,11 @@ data "aws_iam_policy_document" "network" {
       "ec2:AuthorizeSecurityGroupEgress",
       "ec2:AuthorizeSecurityGroupIngress",
       "ec2:CreateInternetGateway",
-      "ec2:CreateNATGateway",
       "ec2:CreateNatGateway",
       "ec2:CreateRoute",
       "ec2:CreateRouteTable",
       "ec2:CreateSecurityGroup",
       "ec2:CreateSubnet",
-      "ec2:CreateTags",
       "ec2:CreateTags",
       "ec2:CreateVpc",
       "ec2:CreateVpcEndpoint",
@@ -198,5 +98,10 @@ data "aws_iam_policy_document" "network" {
       "arn:aws:elasticloadbalancing:${local.region_account}:targetgroup/bloom-site-partners/*",
       "arn:aws:elasticloadbalancing:${local.region_account}:targetgroup/bloom-site-public/*",
     ]
+  }
+  statement {
+    actions = ["ec2:DisassociateAddress"]
+    # For some reason the DisassociateAdress calls use this resource pattern.
+    resources = ["arn:aws:ec2:${local.region_account}:*/*"]
   }
 }
