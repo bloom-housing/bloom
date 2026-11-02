@@ -18,6 +18,8 @@ import {
   Application,
   AssetsService,
   IncomePeriodEnum,
+  Listing,
+  ReviewOrderTypeEnum,
   UserRole,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import * as styles from "../components/listings/PaperListingForm/ListingForm.module.scss"
@@ -510,4 +512,10 @@ export const mergeApplicationNames = (applications: Application[]) => {
 
 export const isAdminRole = (userRoles: UserRole) => {
   return userRoles?.isAdmin || userRoles?.isSuperAdmin || userRoles?.isSupportAdmin
+}
+
+export const shouldShowManualLotteryPosition = (
+  listing?: Pick<Listing, "reviewOrderType" | "lotteryOptIn">
+) => {
+  return listing?.reviewOrderType === ReviewOrderTypeEnum.lottery && listing?.lotteryOptIn !== true
 }

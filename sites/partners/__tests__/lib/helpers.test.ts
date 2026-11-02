@@ -1,4 +1,8 @@
-import { Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Application,
+  Listing,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   addAsterisk,
   createDate,
@@ -7,6 +11,7 @@ import {
   getLabel,
   getRequiredSubNote,
   mergeApplicationNames,
+  shouldShowManualLotteryPosition,
 } from "../../src/lib/helpers"
 import { t } from "@bloom-housing/ui-components"
 
@@ -170,6 +175,29 @@ describe("helpers", () => {
           onChange: expect.any(Function),
         },
       })
+    })
+  })
+
+  describe("shouldShowManualLotteryPosition", () => {
+    it.each([
+      [ReviewOrderTypeEnum.lottery, false, true],
+      [ReviewOrderTypeEnum.lottery, null, true],
+      [ReviewOrderTypeEnum.lottery, undefined, true],
+      [ReviewOrderTypeEnum.lottery, true, false],
+      [ReviewOrderTypeEnum.firstComeFirstServe, false, false],
+      [ReviewOrderTypeEnum.waitlist, false, false],
+      [ReviewOrderTypeEnum.waitlistLottery, false, false],
+    ])(
+      "reviewOrderType %s with lotteryOptIn %s returns %s",
+      (reviewOrderType, lotteryOptIn, expected) => {
+        expect(shouldShowManualLotteryPosition({ reviewOrderType, lotteryOptIn } as Listing)).toBe(
+          expected
+        )
+      }
+    )
+
+    it("returns false when there is no listing", () => {
+      expect(shouldShowManualLotteryPosition(undefined)).toBe(false)
     })
   })
 })

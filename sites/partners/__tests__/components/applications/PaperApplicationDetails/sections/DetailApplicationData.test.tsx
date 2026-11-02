@@ -16,10 +16,12 @@ const renderDetailsApplicationData = ({
   applicationOverrides = {},
   enableApplicationStatus = false,
   enableReceivedAtAndByFields = false,
+  showManualLotteryPosition = false,
 }: {
   applicationOverrides?: Partial<typeof application>
   enableApplicationStatus?: boolean
   enableReceivedAtAndByFields?: boolean
+  showManualLotteryPosition?: boolean
 } = {}) => {
   mockNextRouter({ id: "application_1" })
   return render(
@@ -37,6 +39,7 @@ const renderDetailsApplicationData = ({
         <DetailsApplicationData
           enableApplicationStatus={enableApplicationStatus}
           enableReceivedAtAndByFields={enableReceivedAtAndByFields}
+          showManualLotteryPosition={showManualLotteryPosition}
         />
       </ApplicationContext.Provider>
     </AuthContext.Provider>
@@ -244,6 +247,29 @@ describe("DetailApplicationData", () => {
         expect(screen.getByText(labelPattern)).toBeInTheDocument()
         unmount()
       })
+    })
+  })
+
+  describe("manual lottery position", () => {
+    it("displays the lottery number when showManualLotteryPosition is true", () => {
+      renderDetailsApplicationData({
+        applicationOverrides: { manualLotteryPositionNumber: 12 },
+        enableApplicationStatus: true,
+        showManualLotteryPosition: true,
+      })
+
+      expect(screen.getByText("Lottery number")).toBeInTheDocument()
+      expect(screen.getByText("12")).toBeInTheDocument()
+    })
+
+    it("does not display the lottery number when showManualLotteryPosition is false", () => {
+      renderDetailsApplicationData({
+        applicationOverrides: { manualLotteryPositionNumber: 12 },
+        enableApplicationStatus: true,
+        showManualLotteryPosition: false,
+      })
+
+      expect(screen.queryByText("Lottery number")).not.toBeInTheDocument()
     })
   })
 })

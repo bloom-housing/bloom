@@ -21,6 +21,7 @@ import { formatLocalDate } from '../utilities/format-local-date';
  * @param timeZone the timezone to output dates in
  * @param enableV2MSQ when true, the new multiselectQuestion logic will be used
  * @param forLottery whether this is for lottery or not
+ * @param hideManualLotteryPosition when true, the manual lottery position column is omitted (system lottery listings)
  * @param includeDemographics whether to include demographic info or not
  * @param swapCommunityTypeWithPrograms when true, the programs section on the frontend is displayed as community types
  * @returns the set of export headers
@@ -43,6 +44,7 @@ export const getExportHeaders = (
     enableV2MSQ?: boolean;
     enableReceivedAtAndByFields?: boolean;
     forLottery?: boolean;
+    hideManualLotteryPosition?: boolean;
     includeDemographics?: boolean;
     swapCommunityTypeWithPrograms?: boolean;
     visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[];
@@ -63,6 +65,7 @@ export const getExportHeaders = (
     enableV2MSQ,
     enableReceivedAtAndByFields,
     forLottery,
+    hideManualLotteryPosition,
     includeDemographics,
     swapCommunityTypeWithPrograms,
     visibleApplicationAccessibilityFeatures,
@@ -154,10 +157,14 @@ export const getExportHeaders = (
           path: 'applicationDeclineReasonAdditionalDetails',
           label: 'Application Decline Reason Additional Details',
         },
-        {
-          path: 'manualLotteryPositionNumber',
-          label: 'Lottery Position Number',
-        },
+        ...(hideManualLotteryPosition
+          ? []
+          : [
+              {
+                path: 'manualLotteryPositionNumber',
+                label: 'Lottery Position Number',
+              },
+            ]),
         {
           path: 'accessibleUnitWaitlistNumber',
           label: 'Waitlist Position (Accessible Unit)',
