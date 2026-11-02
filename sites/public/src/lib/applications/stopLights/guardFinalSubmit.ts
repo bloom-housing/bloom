@@ -4,6 +4,8 @@ import { stopLightRules } from "./stopLightRules"
 
 export const guardFinalSubmit = (conductor: ApplicationConductor, proceed: () => void) => {
   for (const step of conductor.steps) {
+    if (step.skipStep()) continue
+
     const blockedRule = stopLightRules.find(
       (rule) =>
         rule.step === step.name &&

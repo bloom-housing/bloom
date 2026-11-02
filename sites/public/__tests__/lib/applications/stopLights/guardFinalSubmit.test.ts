@@ -1,4 +1,4 @@
-import { Application, Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
 import { ApplicationFormConfig } from "../../../../src/lib/applications/configInterfaces"
 import {
@@ -29,14 +29,23 @@ const buildRule = (
   body: `stopLights.${key}.body`,
 })
 
-const buildConductor = (rules: RuleFixture[], enabledRuleKeys = rules.map((rule) => rule.key)) => {
+const buildConductor = (
+  rules: RuleFixture[],
+  enabledRuleKeys = rules.map((rule) => rule.key),
+  householdSize = 2
+) => {
   stopLightRules.splice(0, stopLightRules.length, ...rules)
 
-  const conductor = new ApplicationConductor({ householdSize: 2 }, {} as Listing)
+  const conductor = new ApplicationConductor({ householdSize }, {} as Listing)
   const config: ApplicationFormConfig = {
     sections: [],
     languages: [],
-    steps: [{ name: "primaryApplicantName" }, { name: "income" }, { name: "terms" }],
+    steps: [
+      { name: "primaryApplicantName" },
+      { name: "addMembers" },
+      { name: "income" },
+      { name: "terms" },
+    ],
     featureFlags: [],
     isAdvocate: false,
     enabledStopLightRuleKeys: enabledRuleKeys,
@@ -107,6 +116,31 @@ describe("guardFinalSubmit", () => {
     expect(rule.evaluate).not.toHaveBeenCalled()
     expect(proceed).toHaveBeenCalledTimes(1)
     expect(routeTo).not.toHaveBeenCalled()
+  })
+
+  it("ignores a triggered red rule on a step skipped for this applicant", () => {
+    const rule = buildRule("membersBlocked", "addMembers", "red", true)
+    const { conductor, routeTo } = buildConductor([rule], undefined, 1)
+    const proceed = jest.fn()
+
+    guardFinalSubmit(conductor, proceed)
+
+    expect(rule.evaluate).not.toHaveBeenCalled()
+    expect(proceed).toHaveBeenCalledTimes(1)
+    expect(routeTo).not.toHaveBeenCalled()
+  })
+
+  it("blocks on a red rule for that step when it is not skipped", () => {
+    const rule = buildRule("membersBlocked", "addMembers", "red", true)
+    const { conductor, routeTo } = buildConductor([rule], undefined, 2)
+    const proceed = jest.fn()
+
+    guardFinalSubmit(conductor, proceed)
+
+    expect(routeTo).toHaveBeenCalledWith(
+      "/applications/household/add-members?blockedRule=membersBlocked"
+    )
+    expect(proceed).not.toHaveBeenCalled()
   })
 
   it("redirects to the earliest blocked step in step order", () => {
