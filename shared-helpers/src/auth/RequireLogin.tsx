@@ -70,7 +70,13 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
       void router.push(signInPath)
     }
 
-    if (termsPath && profile && !profile?.agreedToTermsOfService && hasTerms) {
+    if (
+      termsPath &&
+      profile &&
+      !profile?.agreedToTermsOfService &&
+      hasTerms &&
+      !(partnersPortal && !isPartnerPortalRole(profile.userRoles || {}))
+    ) {
       void router.push(termsPath)
     }
   }, [
