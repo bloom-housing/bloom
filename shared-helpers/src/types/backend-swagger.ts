@@ -8534,6 +8534,9 @@ export interface JurisdictionCreate {
   languages: LanguagesEnum[]
 
   /**  */
+  lotteryAutoPublishDays?: number
+
+  /**  */
   minimumListingPublishImagesRequired?: number
 
   /**  */
@@ -8634,6 +8637,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: LanguagesEnum[]
+
+  /**  */
+  lotteryAutoPublishDays?: number
 
   /**  */
   minimumListingPublishImagesRequired?: number
@@ -8781,6 +8787,9 @@ export interface Jurisdiction {
 
   /**  */
   multiselectQuestions: IdDTO[]
+
+  /**  */
+  lotteryAutoPublishDays?: number
 
   /**  */
   minimumListingPublishImagesRequired?: number
