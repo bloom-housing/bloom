@@ -1026,6 +1026,7 @@ describe('Testing application service', () => {
         id: randomUUID(),
         name: 'listing name',
         status: mockValue.listings.status,
+        jurisdictionId: mockValue.listings.jurisdictionId,
         lotteryLastPublishedAt: null,
         lotteryStatus: mockValue.listings.lotteryStatus ?? null,
         applicationDueDate: null,
@@ -1084,6 +1085,11 @@ describe('Testing application service', () => {
             },
             where: { type: ListingEventsTypeEnum.publicLottery },
           },
+          jurisdictions: {
+            select: {
+              id: true,
+            },
+          },
         },
       },
     },
@@ -1098,6 +1104,7 @@ describe('Testing application service', () => {
   const buildPublicAppsExpectedWhere = (
     filterType: ApplicationsFilterEnum,
     includeLotteryApps: boolean,
+    enablePublicLotteryExpirationIds: string[] = [],
   ) => {
     if (filterType === ApplicationsFilterEnum.open) {
       return {
@@ -1122,7 +1129,23 @@ describe('Testing application service', () => {
             listings: {
               is: {
                 status: { not: ListingsStatusEnum.active },
-                lotteryStatus: LotteryStatusEnum.publishedToPublic,
+                OR: [
+                  {
+                    lotteryStatus: LotteryStatusEnum.publishedToPublic,
+                  },
+                  {
+                    AND: [
+                      { lotteryStatus: LotteryStatusEnum.expired },
+                      {
+                        jurisdictionId: {
+                          not: {
+                            in: enablePublicLotteryExpirationIds,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                ],
               },
             },
           },
@@ -1141,12 +1164,27 @@ describe('Testing application service', () => {
                   status: { not: ListingsStatusEnum.active },
                   OR: [
                     {
+                      lotteryStatus: null,
+                    },
+                    {
                       lotteryStatus: {
-                        not: LotteryStatusEnum.publishedToPublic,
+                        not: {
+                          in: [
+                            LotteryStatusEnum.publishedToPublic,
+                            LotteryStatusEnum.expired,
+                          ],
+                        },
                       },
                     },
                     {
-                      lotteryStatus: null,
+                      AND: [
+                        { lotteryStatus: LotteryStatusEnum.expired },
+                        {
+                          jurisdictionId: {
+                            in: enablePublicLotteryExpirationIds,
+                          },
+                        },
+                      ],
                     },
                   ],
                 },
@@ -1259,11 +1297,12 @@ describe('Testing application service', () => {
     it('should get publicAppsView() info when applications are available and filterType is all', async () => {
       const mockedValues = mockApplicationSet(3, date);
       const listingStatuses = [
-        { status: ListingsStatusEnum.active },
-        { status: ListingsStatusEnum.closed },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.active },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.closed },
         {
-          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          status: ListingsStatusEnum.closed,
         },
       ];
       const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
@@ -1281,6 +1320,9 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(1) // closed
         .mockResolvedValueOnce(1) // lottery
         .mockResolvedValueOnce(3); // total
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [],
+      });
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1309,11 +1351,12 @@ describe('Testing application service', () => {
     it('should get publicAppsView() info when there are lottery listings but includeLottery is false and filter type is all', async () => {
       const mockedValues = mockApplicationSet(3, date);
       const listingStatuses = [
-        { status: ListingsStatusEnum.active },
-        { status: ListingsStatusEnum.closed },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.active },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.closed },
         {
-          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          status: ListingsStatusEnum.closed,
         },
       ];
       const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
@@ -1330,6 +1373,9 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(1) // open
         .mockResolvedValueOnce(2) // closed
         .mockResolvedValueOnce(3); // displayCount
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [],
+      });
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1358,11 +1404,12 @@ describe('Testing application service', () => {
     it('should get publicAppsView() info when applications are available and filterType is open', async () => {
       const mockedValues = mockApplicationSet(3, date);
       const listingStatuses = [
-        { status: ListingsStatusEnum.active },
-        { status: ListingsStatusEnum.active },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.active },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.active },
         {
-          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          status: ListingsStatusEnum.closed,
         },
       ];
       const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
@@ -1386,6 +1433,9 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(0) // closed
         .mockResolvedValueOnce(1) // lottery
         .mockResolvedValueOnce(2); // displayCount
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [],
+      });
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1414,11 +1464,12 @@ describe('Testing application service', () => {
     it('should get publicAppsView() info when applications are available and filterType is closed', async () => {
       const mockedValues = mockApplicationSet(3, date);
       const listingStatuses = [
-        { status: ListingsStatusEnum.closed },
-        { status: ListingsStatusEnum.closed },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.closed },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.closed },
         {
-          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          status: ListingsStatusEnum.closed,
         },
       ];
       const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
@@ -1445,6 +1496,9 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(2) // closed
         .mockResolvedValueOnce(1) // lottery
         .mockResolvedValueOnce(2); // displayCount
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [],
+      });
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1476,14 +1530,16 @@ describe('Testing application service', () => {
     it('should get publicAppsView() info when applications are available and filterType is lottery', async () => {
       const mockedValues = mockApplicationSet(3, date);
       const listingStatuses = [
-        { status: ListingsStatusEnum.active },
+        { jurisdictionId: randomUUID(), status: ListingsStatusEnum.active },
         {
-          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          status: ListingsStatusEnum.closed,
         },
         {
-          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
           lotteryStatus: LotteryStatusEnum.publishedToPublic,
+          status: ListingsStatusEnum.closed,
         },
       ];
       const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
@@ -1510,6 +1566,9 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(0) // closed
         .mockResolvedValueOnce(2) // lottery
         .mockResolvedValueOnce(2); // displayCount
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [],
+      });
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,
@@ -1538,6 +1597,90 @@ describe('Testing application service', () => {
       });
     });
 
+    it('should get publicAppsView() info when applications are available, filterType is lottery and a jurisdiction has enablePublicLotteryExpiration true', async () => {
+      const jurisdictionWithExpiryOn = randomUUID();
+      const mockedValues = mockApplicationSet(5, date);
+      const listingStatuses = [
+        { status: ListingsStatusEnum.active },
+        {
+          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+        {
+          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.publishedToPublic,
+        },
+        {
+          status: ListingsStatusEnum.closed,
+          jurisdictionId: randomUUID(),
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+        {
+          status: ListingsStatusEnum.closed,
+          jurisdictionId: jurisdictionWithExpiryOn,
+          lotteryStatus: LotteryStatusEnum.expired,
+        },
+      ];
+      const mockedValuesWithListing = mockedValues.map((mockedValue, idx) => {
+        return {
+          ...mockedValue,
+          listings: listingStatuses[idx],
+        };
+      });
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(
+          getPublicAppsFindManyMock(
+            mockedValuesWithListing.filter(
+              (app) =>
+                app.listings.status !== ListingsStatusEnum.active &&
+                (app.listings.lotteryStatus ===
+                  LotteryStatusEnum.publishedToPublic ||
+                  (app.listings.lotteryStatus === LotteryStatusEnum.expired &&
+                    app.listings.jurisdictionId !== jurisdictionWithExpiryOn)),
+            ),
+          ),
+        );
+      prisma.applications.count = jest
+        .fn()
+        .mockResolvedValueOnce(1) // open
+        .mockResolvedValueOnce(1) // closed
+        .mockResolvedValueOnce(3) // lottery
+        .mockResolvedValueOnce(3); // displayCount
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [{ id: jurisdictionWithExpiryOn }],
+      });
+
+      const params: PublicAppsViewQueryParams = {
+        userId: requestingUser.id,
+        filterType: ApplicationsFilterEnum.lottery,
+        includeLotteryApps: true,
+      };
+
+      const res = await service.publicAppsView(params, {
+        user: requestingUser,
+      } as unknown as ExpressRequest);
+
+      // expect(res.items.length).toEqual(3);
+      expect(res.applicationsCount).toEqual({
+        total: 5,
+        open: 1,
+        closed: 1,
+        lottery: 3,
+      });
+
+      expect(prisma.applications.findMany).toHaveBeenCalledWith({
+        ...publicAppsFindManyCalledWith,
+        where: buildPublicAppsExpectedWhere(
+          ApplicationsFilterEnum.lottery,
+          true,
+          [jurisdictionWithExpiryOn],
+        ),
+      });
+    });
+
     it('should not error when publicAppsView() is called when applications are unavailable', async () => {
       prisma.applications.findMany = jest
         .fn()
@@ -1548,6 +1691,9 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(0) // closed
         .mockResolvedValueOnce(0) // lottery
         .mockResolvedValueOnce(0); // displayCount
+      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+        jurisdictions: [],
+      });
 
       const params: PublicAppsViewQueryParams = {
         userId: requestingUser.id,

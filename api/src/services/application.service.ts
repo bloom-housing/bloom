@@ -467,13 +467,33 @@ export class ApplicationService {
       }
     }
 
-    const buildCountWhereClause = (filterType: ApplicationsFilterEnum) =>
+    const rawJurisdictionIds = await this.prisma.featureFlags.findUniqueOrThrow(
+      {
+        select: {
+          jurisdictions: {
+            select: {
+              id: true,
+            },
+          },
+        },
+        where: {
+          name: FeatureFlagEnum.enablePublicLotteryExpiration,
+        },
+      },
+    );
+    const expirationJurisdictionIds = rawJurisdictionIds?.jurisdictions;
+
+    const buildCountWhereClause = (
+      filterType: ApplicationsFilterEnum,
+      expirationJurisdictionIds?: IdDTO[],
+    ) =>
       this.buildPublicAppsViewWhereClause(
         {
           ...normalizedParams,
           filterType,
         },
         whereClause,
+        expirationJurisdictionIds,
       );
 
     const [openCount, closedCount, lotteryCount] = await Promise.all([
@@ -481,11 +501,17 @@ export class ApplicationService {
         where: buildCountWhereClause(ApplicationsFilterEnum.open),
       }),
       this.prisma.applications.count({
-        where: buildCountWhereClause(ApplicationsFilterEnum.closed),
+        where: buildCountWhereClause(
+          ApplicationsFilterEnum.closed,
+          expirationJurisdictionIds,
+        ),
       }),
       params.includeLotteryApps
         ? this.prisma.applications.count({
-            where: buildCountWhereClause(ApplicationsFilterEnum.lottery),
+            where: buildCountWhereClause(
+              ApplicationsFilterEnum.lottery,
+              expirationJurisdictionIds,
+            ),
           })
         : Promise.resolve(0),
     ]);
@@ -495,6 +521,7 @@ export class ApplicationService {
     const displayWhereClause = this.buildPublicAppsViewWhereClause(
       normalizedParams,
       whereClause,
+      expirationJurisdictionIds,
     );
 
     let displayCount = totalCount;
@@ -552,6 +579,11 @@ export class ApplicationService {
               },
               where: { type: ListingEventsTypeEnum.publicLottery },
             },
+            jurisdictions: {
+              select: {
+                id: true,
+              },
+            },
           },
         },
         applicationLotteryPositions: {
@@ -594,6 +626,7 @@ export class ApplicationService {
   buildPublicAppsViewWhereClause(
     params: PublicAppsViewQueryParams,
     baseWhereClause: Prisma.ApplicationsWhereInput,
+    expirationJurisdictionIds: IdDTO[] = [],
   ): Prisma.ApplicationsWhereInput {
     const conditions: Prisma.ApplicationsWhereInput[] = Array.isArray(
       baseWhereClause.AND,
@@ -602,6 +635,12 @@ export class ApplicationService {
           Array.isArray(condition.AND) ? condition.AND : [condition],
         )
       : [baseWhereClause];
+
+    const enablePublicLotteryExpirationIds = expirationJurisdictionIds.map(
+      (juris) => {
+        return juris.id;
+      },
+    );
 
     if (params.filterType === ApplicationsFilterEnum.open) {
       conditions.push({
@@ -618,7 +657,23 @@ export class ApplicationService {
         listings: {
           is: {
             status: { not: ListingsStatusEnum.active },
-            lotteryStatus: LotteryStatusEnum.publishedToPublic,
+            OR: [
+              {
+                lotteryStatus: LotteryStatusEnum.publishedToPublic,
+              },
+              {
+                AND: [
+                  { lotteryStatus: LotteryStatusEnum.expired },
+                  {
+                    jurisdictionId: {
+                      not: {
+                        in: enablePublicLotteryExpirationIds,
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
           },
         },
       });
@@ -632,10 +687,27 @@ export class ApplicationService {
               status: { not: ListingsStatusEnum.active },
               OR: [
                 {
-                  lotteryStatus: { not: LotteryStatusEnum.publishedToPublic },
+                  lotteryStatus: null,
                 },
                 {
-                  lotteryStatus: null,
+                  lotteryStatus: {
+                    not: {
+                      in: [
+                        LotteryStatusEnum.publishedToPublic,
+                        LotteryStatusEnum.expired,
+                      ],
+                    },
+                  },
+                },
+                {
+                  AND: [
+                    { lotteryStatus: LotteryStatusEnum.expired },
+                    {
+                      jurisdictionId: {
+                        in: enablePublicLotteryExpirationIds,
+                      },
+                    },
+                  ],
                 },
               ],
             },
