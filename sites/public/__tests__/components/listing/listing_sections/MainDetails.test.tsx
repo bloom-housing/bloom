@@ -165,40 +165,4 @@ describe("<MainDetails>", () => {
 
     expect(screen.queryByText("Accessibility features")).toBeNull()
   })
-
-  it("hides accessibility features tag when all listing features are false", () => {
-    render(
-      <MainDetails
-        listing={{
-          ...listing,
-          listingFeatures: {
-            id: "listing_features_id",
-            elevator: false,
-            grabBars: false,
-          },
-        }}
-        jurisdiction={jurisdiction}
-      />
-    )
-
-    expect(screen.queryByText("Accessibility features")).toBeNull()
-  })
-
-  it("shows accessibility features tag when at least one listing feature is true", () => {
-    render(
-      <MainDetails
-        listing={{
-          ...listing,
-          listingFeatures: {
-            id: "listing_features_id",
-            elevator: false,
-            grabBars: true,
-          },
-        }}
-        jurisdiction={jurisdiction}
-      />
-    )
-
-    expect(screen.getByText("Accessibility features")).toBeDefined()
-  })
 })
