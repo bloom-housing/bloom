@@ -154,7 +154,6 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
    1. In the 'Select permission set type' screen, select the 'Custom permission set' option.
    2. In the 'Specify policies and permission boundary' screen, expand the 'Inline policy'
       section. Paste in the following policy and change:
-
       - `CHANGEME_IAM_IDENTITY_CENTER_INSTANCE_ARN` to the IAM Identity Center instance ARN in your
         notes.
       - `CHANGEME_BLOOM_DEV_ACCOUNT_NUMBER` to the Bloom dev account number in your notes.
@@ -172,7 +171,10 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
               "sso:DescribePermissionSetProvisioningStatus",
               "sso:GetInlinePolicyForPermissionSet",
               "sso:ProvisionPermissionSet",
-              "sso:PutInlinePolicyToPermissionSet"
+              "sso:PutInlinePolicyToPermissionSet",
+              "sso:AttachCustomerManagedPolicyReferenceToPermissionSet",
+              "sso:DetachCustomerManagedPolicyReferenceFromPermissionSet",
+              "sso:ListCustomerManagedPolicyReferencesInPermissionSet"
             ],
             "Resource": [
               "CHANGEME_IAM_IDENTITY_CENTER_INSTANCE_ARN",
@@ -183,6 +185,7 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
         ]
       }
       ```
+
    3. In the 'Specify permission set details' screen:
       1. Enter 'bloom-dev-iam-admin' in the 'Permission set name' field.
       2. Enter 'Permissions to manage the bloom-dev-deployer permission set policy' in the
@@ -203,7 +206,6 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
    1. In the 'Select permission set type' screen, select the 'Custom permission set' option.
    2. In the 'Specify policies and permission boundary' screen, expand the 'Inline policy'
       section. Paste in the following policy then modify it with the following specifics:
-
       - `CHANGEME_IAM_IDENTITY_CENTER_INSTANCE_ARN` to the IAM Identity Center instance ARN in your
         notes.
       - `CHANGEME_BLOOM_PROD_ACCOUNT_NUMBER` to the Bloom prod account number in your notes.
@@ -221,7 +223,10 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
               "sso:DescribePermissionSetProvisioningStatus",
               "sso:GetInlinePolicyForPermissionSet",
               "sso:ProvisionPermissionSet",
-              "sso:PutInlinePolicyToPermissionSet"
+              "sso:PutInlinePolicyToPermissionSet",
+              "sso:AttachCustomerManagedPolicyReferenceToPermissionSet",
+              "sso:DetachCustomerManagedPolicyReferenceFromPermissionSet",
+              "sso:ListCustomerManagedPolicyReferencesInPermissionSet"
             ],
             "Resource": [
               "CHANGEME_IAM_IDENTITY_CENTER_INSTANCE_ARN",
@@ -232,6 +237,7 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
         ]
       }
       ```
+
    3. In the 'Specify permission set details' screen:
       1. Enter 'bloom-prod-iam-admin' in the 'Permission set name' field.
       2. Enter 'Permissions to manage the bloom-prod-deployer permission set policy' in the
@@ -274,14 +280,14 @@ Each permission set assignment in step 3 caused AWS to generate a Role in the ac
 set was assigned to. These roles need access to a S3 bucket that will be created in the next steps.
 
 1. In the organization management account, go to the 'IAM > Roles' page. Search for
-   'AWSReservedSSO_bloom'. Two roles, 'AWSReservedSSO_bloom-dev-iam-admin_..' and
-   'AWSReservedSSO_bloom-prod-iam-admin_..' should be returned. Go into each role detail page and
+   'AWSReservedSSO*bloom'. Two roles, 'AWSReservedSSO_bloom-dev-iam-admin*..' and
+   'AWSReservedSSO*bloom-prod-iam-admin*..' should be returned. Go into each role detail page and
    **note the role ARN for each role**.
-2. In the dev Bloom account, go to the 'IAM > Roles' page. Search for 'AWSReservedSSO_bloom'. One
-   role 'AWSReservedSSO_bloom-dev-deployer_..' should be returned. Go into each role detail page and
+2. In the dev Bloom account, go to the 'IAM > Roles' page. Search for 'AWSReservedSSO*bloom'. One
+   role 'AWSReservedSSO_bloom-dev-deployer*..' should be returned. Go into each role detail page and
    **note the role ARN**.
-3. In the prod Bloom account, go to the 'IAM > Roles' page. Search for 'AWSReservedSSO_bloom'. One
-   role 'AWSReservedSSO_bloom-prod-deployer_..' should be returned. Go into each role detail page
+3. In the prod Bloom account, go to the 'IAM > Roles' page. Search for 'AWSReservedSSO*bloom'. One
+   role 'AWSReservedSSO_bloom-prod-deployer*..' should be returned. Go into each role detail page
    and **note the role ARN**.
 
 ## After these steps
