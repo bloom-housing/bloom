@@ -5,8 +5,8 @@ import {
   FeatureFlagEnum,
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isAdminRole } from "@bloom-housing/shared-helpers/src/utilities/userRoles"
 import { ListingContext } from "../listings/ListingContext"
-import { isAdminRole } from "../../lib/helpers"
 
 type AuthGuardProps = {
   children: React.ReactElement

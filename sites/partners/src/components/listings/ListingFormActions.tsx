@@ -20,10 +20,11 @@ import {
   ListingsStatusEnum,
   UserRoleEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isAdminRole } from "@bloom-housing/shared-helpers/src/utilities/userRoles"
 import { StatusAside } from "../shared/StatusAside"
 import { SubmitFunction } from "./PaperListingForm"
 import { ListingContext } from "./ListingContext"
-import { createDate, isAdminRole } from "../../lib/helpers"
+import { createDate } from "../../lib/helpers"
 import { getValidFutureScheduledDate, publishesLandUseToClosed } from "./helpers"
 
 export enum ListingFormActionsType {

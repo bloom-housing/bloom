@@ -13,6 +13,7 @@ import {
   OrderByEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isAdminRole } from "@bloom-housing/shared-helpers/src/utilities/userRoles"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Dialog, LoadingState, Message } from "@bloom-housing/ui-seeds"
@@ -34,7 +35,7 @@ import {
   useSSE,
   useZipExport,
 } from "../../../../lib/hooks"
-import { isAdminRole, shouldShowManualLotteryPosition } from "../../../../lib/helpers"
+import { shouldShowManualLotteryPosition } from "../../../../lib/helpers"
 
 interface BulkUploadJobNotification {
   jobId: string
