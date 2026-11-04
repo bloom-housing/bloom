@@ -24,7 +24,7 @@ class AutofillCleaner {
   }
 
   addDefaults() {
-    ;["id", "createdAt", "updatedAt", "deletedAt", "listing", "submissionDate", "user"].forEach(
+    ;["id", "createdAt", "updatedAt", "deletedAt", "listings", "submissionDate", "user"].forEach(
       (key) => {
         delete this.application[key]
       }
