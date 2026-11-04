@@ -39,6 +39,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [disableReservedCommunityTypeEdit](./feature-flags/disableReservedCommunityTypeEdit.md) | When true, disables editing of reserved community type description in the partners site (shows as plaintext only). |
 | [disableWorkInRegion](./feature-flags/disableWorkInRegion.md) | When true, the "Work in Region" question will be removed from the application process |
 | [enableAccessibilityFeatures](./feature-flags/enableAccessibilityFeatures.md) | When true, the 'accessibility features' section is displayed in listing creation/edit and the public listing view |
+| [enableAccessibleUnitWaitlistOnly](./feature-flags/enableAccessibleUnitWaitlistOnly.md) | When true, the 'Is this listing open to all housing seekers?' question is displayed and required in the application types section of the listing form |
 | [enableAdditionalResources](./feature-flags/enableAdditionalResources.md) | When true, the 'learn more' section is displayed on the home page |
 | [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
 | [enableApplicationExpirationNonAdmins](./feature-flags/enableApplicationExpirationNonAdmins.md) | When true, application data in the partner site will expire for non-admin users after 45 days |

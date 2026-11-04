@@ -191,4 +191,55 @@ describe("<DetailApplicationTypes>", () => {
     expect(screen.getByText("Referral only units")).toBeInTheDocument()
     expect(screen.queryByText("Referral")).not.toBeInTheDocument()
   })
+
+  it("should show accessible unit wait list only when enableAccessibleUnitWaitlistOnly is turned on", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: (featureFlag) =>
+            featureFlag === FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            digitalApplication: false,
+            paperApplication: false,
+            referralOpportunity: false,
+            accessibleUnitWaitlistOnly: true,
+            applicationMethods: [],
+            units: [],
+          }}
+        >
+          <DetailApplicationTypes />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    expect(screen.getByText("Accessible Unit Wait List only")).toBeInTheDocument()
+    expect(screen.getByText("Yes")).toBeInTheDocument()
+  })
+
+  it("should not show accessible unit wait list only when the feature flag is off", () => {
+    render(
+      <AuthContext.Provider
+        value={{
+          doJurisdictionsHaveFeatureFlagOn: () => false,
+        }}
+      >
+        <ListingContext.Provider
+          value={{
+            ...listing,
+            accessibleUnitWaitlistOnly: true,
+            applicationMethods: [],
+            units: [],
+          }}
+        >
+          <DetailApplicationTypes />
+        </ListingContext.Provider>
+      </AuthContext.Provider>
+    )
+
+    expect(screen.queryByText("Accessible Unit Wait List only")).not.toBeInTheDocument()
+  })
 })

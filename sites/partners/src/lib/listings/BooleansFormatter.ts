@@ -76,6 +76,11 @@ export default class BooleansFormatter extends Formatter {
       falseCase: () => (this.data.referralOpportunityChoice === YesNoEnum.no ? false : null),
     })
 
+    this.processBoolean("accessibleUnitWaitlistOnly", {
+      when: this.data.openToAllHousingSeekersChoice === YesNoEnum.no,
+      falseCase: () => (this.data.openToAllHousingSeekersChoice === YesNoEnum.yes ? false : null),
+    })
+
     if (this.data.reviewOrderQuestion !== "reviewOrderLottery") {
       this.data.lotteryOptIn = null
     } else {

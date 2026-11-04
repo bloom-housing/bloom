@@ -38,4 +38,16 @@ describe("BooleansFormatter", () => {
     data.digitalApplicationChoice = YesNoEnum.no
     expect(formatData(data).digitalApplication).toBe(false)
   })
+
+  it("should format accessibleUnitWaitlistOnly", () => {
+    const data = {} as FormListing
+
+    expect(formatData(data).accessibleUnitWaitlistOnly).toBeNull()
+
+    data.openToAllHousingSeekersChoice = YesNoEnum.no
+    expect(formatData(data).accessibleUnitWaitlistOnly).toBe(true)
+
+    data.openToAllHousingSeekersChoice = YesNoEnum.yes
+    expect(formatData(data).accessibleUnitWaitlistOnly).toBe(false)
+  })
 })

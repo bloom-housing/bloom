@@ -428,6 +428,49 @@ describe('ListingCreateUpdateValidationPipe', () => {
       );
     });
 
+    describe('accessibleUnitWaitlistOnly', () => {
+      const getRequiredFields = async (
+        jurisdiction: Record<string, unknown>,
+      ): Promise<string[]> => {
+        const value = {
+          name: 'Test Listing',
+          jurisdictions: { id: randomUUID() },
+        };
+        mockPrisma.jurisdictions.findFirst.mockResolvedValue(jurisdiction);
+        mockSuperTransform.mockResolvedValue(value);
+        await pipe.transform(value, metadata);
+        return mockSuperTransform.mock.calls[0][0].requiredFields;
+      };
+
+      it('should be required when the feature flag is active', async () => {
+        expect(
+          await getRequiredFields({
+            requiredListingFields: ['name'],
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+                active: true,
+              },
+            ],
+          }),
+        ).toEqual(['name', 'accessibleUnitWaitlistOnly']);
+      });
+
+      it('should not be required when the feature flag is not active', async () => {
+        expect(
+          await getRequiredFields({
+            requiredListingFields: ['name'],
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+                active: false,
+              },
+            ],
+          }),
+        ).toEqual(['name']);
+      });
+    });
+
     it('should handle jurisdiction with undefined id gracefully', async () => {
       const value = {
         name: 'Test Listing',

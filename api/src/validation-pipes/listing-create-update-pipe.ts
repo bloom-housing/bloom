@@ -112,7 +112,17 @@ export class ListingCreateUpdateValidationPipe extends ValidationPipe {
         ? baseRequiredFields.filter(
             (field) => !this.landUseExcludedRequiredFields.includes(field),
           )
-        : baseRequiredFields;
+        : [...baseRequiredFields];
+
+    if (
+      doJurisdictionHaveFeatureFlagSet(
+        jurisdiction as unknown as Jurisdiction,
+        FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+      ) &&
+      !requiredFields.includes('accessibleUnitWaitlistOnly')
+    ) {
+      requiredFields.push('accessibleUnitWaitlistOnly');
+    }
 
     const minimumImagesRequired =
       jurisdiction?.minimumListingPublishImagesRequired || 0;
