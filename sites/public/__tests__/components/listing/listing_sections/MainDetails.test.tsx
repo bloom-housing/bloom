@@ -33,21 +33,7 @@ describe("<MainDetails>", () => {
           reservedCommunityTypes: null,
           listingFeatures: { id: "1" },
         }}
-        jurisdiction={{
-          ...jurisdiction,
-          featureFlags: [
-            ...jurisdiction.featureFlags,
-            {
-              name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
-              id: "id_2",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: true,
-              description: "",
-              jurisdictions: [],
-            },
-          ],
-        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(screen.queryByTestId("listing-tags")).toBeNull()
@@ -178,5 +164,41 @@ describe("<MainDetails>", () => {
     )
 
     expect(screen.queryByText("Accessibility features")).toBeNull()
+  })
+
+  it("hides accessibility features tag when all listing features are false", () => {
+    render(
+      <MainDetails
+        listing={{
+          ...listing,
+          listingFeatures: {
+            id: "listing_features_id",
+            elevator: false,
+            grabBars: false,
+          },
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+
+    expect(screen.queryByText("Accessibility features")).toBeNull()
+  })
+
+  it("shows accessibility features tag when at least one listing feature is true", () => {
+    render(
+      <MainDetails
+        listing={{
+          ...listing,
+          listingFeatures: {
+            id: "listing_features_id",
+            elevator: false,
+            grabBars: true,
+          },
+        }}
+        jurisdiction={jurisdiction}
+      />
+    )
+
+    expect(screen.getByText("Accessibility features")).toBeDefined()
   })
 })
