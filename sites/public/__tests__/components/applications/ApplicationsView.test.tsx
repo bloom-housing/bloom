@@ -31,6 +31,10 @@ const mockRouter: GenericRouter = {
   },
 }
 
+const doJurisdictionsHaveFeatureFlagOn: (featureFlag: string) => boolean = () => {
+  return false
+}
+
 beforeAll(() => {
   server.listen()
   mockNextRouter()
@@ -122,6 +126,7 @@ function renderApplicationsView(
         value={{
           profile: { ...user, jurisdictions: [], listings: [], ...profileOverrides },
           applicationsService: new ApplicationsService(),
+          doJurisdictionsHaveFeatureFlagOn,
         }}
       >
         <ApplicationsView
@@ -152,6 +157,7 @@ describe("<ApplicationsView>", () => {
           value={{
             profile: undefined,
             initialStateLoaded: true,
+            doJurisdictionsHaveFeatureFlagOn,
           }}
         >
           <ApplicationsView filterType={ApplicationsIndexEnum.all} />
