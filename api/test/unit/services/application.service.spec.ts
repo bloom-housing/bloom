@@ -1320,7 +1320,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(1) // closed
         .mockResolvedValueOnce(1) // lottery
         .mockResolvedValueOnce(3); // total
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [],
       });
 
@@ -1373,7 +1373,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(1) // open
         .mockResolvedValueOnce(2) // closed
         .mockResolvedValueOnce(3); // displayCount
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [],
       });
 
@@ -1433,7 +1433,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(0) // closed
         .mockResolvedValueOnce(1) // lottery
         .mockResolvedValueOnce(2); // displayCount
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [],
       });
 
@@ -1496,7 +1496,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(2) // closed
         .mockResolvedValueOnce(1) // lottery
         .mockResolvedValueOnce(2); // displayCount
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [],
       });
 
@@ -1566,7 +1566,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(0) // closed
         .mockResolvedValueOnce(2) // lottery
         .mockResolvedValueOnce(2); // displayCount
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [],
       });
 
@@ -1649,7 +1649,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(1) // closed
         .mockResolvedValueOnce(3) // lottery
         .mockResolvedValueOnce(3); // displayCount
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [{ id: jurisdictionWithExpiryOn }],
       });
 
@@ -1691,7 +1691,7 @@ describe('Testing application service', () => {
         .mockResolvedValueOnce(0) // closed
         .mockResolvedValueOnce(0) // lottery
         .mockResolvedValueOnce(0); // displayCount
-      prisma.featureFlags.findUniqueOrThrow = jest.fn().mockResolvedValue({
+      prisma.featureFlags.findUnique = jest.fn().mockResolvedValue({
         jurisdictions: [],
       });
 

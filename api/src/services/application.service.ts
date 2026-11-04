@@ -467,21 +467,24 @@ export class ApplicationService {
       }
     }
 
-    const rawJurisdictionIds = await this.prisma.featureFlags.findUniqueOrThrow(
-      {
-        select: {
-          jurisdictions: {
-            select: {
-              id: true,
-            },
+    const rawJurisdictionIds = await this.prisma.featureFlags.findUnique({
+      select: {
+        jurisdictions: {
+          select: {
+            id: true,
           },
         },
-        where: {
-          name: FeatureFlagEnum.enablePublicLotteryExpiration,
-        },
       },
-    );
-    const expirationJurisdictionIds = rawJurisdictionIds?.jurisdictions;
+      where: {
+        name: FeatureFlagEnum.enablePublicLotteryExpiration,
+      },
+    });
+    if (!rawJurisdictionIds) {
+      throw new NotFoundException(
+        `Feature flag ${FeatureFlagEnum.enablePublicLotteryExpiration} was requested but not found`,
+      );
+    }
+    const expirationJurisdictionIds = rawJurisdictionIds.jurisdictions;
 
     const buildCountWhereClause = (
       filterType: ApplicationsFilterEnum,
