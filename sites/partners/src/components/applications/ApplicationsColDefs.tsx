@@ -6,7 +6,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 import {
   Application,
   IncomePeriodEnum,
-  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
@@ -44,7 +43,7 @@ export function getColDefs(
   enableFullTimeStudentQuestion?: boolean,
   disableWorkInRegion?: boolean,
   enableApplicationStatus?: boolean,
-  reviewOrderType?: ReviewOrderTypeEnum,
+  showManualLotteryPosition?: boolean,
   enableHousingAdvocate?: boolean
 ): ColDef[] {
   const defs: ColDef[] = [
@@ -118,7 +117,7 @@ export function getColDefs(
             width: 120,
             minWidth: 50,
           },
-          ...(reviewOrderType === ReviewOrderTypeEnum.lottery
+          ...(showManualLotteryPosition
             ? [
                 {
                   headerName: t("application.details.manualLotteryPositionNumber"),

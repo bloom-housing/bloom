@@ -5,7 +5,10 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
+import {
+  MultiselectQuestionsApplicationSectionEnum,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import { S3Service } from '../../../src/services/s3.service';
 import {
   mockApplication,
@@ -75,6 +78,75 @@ describe('Testing application export service', () => {
   });
 
   describe('csvExport', () => {
+    beforeEach(() => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+        lotteryOptIn: false,
+      });
+    });
+
+    const exportHeaderRow = async (listing: {
+      reviewOrderType: ReviewOrderTypeEnum;
+      lotteryOptIn: boolean;
+    }): Promise<string> => {
+      prisma.listings.findUnique = jest.fn().mockResolvedValue(listing);
+      prisma.applications.findMany = jest
+        .fn()
+        .mockReturnValue(mockApplicationSet(1, new Date(), 1));
+      prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue({
+        featureFlags: [
+          {
+            id: 'enableApplicationStatus',
+            name: FeatureFlagEnum.enableApplicationStatus,
+            active: true,
+          },
+        ],
+      });
+      prisma.multiselectQuestions.findMany = jest.fn().mockReturnValue([]);
+
+      const exportResponse = await service.csvExport(
+        {
+          id: randomUUID(),
+          includeDemographics: false,
+        } as unknown as ApplicationCsvQueryParams,
+        { id: 'requesting id' } as unknown as User,
+      );
+
+      const mockedStream = new PassThrough();
+      exportResponse.pipe(mockedStream);
+      return new Promise((resolve) => {
+        mockedStream.on('data', (d) => {
+          const value = Buffer.from(d).toString();
+          mockedStream.end();
+          mockedStream.destroy();
+          resolve(value.split('\n')[0]);
+        });
+      });
+    };
+
+    it('should include the manual lottery position column for lotteryOptIn: false', async () => {
+      const headerRow = await exportHeaderRow({
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: false,
+      });
+
+      expect(headerRow).toContain('"Lottery Position Number"');
+      expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+        select: { reviewOrderType: true, lotteryOptIn: true },
+        where: { id: expect.anything() },
+      });
+    });
+
+    it('should omit the manual lottery position column for lotteryOptIn: true', async () => {
+      const headerRow = await exportHeaderRow({
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: true,
+      });
+
+      expect(headerRow).not.toContain('"Lottery Position Number"');
+      expect(headerRow).toContain('"Waitlist Position (Accessible Unit)"');
+    });
+
     it('should build csv without demographics', async () => {
       const requestingUser = {
         id: 'requesting id',

@@ -24,6 +24,7 @@ import { OrderByEnum } from '../enums/shared/order-by-enum';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { getExportHeaders } from '../utilities/application-export-helpers';
 import { doJurisdictionHaveFeatureFlagSet } from '../utilities/feature-flag-utilities';
+import { isSystemLotteryListing } from '../utilities/is-system-lottery-listing';
 import { mapTo } from '../utilities/mapTo';
 import { zipExport, zipExportSecure } from '../utilities/zip-export';
 
@@ -205,6 +206,11 @@ export class ApplicationExporterService {
       },
     });
 
+    const listing = await this.prisma.listings.findUnique({
+      select: { reviewOrderType: true, lotteryOptIn: true },
+      where: { id: queryParams.id },
+    });
+
     const disableEthnicityQuestion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableEthnicityQuestion,
@@ -287,6 +293,7 @@ export class ApplicationExporterService {
         enableSexualOrientationQuestion,
         enableSpokenLanguage,
         enableV2MSQ,
+        hideManualLotteryPosition: isSystemLotteryListing(listing),
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
         visibleApplicationAccessibilityFeatures:
@@ -517,6 +524,11 @@ export class ApplicationExporterService {
       },
     });
 
+    const listing = await this.prisma.listings.findUnique({
+      select: { reviewOrderType: true, lotteryOptIn: true },
+      where: { id: queryParams.id },
+    });
+
     const disableEthnicityQuestion = doJurisdictionHaveFeatureFlagSet(
       jurisdiction as Jurisdiction,
       FeatureFlagEnum.disableEthnicityQuestion,
@@ -600,6 +612,7 @@ export class ApplicationExporterService {
         enableSpokenLanguage,
         enableV2MSQ,
         forLottery,
+        hideManualLotteryPosition: isSystemLotteryListing(listing),
         includeDemographics: queryParams.includeDemographics,
         swapCommunityTypeWithPrograms,
         visibleApplicationAccessibilityFeatures:

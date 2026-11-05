@@ -11,6 +11,7 @@ import {
   ApplicationSubmissionTypeEnum,
   BackgroundJobStatusEnum,
   IncomePeriodEnum,
+  ReviewOrderTypeEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Readable } from 'stream';
@@ -123,6 +124,10 @@ const expectedDate = (d: Date): string =>
 
 type RowOverrides = Partial<Record<keyof typeof bulkUploadHeaderNames, string>>;
 
+const headerKeyByLabel: Record<string, string> = Object.fromEntries(
+  Object.entries(bulkUploadHeaderNames).map(([key, label]) => [label, key]),
+);
+
 const mockCsvInput = (
   rows: RowOverrides[] = [],
   options: { header?: string[] } = {},
@@ -131,14 +136,11 @@ const mockCsvInput = (
 
   return [
     headerRow,
-    rows.map((row) => {
-      const cells = Object.keys(bulkUploadHeaderNames).map(
-        (key) => row[key] ?? '',
-      );
-      return Object.fromEntries(
-        headerRow.map((label, i) => [label, cells[i] ?? '']),
-      );
-    }),
+    rows.map((row) =>
+      Object.fromEntries(
+        headerRow.map((label) => [label, row[headerKeyByLabel[label]] ?? '']),
+      ),
+    ),
   ];
 };
 
@@ -423,6 +425,30 @@ describe('Testing application bulk upload services', () => {
         ),
       ).toMatch(/,$/);
     });
+
+    it('should omit the lottery position column from the template when hideManualLotteryPosition is true', async () => {
+      prisma.applications.findMany = jest
+        .fn()
+        .mockResolvedValue(applicationsSet);
+
+      await service.csvExportHelper(
+        'sampleTemplate.csv',
+        randomUUID(),
+        applicationsSet.map((app) => ({ id: app.id })),
+        undefined,
+        true,
+      );
+
+      const content = fs.readFileSync('sampleTemplate.csv', 'utf8');
+
+      const headers =
+        '"Application Id","Applicant First Name","Applicant Last Name","Primary DOB","Application Submission Date","Application Status","Application Decline Reason","Application Decline Reason Additional Details","Waitlist Position (Accessible Unit)","Waitlist Position (Conventional Unit)","Household size","Declared annual income","Declared monthly income","Request ADA","Subsidy/Voucher"';
+      const rowOne = `"${applicationsSet[0].id}","Colleen","Tawnee","3/15/1990","05-19-2026 03:00:00PM PDT","Declined","Household size too large","Some additional details",,,"2","55000",,"Mobility, Other","Yes"`;
+
+      expect(content).toContain(headers);
+      expect(content).toContain(rowOne);
+      expect(content).not.toContain('Lottery Position Number');
+    });
   });
 
   describe('authorizeExport', () => {
@@ -616,6 +642,189 @@ describe('Testing application bulk upload services', () => {
         ),
       );
     });
+
+    describe('for a system lottery listing', () => {
+      const appOne = dbContext({
+        id: randomUUID(),
+        applicant: { firstName: 'Andrew', lastName: 'Rust' },
+        submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+      });
+      const baseRow: RowOverrides = {
+        ...contextRow(appOne),
+        applicationStatus: 'Wait list',
+        waitlistPositionConventionalUnit: '3',
+      };
+
+      beforeEach(() => {
+        prisma.listings.findUnique = jest.fn().mockResolvedValue({
+          name: 'Test Listing',
+          reviewOrderType: ReviewOrderTypeEnum.lottery,
+          lotteryOptIn: true,
+          jurisdictions: {
+            id: randomUUID(),
+            publicUrl: 'test-url.com',
+          },
+        });
+        prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+        prisma.backgroundJob.update = jest.fn().mockResolvedValue({
+          id: 'job-id',
+          status: BackgroundJobStatusEnum.completed,
+        });
+        backgroundJobCreateMock.mockResolvedValue({ id: 'job-id' });
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
+
+      it('should ignore an invalid lottery value and drop the column before updating', async () => {
+        const bulkUpdateSpy = jest
+          .spyOn(service, 'bulkUpdateApplications')
+          .mockResolvedValue({ totalRecords: 1, failedEmailsCount: 0 });
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([{ ...baseRow, lotteryPositionNumber: 'abc' }]),
+        );
+
+        await expect(
+          service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual('job-id');
+
+        const [rows] = bulkUpdateSpy.mock.calls[0];
+        expect(rows[0]).not.toHaveProperty(
+          bulkUploadHeaderNames.lotteryPositionNumber,
+        );
+        expect(
+          rows[0][bulkUploadHeaderNames.waitlistPositionConventionalUnit],
+        ).toEqual('3');
+        expect(rows[0][bulkUploadHeaderNames.applicationStatus]).toEqual(
+          'Wait list',
+        );
+      });
+
+      it('should accept a CSV without the lottery column', async () => {
+        const bulkUpdateSpy = jest
+          .spyOn(service, 'bulkUpdateApplications')
+          .mockResolvedValue({ totalRecords: 1, failedEmailsCount: 0 });
+        const header = Object.values(bulkUploadHeaderNames).filter(
+          (h) => h !== bulkUploadHeaderNames.lotteryPositionNumber,
+        );
+        downloadFromPrivateMock.mockResolvedValue(
+          mockCsvResponse([baseRow], { header }),
+        );
+
+        await expect(
+          service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
+        ).resolves.toEqual('job-id');
+
+        const [rows] = bulkUpdateSpy.mock.calls[0];
+        expect(rows[0]).not.toHaveProperty(
+          bulkUploadHeaderNames.lotteryPositionNumber,
+        );
+        expect(
+          rows[0][bulkUploadHeaderNames.waitlistPositionConventionalUnit],
+        ).toEqual('3');
+        expect(rows[0][bulkUploadHeaderNames.applicationStatus]).toEqual(
+          'Wait list',
+        );
+      });
+    });
+
+    it('should still validate the lottery column for lotteryOptIn: false', async () => {
+      const appOne = dbContext({
+        id: randomUUID(),
+        applicant: { firstName: 'Andrew', lastName: 'Rust' },
+        submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+      });
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        name: 'Test Listing',
+        reviewOrderType: ReviewOrderTypeEnum.lottery,
+        lotteryOptIn: false,
+        jurisdictions: { id: randomUUID(), publicUrl: 'test-url.com' },
+      });
+      prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+      downloadFromPrivateMock.mockResolvedValue(
+        mockCsvResponse([
+          {
+            ...contextRow(appOne),
+            applicationStatus: 'Submitted',
+            lotteryPositionNumber: 'abc',
+          },
+        ]),
+      );
+
+      await expect(
+        service.processBulkUpload({ s3Key, listingId }, mockRequestingUser),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'Upload Failed: One or more rows beginning on row 2 have invalid numeric values',
+        ),
+      );
+    });
+  });
+
+  describe('bulkUpdateApplications', () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should not touch the manual lottery position when the row has no lottery column', async () => {
+      const applicationId = randomUUID();
+      prisma.applications.findUnique = jest.fn().mockResolvedValue({
+        userAccounts: null,
+        applicant: {
+          firstName: 'Andrew',
+          lastName: 'Rust',
+          emailAddress: 'andrew@example.com',
+        },
+        alternateContact: null,
+        status: ApplicationStatusEnum.submitted,
+        applicationDeclineReason: null,
+        applicationDeclineReasonAdditionalDetails: null,
+        accessibleUnitWaitlistNumber: null,
+        conventionalUnitWaitlistNumber: null,
+        manualLotteryPositionNumber: 4,
+      });
+      prisma.applications.update = jest
+        .fn()
+        .mockResolvedValue({ id: applicationId });
+      jest
+        .spyOn(service['snapshotService'], 'createApplicationSnapshot')
+        .mockResolvedValue({ success: true });
+      const applicationUpdateEmailMock = service['emailService']
+        .applicationUpdateEmail as jest.Mock;
+      applicationUpdateEmailMock.mockClear();
+
+      const row: CsvRow = {
+        [bulkUploadHeaderNames.applicationId]: applicationId,
+        [bulkUploadHeaderNames.applicantFirstName]: 'Andrew',
+        [bulkUploadHeaderNames.applicantLastName]: 'Rust',
+        [bulkUploadHeaderNames.applicationSubmissionDate]: '',
+        [bulkUploadHeaderNames.applicationStatus]: 'Wait list',
+        [bulkUploadHeaderNames.applicationDeclineReason]: '',
+        [bulkUploadHeaderNames.applicationDeclineReasonAdditionalDetails]: '',
+        [bulkUploadHeaderNames.waitlistPositionAccessibleUnit]: '',
+        [bulkUploadHeaderNames.waitlistPositionConventionalUnit]: '3',
+      };
+
+      await service.bulkUpdateApplications([row], {
+        id: randomUUID(),
+        name: 'Test Listing',
+        jurisdictionId: randomUUID(),
+        appUrl: 'test-url.com',
+      });
+
+      expect(prisma.applications.update).toHaveBeenCalledWith({
+        where: { id: applicationId, listingId: expect.anything() },
+        data: {
+          status: ApplicationStatusEnum.waitlist,
+          conventionalUnitWaitlistNumber: 3,
+        },
+      });
+      const changeTypes = applicationUpdateEmailMock.mock.calls[0][3].map(
+        (change) => change.type,
+      );
+      expect(changeTypes).not.toContain('lotteryPosition');
+    });
   });
 
   describe('validateCSV', () => {
@@ -665,6 +874,97 @@ describe('Testing application bulk upload services', () => {
       it('should reject a CSV with an unknown column swapped in at the correct count', async () => {
         const header = Object.values(bulkUploadHeaderNames);
         header[0] = 'Unknown';
+
+        await expect(
+          service.validateCSV(
+            ...mockCsvInput([{ applicationId: randomUUID() }], { header }),
+            listingId,
+          ),
+        ).rejects.toThrow(
+          new BadRequestException(
+            'Upload Failed: CSV has additional or missing columns',
+          ),
+        );
+      });
+
+      describe('for a system lottery listing', () => {
+        const headerWithoutLottery = Object.values(
+          bulkUploadHeaderNames,
+        ).filter((h) => h !== bulkUploadHeaderNames.lotteryPositionNumber);
+
+        const validRow = () => {
+          const appOne = dbContext({
+            id: randomUUID(),
+            applicant: { firstName: 'Andrew', lastName: 'Rust' },
+            submissionDate: new Date(2026, 0, 1, 10, 0, 0),
+          });
+          prisma.applications.findMany = jest.fn().mockResolvedValue([appOne]);
+          return { ...contextRow(appOne), applicationStatus: 'Submitted' };
+        };
+
+        it('should pass when the lottery column is missing', async () => {
+          await expect(
+            service.validateCSV(
+              ...mockCsvInput([validRow()], { header: headerWithoutLottery }),
+              listingId,
+              undefined,
+              true,
+            ),
+          ).resolves.toBeUndefined();
+        });
+
+        it('should pass when the lottery column is present', async () => {
+          await expect(
+            service.validateCSV(
+              ...mockCsvInput([validRow()]),
+              listingId,
+              undefined,
+              true,
+            ),
+          ).resolves.toBeUndefined();
+        });
+
+        it('should reject a CSV missing another required column', async () => {
+          const header = headerWithoutLottery.filter(
+            (h) => h !== bulkUploadHeaderNames.applicationStatus,
+          );
+
+          await expect(
+            service.validateCSV(
+              ...mockCsvInput([validRow()], { header }),
+              listingId,
+              undefined,
+              true,
+            ),
+          ).rejects.toThrow(
+            new BadRequestException(
+              'Upload Failed: CSV has additional or missing columns',
+            ),
+          );
+        });
+
+        it('should reject a CSV with an extra unknown column', async () => {
+          const header = [...headerWithoutLottery, 'Unknown'];
+
+          await expect(
+            service.validateCSV(
+              ...mockCsvInput([validRow()], { header }),
+              listingId,
+              undefined,
+              true,
+            ),
+          ).rejects.toThrow(
+            new BadRequestException(
+              'Upload Failed: CSV has additional or missing columns',
+            ),
+          );
+        });
+      });
+
+      it('should still reject a missing lottery column for a legacy listing', async () => {
+        const header = Object.values(bulkUploadHeaderNames).filter(
+          (h) => h !== bulkUploadHeaderNames.lotteryPositionNumber,
+        );
 
         await expect(
           service.validateCSV(
