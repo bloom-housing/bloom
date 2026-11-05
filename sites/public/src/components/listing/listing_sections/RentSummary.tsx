@@ -115,7 +115,7 @@ export const RentSummary = ({
           <Markdown>{t("listings.section8VoucherInfo")}</Markdown>
         </div>
       )}
-      <p className={`seeds-p-bs-4`}>{t("listings.amiDisclaimer")}</p>
+      {amiValues.length > 1 && <p className={`seeds-p-bs-4`}>{t("listings.amiDisclaimer")}</p>}
     </div>
   )
 }
