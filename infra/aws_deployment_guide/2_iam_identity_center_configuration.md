@@ -181,6 +181,23 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
               "arn:aws:sso:::account/CHANGEME_BLOOM_DEV_ACCOUNT_NUMBER",
               "CHANGEME_DEV_DEPLOYER_PERMISSIONSET_ARN"
             ]
+          },
+          {
+            "Sid": "DeployerPolicies",
+            "Effect": "Allow",
+            "Action": [
+               "iam:CreatePolicy",
+               "iam:CreatePolicyVersion",
+               "iam:DeletePolicy",
+               "iam:DeletePolicyVersion",
+               "iam:GetPolicy",
+               "iam:GetPolicyVersion",
+               "iam:ListPolicyTags",
+               "iam:ListPolicyVersions",
+               "iam:TagPolicy",
+               "iam:UntagPolicy"
+            ],
+            "Resource": "arn:aws:iam::CHANGEME_BLOOM_DEV_ACCOUNT_NUMBER:policy/bloom-deployer-*"
           }
         ]
       }
@@ -233,6 +250,23 @@ the `bloom-dev-deployer` permission set policy is different from the group of pe
               "arn:aws:sso:::account/CHANGEME_BLOOM_PROD_ACCOUNT_NUMBER",
               "CHANGEME_PROD_DEPLOYER_PERMISSIONSET_ARN"
             ]
+          },
+          {
+            "Sid": "DeployerPolicies",
+            "Effect": "Allow",
+            "Action": [
+               "iam:CreatePolicy",
+               "iam:CreatePolicyVersion",
+               "iam:DeletePolicy",
+               "iam:DeletePolicyVersion",
+               "iam:GetPolicy",
+               "iam:GetPolicyVersion",
+               "iam:ListPolicyTags",
+               "iam:ListPolicyVersions",
+               "iam:TagPolicy",
+               "iam:UntagPolicy"
+            ],
+            "Resource": "arn:aws:iam::CHANGEME_BLOOM_PROD_ACCOUNT_NUMBER:policy/bloom-deployer-*"
           }
         ]
       }
@@ -273,6 +307,12 @@ On the IAM Identity Center 'AWS Organizations: AWS accounts' page:
       button.
    2. Select the `bloom-prod-deployers` group checkbox then click the 'Next' button.
    3. Select the `bloom-prod-deployer` permission set checkbox then click the 'Next' button.
+
+5. Assign the `bloom-dev-iam-admin` profile to the `bloom-dev` account
+   1. AWS Accounts -> `bloom-dev` -> Assign Users or Groups
+
+6. Assign the `bloom-prod-iam-admin` profile to the `bloom-prod` account
+   1. AWS Accounts -> `bloom-prod` -> Assign Users or Groups
 
 ### 4. Find the ARNs of the AWS-generated Roles
 
