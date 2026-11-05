@@ -29,6 +29,11 @@ export class AmiChartService {
     const rawAmiCharts = await this.prisma.amiChart.findMany({
       include: view,
       where: this.buildWhereClause(params),
+      orderBy: [
+        { ordinal: { sort: 'asc', nulls: 'last' } },
+        { createdAt: 'desc' },
+        { name: 'asc' },
+      ],
     });
     return mapTo(AmiChart, rawAmiCharts);
   }
