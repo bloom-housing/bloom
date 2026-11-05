@@ -507,7 +507,3 @@ export const mergeApplicationNames = (applications: Application[]) => {
 
   return `${names.join(", ")}`
 }
-
-export const isAdminRole = (userRoles: UserRole) => {
-  return userRoles?.isAdmin || userRoles?.isSuperAdmin || userRoles?.isSupportAdmin
-}

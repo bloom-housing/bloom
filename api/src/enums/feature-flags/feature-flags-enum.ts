@@ -75,6 +75,7 @@ export enum FeatureFlagEnum {
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
+  enablePublicLotteryExpiration = 'enablePublicLotteryExpiration',
   enablePublicTermsOfUse = 'enablePublicTermsOfUse',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
@@ -457,6 +458,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enablePublicLotteryExpiration,
+    description:
+      'When true, public user lottery results will expire after a set amount of time',
   },
   {
     name: FeatureFlagEnum.enablePublicTermsOfUse,

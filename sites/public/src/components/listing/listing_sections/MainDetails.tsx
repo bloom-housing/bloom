@@ -122,8 +122,7 @@ export const getListingTags = (
 
   if (
     !enabledFeatures.hideAccessibilityFeaturesTag &&
-    listing.listingFeatures &&
-    Object.values(listing.listingFeatures).some((feature) => feature)
+    Object.entries(listing.listingFeatures ?? {}).some(([key, value]) => key !== "id" && value)
   ) {
     listingTags.push({
       title: t("listings.sections.accessibilityFeatures"),

@@ -44,7 +44,7 @@ const skipLoginRoutes = [
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
 
-  // fix for rehydration
+  // TODO: fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
     setHasMounted(true)
@@ -64,8 +64,9 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         <AuthProvider>
           <RequireLogin
             signInPath="/sign-in"
-            termsPath="/users/terms"
             signInMessage={signInMessage}
+            termsPath="/users/terms"
+            partnersPortal={true}
             skipForRoutes={skipLoginRoutes}
           >
             <MessageProvider>
