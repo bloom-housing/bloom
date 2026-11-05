@@ -8,7 +8,7 @@ import { useRouter } from "next/router"
 import Ticket from "@heroicons/react/24/solid/TicketIcon"
 import Download from "@heroicons/react/24/solid/ArrowDownTrayIcon"
 import ExclamationCircleIcon from "@heroicons/react/24/solid/ExclamationCircleIcon"
-import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink, AlertBox } from "@bloom-housing/ui-components"
 import { Button, Card, Dialog, Heading, Icon, Message } from "@bloom-housing/ui-seeds"
 import { CardHeader, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
@@ -484,6 +484,16 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                 <p>{t("listings.lottery.runLotteryContent")}</p>
               )}
               <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
+              {enableNonAdminLotteries && jurisdictionData?.lotteryAutoPublishDays && (
+                <AlertBox type="notice">
+                  {t("listings.lottery.autopublishNotice", {
+                    publishDate: dayjs(new Date())
+                      .add(jurisdictionData.lotteryAutoPublishDays, "day")
+                      .format("MM/DD/YYYY"),
+                    smart_count: jurisdictionData.lotteryAutoPublishDays,
+                  })}
+                </AlertBox>
+              )}
             </Dialog.Content>
             <Dialog.Footer>
               <Button
@@ -566,6 +576,16 @@ const Lottery = (props: { listing: Listing | undefined }) => {
                   <p>{t("listings.lottery.reRunHistory")}</p>
                   <p>{t("applications.addConfirmModalAddApplicationPostLotteryAreYouSure")}</p>
                 </>
+              )}
+              {enableNonAdminLotteries && jurisdictionData?.lotteryAutoPublishDays && (
+                <AlertBox type="notice">
+                  {t("listings.lottery.autopublishNotice", {
+                    publishDate: dayjs(new Date())
+                      .add(jurisdictionData.lotteryAutoPublishDays, "day")
+                      .format("MM/DD/YYYY"),
+                    smart_count: jurisdictionData.lotteryAutoPublishDays,
+                  })}
+                </AlertBox>
               )}
             </Dialog.Content>
             <Dialog.Footer>
