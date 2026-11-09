@@ -81,10 +81,10 @@ def main():
         required=True,
         choices=us_regions)
     p.add_argument(
-        "--enable_task_auto_scaling",
-        help="Enable production task autoscaling in ECS (default true)",
+        "--disable_task_auto_scaling",
+        help="Disable production task autoscaling in ECS",
         required=False,
-        default=True)
+        action="store_false")
     p.add_argument(
         "--autoscaling_min_tasks",
         type=int,
@@ -194,7 +194,7 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
-            ECS_AUTOSCALING=args.enable_task_auto_scaling,
+            ECS_AUTOSCALING=args.disable_task_auto_scaling,
             ECS_AUTOSCALING_MIN_TASKS=args.autoscaling_min_tasks,
             ECS_AUTOSCALING_MAX_TASKS=args.autoscaling_max_tasks,
             DB_HIGH_AVAILABILITY="true",
