@@ -8,30 +8,16 @@ export enum SettingsIndexEnum {
   preferences = 0,
   properties,
   agencies,
-  translations,
-  content,
-  branding,
-  transfer,
 }
 
 type SettingsTabsFeatureFlags = {
   enablePreferences: boolean
   enableProperties: boolean
   enableAgencies?: boolean
-  enableTranslations?: boolean
-  enableContent?: boolean
-  enableBranding?: boolean
 }
 
 export const getVisibleSettingsTabs = (
-  {
-    enablePreferences,
-    enableProperties,
-    enableAgencies,
-    enableTranslations,
-    enableContent,
-    enableBranding,
-  }: SettingsTabsFeatureFlags,
+  { enablePreferences, enableProperties, enableAgencies }: SettingsTabsFeatureFlags,
   userRoles?: UserRole
 ) => {
   const isPartnerOrSupport = !!userRoles?.isPartner || !!userRoles?.isSupportAdmin
@@ -41,11 +27,6 @@ export const getVisibleSettingsTabs = (
     preferences: !!enablePreferences && !isPartnerOrSupport,
     properties: !!enableProperties && !isPartnerOrSupport && !isLimited,
     agencies: !!enableAgencies && !isPartnerOrSupport && !isLimited,
-    // Editing translations spans every jurisdiction, so it is limited to the admin role.
-    translations: !!enableTranslations && !!userRoles?.isAdmin,
-    content: !!enableContent && !!userRoles?.isAdmin,
-    branding: !!enableBranding && !!userRoles?.isAdmin,
-    transfer: (!!enableContent || !!enableBranding) && !!userRoles?.isAdmin,
   }
 }
 
@@ -64,10 +45,6 @@ export const getSettingsTabs = (
     preferences: enablePreferences,
     properties: enableProperties,
     agencies: enableAgencies,
-    translations: enableTranslations,
-    content: enableContent,
-    branding: enableBranding,
-    transfer: enableTransfer,
   } = getVisibleSettingsTabs(featureFlags, userRoles)
 
   const baseUrl = "/settings"
@@ -75,10 +52,6 @@ export const getSettingsTabs = (
   if (enablePreferences) enabledTabs.push(SettingsIndexEnum.preferences)
   if (enableProperties) enabledTabs.push(SettingsIndexEnum.properties)
   if (enableAgencies) enabledTabs.push(SettingsIndexEnum.agencies)
-  if (enableTranslations) enabledTabs.push(SettingsIndexEnum.translations)
-  if (enableContent) enabledTabs.push(SettingsIndexEnum.content)
-  if (enableBranding) enabledTabs.push(SettingsIndexEnum.branding)
-  if (enableTransfer) enabledTabs.push(SettingsIndexEnum.transfer)
 
   return (
     <Tabs
@@ -117,42 +90,6 @@ export const getSettingsTabs = (
             <span>{t("settings.agencies")}</span>
           </Tabs.Tab>
         )}
-        {enableTranslations && (
-          <Tabs.Tab
-            href={`${baseUrl}/translations`}
-            data-testid="translations-tab"
-            active={selectedIndex === SettingsIndexEnum.translations}
-          >
-            <span>{t("settings.translations")}</span>
-          </Tabs.Tab>
-        )}
-        {enableContent && (
-          <Tabs.Tab
-            href={`${baseUrl}/content`}
-            data-testid="content-tab"
-            active={selectedIndex === SettingsIndexEnum.content}
-          >
-            <span>{t("settings.content")}</span>
-          </Tabs.Tab>
-        )}
-        {enableBranding && (
-          <Tabs.Tab
-            href={`${baseUrl}/branding`}
-            data-testid="branding-tab"
-            active={selectedIndex === SettingsIndexEnum.branding}
-          >
-            <span>{t("settings.branding")}</span>
-          </Tabs.Tab>
-        )}
-        {enableTransfer && (
-          <Tabs.Tab
-            href={`${baseUrl}/transfer`}
-            data-testid="transfer-tab"
-            active={selectedIndex === SettingsIndexEnum.transfer}
-          >
-            <span>{t("settings.transfer")}</span>
-          </Tabs.Tab>
-        )}
       </Tabs.TabList>
     </Tabs>
   )
@@ -161,9 +98,6 @@ export const getSettingsTabs = (
 export const useSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
   const { profile, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
 
-  const enableDbDrivenContent = doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.enableDbDrivenContent
-  )
   const enableV2MSQ = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableV2MSQ)
   const featureFlags: SettingsTabsFeatureFlags = {
     enablePreferences: !doJurisdictionsHaveFeatureFlagOn(
@@ -173,9 +107,6 @@ export const useSettingsTabs = (selectedIndex: SettingsIndexEnum) => {
     ),
     enableProperties: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties),
     enableAgencies: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate),
-    enableTranslations: enableDbDrivenContent,
-    enableContent: enableDbDrivenContent,
-    enableBranding: doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableDbDrivenBranding),
   }
 
   return {

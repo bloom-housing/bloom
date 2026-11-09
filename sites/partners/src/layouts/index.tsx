@@ -45,6 +45,12 @@ const Layout = (props) => {
         : "/settings/properties",
     })
   }
+  if (profile?.userRoles?.isSuperAdmin) {
+    menuLinks.push({
+      title: t("nav.admin"),
+      href: "/admin",
+    })
+  }
   if (profile) {
     menuLinks.push({
       title: t("nav.signOut"),

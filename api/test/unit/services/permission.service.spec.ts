@@ -633,6 +633,7 @@ describe('Testing permission service', () => {
     },
   );
 
+  // The services narrow this to superadmins with assertSuperAdmin.
   it('should let an admin edit translations and jurisdiction content', async () => {
     expect(await contentAccessFor(admin)).toEqual([
       'translation.read=true',
