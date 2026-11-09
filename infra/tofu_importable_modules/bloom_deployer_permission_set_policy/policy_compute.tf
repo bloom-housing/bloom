@@ -13,6 +13,9 @@ data "aws_iam_policy_document" "compute" {
     # Configure the Bloom ECS cluster.
     actions = [
       "application-autoscaling:RegisterScalableTarget",
+      "application-autoscaling:ListTagsForResource",
+      "application-autoscaling:DeregisterScalableTarget",
+      "application-autoscaling:PutScalingPolicy",
       "ecs:CreateCluster",
       "ecs:CreateService",
       "ecs:DeleteCluster",
