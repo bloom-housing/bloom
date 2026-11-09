@@ -20,6 +20,21 @@ describe('brandAssetUrl', () => {
     );
   });
 
+  it('builds an untransformed Cloudinary url for the original file', () => {
+    expect(brandAssetUrl('logo-id', 'original')).toEqual(
+      'https://res.cloudinary.com/exygy/image/upload/logo-id',
+    );
+  });
+
+  it('builds the same S3 url for the original file', () => {
+    process.env.S3_PUBLIC_BUCKET = 'bloom-public';
+    process.env.S3_REGION = 'us-west-2';
+
+    expect(brandAssetUrl('logo-id', 'original')).toEqual(
+      'https://bloom-public.s3.us-west-2.amazonaws.com/logo-id',
+    );
+  });
+
   it.each([
     [
       '../../../../attackercloud/image/upload/evil.png',

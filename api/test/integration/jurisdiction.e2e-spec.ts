@@ -23,6 +23,7 @@ describe('Jurisdiction Controller Tests', () => {
   let prisma: PrismaService;
   let cookies = '';
   let jurisAdminCookies = '';
+  let adminOnlyCookies = '';
 
   beforeAll(async () => {
     // The font check reads css from google; the responses are stubbed so the suite makes no
@@ -45,7 +46,7 @@ describe('Jurisdiction Controller Tests', () => {
     await app.init();
     const storedUser = await prisma.userAccounts.create({
       data: await userFactory({
-        roles: { isAdmin: true },
+        roles: { isAdmin: true, isSuperAdmin: true },
         mfaEnabled: false,
         confirmedAt: new Date(),
       }),
@@ -60,6 +61,21 @@ describe('Jurisdiction Controller Tests', () => {
       .expect(201);
 
     cookies = resLogIn.headers['set-cookie'];
+
+    const adminOnly = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    adminOnlyCookies = (
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .set({ passkey: process.env.API_PASS_KEY || '' })
+        .send({ email: adminOnly.email, password: 'Abcdef12345!' } as Login)
+        .expect(201)
+    ).headers['set-cookie'];
 
     const jurisAdmin = await prisma.userAccounts.create({
       data: await userFactory({
@@ -143,21 +159,21 @@ describe('Jurisdiction Controller Tests', () => {
     });
 
     // The create path runs the same font and asset checks, so it is exercised too.
-    const post = (extra = {}) => {
+    const post = (extra = {}, as = cookies) => {
       const { id, ...body } = updateBody(randomUUID(), extra);
       void id;
       return request(app.getHttpServer())
         .post('/jurisdictions')
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', as)
         .send(body);
     };
 
-    const put = (id: string, extra = {}) =>
+    const put = (id: string, extra = {}, as = cookies) =>
       request(app.getHttpServer())
         .put(`/jurisdictions/${id}`)
         .set({ passkey: process.env.API_PASS_KEY || '' })
-        .set('Cookie', cookies)
+        .set('Cookie', as)
         .send(updateBody(id, extra));
 
     it('completes the ramp and uppercases hex through the endpoints', async () => {
@@ -438,7 +454,7 @@ describe('Jurisdiction Controller Tests', () => {
         await putBrand(randomUUID(), { brand: null }).expect(404);
       });
 
-      // Editing a brand is limited to the admin role, matching the jurisdiction resource policy.
+      // Editing a brand is limited to superadmins.
       it('forbids a jurisdictional admin', async () => {
         const jurisdiction = await prisma.jurisdictions.create({
           data: jurisdictionFactory(),
@@ -451,6 +467,24 @@ describe('Jurisdiction Controller Tests', () => {
         ).expect(403);
       });
 
+      it('forbids an admin who is not a superadmin', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await putBrand(
+          jurisdiction.id,
+          { brand: { primary: { base: '#773E98' } } },
+          adminOnlyCookies,
+        ).expect(403);
+
+        const stored = await prisma.jurisdictions.findUnique({
+          where: { id: jurisdiction.id },
+          select: { brand: true },
+        });
+        expect(stored.brand).toBeNull();
+      });
+
       it('forbids an anonymous request', async () => {
         const jurisdiction = await prisma.jurisdictions.create({
           data: jurisdictionFactory(),
@@ -461,6 +495,52 @@ describe('Jurisdiction Controller Tests', () => {
           .set({ passkey: process.env.API_PASS_KEY || '' })
           .send({ brand: { primary: { base: '#773E98' } } })
           .expect(403);
+      });
+    });
+
+    describe('for an admin who is not a superadmin', () => {
+      it('forbids setting or clearing a brand through the jurisdiction update', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: {
+            ...jurisdictionFactory(),
+            brand: { primary: { base: '#773E98' } },
+          },
+        });
+
+        await put(
+          jurisdiction.id,
+          { brand: { primary: { base: '#000000' } } },
+          adminOnlyCookies,
+        ).expect(403);
+        await put(jurisdiction.id, { brand: null }, adminOnlyCookies).expect(
+          403,
+        );
+        await put(
+          jurisdiction.id,
+          { brandLogoAssetId: randomUUID() },
+          adminOnlyCookies,
+        ).expect(403);
+
+        const stored = await prisma.jurisdictions.findUnique({
+          where: { id: jurisdiction.id },
+          select: { brand: true },
+        });
+        expect(stored.brand).toEqual({ primary: { base: '#773E98' } });
+      });
+
+      it('forbids creating a jurisdiction with a brand', async () => {
+        await post(
+          { brand: { primary: { base: '#773E98' } } },
+          adminOnlyCookies,
+        ).expect(403);
+      });
+
+      it('allows a jurisdiction update with no brand fields', async () => {
+        const jurisdiction = await prisma.jurisdictions.create({
+          data: jurisdictionFactory(),
+        });
+
+        await put(jurisdiction.id, {}, adminOnlyCookies).expect(200);
       });
     });
 

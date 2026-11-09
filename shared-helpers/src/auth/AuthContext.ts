@@ -27,6 +27,7 @@ import {
   ReservedCommunityTypesService,
   TranslationsService,
   JurisdictionContentService,
+  ContentTransferService,
   UnitTypesService,
   User,
   UserService,
@@ -63,6 +64,7 @@ type ContextProps = {
   agencyService: AgencyService
   translationsService: TranslationsService
   jurisdictionContentService: JurisdictionContentService
+  contentTransferService: ContentTransferService
   loadProfile: (redirect?: string) => void
   login: (
     email: string,
@@ -260,6 +262,7 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
     agencyService: new AgencyService(),
     translationsService: new TranslationsService(),
     jurisdictionContentService: new JurisdictionContentService(),
+    contentTransferService: new ContentTransferService(),
     loading: state?.loading,
     initialStateLoaded: state?.initialStateLoaded,
     profile: state?.profile,

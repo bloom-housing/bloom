@@ -65,6 +65,7 @@ p, supportAdmin, applicationFlaggedSet, true, .*
 p, jurisdictionAdmin, applicationFlaggedSet, true, .*
 p, partner, applicationFlaggedSet, true, .*
 
+# TranslationService and JurisdictionContentService also require isSuperAdmin.
 p, admin, translation, true, .*
 
 p, admin, jurisdictionContent, true, .*

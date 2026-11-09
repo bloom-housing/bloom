@@ -5,6 +5,8 @@ import { wrapper } from "axios-cookiejar-support"
 import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { maskAxiosResponse } from "@bloom-housing/shared-helpers"
 
+export const config = { api: { bodyParser: { sizeLimit: "10mb" } } }
+
 // all endpoints that return a zip file
 const zipEndpoints = [
   "listings/csv",

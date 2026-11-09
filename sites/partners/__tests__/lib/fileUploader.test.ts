@@ -78,6 +78,33 @@ describe("fileUploader", () => {
     alerted.mockRestore()
   })
 
+  // A failure reports 0, so progress during an upload must never be 0.
+  it("never reports a progress of 0 while an upload is running", async () => {
+    process.env.useS3FileStorage = "TRUE"
+    MockedAssetsService.mockImplementation(
+      () =>
+        ({
+          createS3UploadUrl: jest.fn().mockResolvedValue({
+            fileId: "9f1c2e3a",
+            uploadUrl: "https://bloom-public.s3.us-west-2.amazonaws.com/signed",
+            publicUrl: "https://bloom-public.s3.us-west-2.amazonaws.com/9f1c2e3a",
+          }),
+        } as unknown as AssetsService)
+    )
+    mockedAxios.request.mockImplementation((config) => {
+      config.onUploadProgress({ loaded: 0, total: 100 })
+      config.onUploadProgress({ loaded: 50, total: 100 })
+      config.onUploadProgress({ loaded: 10, total: undefined })
+      return Promise.resolve({})
+    })
+    const setProgressValue = jest.fn()
+
+    await fileUploader({ file, setFileUploadData: jest.fn(), setProgressValue })
+    await new Promise((resolve) => process.nextTick(resolve))
+
+    expect(setProgressValue.mock.calls.map(([value]) => value)).toEqual([1, 3, 3, 50, 3, 100])
+  })
+
   it("reports the cloudinary public id as the storage key", async () => {
     MockedAssetsService.mockImplementation(
       () =>

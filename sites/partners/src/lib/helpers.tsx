@@ -203,7 +203,8 @@ export const fileUploader = async ({
   contentDisposition,
 }: FileUploaderParams) => {
   const onUploadProgress = (p: AxiosProgressEvent) => {
-    setProgressValue(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
+    const percent = parseInt(((p.loaded / p.total) * 100).toFixed(0), 10)
+    setProgressValue(Number.isFinite(percent) ? Math.max(3, percent) : 3)
   }
 
   const assetsService = new AssetsService()

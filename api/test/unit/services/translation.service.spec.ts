@@ -217,7 +217,14 @@ describe('Testing translations service', () => {
   let permissionServiceMock;
   let httpServiceMock;
   let mockConsoleWarn;
-  const adminUser = { id: 'admin-user' } as User;
+  const adminUser = {
+    id: 'admin-user',
+    userRoles: { isAdmin: true, isSuperAdmin: true },
+  } as User;
+  const adminOnlyUser = {
+    id: 'admin-only-user',
+    userRoles: { isAdmin: true },
+  } as User;
 
   beforeEach(async () => {
     googleTranslateServiceMock = {
@@ -1533,6 +1540,29 @@ describe('Testing translations service', () => {
       ).toHaveBeenCalledTimes(1);
       validateTranslatedFields(result);
     });
+  });
+
+  describe('superadmin access', () => {
+    it.each([
+      ['a jurisdiction', randomUUID()],
+      ['the global scope', null],
+    ])(
+      'refuses an admin who is not a superadmin for %s',
+      async (_label, jurisdictionId) => {
+        prisma.translationStrings.findMany = jest.fn();
+
+        await expect(
+          service.getRawOverrides(
+            jurisdictionId,
+            SiteEnum.email,
+            LanguagesEnum.en,
+            adminOnlyUser,
+          ),
+        ).rejects.toThrow(ForbiddenException);
+        expect(permissionServiceMock.canOrThrow).not.toHaveBeenCalled();
+        expect(prisma.translationStrings.findMany).not.toHaveBeenCalled();
+      },
+    );
   });
 });
 
