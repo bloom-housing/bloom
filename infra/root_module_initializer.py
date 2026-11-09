@@ -331,9 +331,19 @@ sso_session = sso
 sso_role_name = bloom-dev-deployer
 sso_account_id = ${DEV_AWS_ACCOUNT_NUMBER}
 
+[profile bloom-dev-deployer-iam-admin]
+sso_session = sso
+sso_role_name = bloom-dev-iam-admin
+sso_account_id = ${DEV_AWS_ACCOUNT_NUMBER}
+
 [profile bloom-prod-deployer]
 sso_session = sso
 sso_role_name = bloom-prod-deployer
+sso_account_id = ${PROD_AWS_ACCOUNT_NUMBER}
+
+[profile bloom-prod-deployer-iam-admin]
+sso_session = sso
+sso_role_name = bloom-prod-iam-admin
 sso_account_id = ${PROD_AWS_ACCOUNT_NUMBER}
 
 [profile bloom-dev-iam-admin]
@@ -373,6 +383,10 @@ locals {
   bloom_deployment = "${DEPLOYMENT_NAME}"
   sso_profile_id   = "$${local.bloom_deployment}-iam-admin"
 
+  # Profile with IAM permissions in the bloom deployment account, used to create customer managed policies
+  # the permission set references.
+  deployer_sso_profile_id = "${local.bloom_deployment}-deployer-iam-admin"
+
   tofu_state_bucket_region = "${TOFU_STATE_BUCKET_REGION}"
   tofu_state_bucket_name   = "${TOFU_STATE_BUCKET_NAME}"
   tofu_state_key_prefix    = "$${local.bloom_deployment}-deployer-permissionset-policy"
@@ -399,6 +413,12 @@ terraform {
 
 provider "aws" {
   profile = local.sso_profile_id
+  region  = local.iam_identity_center_region
+}
+
+provider "aws" {
+  alias   = "deployment_account"
+  profile = local.deployer_sso_profile_id
   region  = local.iam_identity_center_region
 }
 
