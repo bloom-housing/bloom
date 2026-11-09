@@ -104,6 +104,7 @@ describe('Testing jurisdiction service', () => {
         visibleAccessibilityPriorityTypes: true,
         visibleApplicationAccessibilityFeatures: true,
         visibleHouseholdMemberRelationships: true,
+        visibleNeighborhoodAmenities: true,
         visibleSpokenLanguages: true,
         whatToExpect: true,
         whatToExpectAdditionalText: true,
@@ -155,6 +156,7 @@ describe('Testing jurisdiction service', () => {
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
         visibleHouseholdMemberRelationships: true,
+        visibleNeighborhoodAmenities: true,
       },
     });
   });
@@ -202,6 +204,7 @@ describe('Testing jurisdiction service', () => {
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
         visibleHouseholdMemberRelationships: true,
+        visibleNeighborhoodAmenities: true,
       },
     });
   });
@@ -249,6 +252,7 @@ describe('Testing jurisdiction service', () => {
         visibleSpokenLanguages: true,
         visibleApplicationAccessibilityFeatures: true,
         visibleHouseholdMemberRelationships: true,
+        visibleNeighborhoodAmenities: true,
       },
     });
   });
