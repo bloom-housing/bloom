@@ -306,6 +306,7 @@ const SettingsContent = () => {
     }))
 
   const hasUnsavedChanges = hasDraftChanges(draft, savedDraft)
+  const uploading = Object.values(uploadProgress).some((progress) => progress > 0)
   useUnsavedChangesWarning(hasUnsavedChanges, t("content.unsavedChangesWarning"))
 
   const changeScope = (apply: () => void) => {
@@ -409,7 +410,7 @@ const SettingsContent = () => {
               name="contentJurisdiction"
               label={t("t.jurisdiction")}
               defaultValue={activeJurisdictionId}
-              disabled={jurisdictions.length < 2 || hasUnsavedChanges}
+              disabled={jurisdictions.length < 2 || hasUnsavedChanges || uploading}
               options={jurisdictions.map((jurisdiction) => ({
                 value: jurisdiction.id,
                 label: jurisdiction.name,
@@ -426,7 +427,7 @@ const SettingsContent = () => {
               label={t("t.language")}
               key={activeJurisdictionId}
               defaultValue={activeLanguage}
-              disabled={hasUnsavedChanges}
+              disabled={hasUnsavedChanges || uploading}
               options={languageOptions}
               inputProps={{
                 onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -464,11 +465,7 @@ const SettingsContent = () => {
             </Button>
             <Button
               variant="primary"
-              disabled={
-                !hasUnsavedChanges ||
-                loading ||
-                Object.values(uploadProgress).some((progress) => progress > 0)
-              }
+              disabled={!hasUnsavedChanges || loading || uploading}
               loadingMessage={isSaving && t("t.loading")}
               onClick={handleSave}
             >
