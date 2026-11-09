@@ -32,7 +32,8 @@ const buildRule = (
     step,
     light,
     evaluate: jest.fn(evaluator),
-    heading: `stopLights.${key}.heading`,
+    modalTitle: `stopLights.${key}.modalTitle`,
+    alertTitle: `stopLights.${key}.alertTitle`,
     body: `stopLights.${key}.body`,
   }
 }

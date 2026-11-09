@@ -1995,6 +1995,7 @@ describe("<ListingFormActions>", () => {
     const landUseCopy =
       "This is a land use listing without a scheduled publish date. Without an entered scheduled publish date, land use listings are published straight to Closed status. No notifications will be sent to applicants or partners. To publish as Open status, first add a scheduled publish date."
     const listingsUpdateMock = jest.fn()
+    const listingsStatusUpdateMock = jest.fn().mockReturnValue({})
     const addToastMock = jest.fn()
 
     const LandUseFormActionsComponent = ({
@@ -2015,7 +2016,10 @@ describe("<ListingFormActions>", () => {
           value={{
             profile: adminUser,
             doJurisdictionsHaveFeatureFlagOn,
-            listingsService: { update: listingsUpdateMock } as unknown as ListingsService,
+            listingsService: {
+              update: listingsUpdateMock,
+              updateListingStatus: listingsStatusUpdateMock,
+            } as unknown as ListingsService,
           }}
         >
           <MessageContext.Provider
@@ -2052,6 +2056,7 @@ describe("<ListingFormActions>", () => {
 
     beforeEach(() => {
       listingsUpdateMock.mockReset().mockResolvedValue({ id: listing.id })
+      listingsStatusUpdateMock.mockReset().mockReturnValue({})
       addToastMock.mockReset()
     })
 
@@ -2074,10 +2079,9 @@ describe("<ListingFormActions>", () => {
       await user.click(within(dialog).getByRole("button", { name: "Approve" }))
 
       await waitFor(() =>
-        expect(listingsUpdateMock).toHaveBeenCalledWith(
+        expect(listingsStatusUpdateMock).toHaveBeenCalledWith(
           expect.objectContaining({
-            id: listing.id,
-            body: expect.objectContaining({ status: ListingsStatusEnum.closed }),
+            body: expect.objectContaining({ id: listing.id, status: ListingsStatusEnum.closed }),
           })
         )
       )
@@ -2103,13 +2107,46 @@ describe("<ListingFormActions>", () => {
       await user.click(within(dialog).getByRole("button", { name: "Approve" }))
 
       await waitFor(() =>
-        expect(listingsUpdateMock).toHaveBeenCalledWith(
+        expect(listingsStatusUpdateMock).toHaveBeenCalledWith(
           expect.objectContaining({
             body: expect.objectContaining({ status: ListingsStatusEnum.scheduled }),
           })
         )
       )
       expect(addToastMock).toHaveBeenCalledWith("Listing scheduled", { variant: "success" })
+    })
+
+    it("approves a land use listing in edit mode with enableApproveAndPublishOnEdit enabled", async () => {
+      const previousFlagCheck = doJurisdictionsHaveFeatureFlagOn
+      doJurisdictionsHaveFeatureFlagOn = (flag) =>
+        flag === FeatureFlagEnum.enableAutopublish ||
+        flag === FeatureFlagEnum.enableLandUse ||
+        flag === FeatureFlagEnum.enableApproveAndPublishOnEdit
+
+      const submitFormWithStatusMock = jest.fn()
+
+      const user = userEvent.setup()
+      render(
+        <LandUseFormActionsComponent
+          listingStatus={ListingsStatusEnum.pendingReview}
+          formActionType={ListingFormActionsType.edit}
+          listingType={EnumListingListingType.landUse}
+          scheduledPublishAt={null}
+          submitFormWithStatus={submitFormWithStatusMock}
+        />
+      )
+
+      await user.click(screen.getByRole("button", { name: "Approve" }))
+
+      const dialog = screen.getByRole("dialog")
+      await user.click(within(dialog).getByRole("button", { name: "Approve" }))
+
+      await waitFor(() =>
+        expect(submitFormWithStatusMock).toHaveBeenCalledWith("redirect", ListingsStatusEnum.active)
+      )
+      expect(listingsStatusUpdateMock).not.toHaveBeenCalled()
+
+      doJurisdictionsHaveFeatureFlagOn = previousFlagCheck
     })
   })
 })

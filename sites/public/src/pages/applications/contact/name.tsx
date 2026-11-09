@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { DOBField, Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -18,6 +19,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
@@ -28,7 +31,8 @@ const ApplicationName = () => {
   const currentPageSection = 1
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, watch, errors, trigger, clearErrors } = useForm<
+  const { register, handleSubmit, watch, errors, trigger, clearErrors, getValues } = useForm<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Record<string, any>
   >({
     shouldFocusError: false,
@@ -37,13 +41,32 @@ const ApplicationName = () => {
       "applicant.noEmail": application.applicant.noEmail,
     },
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "primaryApplicantName",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "primaryApplicantName",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
+
   const onSubmit = async (data) => {
     const validation = await trigger()
     if (!validation) return
 
-    conductor.currentStep.save({ applicant: { ...application.applicant, ...data.applicant } })
-
-    conductor.routeToNextOrReturnUrl()
+    const pendingSave = { applicant: { ...application.applicant, ...data.applicant } }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.routeToNextOrReturnUrl()
+    })
   }
 
   const onError = () => {
@@ -73,7 +96,7 @@ const ApplicationName = () => {
         listing?.name
       }`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.name.title")}
@@ -87,6 +110,7 @@ const ApplicationName = () => {
             url: autofilled ? `/applications/start/autofill` : `/applications/start/what-to-expect`,
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           <CardSection divider={"inset"}>

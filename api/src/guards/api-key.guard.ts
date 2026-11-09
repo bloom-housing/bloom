@@ -4,16 +4,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { matchesApiPassKey } from '../utilities/api-pass-key';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
 
-    if (
-      process.env.API_PASS_KEY &&
-      (!req.headers.passkey || req.headers.passkey !== process.env.API_PASS_KEY)
-    ) {
+    if (process.env.API_PASS_KEY && !matchesApiPassKey(req.headers.passkey)) {
       throw new UnauthorizedException('Traffic not from a known source');
     }
 

@@ -74,6 +74,7 @@ export const phoneMask = (incomingNewValue: string): string => {
 
 type ApplicationTypesProps = {
   disableCommonApplication: boolean
+  disableReferralOpportunity: boolean
   enableReferralQuestionUnits: boolean
   jurisdiction: string
   listing: FormListing
@@ -83,6 +84,7 @@ type ApplicationTypesProps = {
 
 const ApplicationTypes = ({
   disableCommonApplication,
+  disableReferralOpportunity,
   enableReferralQuestionUnits,
   jurisdiction,
   listing,
@@ -548,114 +550,118 @@ const ApplicationTypes = ({
             )}
           </>
         )}
-        <Grid.Row columns={1}>
-          <Grid.Cell
-            className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
-          >
-            <FieldGroup
-              name="referralOpportunityChoice"
-              type="radio"
-              register={register}
-              fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
-              groupLabel={getLabel(
-                "referralOpportunity",
-                requiredFields,
-                t(
-                  enableReferralQuestionUnits
-                    ? "listings.areReferralOnlyUnits"
-                    : "listings.isReferralOpportunity"
-                )
-              )}
-              error={
-                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
-              }
-              errorMessage={fieldMessage(errors?.referralOpportunity)}
-              fields={[
-                {
-                  ...yesNoRadioOptions[0],
-                  id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true,
-                  inputProps: {
-                    onChange: () => {
+        {!disableReferralOpportunity && (
+          <>
+            <Grid.Row columns={1}>
+              <Grid.Cell
+                className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
+              >
+                <FieldGroup
+                  name="referralOpportunityChoice"
+                  type="radio"
+                  register={register}
+                  fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                  groupLabel={getLabel(
+                    "referralOpportunity",
+                    requiredFields,
+                    t(
+                      enableReferralQuestionUnits
+                        ? "listings.areReferralOnlyUnits"
+                        : "listings.isReferralOpportunity"
+                    )
+                  )}
+                  error={
+                    fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
+                  }
+                  errorMessage={fieldMessage(errors?.referralOpportunity)}
+                  fields={[
+                    {
+                      ...yesNoRadioOptions[0],
+                      id: "referralOpportunityYes",
+                      defaultChecked: listing?.referralOpportunity === true,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            referral: {
+                              ...methods.referral,
+                              type: ApplicationMethodsTypeEnum.Referral,
+                              externalReference:
+                                methods.referral?.externalReference || defaultReferralText,
+                            },
+                          })
+                        },
+                      },
+                    },
+                    {
+                      ...yesNoRadioOptions[1],
+                      id: "referralOpportunityNo",
+                      defaultChecked: listing?.referralOpportunity === false,
+                      inputProps: {
+                        onChange: () => {
+                          setMethods({
+                            ...methods,
+                            referral: null,
+                          })
+                        },
+                      },
+                    },
+                  ]}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+            {referralOpportunityChoice === YesNoEnum.yes && (
+              <Grid.Row columns={3}>
+                <Grid.Cell>
+                  <Field
+                    label={t("listings.referralContactPhone")}
+                    name="referralContactPhone"
+                    id="referralContactPhone"
+                    defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
+                    register={register}
+                    placeholder={t("t.phoneNumberPlaceholder")}
+                    onChange={(e) => {
+                      const newValue = phoneMask(e.target.value)
+                      referralPhoneRef.current = newValue
+                      e.target.value = newValue
                       setMethods({
                         ...methods,
                         referral: {
                           ...methods.referral,
-                          type: ApplicationMethodsTypeEnum.Referral,
-                          externalReference:
-                            methods.referral?.externalReference || defaultReferralText,
+                          phoneNumber: e.target.value,
                         },
                       })
-                    },
-                  },
-                },
-                {
-                  ...yesNoRadioOptions[1],
-                  id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        referral: null,
-                      })
-                    },
-                  },
-                },
-              ]}
-            />
-          </Grid.Cell>
-        </Grid.Row>
-        {referralOpportunityChoice === YesNoEnum.yes && (
-          <Grid.Row columns={3}>
-            <Grid.Cell>
-              <Field
-                label={t("listings.referralContactPhone")}
-                name="referralContactPhone"
-                id="referralContactPhone"
-                defaultValue={methods.referral ? methods.referral.phoneNumber : ""}
-                register={register}
-                placeholder={t("t.phoneNumberPlaceholder")}
-                onChange={(e) => {
-                  const newValue = phoneMask(e.target.value)
-                  referralPhoneRef.current = newValue
-                  e.target.value = newValue
-                  setMethods({
-                    ...methods,
-                    referral: {
-                      ...methods.referral,
-                      phoneNumber: e.target.value,
-                    },
-                  })
-                }}
-              />
-            </Grid.Cell>
-            <Grid.Cell className="seeds-grid-span-2">
-              <Textarea
-                label={t("listings.referralSummary")}
-                rows={3}
-                fullWidth={true}
-                placeholder={""}
-                name="referralSummary"
-                id="referralSummary"
-                maxLength={500}
-                inputProps={{
-                  value: methods?.referral
-                    ? methods?.referral?.externalReference
-                    : defaultReferralText,
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      referral: {
-                        ...methods.referral,
-                        externalReference: e.target?.value,
+                    }}
+                  />
+                </Grid.Cell>
+                <Grid.Cell className="seeds-grid-span-2">
+                  <Textarea
+                    label={t("listings.referralSummary")}
+                    rows={3}
+                    fullWidth={true}
+                    placeholder={""}
+                    name="referralSummary"
+                    id="referralSummary"
+                    maxLength={500}
+                    inputProps={{
+                      value: methods?.referral
+                        ? methods?.referral?.externalReference
+                        : defaultReferralText,
+                      onChange: (e) => {
+                        setMethods({
+                          ...methods,
+                          referral: {
+                            ...methods.referral,
+                            externalReference: e.target?.value,
+                          },
+                        })
                       },
-                    })
-                  },
-                }}
-              />
-            </Grid.Cell>
-          </Grid.Row>
+                    }}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            )}
+          </>
         )}
       </SectionWithGrid>
 

@@ -16,6 +16,9 @@ describe("fetchJurisdictionByName", () => {
     mockedGet = jest.spyOn(axios, "get")
     mockedLog = jest.spyOn(console, "log").mockImplementation(() => undefined)
     const hooks = require("../../src/lib/hooks") as Hooks
+    // The caches live on globalThis so the revalidation route can clear them, which means
+    // jest.resetModules() no longer isolates them.
+    hooks.clearCachedApiReads()
     fetchJurisdictionByName = hooks.fetchJurisdictionByName
     API_TIMEOUT_MS = hooks.API_TIMEOUT_MS
     process.env.backendApiBase = "http://localhost:3100"
@@ -38,6 +41,20 @@ describe("fetchJurisdictionByName", () => {
         timeout: API_TIMEOUT_MS,
       }
     )
+  })
+
+  it("sends the revalidate secret on a read made without a visitor's request", async () => {
+    process.env.PUBLIC_SITE_REVALIDATE_SECRET = "test-secret"
+
+    await fetchJurisdictionByName()
+
+    expect(mockedGet).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        headers: { passkey: process.env.API_PASS_KEY, "revalidate-secret": "test-secret" },
+      })
+    )
+    delete process.env.PUBLIC_SITE_REVALIDATE_SECRET
   })
 
   it("attributes the request to the visitor when it has one", async () => {

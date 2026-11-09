@@ -22,7 +22,7 @@ const ResourceSection = ({
           {sectionTitle}
         </Heading>
         {sectionSubtitle && (
-          <p className={styles["resource-section-subtitle"]}>{sectionSubtitle}</p>
+          <div className={styles["resource-section-subtitle"]}>{sectionSubtitle}</div>
         )}
       </div>
       {cards && (

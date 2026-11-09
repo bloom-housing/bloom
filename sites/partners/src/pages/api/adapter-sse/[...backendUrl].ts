@@ -70,7 +70,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   } catch (e) {
     if (isDisconnect(e)) return
-    console.error("partner's SSE adapter error:", e.response ? maskAxiosResponse(e.response) : e)
+    console.error(
+      "partner's SSE adapter error:",
+      e.response ? maskAxiosResponse(e.response) : e.message
+    )
     if (e.response) {
       res.statusMessage = e.response.statusText
       res.status(e.response.status).json(e.response.data)

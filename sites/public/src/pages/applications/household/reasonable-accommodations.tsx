@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { t, Textarea } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -14,6 +15,8 @@ import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationReasonableAccommodations = () => {
   const { profile } = useContext(AuthContext)
@@ -21,18 +24,35 @@ const ApplicationReasonableAccommodations = () => {
   const currentPageSection = 2
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit } = useForm<Record<string, string>>({
+  const { register, handleSubmit, getValues } = useForm<Record<string, string>>({
     defaultValues: {
       reasonableAccommodations: application.reasonableAccommodations || "",
     },
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "reasonableAccommodations",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "reasonableAccommodations",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = (data) => {
-    conductor.currentStep.save({
-      reasonableAccommodations: data.reasonableAccommodations,
+    const pendingSave = { reasonableAccommodations: data.reasonableAccommodations }
+    guardSubmit(pendingSave, () => {
+      conductor.currentStep.save(pendingSave)
+      conductor.sync()
+      conductor.routeToNextOrReturnUrl()
     })
-    conductor.sync()
-    conductor.routeToNextOrReturnUrl()
   }
 
   useEffect(() => {
@@ -49,7 +69,7 @@ const ApplicationReasonableAccommodations = () => {
         "listings.apply.applyOnline"
       )} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.reasonableAccommodations.question")}
@@ -64,6 +84,7 @@ const ApplicationReasonableAccommodations = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <CardSection divider={"flush"} className={"border-none"}>
             <Textarea

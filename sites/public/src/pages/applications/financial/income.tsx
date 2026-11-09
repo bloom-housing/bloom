@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import { AlertBox, AlertNotice, Field, FieldGroup, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
@@ -24,6 +25,8 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -76,6 +79,22 @@ const ApplicationIncome = () => {
     },
     shouldFocusError: false,
   })
+  const router = useRouter()
+  const enabledRuleKeys = conductor.config.enabledStopLightRuleKeys ?? []
+  const { guardSubmit, stopLights } = useStopLightGate(
+    "income",
+    application,
+    listing,
+    enabledRuleKeys,
+    router.query.blockedRule as string | undefined
+  )
+  const { onFieldBlur } = useStopLightBanners(
+    "income",
+    application,
+    listing,
+    enabledRuleKeys,
+    getValues
+  )
 
   const onSubmit = async (data) => {
     const validation = await trigger()
@@ -91,11 +110,13 @@ const ApplicationIncome = () => {
     setIncomeError(validationError)
 
     if (!validationError) {
-      const toSave = { income: incomeValue, incomePeriod }
+      const pendingSave = { income: incomeValue, incomePeriod }
 
-      conductor.completeSection(currentPageSection)
-      conductor.currentStep.save(toSave)
-      conductor.routeToNextOrReturnUrl()
+      guardSubmit(pendingSave, () => {
+        conductor.completeSection(currentPageSection)
+        conductor.currentStep.save(pendingSave)
+        conductor.routeToNextOrReturnUrl()
+      })
     }
   }
   const onError = () => {
@@ -127,7 +148,7 @@ const ApplicationIncome = () => {
     <FormsLayout
       pageTitle={`${t("t.income")} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.income.title")}
@@ -147,6 +168,7 @@ const ApplicationIncome = () => {
             url: conductor.determinePreviousUrl(),
           }}
           conductor={conductor}
+          stopLights={stopLights}
         >
           <ApplicationAlertBox errors={errors} />
           {incomeError && (

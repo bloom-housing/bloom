@@ -56,7 +56,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (e) {
     console.error(
       "public backend url adapter error:",
-      e.response ? maskAxiosResponse(e.response) : e
+      e.response ? maskAxiosResponse(e.response) : e.message
     )
     if (e.response) {
       res.statusMessage = e.response.statusText

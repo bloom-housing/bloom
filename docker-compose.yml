@@ -213,6 +213,9 @@ services:
       NODE_ENV: "production"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       APP_SECRET: "totally a secret"
+      PUBLIC_SITE_REVALIDATE_SECRET: "some-secret-here"
+      # dnsrr resolves this to every public replica, so a save reaches all of them.
+      PUBLIC_SITE_DISCOVERY_NAME: "public"
       DATABASE_URL: "postgres://bloom_api:bloom_api_pw@db:5432/bloom_prisma"
       DB_NO_SSL: "TRUE"
     healthcheck:
@@ -296,7 +299,10 @@ services:
       LANGUAGES: "en,es,zh,vi,tl"
 
       IDLE_TIMEMOUT: 5 # seconds
-      CACHE_REVALIDATE: 30 # seconds
+      CACHE_REVALIDATE: 3600 # seconds
+      LISTING_CACHE_REVALIDATE: 30 # seconds
+
+      PUBLIC_SITE_REVALIDATE_SECRET: "some-secret-here"
 
       SHOW_PUBLIC_LOTTERY: "TRUE"
       SHOW_MANDATED_ACCOUNTS: "FALSE"
