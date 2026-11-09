@@ -4,6 +4,8 @@ data "aws_iam_policy_document" "compute" {
     # For some reason the task APIs operate on the * resouce and don't support targeting the
     # resource directly in the IAM policy.
     actions = [
+      "iam:CreateServiceLinkedRole",
+      "iam:DeleteServiceLinkedRole",
       "ecs:DeregisterTaskDefinition",
       "ecs:DescribeTaskDefinition",
     ]
@@ -13,6 +15,9 @@ data "aws_iam_policy_document" "compute" {
     # Configure the Bloom ECS cluster.
     actions = [
       "application-autoscaling:RegisterScalableTarget",
+      "application-autoscaling:ListTagsForResource",
+      "application-autoscaling:DeregisterScalableTarget",
+      "application-autoscaling:PutScalingPolicy",
       "ecs:CreateCluster",
       "ecs:CreateService",
       "ecs:DeleteCluster",
@@ -57,6 +62,7 @@ data "aws_iam_policy_document" "compute" {
       "arn:aws:logs:${local.region_account}:log-group::log-stream:",
       "arn:aws:logs:${local.region_account}:log-group:bloom-*",
       "arn:aws:servicediscovery:${local.region_account}:*/*",
+      "arn:aws:application-autoscaling:${local.region_account}:scalable-target/*"
     ]
   }
   statement {
