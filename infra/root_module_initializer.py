@@ -81,6 +81,23 @@ def main():
         required=True,
         choices=us_regions)
     p.add_argument(
+        "--enable_task_auto_scaling",
+        help="Enable production task autoscaling in ECS (default true)",
+        required=False,
+        default=True)
+    p.add_argument(
+        "--autoscaling_min_tasks",
+        type=int,
+        help="The minimum number of production tasks to run.",
+        required=False,
+        default=1)
+    p.add_argument(
+        "--autoscaling_max_tasks",
+        type=int,
+        help="The maximum number of production tasks that can be run",
+        required=False,
+        default=2)
+    p.add_argument(
         "--dev_aws_account_number",
         help="The AWS account number that the dev Bloom deployment will be deployed to.",
         required=True)
@@ -141,6 +158,9 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
+            ECS_AUTOSCALING="false",
+            ECS_AUTOSCALING_MIN_TASKS=1,
+            ECS_AUTOSCALING_MAX_TASKS=1,
             DB_HIGH_AVAILABILITY="false",
             GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
         ))
@@ -174,6 +194,9 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
+            ECS_AUTOSCALING=args.enable_task_auto_scaling,
+            ECS_AUTOSCALING_MIN_TASKS=args.autoscaling_min_tasks,
+            ECS_AUTOSCALING_MAX_TASKS=args.autoscaling_max_tasks,
             DB_HIGH_AVAILABILITY="true",
             GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
         ))
