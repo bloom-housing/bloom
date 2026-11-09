@@ -97,22 +97,46 @@ variable "google_translate_settings" {
   }
 }
 
-variable "min_tasks" {
+variable "api_service_min_tasks" {
   type        = number
-  description = "The minimum number of tasks to run"
-  default     = 2
+  description = "The minimum number of the api  tasks to run"
+  default     = 1
 }
 
-variable "max_tasks" {
+variable "api_service_max_tasks" {
   type        = number
-  description = "The minimum number of tasks to run"
-  default     = 4
+  description = "The maximum number of the api  tasks to run"
+  default     = 3
 }
 
-variable "high_availability" {
+variable "partners_service_min_tasks" {
+  type        = number
+  description = "The minimum number of the partners site tasks to run"
+  default     = 1
+}
+
+variable "partners_service_max_tasks" {
+  type        = number
+  description = "The maximum number of the partners site tasks to run"
+  default     = 3
+}
+
+variable "public_service_min_tasks" {
+  type        = number
+  description = "The minimum number of the api service tasks to run"
+  default     = 1
+}
+
+variable "public_service_max_tasks" {
+  type        = number
+  description = "The maximum number of the public site tasks to run"
+  default     = 3
+}
+
+variable "db_high_availability" {
   type        = bool
-  description = "Deploy the Bloom services in a highly-available manner. If true, a minimum of 2 instances will be running for each Bloom service."
-  default     = true
+  description = "Whether to setup the database across multiple Availability Zones"
+  default     = false
 }
 
 variable "env_type" {
@@ -229,15 +253,6 @@ variable "bloom_site_partners_env_vars" {
   default     = {}
 }
 
-variable "bloom_site_partners_task_count" {
-  description = "How many partners site tasks that should be running. Default is provided based on the high_availability setting."
-  type        = number
-  default     = null
-}
-
-locals {
-  bloom_site_partners_task_count = var.bloom_site_partners_task_count != null ? var.bloom_site_partners_task_count : (var.high_availability ? 2 : 1)
-}
 variable "bloom_site_partners_resource_limits" {
   description = "ECS task resource limits for the partners site contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
   type = object({
@@ -250,23 +265,18 @@ variable "bloom_site_partners_resource_limits" {
     memory_mib = 4 * 1024 # 4 GiB
   }
 }
+
 variable "bloom_site_public_image" {
   type        = string
   description = "Container image for the Bloom public site."
 }
+
 variable "bloom_site_public_env_vars" {
   type        = map(any)
   description = "Environment variables for the Bloom public site tasks. This is merged with the default env vars set in the ecs_site_public_task.tf file, with these variables taking precedence."
   default     = {}
 }
-variable "bloom_site_public_task_count" {
-  description = "How many public site tasks that should be running. Default is provided based on the high_availability setting."
-  type        = number
-  default     = null
-}
-locals {
-  bloom_site_public_task_count = var.bloom_site_public_task_count != null ? var.bloom_site_public_task_count : (var.high_availability ? 2 : 1)
-}
+
 variable "bloom_site_public_resource_limits" {
   description = "ECS task resource limits for the public site contianer. vcpu is in CPU units where 1024 CPU units = 1 CPU."
   type = object({

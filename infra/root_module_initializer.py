@@ -141,7 +141,7 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
-            HIGH_AVAILABILITY="false",
+            DB_HIGH_AVAILABILITY="false",
             GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
         ))
 
@@ -174,7 +174,7 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
-            HIGH_AVAILABILITY="true",
+            DB_HIGH_AVAILABILITY="true",
             GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
         ))
 
@@ -428,7 +428,7 @@ class BloomDeploymentTemplateArgs:
     GITHUB_ORG: str
     GIT_COMMIT: str
     BLOOM_ENV_TYPE: str
-    HIGH_AVAILABILITY: str
+    DB_HIGH_AVAILABILITY: str
     GRAFANA_EDITOR_GROUP_ID: str
 
 
@@ -508,7 +508,7 @@ module "bloom_deployment" {
   aws_certificate_arn = aws_acm_certificate.bloom.arn
 
   env_type          = "${BLOOM_ENV_TYPE}"
-  high_availability = ${HIGH_AVAILABILITY}
+  database_high_availability = ${DB_HIGH_AVAILABILITY}
 
   bloom_dbinit_image = "ghcr.io/${GITHUB_ORG}/bloom/dbinit:gitsha-${GIT_COMMIT}"
   bloom_dbseed_image = "ghcr.io/${GITHUB_ORG}/bloom/dbseed:gitsha-${GIT_COMMIT}"

@@ -108,7 +108,6 @@ resource "aws_ecs_service" "bloom_api" {
   launch_type                   = "FARGATE"
   scheduling_strategy           = "REPLICA"
   availability_zone_rebalancing = "ENABLED"
-  desired_count                 = var.min_tasks
 
   lifecycle {
     ignore_changes = [desired_count] # tells terraform to ignore changes to desired_count so it does not fight with the auto scaler
@@ -117,10 +116,12 @@ resource "aws_ecs_service" "bloom_api" {
   deployment_configuration {
     strategy = "ROLLING"
   }
+
   deployment_circuit_breaker {
     enable   = true
     rollback = true
   }
+
   deployment_controller {
     type = "ECS"
   }
@@ -130,6 +131,7 @@ resource "aws_ecs_service" "bloom_api" {
     subnets          = [for s in aws_subnet.private : s.id]
     assign_public_ip = false
   }
+
   service_connect_configuration {
     enabled   = true
     namespace = aws_service_discovery_http_namespace.bloom.arn
@@ -145,6 +147,7 @@ resource "aws_ecs_service" "bloom_api" {
         per_request_timeout_seconds = 60
       }
     }
+
     log_configuration {
       log_driver = "awslogs"
       options = {
@@ -157,8 +160,8 @@ resource "aws_ecs_service" "bloom_api" {
 }
 
 resource "aws_appautoscaling_target" "bloom_api_autoscaling_target" {
-  max_capacity       = var.max_tasks
-  min_capacity       = var.min_tasks
+  max_capacity       = var.api_service_max_tasks
+  min_capacity       = var.api_service_min_tasks
   resource_id        = "service/${aws_ecs_cluster.bloom.name}/${aws_ecs_service.bloom_api.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
