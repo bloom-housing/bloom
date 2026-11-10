@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
         interval    = 5 # seconds
         timeout     = 2 # seconds
         retries     = 10
-        startPeriod = 30 # seconds
+        startPeriod = 60 # takes about 30s to start up, pad with 2x
       }
 
       logConfiguration = {

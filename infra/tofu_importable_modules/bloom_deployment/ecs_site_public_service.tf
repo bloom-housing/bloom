@@ -61,9 +61,9 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
           "http://127.0.0.1:3000/"
         ]
         interval    = 5 # seconds
-        timeout     = 2 # seconds
+        timeout     = 2
         retries     = 10
-        startPeriod = 30 # seconds
+        startPeriod = 90 # takes about 60s to startup, add some padding
       }
       logConfiguration = {
         logDriver = "awslogs"
