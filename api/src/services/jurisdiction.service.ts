@@ -56,6 +56,7 @@ const selectViews: Partial<
     visibleAccessibilityPriorityTypes: true,
     visibleApplicationAccessibilityFeatures: true,
     visibleHouseholdMemberRelationships: true,
+    visibleNeighborhoodAmenities: true,
     visibleSpokenLanguages: true,
   },
 };
