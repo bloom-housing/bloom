@@ -63,7 +63,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
         interval    = 5 # seconds
         timeout     = 2
         retries     = 10
-        startPeriod = 90 # takes about 60s to startup, add some padding
+        startPeriod = 120 # takes about 60s to startup, padding with 2x
       }
       logConfiguration = {
         logDriver = "awslogs"
