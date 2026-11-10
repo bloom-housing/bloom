@@ -107,5 +107,20 @@ describe("<FaqPage>", () => {
 
       expect(window.location.hash).toBe(`#${nextStepsSectionId}`)
     })
+
+    it("on mobile, only shows the links once the toggle button is clicked", async () => {
+      const { container } = renderFaq(multiCategoryFaq)
+
+      const toggleButton = screen.getByRole("button", { name: "On this page" })
+      const list = container.querySelector("#table-of-contents-list")
+
+      expect(toggleButton).toHaveAttribute("aria-expanded", "false")
+      expect(list).not.toHaveClass("links-open")
+
+      await userEvent.click(toggleButton)
+
+      expect(toggleButton).toHaveAttribute("aria-expanded", "true")
+      expect(list).toHaveClass("links-open")
+    })
   })
 })
