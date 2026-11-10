@@ -9,6 +9,12 @@ if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT) {
         "instrumentation.ts: not running in nodejs runtime, no metrics will be available."
       )
     }
+    
+    if(process.env.NEXT_RUNTIME === 'nodejs' && process.env.NEXT_MANUAL_SIG_HANDLE) {
+        process.on('SIGTERM', async () => {
+          process.exit(0);
+        });
+    }
   }
 }
 
