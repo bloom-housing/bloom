@@ -20,7 +20,7 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
 
   return (
     <nav className={styles["table-of-contents"]} aria-label={label}>
-      <Heading size={"lg"} className={styles["heading"]}>
+      <Heading priority={2} size={"lg"} className={styles["heading"]}>
         {label}
       </Heading>
       <button
