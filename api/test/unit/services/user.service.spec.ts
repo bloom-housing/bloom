@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { ForbiddenException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -1724,6 +1724,55 @@ describe('Testing user service', () => {
 
       expect(prisma.userAccounts.delete).not.toHaveBeenCalled();
       expect(prisma.userRoles.delete).not.toHaveBeenCalled();
+    });
+
+    it('should not delete the user when authorization fails', async () => {
+      const id = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({ id });
+      prisma.userAccounts.delete = jest.fn().mockResolvedValue({ id });
+      prisma.userRoles.delete = jest.fn().mockResolvedValue({ id });
+      prisma.userAccountSnapshot.deleteMany = jest
+        .fn()
+        .mockResolvedValue({ id });
+      canOrThrowMock.mockRejectedValueOnce(new ForbiddenException());
+
+      await expect(
+        service.delete(id, {
+          id: 'requestingUser id',
+          userRoles: { isAdmin: true },
+        } as unknown as User),
+      ).rejects.toThrow(ForbiddenException);
+
+      expect(prisma.userAccountSnapshot.deleteMany).not.toHaveBeenCalled();
+      expect(prisma.userAccounts.delete).not.toHaveBeenCalled();
+    });
+
+    it('should not let a jurisdictional admin delete an admin user', async () => {
+      const id = randomUUID();
+
+      prisma.userAccounts.findUnique = jest.fn().mockResolvedValue({
+        id,
+        userRoles: { isAdmin: true },
+        jurisdictions: [{ id: 'juris id' }],
+      });
+      prisma.userAccounts.delete = jest.fn().mockResolvedValue({ id });
+      prisma.userRoles.delete = jest.fn().mockResolvedValue({ id });
+      prisma.userAccountSnapshot.deleteMany = jest
+        .fn()
+        .mockResolvedValue({ id });
+
+      await expect(
+        service.delete(id, {
+          id: 'requestingUser id',
+          userRoles: { isJurisdictionalAdmin: true },
+          jurisdictions: [{ id: 'juris id' }],
+        } as unknown as User),
+      ).rejects.toThrow(
+        'a jurisdictional admin is attempting to delete an admin user',
+      );
+
+      expect(prisma.userAccounts.delete).not.toHaveBeenCalled();
     });
   });
 
