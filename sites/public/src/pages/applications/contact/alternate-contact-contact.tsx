@@ -57,12 +57,17 @@ const ApplicationAlternateContactContact = () => {
     const validation = await trigger()
     if (!validation) return
 
+    // PhoneField registers with the form in an effect, so a quick Next click on a pre-filled
+    // page can submit before it has, leaving data.phoneNumber undefined. Keep the saved value
+    // in that case (a field the user cleared submits "" and is caught by validation).
+    const phoneNumber = data.phoneNumber ?? application.alternateContact.phoneNumber
+
     const pendingSave = isAdvocate
       ? {}
       : {
           alternateContact: {
             ...application.alternateContact,
-            phoneNumber: data.phoneNumber,
+            phoneNumber,
             emailAddress: data.emailAddress || null,
             address: {
               ...application.alternateContact.address,
@@ -76,7 +81,7 @@ const ApplicationAlternateContactContact = () => {
         }
     guardSubmit(pendingSave, () => {
       if (!isAdvocate) {
-        application.alternateContact.phoneNumber = data.phoneNumber
+        application.alternateContact.phoneNumber = phoneNumber
         application.alternateContact.emailAddress = data.emailAddress || null
         if (!application.alternateContact.address) {
           application.alternateContact.address = {} as typeof application.alternateContact.address
