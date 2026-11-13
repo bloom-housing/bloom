@@ -147,7 +147,7 @@ const ApplicationSummary = () => {
               fullwidth
               id={"application-alert-box"}
             >
-              {t("errors.alert.applicationSubmissionVerificationError")}
+              {validationError}
             </Alert>
           )}
 
