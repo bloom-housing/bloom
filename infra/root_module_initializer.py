@@ -81,6 +81,23 @@ def main():
         required=True,
         choices=us_regions)
     p.add_argument(
+        "--disable_task_auto_scaling",
+        help="Disable production task autoscaling in ECS",
+        required=False,
+        action="store_false")
+    p.add_argument(
+        "--autoscaling_min_tasks",
+        type=int,
+        help="The minimum number of production tasks to run.",
+        required=False,
+        default=1)
+    p.add_argument(
+        "--autoscaling_max_tasks",
+        type=int,
+        help="The maximum number of production tasks that can be run",
+        required=False,
+        default=2)
+    p.add_argument(
         "--dev_aws_account_number",
         help="The AWS account number that the dev Bloom deployment will be deployed to.",
         required=True)
@@ -141,7 +158,10 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
-            HIGH_AVAILABILITY="false",
+            ECS_AUTOSCALING="false",
+            ECS_AUTOSCALING_MIN_TASKS=1,
+            ECS_AUTOSCALING_MAX_TASKS=1,
+            DB_HIGH_AVAILABILITY="false",
             GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
         ))
 
@@ -174,7 +194,10 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
-            HIGH_AVAILABILITY="true",
+            ECS_AUTOSCALING=args.disable_task_auto_scaling,
+            ECS_AUTOSCALING_MIN_TASKS=args.autoscaling_min_tasks,
+            ECS_AUTOSCALING_MAX_TASKS=args.autoscaling_max_tasks,
+            DB_HIGH_AVAILABILITY="true",
             GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
         ))
 
@@ -331,9 +354,19 @@ sso_session = sso
 sso_role_name = bloom-dev-deployer
 sso_account_id = ${DEV_AWS_ACCOUNT_NUMBER}
 
+[profile bloom-dev-deployer-iam-admin]
+sso_session = sso
+sso_role_name = bloom-dev-iam-admin
+sso_account_id = ${DEV_AWS_ACCOUNT_NUMBER}
+
 [profile bloom-prod-deployer]
 sso_session = sso
 sso_role_name = bloom-prod-deployer
+sso_account_id = ${PROD_AWS_ACCOUNT_NUMBER}
+
+[profile bloom-prod-deployer-iam-admin]
+sso_session = sso
+sso_role_name = bloom-prod-iam-admin
 sso_account_id = ${PROD_AWS_ACCOUNT_NUMBER}
 
 [profile bloom-dev-iam-admin]
@@ -373,6 +406,10 @@ locals {
   bloom_deployment = "${DEPLOYMENT_NAME}"
   sso_profile_id   = "$${local.bloom_deployment}-iam-admin"
 
+  # Profile with IAM permissions in the bloom deployment account, used to create customer managed policies
+  # the permission set references.
+  deployer_sso_profile_id = "${local.bloom_deployment}-deployer-iam-admin"
+
   tofu_state_bucket_region = "${TOFU_STATE_BUCKET_REGION}"
   tofu_state_bucket_name   = "${TOFU_STATE_BUCKET_NAME}"
   tofu_state_key_prefix    = "$${local.bloom_deployment}-deployer-permissionset-policy"
@@ -402,6 +439,12 @@ provider "aws" {
   region  = local.iam_identity_center_region
 }
 
+provider "aws" {
+  alias   = "deployment_account"
+  profile = local.deployer_sso_profile_id
+  region  = local.iam_identity_center_region
+}
+
 module "deployer_permission_set" {
   source = "../../tofu_importable_modules/bloom_deployer_permission_set_policy"
 
@@ -428,7 +471,7 @@ class BloomDeploymentTemplateArgs:
     GITHUB_ORG: str
     GIT_COMMIT: str
     BLOOM_ENV_TYPE: str
-    HIGH_AVAILABILITY: str
+    DB_HIGH_AVAILABILITY: str
     GRAFANA_EDITOR_GROUP_ID: str
 
 
@@ -508,7 +551,7 @@ module "bloom_deployment" {
   aws_certificate_arn = aws_acm_certificate.bloom.arn
 
   env_type          = "${BLOOM_ENV_TYPE}"
-  high_availability = ${HIGH_AVAILABILITY}
+  database_high_availability = ${DB_HIGH_AVAILABILITY}
 
   bloom_dbinit_image = "ghcr.io/${GITHUB_ORG}/bloom/dbinit:gitsha-${GIT_COMMIT}"
   bloom_dbseed_image = "ghcr.io/${GITHUB_ORG}/bloom/dbseed:gitsha-${GIT_COMMIT}"

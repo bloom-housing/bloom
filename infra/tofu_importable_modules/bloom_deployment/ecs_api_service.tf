@@ -108,24 +108,30 @@ resource "aws_ecs_service" "bloom_api" {
   launch_type                   = "FARGATE"
   scheduling_strategy           = "REPLICA"
   availability_zone_rebalancing = "ENABLED"
-  desired_count                 = local.bloom_api_task_count
+
+  lifecycle {
+    ignore_changes = [desired_count] # tells terraform to ignore changes to desired_count so it does not fight with the auto scaler
+  }
+
   deployment_configuration {
     strategy = "ROLLING"
   }
+
   deployment_circuit_breaker {
     enable   = true
     rollback = true
   }
+
   deployment_controller {
     type = "ECS"
   }
-  deployment_maximum_percent = 200 # allow surge of up to twice desired task count.
 
   network_configuration {
     security_groups  = [aws_security_group.bloom["api"].id]
     subnets          = [for s in aws_subnet.private : s.id]
     assign_public_ip = false
   }
+
   service_connect_configuration {
     enabled   = true
     namespace = aws_service_discovery_http_namespace.bloom.arn
@@ -141,6 +147,7 @@ resource "aws_ecs_service" "bloom_api" {
         per_request_timeout_seconds = 60
       }
     }
+
     log_configuration {
       log_driver = "awslogs"
       options = {
@@ -149,5 +156,32 @@ resource "aws_ecs_service" "bloom_api" {
         "awslogs-stream-prefix" = "service-connect-proxy"
       }
     }
+  }
+}
+
+resource "aws_appautoscaling_target" "bloom_api_autoscaling_target" {
+  max_capacity       = var.api_service_max_tasks
+  min_capacity       = var.api_service_min_tasks
+  resource_id        = "service/${aws_ecs_cluster.bloom.name}/${aws_ecs_service.bloom_api.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "bloom_api_appautoscaling_policy_request" {
+  name               = "${aws_ecs_service.bloom_api.name}-request-scaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.bloom_api_autoscaling_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.bloom_api_autoscaling_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.bloom_api_autoscaling_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    target_value = 30 # Keep CPU at 30% utilization
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+
+    scale_in_cooldown  = 300 # Wait 5 minutes before scaling in
+    scale_out_cooldown = 60  # Wait 1 minute before scaling out
   }
 }
