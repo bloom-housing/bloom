@@ -6,7 +6,6 @@ import {
   LanguagesEnum,
   ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
-  ReviewOrderTypeEnum,
   ApplicationSubmissionTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { FormProviderWrapper } from "../../../../testUtils"
@@ -304,13 +303,13 @@ describe("<FormApplicationData>", () => {
       expect(cuwlInput.closest(".hidden")).toBeInTheDocument()
     })
 
-    it("renders lottery position field when reviewOrderType is lottery", () => {
+    it("renders lottery position field when showManualLotteryPosition is true", () => {
       render(
         <FormProviderWrapper>
           <FormApplicationData
             {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}
-            reviewOrderType={ReviewOrderTypeEnum.lottery}
+            showManualLotteryPosition={true}
           />
         </FormProviderWrapper>
       )
@@ -333,7 +332,7 @@ describe("<FormApplicationData>", () => {
             {...defaultFormApplicationDataProps}
             enableApplicationStatus={true}
             disableApplicationStatusControls={true}
-            reviewOrderType={ReviewOrderTypeEnum.lottery}
+            showManualLotteryPosition={true}
           />
         </FormProviderWrapper>
       )
@@ -361,6 +360,32 @@ describe("<FormApplicationData>", () => {
       )
       expect(activeLotteryInput.closest(".hidden")).toBeInTheDocument()
       expect(displayLotteryInput).toBeDisabled()
+    })
+
+    it("does not render the lottery position fields when showManualLotteryPosition is false", () => {
+      render(
+        <FormProviderWrapper
+          values={{
+            application: {
+              status: ApplicationStatusEnum.waitlist,
+              manualLotteryPositionNumber: 5,
+            } as never,
+          }}
+        >
+          <FormApplicationData
+            {...defaultFormApplicationDataProps}
+            enableApplicationStatus={true}
+            disableApplicationStatusControls={true}
+            showManualLotteryPosition={false}
+          />
+        </FormProviderWrapper>
+      )
+
+      expect(screen.queryByLabelText(/lottery number/i)).not.toBeInTheDocument()
+      expect(screen.queryByTestId("applicationManualLotteryPositionNumber")).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId("applicationManualLotteryPositionNumberDisplay")
+      ).not.toBeInTheDocument()
     })
   })
 
