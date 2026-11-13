@@ -34,7 +34,7 @@ const ApplicationSummary = () => {
   const router = useRouter()
   const { profile, applicationsService } = useContext(AuthContext)
   const toastyRef = useToastyRef()
-  const [validationError, setValidationError] = useState(false)
+  const [validationError, setValidationError] = useState("")
   const [loading, setLoading] = useState(false)
   const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
@@ -108,8 +108,13 @@ const ApplicationSummary = () => {
       .then(() => {
         conductor.routeToNextOrReturnUrl()
       })
-      .catch(() => {
-        setValidationError(true)
+      .catch((error) => {
+        const status = (error as { response?: { status?: number } })?.response?.status
+        setValidationError(
+          status === 401
+            ? t("errors.alert.applicationSubmissionSessionExpired")
+            : t("errors.alert.applicationSubmissionVerificationError")
+        )
         window.scrollTo(0, 0)
       })
   }
@@ -142,7 +147,7 @@ const ApplicationSummary = () => {
               fullwidth
               id={"application-alert-box"}
             >
-              {t("errors.alert.applicationSubmissionVerificationError")}
+              {validationError}
             </Alert>
           )}
 
@@ -160,7 +165,7 @@ const ApplicationSummary = () => {
                 ?.length === 0
             }
             editMode
-            validationError={validationError}
+            validationError={!!validationError}
             enableUnitGroups={isFeatureFlagOn(conductor.config, FeatureFlagEnum.enableUnitGroups)}
             enableFullTimeStudentQuestion={isFeatureFlagOn(
               conductor.config,
@@ -189,7 +194,7 @@ const ApplicationSummary = () => {
             <Button
               variant={"primary"}
               id={"app-summary-confirm"}
-              disabled={validationError}
+              disabled={!!validationError}
               type={"submit"}
               loadingMessage={loading ? t("t.loading") : undefined}
             >
