@@ -1,7 +1,7 @@
 # Keep up to date with Active LTS: https://nodejs.org/en/about/previous-releases
 #
 # IMPORTANT: keep in sync with ./Dockerfile.
-FROM node:22@sha256:23c24e85395992be118734a39903e08c8f7d1abc73978c46b6bda90060091a49 AS build
+FROM node:24@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496 AS build
 
 # Create a non-root user to build (principle of least privilege).
 WORKDIR /dbseed
