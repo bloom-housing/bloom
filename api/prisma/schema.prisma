@@ -204,6 +204,7 @@ model AmiChart {
   items          Json
   jurisdictionId String @map("jurisdiction_id") @db.Uuid
   name           String @db.VarChar
+  ordinal        Int?
 
   jurisdictions              Jurisdictions               @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitGroupAmiLevels         UnitGroupAmiLevels[]
