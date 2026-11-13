@@ -763,6 +763,7 @@
   "faq.linkText": "Lea las preguntas frecuentes",
   "faq.stillHaveQuestions": "¿Aún tienes preguntas?",
   "faq.stillHaveQuestionsContent": "Si no pudo encontrar la respuesta que buscaba, comuníquese con nuestro equipo de soporte en <a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a> o visite nuestra página de Recursos.",
+  "faq.tableOfContents.header": "En esta página",
   "faq.viewResourcePage": "Ver la página de Recursos",
   "faq.whatHappensNext": "¿Qué pasa después?",
   "finder.accessibility.question": "¿Usted o alguien en su hogar necesita alguna de las siguientes funciones de accesibilidad?",

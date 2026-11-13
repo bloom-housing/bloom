@@ -763,6 +763,7 @@
   "faq.linkText": "阅读常见问题解答",
   "faq.stillHaveQuestions": "还有其他问题吗？",
   "faq.stillHaveQuestionsContent": "如果您找不到想要的答案，请联系我们的支持团队<a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a>或查看我们的资源页面。",
+  "faq.tableOfContents.header": "本页",
   "faq.viewResourcePage": "查看资源页面",
   "faq.whatHappensNext": "接下来会发生什么？",
   "finder.accessibility.question": "您或您家中的任何人是否需要以下任何辅助功能？",

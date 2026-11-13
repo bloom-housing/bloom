@@ -763,6 +763,7 @@
   "faq.linkText": "Đọc các câu hỏi thường gặp",
   "faq.stillHaveQuestions": "Bạn vẫn còn thắc mắc?",
   "faq.stillHaveQuestionsContent": "Nếu bạn không tìm thấy câu trả lời mình cần, vui lòng liên hệ với nhóm hỗ trợ của chúng tôi qua địa chỉ <a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a> hoặc xem trang Tài nguyên của chúng tôi.",
+  "faq.tableOfContents.header": "Trên trang này",
   "faq.viewResourcePage": "Xem trang Tài nguyên",
   "faq.whatHappensNext": "Điều gì sẽ xảy ra tiếp theo?",
   "finder.accessibility.question": "Bạn hoặc bất kỳ thành viên nào trong gia đình bạn có cần bất kỳ tính năng trợ năng nào sau đây không?",
