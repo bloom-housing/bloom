@@ -294,6 +294,11 @@ Cypress.Commands.add("step5AlternateContactInfo", (application, autofill) => {
     cy.getByTestId("app-alternate-mailing-address-zip").type(
       application.alternateContact.address.zipCode
     )
+  } else {
+    cy.getPhoneFieldByTestId("app-alternate-phone-number").should(
+      "have.value",
+      application.alternateContact.phoneNumber
+    )
   }
 
   cy.getByTestId("app-alternate-mailing-address-street").should("exist")

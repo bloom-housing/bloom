@@ -1623,7 +1623,7 @@ export class UserService {
       UserViews.base,
     );
 
-    this.authorizeAction(
+    await this.authorizeAction(
       requestingUser,
       mapTo(User, targetUser),
       permissionActions.delete,
