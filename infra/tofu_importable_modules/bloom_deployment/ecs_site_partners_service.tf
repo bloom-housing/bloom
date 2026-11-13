@@ -46,7 +46,18 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
       restartPolicy = {
         enabled = false
       }
-      # TODO healthCheck https://github.com/bloom-housing/bloom/issues/5583
+      healthCheck = {
+        command = [
+          "curl",
+          "--fail",
+          "http://127.0.0.1:3001/"
+        ]
+        interval    = 5 # seconds
+        timeout     = 2 # seconds
+        retries     = 10
+        startPeriod = 60 # takes about 30s to start up, pad with 2x
+      }
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {

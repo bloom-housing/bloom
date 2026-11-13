@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
         interval    = 5 # seconds
         timeout     = 2 # seconds
         retries     = 10
-        startPeriod = 5 # seconds
+        startPeriod = 10 # seconds
       }
       logConfiguration = {
         logDriver = "awslogs"
