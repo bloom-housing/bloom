@@ -198,6 +198,9 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
           })
           .catch((e) => {
             console.error(e)
+            // the server rejected the refresh (e.g. a dead/invalidated session) --
+            // clear the stale profile so the UI stops acting as if we're signed in
+            dispatch(saveProfile(null))
           })
       }
     }, 1000 * 60 * 59) // runs once every 59 minutes
