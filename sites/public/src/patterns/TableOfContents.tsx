@@ -3,7 +3,7 @@ import ChevronDown from "@heroicons/react/20/solid/ChevronDownIcon"
 import ChevronUp from "@heroicons/react/20/solid/ChevronUpIcon"
 import { t } from "@bloom-housing/ui-components"
 import { Heading, Icon, Link } from "@bloom-housing/ui-seeds"
-import { FaqContent, getFaqCategoryId } from "./FrequentlyAskedQuestions"
+import { FaqContent } from "./FrequentlyAskedQuestions"
 import styles from "./TableOfContents.module.scss"
 
 interface TableOfContentsProps {
@@ -38,7 +38,7 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
       <ul id={listId} className={`${styles["links"]} ${isOpen ? styles["links-open"] : ""}`}>
         {content.categories.map((category, index) => (
           <li key={index} className={styles["link-item"]}>
-            <Link href={`#${getFaqCategoryId(index)}`}>{category.title}</Link>
+            <Link href={`#category-${index}`}>{category.title}</Link>
           </li>
         ))}
       </ul>
