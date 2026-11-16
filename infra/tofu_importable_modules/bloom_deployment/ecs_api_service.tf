@@ -11,8 +11,8 @@ locals {
     GOOGLE_API_ID              = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
     GOOGLE_API_EMAIL           = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
     S3_REGION                  = var.aws_region
-    S3_PRIVATE_BUCKET          = aws_s3_bucket.private.id
-    S3_PUBLIC_BUCKET           = aws_s3_bucket.public.id
+    S3_PRIVATE_BUCKET          = module.s3.private_bucket_id
+    S3_PUBLIC_BUCKET           = module.s3.public_bucket_id
     SMS_PROVIDER               = var.bloom_api_sms_config == null ? "" : "aws"
     AWS_SMS_REGION             = var.bloom_api_sms_config == null ? "" : var.aws_region
     AWS_SMS_ORIGINATION_NUMBER = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number

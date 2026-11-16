@@ -60,6 +60,17 @@ module "rds" {
   is_prod = local.is_prod
 }
 
+module "s3" {
+  source = "./s3"
+
+  aws_region = var.aws_region
+
+  bloom_api_container_iam_role_arn = module.ecs_cluster.aws_iam_role_bloom_container_arns["api"]
+
+  domain_name = var.domain_name
+  is_prod     = local.is_prod
+}
+
 module "secretsmanager" {
   source = "./secretsmanager"
 
