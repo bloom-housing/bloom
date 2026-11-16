@@ -23,27 +23,24 @@ export const createLakeviewJurisdiction = async (
   {
     publicSiteBaseURL,
     unitTypes,
-    msqV2,
     jurisdictionName = 'Lakeview',
   }: {
     publicSiteBaseURL: string;
     unitTypes: { id: string }[];
-    msqV2: boolean;
     jurisdictionName?: string;
   },
 ) => {
-  const optionalV2MSQ = msqV2 ? [FeatureFlagEnum.enableV2MSQ] : [];
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName, {
       publicSiteBaseURL,
       featureFlags: [
-        ...optionalV2MSQ,
         FeatureFlagEnum.disableJurisdictionalAdmin,
         FeatureFlagEnum.disableListingPreferences,
         FeatureFlagEnum.disableWorkInRegion,
         FeatureFlagEnum.enableAccessibilityFeatures,
         FeatureFlagEnum.enableAdditionalResources,
         FeatureFlagEnum.enableCompanyWebsite,
+        FeatureFlagEnum.enableFullTimeStudentQuestion,
         FeatureFlagEnum.enableGeocodingRadiusMethod,
         FeatureFlagEnum.enableHomeType,
         FeatureFlagEnum.enableHousingBasics,
@@ -68,11 +65,11 @@ export const createLakeviewJurisdiction = async (
         FeatureFlagEnum.enableUnderConstructionHome,
         FeatureFlagEnum.enableUnitGroups,
         FeatureFlagEnum.enableUtilitiesIncluded,
+        FeatureFlagEnum.enableV2MSQ,
         FeatureFlagEnum.enableWaitlistAdditionalFields,
+        FeatureFlagEnum.enableWhatToExpectAdditionalField,
         FeatureFlagEnum.hideCloseListingButton,
         FeatureFlagEnum.swapCommunityTypeWithPrograms,
-        FeatureFlagEnum.enableFullTimeStudentQuestion,
-        FeatureFlagEnum.enableWhatToExpectAdditionalField,
       ],
       requiredListingFields: ['name', 'listingsBuildingAddress'],
       languages: [
@@ -99,33 +96,22 @@ export const createLakeviewJurisdiction = async (
     data: amiChartFactory(8, jurisdiction.id, 2, jurisdiction.name),
   });
 
-  const senior62PlusProgramMsqData = msqV2
-    ? {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Are you or anyone in your household 62 years of age or older?',
-        isExclusive: true,
-        multiselectOptions: {
-          createMany: {
-            data: [
-              { name: 'Yes', ordinal: 1 },
-              { name: 'No', ordinal: 2 },
-            ],
-          },
-        },
-        name: 'Seniors 62+',
-        status: MultiselectQuestionsStatusEnum.active,
-      }
-    : {
-        applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
-        description:
-          'Are you or anyone in your household 62 years of age or older?',
-        options: [
-          { text: 'Yes', exclusive: true, ordinal: 0 },
-          { text: 'No', exclusive: true, ordinal: 1 },
+  const senior62PlusProgramMsqData = {
+    applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+    description:
+      'Are you or anyone in your household 62 years of age or older?',
+    isExclusive: true,
+    multiselectOptions: {
+      createMany: {
+        data: [
+          { name: 'Yes', ordinal: 1 },
+          { name: 'No', ordinal: 2 },
         ],
-        text: 'Seniors 62+',
-      };
+      },
+    },
+    name: 'Seniors 62+',
+    status: MultiselectQuestionsStatusEnum.active,
+  };
   await prismaClient.multiselectQuestions.create({
     data: multiselectQuestionFactory(jurisdiction.id, {
       multiselectQuestion: senior62PlusProgramMsqData,
@@ -138,31 +124,21 @@ export const createLakeviewJurisdiction = async (
       async (text) =>
         await prismaClient.multiselectQuestions.create({
           data: multiselectQuestionFactory(jurisdiction.id, {
-            multiselectQuestion: msqV2
-              ? {
-                  applicationSection:
-                    MultiselectQuestionsApplicationSectionEnum.programs,
-                  isExclusive: true,
-                  multiselectOptions: {
-                    createMany: {
-                      data: [
-                        { name: 'Yes', ordinal: 1 },
-                        { name: 'No', ordinal: 2 },
-                      ],
-                    },
-                  },
-                  name: text,
-                  status: MultiselectQuestionsStatusEnum.active,
-                }
-              : {
-                  applicationSection:
-                    MultiselectQuestionsApplicationSectionEnum.programs,
-                  options: [
-                    { text: 'Yes', exclusive: true, ordinal: 0 },
-                    { text: 'No', exclusive: true, ordinal: 1 },
+            multiselectQuestion: {
+              applicationSection:
+                MultiselectQuestionsApplicationSectionEnum.programs,
+              isExclusive: true,
+              multiselectOptions: {
+                createMany: {
+                  data: [
+                    { name: 'Yes', ordinal: 1 },
+                    { name: 'No', ordinal: 2 },
                   ],
-                  text,
                 },
+              },
+              name: text,
+              status: MultiselectQuestionsStatusEnum.active,
+            },
           }),
         }),
     ),
