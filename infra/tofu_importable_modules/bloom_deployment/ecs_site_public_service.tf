@@ -126,7 +126,7 @@ resource "aws_ecs_service" "bloom_site_public" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.site_public.arn
+    target_group_arn = module.alb.aws_lb_target_group_site_public_arn
     container_name   = "bloom-site-public"
     container_port   = 3000
   }

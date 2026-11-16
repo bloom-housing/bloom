@@ -122,7 +122,7 @@ resource "aws_ecs_service" "bloom_site_partners" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.site_partners.arn
+    target_group_arn = module.alb.aws_lb_target_group_site_partners_arn
     container_name   = "bloom-site-partners"
     container_port   = 3001
   }
