@@ -94,7 +94,7 @@ const MultiselectQuestionsPreferences = () => {
         flex: 0.75,
         minWidth: 100,
         cellRendererFramework: ({ data }) => {
-          const { preference, id } = data
+          const { preference } = data
 
           return preference.status === MultiselectQuestionsStatusEnum.draft ||
             preference.status === MultiselectQuestionsStatusEnum.visible ? (
