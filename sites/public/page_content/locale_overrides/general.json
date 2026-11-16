@@ -1,6 +1,8 @@
 {
   "account.settings.disclaimer": "You can contact BAHFA to have your account information and associated data deleted at any time. To do so, please reach out to %{contactEmail}.",
   "alert.maintenance": "The Doorway Housing Portal has a new look! You'll notice some changes, but don't worry, it's still Doorway!",
+  "authentication.createAccount.errors.errorSaving": "Oops! Looks like something went wrong. Please try again. \n\nContact Doorway at doorway@bayareametro.gov if you're still experiencing issues.",
+  "authentication.createAccount.errors.generic": "Something went wrong while creating your account. Please try again.\n\nContact Doorway at doorway@bayareametro.gov if you're still experiencing issues.",
   "application.confirmation.expiredDetailsWarning": "If your household details have changed since you submitted your application, please contact the property directly. It is common for household details to change over time, and information that is no longer current will not be held against you. The ability to edit an application after submission is currently in development and you will be able to make changes to an existing application at a later date.",
   "application.review.confirmation.whatHappensNext.lottery": "### What happens next?\n\n* Once the application period closes, eligible applicants will be placed in order based on lottery rank order.\n\n* Housing preferences, if applicable, will affect lottery rank order.\n\n* If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.\n\n* Doorway generally does not accept duplicate applications. A duplicate application is one that has someone who also appears on another application for the same housing opportunity. For more detailed information on how we handle duplicates, see our <a href='https://mtc.ca.gov/doorway-housing-portal-terms-use' target='_blank'>Terms of Use</a>.",
   "application.review.demographics.howDidYouHearOptions.developerWebsite": "Property website",
@@ -31,6 +33,7 @@
   "counties.Santa Clara": "Santa Clara",
   "counties.Solano": "Solano",
   "counties.Sonoma": "Sonoma",
+  "errors.alert.badRequest": "Looks like something went wrong. Please try again. \n\nContact Doorway at doorway@bayareametro.gov if you're still experiencing issues.",
   "faq.affordableDifferences": "What's the difference between regulated affordable housing and naturally-occurring affordable housing? Why is some affordable housing regulated by the government?",
   "faq.affordableDifferencesResp1": "Regulated affordable housing typically comes from one of two sources:",
   "faq.affordableDifferencesResp2": "Market-rate properties that are required by local ordinance to offer a portion of their units at below-market rates.",
