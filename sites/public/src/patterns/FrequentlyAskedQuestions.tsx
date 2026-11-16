@@ -81,7 +81,7 @@ const FrequentlyAskedQuestions = (props: FrequentlyAskedQuestionsProps) => {
   return (
     <div className={styles["faq-container"]}>
       {props.content.categories.map((category, index) => (
-        <section key={index} className="seeds-m-be-8">
+        <section key={index} id={`category-${index}`} className="seeds-m-be-8">
           <Heading priority={2} className={"seeds-m-be-content"}>
             {category.title}
           </Heading>
