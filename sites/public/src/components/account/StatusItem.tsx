@@ -21,7 +21,6 @@ interface StatusItemProps {
   lotteryPublishedDate?: string
   lotteryResults?: boolean
   lotteryURL?: string
-  lotteryStatus?: LotteryStatusEnum
   applicationStatus?: {
     content: string
     variant: TagVariant
@@ -47,7 +46,7 @@ const StatusItem = (props: StatusItemProps) => {
   if (props.applicationStatus) {
     tagText = props.applicationStatus.content
     tagVariant = props.applicationStatus.variant
-  } else if (props.lotteryStatus === LotteryStatusEnum.publishedToPublic && showPublicLottery) {
+  } else if (props.lotteryResults && showPublicLottery) {
     tagText = t("account.lotteryRun")
     tagVariant = "success"
     deadlineText = t("account.lotteryPosted")

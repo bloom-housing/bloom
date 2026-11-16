@@ -13,4 +13,4 @@ When true, the 'Is this listing open to all housing seekers?' question is displa
 ## Images
 
 Partners
-![image.png](./images/image%20101.png)
+![image.png](./images/image%20106.png)

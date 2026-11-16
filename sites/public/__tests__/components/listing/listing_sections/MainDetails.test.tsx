@@ -33,21 +33,7 @@ describe("<MainDetails>", () => {
           reservedCommunityTypes: null,
           listingFeatures: { id: "1" },
         }}
-        jurisdiction={{
-          ...jurisdiction,
-          featureFlags: [
-            ...jurisdiction.featureFlags,
-            {
-              name: FeatureFlagEnum.disableAccessibilityFeaturesTag,
-              id: "id_2",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              active: true,
-              description: "",
-              jurisdictions: [],
-            },
-          ],
-        }}
+        jurisdiction={jurisdiction}
       />
     )
     expect(screen.queryByTestId("listing-tags")).toBeNull()

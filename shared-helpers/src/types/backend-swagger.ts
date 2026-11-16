@@ -11991,6 +11991,7 @@ export enum FeatureFlagEnum {
   "enablePetPolicyCheckbox" = "enablePetPolicyCheckbox",
   "enableProfessionalPartnersPage" = "enableProfessionalPartnersPage",
   "enableProperties" = "enableProperties",
+  "enablePublicLotteryExpiration" = "enablePublicLotteryExpiration",
   "enablePublicTermsOfUse" = "enablePublicTermsOfUse",
   "enableReasonableAccommodations" = "enableReasonableAccommodations",
   "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
