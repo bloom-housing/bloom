@@ -30,7 +30,7 @@ locals {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+          "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-api"]
           "awslogs-stream-prefix" = "otel-sidecar"
         }
       }

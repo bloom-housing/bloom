@@ -27,8 +27,8 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
     cpu_architecture        = "X86_64"
   }
 
-  execution_role_arn = aws_iam_role.bloom_ecs["site-public"].arn
-  task_role_arn      = aws_iam_role.bloom_container["site-public"].arn
+  execution_role_arn = module.ecs_cluster.aws_iam_role_bloom_ecs_arns["site-public"]
+  task_role_arn      = module.ecs_cluster.aws_iam_role_bloom_container_arns["site-public"]
 
   cpu    = var.bloom_site_public_resource_limits.vcpu
   memory = var.bloom_site_public_resource_limits.memory_mib
@@ -69,7 +69,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-site-public"].name
+          "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-site-public"]
           "awslogs-stream-prefix" = "bloom-site-public"
         }
       }
@@ -85,7 +85,7 @@ resource "aws_ecs_service" "bloom_site_public" {
     null_resource.bloom_dbseed_run,
   ]
   region                = var.aws_region
-  cluster               = aws_ecs_cluster.bloom.arn
+  cluster               = module.ecs_cluster.arn
   name                  = "bloom-site-public"
   force_delete          = true # allow deletion of the service without scaling down tasks to 0 first.
   task_definition       = aws_ecs_task_definition.bloom_site_public.arn
@@ -114,12 +114,12 @@ resource "aws_ecs_service" "bloom_site_public" {
 
   service_connect_configuration {
     enabled   = true
-    namespace = aws_service_discovery_http_namespace.bloom.arn
+    namespace = module.ecs_cluster.aws_service_discovery_http_namespace_arn
     log_configuration {
       log_driver = "awslogs"
       options = {
         "awslogs-region"        = var.aws_region
-        "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-site-public"].name
+        "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-site-public"]
         "awslogs-stream-prefix" = "service-connect-proxy"
       }
     }
@@ -141,7 +141,7 @@ resource "aws_ecs_service" "bloom_site_public" {
 resource "aws_appautoscaling_target" "bloom_site_public_autoscaling_target" {
   max_capacity       = var.partners_service_max_tasks
   min_capacity       = var.partners_service_min_tasks
-  resource_id        = "service/${aws_ecs_cluster.bloom.name}/${aws_ecs_service.bloom_site_public.name}"
+  resource_id        = "service/${module.ecs_cluster.cluster_name}/${aws_ecs_service.bloom_site_public.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }

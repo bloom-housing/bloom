@@ -9,8 +9,8 @@ resource "aws_ecs_task_definition" "bloom_dbinit" {
     cpu_architecture        = "X86_64"
   }
 
-  execution_role_arn = aws_iam_role.bloom_ecs["dbinit"].arn
-  task_role_arn      = aws_iam_role.bloom_container["dbinit"].arn
+  execution_role_arn = module.ecs_cluster.aws_iam_role_bloom_ecs_arns["dbinit"]
+  task_role_arn      = module.ecs_cluster.aws_iam_role_bloom_container_arns["dbinit"]
 
   # Keep in sync with docker-compose.yml
   cpu    = 256 # 0.25 vCPU
@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "bloom_dbinit" {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-dbinit"].name
+          "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-dbinit"]
           "awslogs-stream-prefix" = "bloom-dbinit"
         }
       }
@@ -57,8 +57,7 @@ resource "aws_ecs_task_definition" "bloom_dbinit" {
 # 'arn:aws:iam::x:role/bloom-dbinit-container' that was provided for this task.
 resource "time_sleep" "on_dbinit_container_role_creation" {
   depends_on = [
-    aws_iam_role_policy.bloom_ecs["dbinit"],
-    aws_iam_role_policy.bloom_container["dbinit"],
+    module.ecs_cluster
   ]
   create_duration = "30s"
 }
@@ -88,7 +87,7 @@ resource "null_resource" "bloom_dbinit_run" {
         aws ecs run-task \
           ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
-          --cluster ${aws_ecs_cluster.bloom.arn} \
+          --cluster ${module.ecs_cluster.arn} \
           --launch-type FARGATE \
           --task-definition ${aws_ecs_task_definition.bloom_dbinit.arn} \
           --network-configuration "awsvpcConfiguration={subnets=[${join(",", [for s in aws_subnet.private : s.id])}],securityGroups=[${aws_security_group.bloom["dbinit"].id}],assignPublicIp=DISABLED}" \
@@ -106,14 +105,14 @@ resource "null_resource" "bloom_dbinit_run" {
       aws ecs wait tasks-stopped \
         ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
         --region ${var.aws_region} \
-        --cluster ${aws_ecs_cluster.bloom.arn} \
+        --cluster ${module.ecs_cluster.arn} \
         --tasks "$task_arn"
 
       exit_code="$(
         aws ecs describe-tasks \
           ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
-          --cluster ${aws_ecs_cluster.bloom.arn} \
+          --cluster ${module.ecs_cluster.arn} \
           --tasks "$task_arn" \
           --query 'tasks[0].containers[0].exitCode' \
           --output text
@@ -124,7 +123,7 @@ resource "null_resource" "bloom_dbinit_run" {
           aws ecs describe-tasks \
             ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
             --region ${var.aws_region} \
-            --cluster ${aws_ecs_cluster.bloom.arn} \
+            --cluster ${module.ecs_cluster.arn} \
             --tasks "$task_arn" \
             --query 'tasks[0].stoppedReason' \
             --output text

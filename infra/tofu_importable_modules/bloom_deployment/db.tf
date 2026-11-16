@@ -44,3 +44,7 @@ output "db_dns_name" {
   value       = aws_db_instance.bloom.address
   description = "DNS name of the database."
 }
+
+output "master_user_secret" {
+  value = aws_db_instance.bloom.master_user_secret
+}

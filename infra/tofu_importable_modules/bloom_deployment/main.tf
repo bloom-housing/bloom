@@ -25,3 +25,32 @@ module "alb" {
   aws_region  = var.aws_region
   domain_name = var.domain_name
 }
+
+module "ecs_cluster" {
+  source = "./ecs-cluster"
+
+  aws_account_number = var.aws_account_number
+  aws_profile        = var.aws_profile
+  aws_region         = var.aws_region
+
+  aws_db_master_user_secrets = aws_db_instance.bloom.master_user_secret
+  aws_db_instance_id         = aws_db_instance.bloom.id
+
+  aws_prometheus_workspace_arn = aws_prometheus_workspace.bloom.arn
+
+  bloom_dbseed_image = var.bloom_dbseed_image
+
+  ecs_logs_retention_days = local.ecs_logs_retention_days
+
+
+  secretsmanager_api_jwt_signing_key_arn      = module.secretsmanager.api_key_secret_arns["api_jwt_signing_key"]
+  secretsmanager_mapbox_api_key_arn           = aws_secretsmanager_secret.mapbox_api_key.arn
+  secretsmanager_google_translate_api_key_arn = aws_secretsmanager_secret.google_translate_api_key.arn
+}
+
+module "secretsmanager" {
+  source = "./secretsmanager"
+
+  aws_profile = var.aws_profile
+  aws_region  = var.aws_region
+}

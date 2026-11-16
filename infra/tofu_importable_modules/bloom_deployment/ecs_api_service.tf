@@ -29,8 +29,8 @@ resource "aws_ecs_task_definition" "bloom_api" {
     cpu_architecture        = "X86_64"
   }
 
-  execution_role_arn = aws_iam_role.bloom_ecs["api"].arn
-  task_role_arn      = aws_iam_role.bloom_container["api"].arn
+  execution_role_arn = module.ecs_cluster.aws_iam_role_bloom_ecs_arns["api"]
+  task_role_arn      = module.ecs_cluster.aws_iam_role_bloom_container_arns["api"]
 
   cpu    = var.bloom_api_resource_limits.vcpu
   memory = var.bloom_api_resource_limits.memory_mib
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
       secrets = [
         {
           name      = "APP_SECRET",
-          valueFrom = aws_secretsmanager_secret.api_jwt_signing_key.arn
+          valueFrom = module.secretsmanager.api_key_secret_arns["api_jwt_signing_key"]
         },
         {
           name      = "GOOGLE_API_KEY",
@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+          "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-api"]
           "awslogs-stream-prefix" = "bloom-api"
         }
       }
@@ -101,7 +101,7 @@ resource "aws_ecs_service" "bloom_api" {
   ]
   wait_for_steady_state         = true # if tofu waits for the triggered deployment to complete.
   region                        = var.aws_region
-  cluster                       = aws_ecs_cluster.bloom.arn
+  cluster                       = module.ecs_cluster.arn
   name                          = "bloom-api"
   force_delete                  = true # allow deletion of the service without scaling down tasks to 0 first.
   task_definition               = aws_ecs_task_definition.bloom_api.arn
@@ -134,7 +134,7 @@ resource "aws_ecs_service" "bloom_api" {
 
   service_connect_configuration {
     enabled   = true
-    namespace = aws_service_discovery_http_namespace.bloom.arn
+    namespace = module.ecs_cluster.aws_service_discovery_http_namespace_arn
     service {
       port_name = "http"
       client_alias {
@@ -152,7 +152,7 @@ resource "aws_ecs_service" "bloom_api" {
       log_driver = "awslogs"
       options = {
         "awslogs-region"        = var.aws_region
-        "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+        "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-api"]
         "awslogs-stream-prefix" = "service-connect-proxy"
       }
     }
@@ -162,7 +162,7 @@ resource "aws_ecs_service" "bloom_api" {
 resource "aws_appautoscaling_target" "bloom_api_autoscaling_target" {
   max_capacity       = var.api_service_max_tasks
   min_capacity       = var.api_service_min_tasks
-  resource_id        = "service/${aws_ecs_cluster.bloom.name}/${aws_ecs_service.bloom_api.name}"
+  resource_id        = "service/${module.ecs_cluster.cluster_name}/${aws_ecs_service.bloom_api.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }

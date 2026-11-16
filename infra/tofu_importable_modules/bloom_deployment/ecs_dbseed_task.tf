@@ -25,8 +25,8 @@ resource "aws_ecs_task_definition" "bloom_dbseed" {
     cpu_architecture        = "X86_64"
   }
 
-  execution_role_arn = aws_iam_role.bloom_ecs["dbseed"].arn
-  task_role_arn      = aws_iam_role.bloom_container["dbseed"].arn
+  execution_role_arn = module.ecs_cluster.aws_iam_role_bloom_ecs_arns["dbseed"]
+  task_role_arn      = module.ecs_cluster.aws_iam_role_bloom_container_arns["dbseed"]
 
   # Keep in sync with docker-compose.yml
   cpu    = 1024     # 1 vCPU
@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "bloom_dbseed" {
         logDriver = "awslogs"
         options = {
           "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-dbseed"].name
+          "awslogs-group"         = module.ecs_cluster.aws_task_log_group_names["bloom-dbseed"]
           "awslogs-stream-prefix" = "bloom-dbseed"
         }
       }
@@ -59,9 +59,9 @@ resource "time_sleep" "on_dbseed_container_role_creation" {
   count = var.bloom_dbseed_image == "" ? 0 : 1
 
   depends_on = [
-    aws_iam_role_policy.bloom_ecs["dbseed"],
-    aws_iam_role_policy.bloom_container["dbseed"],
+    module.ecs_cluster
   ]
+
   create_duration = "30s"
 }
 
@@ -94,7 +94,7 @@ resource "null_resource" "bloom_dbseed_run" {
         aws ecs run-task \
            ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
-          --cluster ${aws_ecs_cluster.bloom.arn} \
+          --cluster ${module.ecs_cluster.arn} \
           --launch-type FARGATE \
           --task-definition ${aws_ecs_task_definition.bloom_dbseed[0].arn} \
           --network-configuration "awsvpcConfiguration={subnets=[${join(",", [for s in aws_subnet.private : s.id])}],securityGroups=[${aws_security_group.bloom["dbseed"].id}],assignPublicIp=DISABLED}" \
@@ -112,14 +112,14 @@ resource "null_resource" "bloom_dbseed_run" {
       aws ecs wait tasks-stopped \
         ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
         --region ${var.aws_region} \
-        --cluster ${aws_ecs_cluster.bloom.arn} \
+        --cluster ${module.ecs_cluster.arn} \
         --tasks "$task_arn"
 
       exit_code="$(
         aws ecs describe-tasks \
           ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
           --region ${var.aws_region} \
-          --cluster ${aws_ecs_cluster.bloom.arn} \
+          --cluster ${module.ecs_cluster.arn} \
           --tasks "$task_arn" \
           --query 'tasks[0].containers[0].exitCode' \
           --output text
@@ -130,7 +130,7 @@ resource "null_resource" "bloom_dbseed_run" {
           aws ecs describe-tasks \
             ${var.aws_profile != "" ? "--profile ${var.aws_profile}" : ""} \
             --region ${var.aws_region} \
-            --cluster ${aws_ecs_cluster.bloom.arn} \
+            --cluster ${module.ecs_cluster.arn} \
             --tasks "$task_arn" \
             --query 'tasks[0].stoppedReason' \
             --output text

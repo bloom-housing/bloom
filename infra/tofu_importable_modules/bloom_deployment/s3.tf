@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "private_bucket" {
     actions = ["s3:GetObject", "s3:PutObject"]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.bloom_container["api"].arn]
+      identifiers = [module.ecs_cluster.aws_iam_role_bloom_container_arns["api"]]
     }
   }
 }
@@ -106,7 +106,7 @@ data "aws_iam_policy_document" "public_bucket" {
     actions = ["s3:PutObject"]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.bloom_container["api"].arn]
+      identifiers = [module.ecs_cluster.aws_iam_role_bloom_container_arns["api"]]
     }
   }
 }
