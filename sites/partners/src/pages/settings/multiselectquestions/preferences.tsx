@@ -104,7 +104,7 @@ const MultiselectQuestionsPreferences = () => {
                 setQuestionData(preference)
                 setMultiselectQuestionDrawerOpen("edit")
               }}
-              id={`preference-link-${id}`}
+              id={`preference-edit-${preference.name}`}
             >
               {t("t.edit")}
             </Button>
@@ -115,7 +115,7 @@ const MultiselectQuestionsPreferences = () => {
                 setQuestionData(preference)
                 setMultiselectQuestionDrawerOpen("view")
               }}
-              id={`preference-link-${id}`}
+              id={`preference-view-${preference.name}`}
             >
               {t("t.view")}
             </Button>
