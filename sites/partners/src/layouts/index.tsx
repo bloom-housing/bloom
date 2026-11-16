@@ -1,51 +1,60 @@
 import React, { useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { SiteHeader, t, MenuLink } from "@bloom-housing/ui-components"
 import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
-import { Toast } from "@bloom-housing/ui-seeds"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isPartnerPortalRole } from "@bloom-housing/shared-helpers/src/utilities/userRoles"
+import { SiteHeader, t, MenuLink } from "@bloom-housing/ui-components"
+import { Toast } from "@bloom-housing/ui-seeds"
 import PartnersFooter from "../components/core/PartnerFooter"
 
 const Layout = (props) => {
-  const { profile, signOut, doJurisdictionsHaveFeatureFlagOn } = useContext(AuthContext)
+  const { profile, doJurisdictionsHaveFeatureFlagOn, signOut } = useContext(AuthContext)
   const { toastMessagesRef, addToast } = useContext(MessageContext)
   const router = useRouter()
   const menuLinks: MenuLink[] = []
-  if (profile) {
+
+  if (profile && isPartnerPortalRole(profile.userRoles)) {
+    const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
+      FeatureFlagEnum.disableListingPreferences,
+      null,
+      true
+    )
+    const enableAgencies = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableHousingAdvocate)
+    const enablePartnerSettings = profile?.jurisdictions?.some(
+      (jurisdiction) => !!jurisdiction.enablePartnerSettings
+    )
+    const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
+    const enableSettings =
+      enablePartnerSettings &&
+      (atLeastOneJurisdictionEnablesPreferences || enableAgencies || enableProperties)
+
     menuLinks.push({
       title: t("nav.listings"),
       href: "/",
     })
-  }
-  if (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) {
-    menuLinks.push({
-      title: t("nav.users"),
-      href: "/users",
-    })
-  }
-  const enableProperties = doJurisdictionsHaveFeatureFlagOn(FeatureFlagEnum.enableProperties)
-  const atLeastOneJurisdictionEnablesPreferences = !doJurisdictionsHaveFeatureFlagOn(
-    FeatureFlagEnum.disableListingPreferences,
-    null,
-    true
-  )
 
-  if (
-    profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings) &&
-    (profile?.userRoles?.isAdmin ||
-      profile?.userRoles?.isJurisdictionalAdmin ||
-      profile?.userRoles?.isLimitedJurisdictionalAdmin) &&
-    (enableProperties || atLeastOneJurisdictionEnablesPreferences)
-  ) {
-    menuLinks.push({
-      title: t("t.settings"),
-      href: atLeastOneJurisdictionEnablesPreferences
-        ? "/settings/preferences"
-        : "/settings/properties",
-    })
-  }
-  if (profile) {
+    if (profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) {
+      menuLinks.push({
+        title: t("nav.users"),
+        href: "/users",
+      })
+    }
+
+    if (
+      enableSettings &&
+      (profile?.userRoles?.isAdmin ||
+        profile?.userRoles?.isJurisdictionalAdmin ||
+        profile?.userRoles?.isLimitedJurisdictionalAdmin)
+    ) {
+      menuLinks.push({
+        title: t("t.settings"),
+        href: atLeastOneJurisdictionEnablesPreferences
+          ? "/settings/preferences"
+          : "/settings/properties",
+      })
+    }
+
     menuLinks.push({
       title: t("nav.signOut"),
       onClick: async () => {

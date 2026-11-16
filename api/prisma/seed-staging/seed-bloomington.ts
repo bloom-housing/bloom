@@ -58,6 +58,7 @@ export const createBloomingtonJurisdiction = async (
       listingApprovalPermissions: [UserRoleEnum.admin],
       featureFlags: [
         FeatureFlagEnum.enableAccessibilityFeatures,
+        FeatureFlagEnum.enableApproveAndPublishOnEdit,
         FeatureFlagEnum.enableCompanyWebsite,
         FeatureFlagEnum.enableCustomListingNotifications,
         FeatureFlagEnum.enableDbDrivenBranding,

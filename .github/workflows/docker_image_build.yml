@@ -81,6 +81,7 @@ jobs:
           context: ${{ matrix.docker_context }}
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.platforms }}
+          build-args: GIT_SHA=${{ github.sha }}
           # the 'tags' and 'labels' fields are 'newline-delimited string': https://github.com/docker/build-push-action#inputs.
           tags: |
             ${{ env.image_base }}/${{ matrix.container }}:gitsha-${{ github.sha }}

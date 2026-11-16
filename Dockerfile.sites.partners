@@ -25,5 +25,7 @@ COPY --chown=2002:2002 sites/middleware.ts /app/sites/partners/src/middleware.ts
 # reads that site's locale overrides. src/lib/publicTranslations.ts is the only thing that needs them.
 COPY --chown=2002:2002 sites/public/page_content/locale_overrides /app/sites/public/page_content/locale_overrides
 
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
 ENV NEXT_TELEMETRY_DISABLED=1
 CMD [ "/bin/bash", "-c", "NODE_OPTIONS='--max-semi-space-size=64 --max-old-space-size=2048' yarn build && yarn start" ]

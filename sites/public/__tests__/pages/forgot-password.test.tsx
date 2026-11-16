@@ -27,7 +27,7 @@ describe("Forgot Password Page", () => {
     expect(getByText("Enter your email to get a password reset link")).toBeInTheDocument()
     expect(
       getByText(
-        "Please enter your email address so we can send you a password reset link. If you don’t receive an email, you may not have an account."
+        "Please enter your email address so we can send you a password reset link. If you don't receive an email, you may not have an account."
       )
     ).toBeInTheDocument()
     expect(getByLabelText("Email")).toBeInTheDocument()

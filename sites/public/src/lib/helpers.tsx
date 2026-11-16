@@ -253,11 +253,7 @@ export const getListingStatusMessageContent = (
       hasScheduledApplicationOpenMessage = true
     } else if (applicationDueDate) {
       const dueDate = dayjs(applicationDueDate)
-      formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = !hideTime
-        ? formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
-        : formattedDate
-
+      formattedDate = formatDateInConfiguredTimeZone(applicationDueDate, hideTime)
       if (dayjs() < dueDate) {
         content = t("listings.applicationDue")
         if (formattedDate) content = content + ": "

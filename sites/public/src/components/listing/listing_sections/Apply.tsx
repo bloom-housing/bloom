@@ -217,7 +217,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
               <Heading size={"md"} priority={3} className={`seeds-m-be-header`}>
                 {t("listings.apply.sendByUsMail")}
               </Heading>
-              <Address address={applicationMailingAddress} />
+              <Address address={applicationMailingAddress} getDirections={true} />
               {postmarkString && <p className={"seeds-m-bs-label"}>{postmarkString}</p>}
             </div>
           )}

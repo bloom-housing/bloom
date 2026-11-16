@@ -1,3 +1,53 @@
+locals {
+  otel_env_vars = var.observability_collection_enabled ? {
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
+    } : {
+    OTEL_SDK_DISABLED = true // needed or the app will keep trying to export and spam logs with errors
+  }
+
+  otel_sidecar_container = var.observability_collection_enabled ? [
+    {
+      name      = "otel-sidecar"
+      image     = var.bloom_otel_collector_image
+      essential = false
+      command   = ["--config", "/etc/api-ecs-sidecar-config.yaml"]
+      environment = [
+        {
+          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
+          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
+        }
+      ]
+      portMappings = [
+        {
+          containerPort = 4317
+          appProtocol   = "grpc"
+        }
+      ]
+      restartPolicy = {
+        enabled = true
+      }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-region"        = var.aws_region
+          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+          "awslogs-stream-prefix" = "otel-sidecar"
+        }
+      }
+    }
+  ] : []
+}
+
+
+
+output "otel_sidecar_container" {
+  value = local.otel_sidecar_container
+}
+
+output "otel_env_vars" {
+  value = local.otel_env_vars
+}
+
 resource "aws_prometheus_workspace" "bloom" {
   region = var.aws_region
   alias  = "bloom"
@@ -17,6 +67,7 @@ resource "aws_iam_role" "bloom_grafana" {
     }]
   })
 }
+
 resource "aws_iam_role_policy" "bloom_grafana" {
   name = "bloom-grafana"
   role = aws_iam_role.bloom_grafana.id
@@ -54,6 +105,7 @@ resource "aws_grafana_workspace" "bloom" {
   data_sources             = ["PROMETHEUS"]
   role_arn                 = aws_iam_role.bloom_grafana.arn
 }
+
 resource "aws_grafana_role_association" "bloom" {
   workspace_id = aws_grafana_workspace.bloom.id
   role         = "EDITOR"
@@ -71,6 +123,7 @@ output "grafana_url" {
 locals {
   grafana_token_age_seconds = 3 * 60
 }
+
 data "external" "grafana_token" {
   program = [
     "/usr/bin/env",
@@ -152,9 +205,10 @@ data "external" "grafana_token" {
 
 
 provider "grafana" {
-  url  = "https://${aws_grafana_workspace.bloom.endpoint}"
-  auth = data.external.grafana_token.result.key
+  url  = try("https://${aws_grafana_workspace.bloom.endpoint}", "https://localhost")
+  auth = try(data.external.grafana_token.result.key, "unused")
 }
+
 resource "grafana_data_source" "prometheus" {
   # Matches the datasource ID in the dashboard JSON files in infra/grafana/dashboards/. Is just an
   # opaque, auto generated UID.
@@ -174,6 +228,7 @@ resource "grafana_data_source" "prometheus" {
     sigV4Region   = var.aws_region
   })
 }
+
 resource "grafana_dashboard" "bloom" {
   for_each    = fileset(path.module, "dashboards/*.json")
   config_json = file("${path.module}/${each.value}")

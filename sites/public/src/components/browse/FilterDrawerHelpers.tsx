@@ -6,6 +6,7 @@ import {
   ListingFeaturesConfiguration,
   ListingFilterKeys,
   ListingFilterParams,
+  ListingsStatusEnum,
   ParkingTypeEnum,
   RegionEnum,
   UnitAccessibilityPriorityTypeEnum,
@@ -47,6 +48,7 @@ export interface FilterData {
   name?: string
   parkingType?: { [K in ParkingTypeEnum]?: BooleanOrBooleanString }
   accessibilityPriorityTypes?: { [K in UnitAccessibilityPriorityTypeEnum]?: BooleanOrBooleanString }
+  status?: ListingsStatusEnum
 }
 
 export interface FilterField {
@@ -61,6 +63,7 @@ export interface CheckboxGroupProps {
   register: UseFormMethods["register"]
   customColumnNumber?: number
   optionalSubNote?: string
+  disabled?: boolean
 }
 
 export interface RadioField extends FilterField {
@@ -243,6 +246,7 @@ export const CheckboxGroup = (props: CheckboxGroupProps) => {
                   type="checkbox"
                   register={props.register}
                   inputProps={{ defaultChecked: field.defaultChecked }}
+                  disabled={props.disabled}
                 />
               </Grid.Cell>
             )
@@ -515,6 +519,12 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
 
       filter[ListingFilterKeys.name] = userSelections
       filters.push(filter)
+    } else if (filterType === ListingFilterKeys.status && userSelections) {
+      const filter = {
+        $comparison: EnumListingFilterParamsComparison["="],
+      }
+      filter[ListingFilterKeys.status] = userSelections as ListingsStatusEnum
+      filters.push(filter)
     }
   })
 
@@ -559,8 +569,8 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
       const booleanParam = `${ListingFilterKeys[filterType]}=true`
       queryArr.push(booleanParam)
     } else if (
-      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
-      userSelections["maxRent"]
+      filterType === ListingFilterKeys.monthlyRent &&
+      (userSelections["minRent"] || userSelections["maxRent"])
     ) {
       const rentParam = `${ListingFilterKeys[filterType]}=${Object.values(userSelections).join(
         "-"
@@ -572,6 +582,9 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
     } else if (filterType === ListingFilterKeys.name) {
       const nameParam = `${ListingFilterKeys[filterType]}=${userSelections}`
       queryArr.push(nameParam)
+    } else if (filterType === ListingFilterKeys.status) {
+      const statusParam = `${ListingFilterKeys[filterType]}=${userSelections}`
+      queryArr.push(statusParam)
     }
   })
   return queryArr.join("&")
@@ -605,6 +618,12 @@ export const decodeQueryToFilterData = (parsedQuery: ParsedUrlQuery): FilterData
       filterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.name) {
       filterData[filterType] = userSelections
+    } else if (
+      filterType === ListingFilterKeys.status &&
+      userSelections === ListingsStatusEnum.closed
+    ) {
+      // only closed is a meaningful selection, active is the default
+      filterData[filterType] = userSelections
     }
   })
   return filterData
@@ -632,13 +651,19 @@ export const removeUnselectedFilterData = (data: FilterData): FilterData => {
     } else if (booleanFilters.includes(ListingFilterKeys[filterType]) && userSelections) {
       cleanedFilterData[filterType] = userSelections
     } else if (
-      (filterType === ListingFilterKeys.monthlyRent && userSelections["minRent"]) ||
-      userSelections["maxRent"]
+      filterType === ListingFilterKeys.monthlyRent &&
+      (userSelections["minRent"] || userSelections["maxRent"])
     ) {
       cleanedFilterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
       cleanedFilterData[filterType] = userSelections
     } else if (filterType === ListingFilterKeys.name && userSelections) {
+      cleanedFilterData[filterType] = userSelections
+    } else if (
+      filterType === ListingFilterKeys.status &&
+      userSelections === ListingsStatusEnum.closed
+    ) {
+      // active is the default status, so it is not treated as a selection
       cleanedFilterData[filterType] = userSelections
     }
   })

@@ -29,6 +29,8 @@ const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
 
 module.exports = withBundleAnalyzer({
+  // Tasks built from one image must share a build ID, or page data requests fail across tasks.
+  generateBuildId: () => process.env.GIT_SHA || null,
   typescript: {
     ignoreBuildErrors: process.env.DISABLE_NEXT_TYPECHECK === "TRUE",
   },

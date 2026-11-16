@@ -106,7 +106,7 @@ describe("applications pages", () => {
       const { getByTestId, getByText, findByText } = renderWithAdvocate()
 
       expect(
-        getByText(/You are applying on behalf of a client; please enter your client’s information/i)
+        getByText(/You are applying on behalf of a client; please enter your client's information/i)
       ).toBeInTheDocument()
       expect(getByText(/not your own/i)).toBeInTheDocument()
 

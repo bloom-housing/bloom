@@ -7,7 +7,6 @@ locals {
     LISTINGS_QUERY              = "/listings"
     USE_SECURE_DOWNLOAD_PATHWAY = "TRUE"
     USE_S3_FILE_STORAGE         = "TRUE"
-    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317"
   }
 }
 resource "aws_ecs_task_definition" "bloom_site_partners" {
@@ -26,7 +25,7 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
   cpu    = var.bloom_site_partners_resource_limits.vcpu
   memory = var.bloom_site_partners_resource_limits.memory_mib
 
-  container_definitions = jsonencode([
+  container_definitions = jsonencode(concat([
     {
       Name        = "bloom-site-partners"
       essential   = true
@@ -47,7 +46,18 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
       restartPolicy = {
         enabled = false
       }
-      # TODO healthCheck https://github.com/bloom-housing/bloom/issues/5583
+      healthCheck = {
+        command = [
+          "curl",
+          "--fail",
+          "http://127.0.0.1:3001/"
+        ]
+        interval    = 5 # seconds
+        timeout     = 2 # seconds
+        retries     = 10
+        startPeriod = 60 # takes about 30s to start up, pad with 2x
+      }
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -56,37 +66,10 @@ resource "aws_ecs_task_definition" "bloom_site_partners" {
           "awslogs-stream-prefix" = "bloom-site-partners"
         }
       }
-    },
-    {
-      name      = "otel-sidecar"
-      image     = var.bloom_otel_collector_image
-      essential = false
-      command   = ["--config", "/etc/sites-ecs-sidecar-config.yaml"]
-      environment = [
-        {
-          name  = "PROMETHEUS_REMOTE_WRITE_ENDPOINT",
-          value = "${aws_prometheus_workspace.bloom.prometheus_endpoint}api/v1/remote_write"
-        }
-      ]
-      portMappings = [
-        {
-          containerPort = 4317
-          appProtocol   = "grpc"
-        }
-      ]
-      restartPolicy = {
-        enabled = true
-      }
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          "awslogs-region"        = var.aws_region
-          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-site-partners"].name
-          "awslogs-stream-prefix" = "otel-sidecar"
-        }
-      }
     }
-  ])
+    ],
+    local.otel_sidecar_container
+  ))
 }
 resource "aws_ecs_service" "bloom_site_partners" {
   depends_on = [

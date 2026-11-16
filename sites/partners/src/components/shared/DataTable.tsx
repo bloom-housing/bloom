@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
+  FilterFn,
   Header,
   PaginationState,
   SortingState,
@@ -16,6 +17,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import ArrowsUpDownIcon from "@heroicons/react/16/solid/ArrowsUpDownIcon"
 import ArrowUpIcon from "@heroicons/react/16/solid/ArrowUpIcon"
 import ArrowDownIcon from "@heroicons/react/16/solid/ArrowDownIcon"
+import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon"
 import { Button, Icon, LoadingState } from "@bloom-housing/ui-seeds"
 import { t } from "@bloom-housing/ui-components"
 import styles from "./DataTable.module.scss"
@@ -69,10 +71,14 @@ interface DataTableBaseProps {
   enableHorizontalScroll?: boolean
   // The type of filtering to use: global search, per-column filters, or omit for neither
   filterType?: "global" | "per-column"
+  // Custom matcher for the global search.
+  globalFilterFn?: FilterFn<TableDataRow>
   // Function to fetch data for the table based on pagination, search, and sort parameters
   fetchData?: FetchDataFn
   // Optional content to display in the header on the right side
   headerRightContent?: React.ReactNode
+  // Optional content to display below the header
+  headerBottomContent?: React.ReactNode
   // Overrides the default id on the <table> element, e.g. so a page with more than one table keeps unique ids
   id?: string
   // Initial sort state for the table
@@ -107,6 +113,10 @@ const getHeaderAriaLabel = (header: Header<TableDataRow, unknown>) => {
 }
 
 export const DataTable = (props: DataTableProps) => {
+  const minSearchCharacters = props.minSearchCharacters || 3
+  const searchHint =
+    minSearchCharacters > 1 ? ` - ${t("table.searchSubtext", { char: minSearchCharacters })}` : ""
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: props.defaultItemsPerPage || 8,
@@ -191,6 +201,10 @@ export const DataTable = (props: DataTableProps) => {
       setSorting(sorting)
     },
     onGlobalFilterChange: setGlobalFilter,
+    ...(props.globalFilterFn && {
+      globalFilterFn: props.globalFilterFn,
+      getColumnCanGlobalFilter: () => true,
+    }),
     rowCount: dataQuery.data?.totalItems,
     state: {
       columnFilters,
@@ -230,8 +244,8 @@ export const DataTable = (props: DataTableProps) => {
                 }
               >
                 {header.column.getCanSort() ? (
-                  <>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  <div className={styles["sortable-header"]}>
+                    <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
                     <button
                       {...{
                         onClick: header.column.getToggleSortingHandler(),
@@ -267,7 +281,7 @@ export const DataTable = (props: DataTableProps) => {
                         ),
                       }[header.column.getIsSorted() as string] ?? null}
                     </button>
-                  </>
+                  </div>
                 ) : (
                   flexRender(header.column.columnDef.header, header.getContext())
                 )}
@@ -275,7 +289,7 @@ export const DataTable = (props: DataTableProps) => {
                   <div>
                     <DataTableFilter
                       columnFilterValue={(header.column.getFilterValue() as string) || ""}
-                      minSearchCharacters={props.minSearchCharacters || 3}
+                      minSearchCharacters={minSearchCharacters}
                       setPagination={setPagination}
                       getFilterValue={header.column.getFilterValue}
                       setFilterValue={header.column.setFilterValue}
@@ -288,7 +302,7 @@ export const DataTable = (props: DataTableProps) => {
                         column:
                           (header.column.columnDef.meta as MetaType)?.plaintextName ||
                           header.column.columnDef.id,
-                      })} - ${t("table.searchSubtext", { char: props.minSearchCharacters })}`}
+                      })}${searchHint}`}
                     />
                   </div>
                 ) : null}
@@ -340,7 +354,7 @@ export const DataTable = (props: DataTableProps) => {
           </tr>
         </tbody>
       )
-    } else if (rows.length === 0) {
+    } else if (table.getRowModel().rows.length === 0) {
       return (
         <>
           {tableHeaders}
@@ -461,16 +475,13 @@ export const DataTable = (props: DataTableProps) => {
           <div className={styles["header-left-content"]}>
             <DataTableFilter
               columnFilterValue={(globalFilter as string) || ""}
-              minSearchCharacters={props.minSearchCharacters || 3}
+              minSearchCharacters={minSearchCharacters}
               setPagination={setPagination}
               getFilterValue={() => table.getState().globalFilter}
               setFilterValue={table.setGlobalFilter}
               inputName={"global-search"}
               filterType={props.filterType}
-              ariaDescription={`${t("listings.table.searchByGeneric")} - ${t(
-                "table.searchSubtext",
-                { char: props.minSearchCharacters }
-              )}`}
+              ariaDescription={`${t("listings.table.searchByGeneric")}${searchHint}`}
             />
           </div>
         )}
@@ -484,6 +495,9 @@ export const DataTable = (props: DataTableProps) => {
           </div>
         )}
       </div>
+      {props.headerBottomContent && (
+        <div className={styles["header-bottom-content"]}>{props.headerBottomContent}</div>
+      )}
       <div
         className={`${styles["data-table-container"]} ${
           props.disablePagination ? styles["no-pagination"] : ""
@@ -549,21 +563,29 @@ const DataTableFilter = (props: DataTableFilterProps) => {
 
   return (
     <>
-      <input
-        className={`${styles["search-input"]} ${
-          props.filterType === "global" ? styles["global-search-input"] : ""
-        }`}
-        id={inputId}
-        data-testid={inputId}
-        onChange={(e) => {
-          setValue(e.target.value)
-        }}
-        placeholder={t("t.search")}
-        type={"text"}
-        value={value}
-        aria-description={props.ariaDescription}
-      />
-      {props.minSearchCharacters && (
+      <div className={styles["search-field"]}>
+        <Icon className={styles["search-icon"]} outlined>
+          <MagnifyingGlassIcon />
+        </Icon>
+        <input
+          className={`${styles["search-input"]} ${
+            props.filterType === "global" ? styles["global-search-input"] : ""
+          }`}
+          id={inputId}
+          data-testid={inputId}
+          onChange={(e) => {
+            setValue(e.target.value)
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") e.preventDefault()
+          }}
+          placeholder={t("t.search")}
+          type={"text"}
+          value={value}
+          aria-description={props.ariaDescription}
+        />
+      </div>
+      {props.minSearchCharacters > 1 && (
         <div className={styles["min-characters-info"]} id={"input-helper"} aria-hidden="true">
           {t("table.searchSubtext", { char: props.minSearchCharacters })}
         </div>

@@ -17,8 +17,9 @@ import { defaultFieldProps, fieldHasError, fieldMessage, getLabel } from "../../
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 import UnitGroupForm from "../UnitGroupForm"
 import styles from "../ListingForm.module.scss"
-import { DataTable } from "../../../shared/DataTable"
-import { getUnitColumns, unitGroupToRow, unitToRow } from "../../UnitTableColDefs"
+import { DataTable, TableDataRow } from "../../../shared/DataTable"
+import { ListingUnitsTable } from "../../UnitsTable/ListingUnitsTable"
+import { getUnitColumns, unitGroupToRow } from "../../UnitTableColDefs"
 import unitTableStyles from "../../UnitTableColDefs.module.scss"
 
 type UnitProps = {
@@ -230,29 +231,26 @@ const FormUnits = ({
     }
   }
 
-  const unitColumns = useMemo(
-    () =>
-      getUnitColumns({
-        enableUnitGroups,
-        showNonRegulated,
-        actionsCell: (row) =>
-          getTableActionItems({
-            onEdit: () =>
-              enableUnitGroups
-                ? editUnitGroup(row.tempId as number)
-                : editUnit(row.tempId as number),
-            onDelete: () => setUnitDeleteModal(row.tempId as number),
-          }),
+  const unitActionsCell = useCallback(
+    (row: TableDataRow) =>
+      getTableActionItems({
+        onEdit: () =>
+          enableUnitGroups ? editUnitGroup(row.tempId as number) : editUnit(row.tempId as number),
+        onDelete: () => setUnitDeleteModal(row.tempId as number),
       }),
-    [enableUnitGroups, showNonRegulated, editUnit, editUnitGroup]
+    [enableUnitGroups, editUnit, editUnitGroup]
   )
 
-  const unitRows = useMemo(() => {
-    if (enableUnitGroups) {
-      return unitGroups.map((unitGroup) => unitGroupToRow(unitGroup, showNonRegulated))
-    }
-    return units.map(unitToRow)
-  }, [units, unitGroups, enableUnitGroups, showNonRegulated])
+  const unitGroupColumns = useMemo(
+    () =>
+      getUnitColumns({ enableUnitGroups: true, showNonRegulated, actionsCell: unitActionsCell }),
+    [showNonRegulated, unitActionsCell]
+  )
+
+  const unitGroupRows = useMemo(
+    () => unitGroups.map((unitGroup) => unitGroupToRow(unitGroup, showNonRegulated)),
+    [unitGroups, showNonRegulated]
+  )
 
   const disableUnitsAccordionOptions = [
     {
@@ -362,13 +360,17 @@ const FormUnits = ({
           <Grid.Cell>
             {(enableUnitGroups ? !!unitGroups.length : !!units.length) && (
               <div className="mb-5">
-                <DataTable
-                  description={t("listings.units")}
-                  columns={unitColumns}
-                  data={unitRows}
-                  disablePagination
-                  tableClassName={unitTableStyles["unit-table"]}
-                />
+                {enableUnitGroups ? (
+                  <DataTable
+                    description={t("listings.units")}
+                    columns={unitGroupColumns}
+                    data={unitGroupRows}
+                    disablePagination
+                    tableClassName={unitTableStyles["unit-table"]}
+                  />
+                ) : (
+                  <ListingUnitsTable units={units} actionsCell={unitActionsCell} />
+                )}
               </div>
             )}
 

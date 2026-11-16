@@ -13,6 +13,7 @@ import {
 import Layout from "../../layouts/application"
 import {
   ApplicationsFilterEnum,
+  FeatureFlagEnum,
   PaginationMeta,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
@@ -42,7 +43,7 @@ interface ApplicationsViewProps {
 }
 
 const ApplicationsView = (props: ApplicationsViewProps) => {
-  const { applicationsService, profile } = useContext(AuthContext)
+  const { applicationsService, doJurisdictionsHaveFeatureFlagOn, profile } = useContext(AuthContext)
   const toastyRef = useToastyRef()
   const [applications, setApplications] = useState<AppWithListing[]>()
   const [applicationsCount, setApplicationsCount] = useState<ApplicationsCount>()
@@ -320,6 +321,10 @@ const ApplicationsView = (props: ApplicationsViewProps) => {
                         key={index}
                         application={application}
                         enableApplicationStatus={props.enableApplicationStatus}
+                        enablePublicLotteryExpiration={doJurisdictionsHaveFeatureFlagOn(
+                          FeatureFlagEnum.enablePublicLotteryExpiration,
+                          application.listings?.jurisdictions?.id
+                        )}
                         showApplicantName={isAdvocate}
                       />
                     )

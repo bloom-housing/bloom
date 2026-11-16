@@ -18,6 +18,7 @@ export enum FeatureFlagEnum {
   enableApplicationBulkCSVUpdates = 'enableApplicationBulkCSVUpdates',
   enableApplicationExpirationNonAdmins = 'enableApplicationExpirationNonAdmins',
   enableApplicationStatus = 'enableApplicationStatus',
+  enableApproveAndPublishOnEdit = 'enableApproveAndPublishOnEdit',
   enableAutoOpenDate = 'enableAutoOpenDate',
   enableAutopublish = 'enableAutopublish',
   enableCompanyWebsite = 'enableCompanyWebsite',
@@ -31,6 +32,7 @@ export enum FeatureFlagEnum {
   enableFaq = 'enableFaq',
   enableFilterByBathroom = 'enableFilterByBathroom',
   enableFilterByCounty = 'enableFilterByCounty',
+  enableFilterByStatus = 'enableFilterByStatus',
   enableFullTimeStudentQuestion = 'enableFullTimeStudentQuestion',
   enableGenderQuestion = 'enableGenderQuestion',
   enableGeocodingPreferences = 'enableGeocodingPreferences',
@@ -73,6 +75,7 @@ export enum FeatureFlagEnum {
   enablePetPolicyCheckbox = 'enablePetPolicyCheckbox',
   enableProfessionalPartnersPage = 'enableProfessionalPartnersPage',
   enableProperties = 'enableProperties',
+  enablePublicLotteryExpiration = 'enablePublicLotteryExpiration',
   enablePublicTermsOfUse = 'enablePublicTermsOfUse',
   enableReasonableAccommodations = 'enableReasonableAccommodations',
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
@@ -189,6 +192,11 @@ export const featureFlagMap: {
       'When true, the application status and notifications feature is enabled on public and partners',
   },
   {
+    name: FeatureFlagEnum.enableApproveAndPublishOnEdit,
+    description:
+      'When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving',
+  },
+  {
     name: FeatureFlagEnum.enableAutoOpenDate,
     description:
       'When true, partners can set an optional scheduled listing applications open date',
@@ -250,6 +258,11 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableFilterByCounty,
     description:
       'When true, the filter drawer on the public site includes the option to filter listings by county',
+  },
+  {
+    name: FeatureFlagEnum.enableFilterByStatus,
+    description:
+      'When true, the filter drawer on the public site includes the option to filter listings by their status',
   },
   {
     name: FeatureFlagEnum.enableFullTimeStudentQuestion,
@@ -445,6 +458,11 @@ export const featureFlagMap: {
   {
     name: FeatureFlagEnum.enableProperties,
     description: 'When true, the properties feature is enabled',
+  },
+  {
+    name: FeatureFlagEnum.enablePublicLotteryExpiration,
+    description:
+      'When true, public user lottery results will expire after a set amount of time',
   },
   {
     name: FeatureFlagEnum.enablePublicTermsOfUse,

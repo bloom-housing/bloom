@@ -29,7 +29,7 @@ describe("forgot-password", () => {
     expect(getByText("Enter your email to get a password reset link", { selector: "h1" }))
     expect(
       getByText(
-        "Please enter your email address so we can send you a password reset link. If you don’t receive an email, you may not have an account.",
+        "Please enter your email address so we can send you a password reset link. If you don't receive an email, you may not have an account.",
         { selector: "p" }
       )
     )

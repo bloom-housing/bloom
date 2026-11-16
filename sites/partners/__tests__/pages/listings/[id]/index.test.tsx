@@ -573,7 +573,7 @@ describe("listing data", () => {
       expect(screen.getAllByText(/#[1-9]/i)).toHaveLength(6)
       expect(screen.getAllByText("Studio")).toHaveLength(6)
       expect(screen.getAllByText("45.0")).toHaveLength(6)
-      expect(screen.getAllByText("1104.0")).toHaveLength(6)
+      expect(screen.getAllByText("$1104.0")).toHaveLength(6)
       expect(screen.getAllByText("285")).toHaveLength(6)
       expect(screen.getAllByText("Mobility")).toHaveLength(6)
       expect(screen.getAllByText("View")).toHaveLength(6)

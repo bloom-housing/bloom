@@ -31,6 +31,10 @@ const mockRouter: GenericRouter = {
   },
 }
 
+const doJurisdictionsHaveFeatureFlagOn: (featureFlag: string) => boolean = () => {
+  return false
+}
+
 beforeAll(() => {
   server.listen()
   mockNextRouter()
@@ -122,6 +126,7 @@ function renderApplicationsView(
         value={{
           profile: { ...user, jurisdictions: [], listings: [], ...profileOverrides },
           applicationsService: new ApplicationsService(),
+          doJurisdictionsHaveFeatureFlagOn,
         }}
       >
         <ApplicationsView
@@ -152,6 +157,7 @@ describe("<ApplicationsView>", () => {
           value={{
             profile: undefined,
             initialStateLoaded: true,
+            doJurisdictionsHaveFeatureFlagOn,
           }}
         >
           <ApplicationsView filterType={ApplicationsIndexEnum.all} />
@@ -175,7 +181,7 @@ describe("<ApplicationsView>", () => {
     // Dashboard heading
     expect(screen.getByRole("heading", { level: 1, name: /my applications/i })).toBeInTheDocument()
     expect(
-      screen.getByText("See listings for properties for which you’ve applied.")
+      screen.getByText("See listings for properties for which you've applied.")
     ).toBeInTheDocument()
 
     expect(
@@ -203,7 +209,7 @@ describe("<ApplicationsView>", () => {
         screen.getByRole("heading", { level: 1, name: /my applications/i })
       ).toBeInTheDocument()
       expect(
-        screen.getByText("See listings for properties for which you’ve applied.")
+        screen.getByText("See listings for properties for which you've applied.")
       ).toBeInTheDocument()
 
       // Application section (Missing fallback component)

@@ -56,6 +56,8 @@ def main():
         "-si", "--skip-init", help="Do not automatically run 'tofu init'.", action='store_true')
     p.add_argument(
         "-ss", "--skip-sso", help="Do not automatically run 'aws sso login'.", action='store_true')
+    p.add_argument(
+        "-em", "--enable-metrics", help="Enabled OTEL side car and metrics collections.", action='store_true')
 
     p.add_argument(
         "root_module_name",
@@ -75,6 +77,9 @@ def main():
         run_subprocess(["aws", "sso", "login", "--use-device-code", "--profile", aws_profile])
     if not args.skip_init:
         run_subprocess(["tofu", "init"], cwd=mod_path)
+    if args.enable_metrics:
+        args.open_tofu_args.append("-var")
+        args.open_tofu_args.append("observability_collection_enabled=true")
 
     run_subprocess(["tofu"] + args.open_tofu_args, cwd=mod_path, always_exit=True)
 

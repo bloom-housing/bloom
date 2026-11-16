@@ -5,6 +5,7 @@ import {
   FeatureFlagEnum,
   ListingsStatusEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isAdminRole } from "@bloom-housing/shared-helpers/src/utilities/userRoles"
 import { ListingContext } from "../listings/ListingContext"
 
 type AuthGuardProps = {
@@ -31,8 +32,7 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
     (listing?.status === ListingsStatusEnum.active || listing?.status === ListingsStatusEnum.closed)
 
   const hasPrivileges =
-    profile?.userRoles?.isAdmin ||
-    profile?.userRoles?.isSupportAdmin ||
+    isAdminRole(profile?.userRoles) ||
     profile?.userRoles?.isJurisdictionalAdmin ||
     profile?.userRoles?.isLimitedJurisdictionalAdmin ||
     leasingAgentInListingsIds?.includes(listingId)

@@ -231,6 +231,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.sites.partners
+      args:
+        GIT_SHA: ${GIT_SHA:-}
     restart: no
     expose:
       - "3001"
@@ -268,6 +270,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.sites.public
+      args:
+        GIT_SHA: ${GIT_SHA:-}
     restart: no
     expose:
       - "3000"

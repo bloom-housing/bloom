@@ -16,6 +16,7 @@ export interface AppWithListing extends Application {
 interface StatusItemWrapperProps {
   application: AppWithListing
   enableApplicationStatus?: boolean
+  enablePublicLotteryExpiration?: boolean
   showApplicantName?: boolean
 }
 
@@ -81,11 +82,12 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
         lotteryLastPublishedAt && dayjs(lotteryLastPublishedAt).format("MMM D, YYYY")
       }
       lotteryResults={
-        props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic &&
+        ((props.application?.listings?.lotteryStatus === LotteryStatusEnum.expired &&
+          !props.enablePublicLotteryExpiration) ||
+          props.application?.listings?.lotteryStatus === LotteryStatusEnum.publishedToPublic) &&
         !!props.application?.applicationLotteryPositions?.length
       }
       lotteryURL={`/account/application/${props.application?.id}/lottery-results`}
-      lotteryStatus={props.application?.listings?.lotteryStatus}
       applicationStatus={applicationStatus}
     />
   )

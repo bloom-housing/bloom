@@ -43,6 +43,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableApplicationBulkCSVUpdates](./feature-flags/enableApplicationBulkCSVUpdates.md) | When true, allows for the bulk uptake of application statuses |
 | [enableApplicationExpirationNonAdmins](./feature-flags/enableApplicationExpirationNonAdmins.md) | When true, application data in the partner site will expire for non-admin users after 45 days |
 | [enableApplicationStatus](./feature-flags/enableApplicationStatus.md) | When true, the application status and notifications feature is enabled on public and partners |
+| [enableApproveAndPublishOnEdit](./feature-flags/enableApproveAndPublishOnEdit.md) | When true, allows listings to be approved and published directly from the edit form allowing edits to be made while approving |
 | [enableAutoOpenDate](./feature-flags/enableAutoOpenDate.md) | When true, partners can set an optional scheduled listing applications open date |
 | [enableAutopublish](./feature-flags/enableAutopublish.md) | When true, partners can set an optional scheduled listing publish date |
 | [enableCompanyWebsite](./feature-flags/enableCompanyWebsite.md) | When true, allows partners to add company website information |
@@ -56,6 +57,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableFaq](./feature-flags/enableFaq.md) | When true, a link to the FAQ page is displayed on the get assistance page |
 | [enableFilterByBathroom](./feature-flags/enableFilterByBathroom.md) | When true, the filter drawer on the public site includes the option to filter listings by number of bathrooms |
 | [enableFilterByCounty](./feature-flags/enableFilterByCounty.md) | When true, the filter drawer on the public site includes the option to filter listings by county |
+| [enableFilterByStatus](./feature-flags/enableFilterByStatus.md) | When true, the filter drawer on the public site includes the option to filter listings by their status |
 | [enableFullTimeStudentQuestion](./feature-flags/enableFullTimeStudentQuestion.md) | When true, the full time student question is displayed in the application form |
 | [enableGenderQuestion](./feature-flags/enableGenderQuestion.md) | When true, the gender identity question is displayed in the public and partner application demographics section |
 | [enableGeocodingPreferences](./feature-flags/enableGeocodingPreferences.md) | When true, preferences can be created with geocoding functionality and when an application is created/updated on a listing that is geocoding then the application gets geocoded |
@@ -98,6 +100,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enablePetPolicyCheckbox](./feature-flags/enablePetPolicyCheckbox.md) | When true, the pet policy field in the listing form is displayed as checkboxes instead of a text area |
 | [enableProfessionalPartnersPage](./feature-flags/enableProfessionalPartnersPage.md) | When true, the professional partners page will appear in the nav header of the public site and page will be reachable |
 | [enableProperties](./feature-flags/enableProperties.md) | When true, the properties feature is enabled |
+| [enablePublicLotteryExpiration](./feature-flags/enablePublicLotteryExpiration.md) | When true, public user lottery results will expire after a set amount of time |
 | [enablePublicTermsOfUse](./feature-flags/enablePublicTermsOfUse.md) | When true, creating a user account on the public site will require the user to review and accept terms of use |
 | [enableReasonableAccommodations](./feature-flags/enableReasonableAccommodations.md) | When true, the reasonable accommodations question is shown in the public and partner application flow |
 | [enableReceivedAtAndByFields](./feature-flags/enableReceivedAtAndByFields.md) | When true, partners can view/edit paper application received at/by fields and include them in application exports |

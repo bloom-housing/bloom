@@ -688,7 +688,7 @@ describe("<Apply>", () => {
     expect(screen.getByText("Drop off address street, Drop off address unit")).toBeInTheDocument()
     expect(screen.getByText("Drop off address city, CT 45678")).toBeInTheDocument()
     expect(screen.getByText("Drop off address office hours")).toBeInTheDocument()
-    expect(screen.getAllByText("Get directions").length).toBe(2)
+    expect(screen.getAllByText("Get directions").length).toBe(3)
 
     expect(screen.queryByText("Apply online")).not.toBeInTheDocument()
   })

@@ -115,13 +115,18 @@ describe("DetailUnits", () => {
     const headAndBody = within(table).getAllByRole("rowgroup")
     expect(headAndBody).toHaveLength(2)
     const [head, body] = headAndBody
-    expect(within(head).getAllByRole("columnheader")).toHaveLength(7)
+    expect(within(head).getAllByRole("columnheader")).toHaveLength(8)
+    expect(screen.getByTestId("sort-button-monthlyRent")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Filter" })).toBeInTheDocument()
     const rows = within(body).getAllByRole("row")
     expect(rows).toHaveLength(6)
     // Validate first row
-    const [unitNumber, type, ami, rent, sqft, ada, action] = within(rows[0]).getAllByRole("cell")
+    const [unitNumber, type, amiChart, ami, rent, sqft, ada, action] = within(rows[0]).getAllByRole(
+      "cell"
+    )
     expect(unitNumber).toBeEmptyDOMElement()
     expect(type).toHaveTextContent("Studio")
+    expect(amiChart).toBeEmptyDOMElement()
     expect(ami).toHaveTextContent(unit.amiPercentage || "")
     expect(rent).toHaveTextContent(unit.monthlyRent || "")
     expect(sqft).toHaveTextContent(unit.sqFeet || "")
@@ -256,6 +261,7 @@ describe("DetailUnits", () => {
         </AuthContext.Provider>
       </QueryClientProvider>
     )
+    expect(screen.queryByRole("button", { name: "Filter" })).not.toBeInTheDocument()
 
     // Above the table
     expect(screen.getByRole("heading", { level: 2, name: /listing units/i })).toBeInTheDocument()

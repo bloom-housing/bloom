@@ -1,0 +1,29 @@
+.filter-section:global(.seeds-card) {
+  --card-border-radius: 0;
+  border-width: 0 0 var(--card-border-width);
+  margin-block-end: var(--seeds-s6);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--seeds-s2);
+}
+
+.heading {
+  margin: 0;
+}
+
+.toggle {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.toggle-icon {
+  color: var(--seeds-color-primary);
+}
+
+.content {
+  margin-block-start: var(--seeds-s4);
+}

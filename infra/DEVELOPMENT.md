@@ -48,6 +48,13 @@ Before running OpenTofu with the passed in args, the script automatically:
    filesystem or when changing providers and/or their versions. To skip the auto init step, pass
    `--skip-init` or `-si`.
 
+3. Toggles the terraform variable `observability_collection_enabled` (false by default)
+
+   `observability_collection_enabled` is used to enable/disable the opentelemetry sidecar being 
+   deployed alongside the application containers. This won't destroy any managed resources such 
+   as grafana, it only effects whether metrics are collected and shipped to grafana.
+   To enable the collector, pass `--enable-metrics` or `-em`.
+
 All together:
 
 ```bash
@@ -57,7 +64,7 @@ docker container run --rm -it \
 -v "${HOME}/.aws/cli":/home/.aws/cli:z \
 -v "${HOME}/.aws/sso/cache":/home/.aws/sso/cache:z \
 ghcr.io/bloom-housing/bloom/infra-dev \
-[[--skip-sso] | [--skip-init]] <ROOT_MODULE_NAME> <OPEN_TOFU_ARGS>
+[[--skip-sso] | [--skip-init] | [--enable-metrics]] <ROOT_MODULE_NAME> <OPEN_TOFU_ARGS>
 ```
 
 You may find it convenient to add an alias. From the root of the Bloom repo:
@@ -65,7 +72,7 @@ You may find it convenient to add an alias. From the root of the Bloom repo:
 ```bash
 alias bloomtofu="docker container run --rm -it --user $(id -u):$(id -g) -v ${PWD}/infra:/bloom/infra:z -v ${HOME}/.aws/cli:/home/.aws/cli:z -v ${HOME}/.aws/sso/cache:/home/.aws/sso/cache:z ghcr.io/bloom-housing/bloom/infra-dev"
 
-bloomtofu -ss -si bloom_dev apply
+bloomtofu -ss -si -em bloom_dev apply
 ```
 
 ## Testing changes in the bloom-dev account:

@@ -13,6 +13,7 @@ import {
   OrderByEnum,
   ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { isAdminRole } from "@bloom-housing/shared-helpers/src/utilities/userRoles"
 import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { AgTable, useAgTable } from "@bloom-housing/ui-components/ag-table"
 import { Button, Dialog, LoadingState, Message } from "@bloom-housing/ui-seeds"
@@ -152,11 +153,10 @@ const ApplicationsList = () => {
 
   const listingName = listingDto?.name
   const isListingOpen = listingDto?.status === "active"
-  const allowNewApps = !(
+  const disallowNewApps =
     listingDto?.status === "closed" &&
     enableOnlyAdminCanAddAppsAfterClose &&
-    (!profile.userRoles?.isAdmin || !profile.userRoles?.isSuperAdmin)
-  )
+    !isAdminRole(profile.userRoles)
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -346,7 +346,7 @@ const ApplicationsList = () => {
                           }}
                           headerContent={
                             <div className="flex gap-2 items-center">
-                              {allowNewApps && (
+                              {!disallowNewApps && (
                                 <Button
                                   onClick={() => {
                                     if (
