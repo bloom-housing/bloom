@@ -6,7 +6,7 @@ locals {
         {
           Action   = "secretsmanager:GetSecretValue"
           Effect   = "Allow"
-          Resource = one([for s in var.aws_db_master_user_secrets : s.secret_arn if s.secret_status == "active"])
+          Resource = one([for s in var.aws_db_master_user_secret : s.secret_arn if s.secret_status == "active"])
         },
       ]
       container_policy = jsonencode({

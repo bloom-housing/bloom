@@ -2,7 +2,7 @@ locals {
   api_default_env_vars = {
     PORT                       = "3100"
     NODE_ENV                   = "production"
-    DB_HOST                    = aws_db_instance.bloom.address
+    DB_HOST                    = module.rds.aws_db_address
     DB_PORT                    = "5432"
     DB_USER                    = "bloom_api"
     DB_DATABASE                = "bloom_prisma"
@@ -94,7 +94,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
 }
 resource "aws_ecs_service" "bloom_api" {
   depends_on = [
-    aws_db_instance.bloom,
+    module.rds,
     aws_vpc_endpoint.aws_services["secretsmanager"],
     aws_route_table_association.private_subnet,
     null_resource.bloom_dbinit_run,

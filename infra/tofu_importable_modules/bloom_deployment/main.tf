@@ -33,8 +33,8 @@ module "ecs_cluster" {
   aws_profile        = var.aws_profile
   aws_region         = var.aws_region
 
-  aws_db_master_user_secrets = aws_db_instance.bloom.master_user_secret
-  aws_db_instance_id         = aws_db_instance.bloom.id
+  aws_db_master_user_secret = module.rds.master_user_secret
+  aws_db_instance_id        = module.rds.aws_db_instance_id
 
   aws_prometheus_workspace_arn = aws_prometheus_workspace.bloom.arn
 
@@ -46,6 +46,18 @@ module "ecs_cluster" {
   secretsmanager_api_jwt_signing_key_arn      = module.secretsmanager.api_key_secret_arns["api_jwt_signing_key"]
   secretsmanager_mapbox_api_key_arn           = aws_secretsmanager_secret.mapbox_api_key.arn
   secretsmanager_google_translate_api_key_arn = aws_secretsmanager_secret.google_translate_api_key.arn
+}
+
+module "rds" {
+  source = "./rds"
+
+  aws_region                     = var.aws_region
+  aws_private_subnet_ids         = [for s in aws_subnet.private : s.id]
+  aws_security_group_bloom_db_id = aws_security_group.bloom["db"].id
+
+  database_config = local.database_config
+
+  is_prod = local.is_prod
 }
 
 module "secretsmanager" {

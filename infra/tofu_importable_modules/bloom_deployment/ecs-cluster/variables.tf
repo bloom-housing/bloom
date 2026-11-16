@@ -23,7 +23,7 @@ variable "aws_region" { # TODO move validations into top level module
   }
 }
 
-variable "aws_db_master_user_secrets" {
+variable "aws_db_master_user_secret" {
   type = list(object({
     kms_key_id    = string
     secret_arn    = string

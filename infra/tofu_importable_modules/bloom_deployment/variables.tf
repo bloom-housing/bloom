@@ -130,6 +130,7 @@ variable "database_config" {
     starting_storage_gb   = number
     max_storage_gb        = number
     backup_retention_days = number
+    db_high_availability  = bool
   })
   default = null
 }
@@ -140,12 +141,14 @@ locals {
     starting_storage_gb   = 10
     max_storage_gb        = 100
     backup_retention_days = 30
+    db_high_availability  = true
     } : {
     # Non-prod defaults
     instance_class        = "db.t4g.micro"
     starting_storage_gb   = 5 # minimum
     max_storage_gb        = 10
     backup_retention_days = 7
+    db_high_availability  = false
   })
 }
 

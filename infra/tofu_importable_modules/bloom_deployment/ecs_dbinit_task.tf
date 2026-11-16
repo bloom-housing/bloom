@@ -24,15 +24,15 @@ resource "aws_ecs_task_definition" "bloom_dbinit" {
       secrets = [
         {
           name      = "PGPASSWORD"
-          valueFrom = "${aws_db_instance.bloom.master_user_secret[0].secret_arn}:password::"
+          valueFrom = "${module.rds.master_user_secret[0].secret_arn}:password::"
         }
       ]
       entryPoint = ["psql"]
       command = [
-        "--host=${aws_db_instance.bloom.address}",
+        "--host=${module.rds.aws_db_address}",
         "--port=5432",
         "--dbname=postgres",
-        "--username=${aws_db_instance.bloom.username}",
+        "--username=${module.rds.master_username}",
         "--echo-queries",
         "--echo-hidden",
         "--file=rds.init.sql",
@@ -67,7 +67,7 @@ resource "time_sleep" "on_dbinit_container_role_creation" {
 resource "null_resource" "bloom_dbinit_run" {
   triggers = {
     run_number     = var.bloom_dbinit_run_number
-    db_instance_id = aws_db_instance.bloom.id
+    db_instance_id = module.rds.aws_db_instance_id
   }
 
   depends_on = [

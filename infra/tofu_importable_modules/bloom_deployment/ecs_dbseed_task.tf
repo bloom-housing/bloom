@@ -2,7 +2,7 @@ locals {
   dbseed_env_vars = {
     PORT                                      = "3100"
     NODE_ENV                                  = "production"
-    DB_HOST                                   = aws_db_instance.bloom.address
+    DB_HOST                                   = module.rds.aws_db_address
     DB_PORT                                   = "5432"
     DB_USER                                   = "bloom_api"
     DB_DATABASE                               = "bloom_prisma"
@@ -72,7 +72,7 @@ resource "null_resource" "bloom_dbseed_run" {
 
   triggers = {
     run_number     = var.bloom_dbseed_run_number
-    db_instance_id = aws_db_instance.bloom.id
+    db_instance_id = module.rds.aws_db_instance_id
   }
 
   depends_on = [
