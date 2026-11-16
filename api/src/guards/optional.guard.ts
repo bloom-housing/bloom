@@ -1,11 +1,18 @@
 import { JwtAuthGuard } from './jwt.guard';
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtStrategy } from '../passports/jwt.strategy';
+import { clearStaleAuthCookies } from '../utilities/clear-auth-cookies';
 
+/*
+  used on routes that should work for both logged in and anonymous callers
+  (e.g. public listing/map reads). Any auth failure -- no token, expired, or
+  invalidated by a login elsewhere -- degrades to an anonymous request rather
+  than blocking it. If a token was sent but rejected, we also clear the
+  browser's auth cookies so it stops resending a dead session on every
+  subsequent request. Routes where an anonymous fallback would itself be a
+  bug (e.g. application submission) should use StrictOptionalAuthGuard
+  instead.
+*/
 @Injectable()
 export class OptionalAuthGuard extends JwtAuthGuard {
   handleRequest<User>(
@@ -18,18 +25,11 @@ export class OptionalAuthGuard extends JwtAuthGuard {
       return user;
     }
 
-    // no token was sent at all, e.g. a logged out visitor -- treat as anonymous
     const req = context.switchToHttp().getRequest();
-    if (!JwtStrategy.extractJwt(req)) {
-      return undefined;
+    if (JwtStrategy.extractJwt(req)) {
+      clearStaleAuthCookies(context.switchToHttp().getResponse());
     }
 
-    // a token was sent but failed validation (expired single-active-token,
-    // tampered, or the user no longer exists) -- surface this instead of
-    // silently falling back to an anonymous request, so the caller can tell
-    // a dead session from an actual logged-out visitor
-    throw err instanceof Error
-      ? err
-      : new UnauthorizedException('invalid or expired credentials');
+    return undefined;
   }
 }
