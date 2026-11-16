@@ -119,6 +119,9 @@ def main():
     args = p.parse_args()
     validate_inputs(args)
 
+    if (args.disable_task_auto_scaling == True):
+        autoscaling_config = build_autoscaling_config()
+
     write_template(
         args.print_to_stdout, pathlib.Path("/bloom/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
         AwsSSOConfigTemplateArgs(
@@ -158,9 +161,7 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
-            ECS_AUTOSCALING="false",
-            ECS_AUTOSCALING_MIN_TASKS=1,
-            ECS_AUTOSCALING_MAX_TASKS=1,
+            ECS_AUTOSCALING_CONFIG="",
             DB_HIGH_AVAILABILITY="false",
             GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
         ))
@@ -194,9 +195,7 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
-            ECS_AUTOSCALING=args.disable_task_auto_scaling,
-            ECS_AUTOSCALING_MIN_TASKS=args.autoscaling_min_tasks,
-            ECS_AUTOSCALING_MAX_TASKS=args.autoscaling_max_tasks,
+            ECS_AUTOSCALING_CONFIG=autoscaling_config,
             DB_HIGH_AVAILABILITY="true",
             GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
         ))
@@ -304,6 +303,27 @@ def validate_inputs(args):
 
     if len(errors) > 0:
         sys.exit("FATAL: Input validation failed:\n  " + "\n  ".join(errors))
+
+def build_autoscaling_config(autoscaling_min_tasks, autoscaling_max_tasks):
+    config = string.Template(
+    """
+  service_task_autoscaling_config = {
+    cpu_target    = 50
+    memory_target = 50
+    
+    api_service_min_tasks = ${MIN_TASKS}
+    api_service_max_tasks = ${MAX_TASKS}
+
+    partners_service_min_tasks = ${MIN_TASKS}
+    partners_service_max_tasks = ${MAX_TASKS}
+
+    public_service_min_tasks = ${MIN_TASKS}
+    public_service_max_tasks = ${MAX_TASKS}
+  }
+    """
+    )
+
+    return config.substitute(MIN_TASKS=autoscaling_min_tasks, MAX_TASKS=autoscaling_max_tasks)
 
 
 def write_template(
@@ -551,6 +571,9 @@ module "bloom_deployment" {
   aws_certificate_arn = aws_acm_certificate.bloom.arn
 
   env_type          = "${BLOOM_ENV_TYPE}"
+
+  ${ECS_AUTOSCALING_CONFIG}
+
   database_high_availability = ${DB_HIGH_AVAILABILITY}
 
   bloom_dbinit_image = "ghcr.io/${GITHUB_ORG}/bloom/dbinit:gitsha-${GIT_COMMIT}"

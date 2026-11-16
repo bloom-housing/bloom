@@ -97,41 +97,57 @@ variable "google_translate_settings" {
   }
 }
 
-variable "api_service_min_tasks" {
-  type        = number
-  description = "The minimum number of the api  tasks to run"
-  default     = 1
+variable "service_task_autoscaling_config" {
+  type = object({
+    cpu_target    = number
+    memory_target = number
+
+    api_service_min_tasks = number
+    api_service_max_tasks = number
+
+    partners_service_min_tasks = number
+    partners_service_max_tasks = number
+
+    public_service_min_tasks = number
+    public_service_max_tasks = number
+  })
+
+  default = {
+    cpu_target    = 50
+    memory_target = 50
+
+    api_service_min_tasks = 1
+    api_service_max_tasks = 2
+
+    partners_service_min_tasks = 1
+    partners_service_max_tasks = 2
+
+    public_service_min_tasks = 1
+    public_service_max_tasks = 2
+  }
+
+  validation {
+    condition = (var.service_task_autoscaling_config.api_service_min_tasks > 0 &&
+    var.service_task_autoscaling_config.api_service_min_tasks <= var.service_task_autoscaling_config.api_service_max_tasks)
+
+    error_message = "api_service_min_tasks must be greater than 0 but less than or equal to api_service_max_tasks"
+  }
+
+  validation {
+    condition = (var.service_task_autoscaling_config.partners_service_min_tasks > 0 &&
+    var.service_task_autoscaling_config.partners_service_min_tasks <= var.service_task_autoscaling_config.partners_service_max_tasks)
+
+    error_message = "partners_service_min_tasks must be greater than 0 but less than or equal to partners_service_max_tasks"
+  }
+
+  validation {
+    condition = (var.service_task_autoscaling_config.public_service_min_tasks > 0 &&
+    var.service_task_autoscaling_config.public_service_min_tasks <= var.service_task_autoscaling_config.public_service_max_tasks)
+
+    error_message = "public_service_min_tasks must be greater than 0 but less than or equal to public_service_max_tasks"
+  }
 }
 
-variable "api_service_max_tasks" {
-  type        = number
-  description = "The maximum number of the api  tasks to run"
-  default     = 3
-}
-
-variable "partners_service_min_tasks" {
-  type        = number
-  description = "The minimum number of the partners site tasks to run"
-  default     = 1
-}
-
-variable "partners_service_max_tasks" {
-  type        = number
-  description = "The maximum number of the partners site tasks to run"
-  default     = 3
-}
-
-variable "public_service_min_tasks" {
-  type        = number
-  description = "The minimum number of the api service tasks to run"
-  default     = 1
-}
-
-variable "public_service_max_tasks" {
-  type        = number
-  description = "The maximum number of the public site tasks to run"
-  default     = 3
-}
 
 variable "db_high_availability" {
   type        = bool

@@ -160,22 +160,22 @@ resource "aws_ecs_service" "bloom_api" {
 }
 
 resource "aws_appautoscaling_target" "bloom_api_autoscaling_target" {
-  max_capacity       = var.api_service_max_tasks
-  min_capacity       = var.api_service_min_tasks
+  max_capacity       = var.service_task_autoscaling_config.api_service_max_tasks
+  min_capacity       = var.service_task_autoscaling_config.api_service_min_tasks
   resource_id        = "service/${aws_ecs_cluster.bloom.name}/${aws_ecs_service.bloom_api.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
 
-resource "aws_appautoscaling_policy" "bloom_api_appautoscaling_policy_request" {
-  name               = "${aws_ecs_service.bloom_api.name}-request-scaling"
+resource "aws_appautoscaling_policy" "bloom_api_appautoscaling_policy_request_cpu" {
+  name               = "${aws_ecs_service.bloom_api.name}-cpu-request-scaling"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.bloom_api_autoscaling_target.resource_id
   scalable_dimension = aws_appautoscaling_target.bloom_api_autoscaling_target.scalable_dimension
   service_namespace  = aws_appautoscaling_target.bloom_api_autoscaling_target.service_namespace
 
   target_tracking_scaling_policy_configuration {
-    target_value = 30 # Keep CPU at 30% utilization
+    target_value = var.service_task_autoscaling_config.cpu_target
 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
@@ -183,5 +183,25 @@ resource "aws_appautoscaling_policy" "bloom_api_appautoscaling_policy_request" {
 
     scale_in_cooldown  = 300 # Wait 5 minutes before scaling in
     scale_out_cooldown = 60  # Wait 1 minute before scaling out
+  }
+}
+
+# Scale based on memory utilization
+resource "aws_appautoscaling_policy" "mbloom_api_appautoscaling_policy_request_memory" {
+  name               = "${aws_ecs_service.bloom_api.name}-memory-request-scaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.bloom_api_autoscaling_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.bloom_api_autoscaling_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.bloom_api_autoscaling_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    target_value = var.service_task_autoscaling_config.memory_target
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+    }
+
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 60
   }
 }
