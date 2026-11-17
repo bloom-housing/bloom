@@ -125,6 +125,7 @@ export class LotteryService {
     if (
       !(
         user?.userRoles?.isAdmin ||
+        user?.userRoles?.isJurisdictionalAdmin ||
         (enablePartnerLotteryRun &&
           user?.userRoles?.isPartner &&
           isUserAssignedToListing)
@@ -568,6 +569,7 @@ export class LotteryService {
         if (
           !(
             isAdmin ||
+            isJurisdictionalAdmin ||
             (enablePartnerLotteryRun && isUserAssignedToListing && isPartner)
           )
         ) {
@@ -581,7 +583,13 @@ export class LotteryService {
         break;
       }
       case LotteryStatusEnum.releasedToPartners: {
-        if (!isAdmin) {
+        if (
+          !(
+            isAdmin ||
+            isJurisdictionalAdmin ||
+            (enablePartnerLotteryRun && isUserAssignedToListing && isPartner)
+          )
+        ) {
           throw new ForbiddenException();
         }
         if (currentStatus !== LotteryStatusEnum.ran) {
