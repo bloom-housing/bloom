@@ -763,6 +763,7 @@
   "faq.linkText": "প্রায়শই জিজ্ঞাসিত প্রশ্নাবলী পড়ুন",
   "faq.stillHaveQuestions": "এখনও প্রশ্ন আছে?",
   "faq.stillHaveQuestionsContent": "আপনি যদি আপনার কাঙ্ক্ষিত উত্তরটি খুঁজে না পান, তাহলে অনুগ্রহ করে <a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a> ঠিকানায় আমাদের সহায়তা দলের সাথে যোগাযোগ করুন অথবা আমাদের রিসোর্স পৃষ্ঠাটি দেখুন।",
+  "faq.tableOfContents.header": "এই পৃষ্ঠায়",
   "faq.viewResourcePage": "রিসোর্স পৃষ্ঠা দেখুন",
   "faq.whatHappensNext": "এরপর কি হবে?",
   "finder.accessibility.question": "আপনার বা আপনার পরিবারের কারো কি নিম্নলিখিত অ্যাক্সেসিবিলিটি বৈশিষ্ট্যগুলির কোনও প্রয়োজন?",
