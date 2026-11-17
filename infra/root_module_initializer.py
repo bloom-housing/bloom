@@ -109,6 +109,12 @@ def main():
         "--dev_domain_name", help="The domain name for the dev Bloom deployment.", required=True)
     p.add_argument(
         "--prod_domain_name", help="The domain name for the prod Bloom deployment.", required=True)
+    p.add_argument(
+        "--observability_collection_enabled",
+        help="Whether to enable metrics collections for observability in grafana",
+        action="store_true",
+        required=False
+        )
 
     p.add_argument(
         "--print_to_stdout",
@@ -165,6 +171,7 @@ def main():
             ECS_AUTOSCALING_CONFIG=build_autoscaling_config(1, 1),
             DB_HIGH_AVAILABILITY="false",
             GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
+            OBSERVABILITY_COLLECTION_ENABLED=false,
         ))
 
     write_template(
@@ -199,6 +206,7 @@ def main():
             ECS_AUTOSCALING_CONFIG=autoscaling_config,
             DB_HIGH_AVAILABILITY="true",
             GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
+            OBSERVABILITY_COLLECTION_ENABLED=args.observability_collection_enabled,
         ))
 
 
@@ -591,6 +599,7 @@ module "bloom_deployment" {
   }
 
   grafana_editor_group_ids = ["${GRAFANA_EDITOR_GROUP_ID}"]
+  observability_collection_enabled = ["${OBSERVABILITY_COLLECTION_ENABLED}"]
 }
 output "aws_lb_dns_name" {
   value       = module.bloom_deployment.lb_dns_name

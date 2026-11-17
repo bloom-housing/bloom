@@ -6,4 +6,18 @@
       font-size: var(--seeds-font-size-2xl);
     }
   }
+
+  .grid-layout {
+    display: grid;
+    grid-template-columns: var(--seeds-width-2-3rd) auto;
+    grid-gap: var(--seeds-spacer-container);
+    @media (--lg-down) {
+      grid-template-columns: 1fr;
+    }
+  }
+  .table-of-contents {
+    @media (--lg-and-up) {
+      order: 99;
+    }
+  }
 }
