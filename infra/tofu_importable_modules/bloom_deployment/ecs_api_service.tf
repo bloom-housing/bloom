@@ -108,6 +108,7 @@ resource "aws_ecs_service" "bloom_api" {
   launch_type                   = "FARGATE"
   scheduling_strategy           = "REPLICA"
   availability_zone_rebalancing = "ENABLED"
+  desired_count                 = var.service_task_autoscaling_config.api_service_min_tasks
 
   lifecycle {
     ignore_changes = [desired_count] # tells terraform to ignore changes to desired_count so it does not fight with the auto scaler
