@@ -71,6 +71,14 @@ module "s3" {
   is_prod     = local.is_prod
 }
 
+module "ses" {
+  source = "./ses"
+
+  aws_region     = var.aws_region
+  ses_identities = var.ses_identities
+
+}
+
 module "secretsmanager" {
   source = "./secretsmanager"
 
