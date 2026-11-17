@@ -2946,6 +2946,41 @@ describe('Testing application service', () => {
       expect(prisma.applicationSnapshot.create).toHaveBeenCalled();
     });
 
+    it('should retry the update transaction once after a serialization failure', async () => {
+      prisma.applications.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        listingId: randomUUID(),
+      });
+      prisma.applications.update = jest
+        .fn()
+        .mockRejectedValueOnce({ code: 'P2034' })
+        .mockResolvedValue({ id: randomUUID(), listingId: randomUUID() });
+      prisma.applicationSnapshot.create = jest.fn().mockResolvedValue({});
+      prisma.householdMember.deleteMany = jest.fn().mockResolvedValue(null);
+      prisma.listings.findUnique = jest.fn().mockResolvedValue({
+        id: randomUUID(),
+        jurisdictions: { id: randomUUID() },
+      });
+      prisma.listings.update = jest.fn().mockResolvedValue({});
+      prisma.$transaction = jest
+        .fn()
+        .mockImplementation((callBack) => callBack(prisma));
+
+      await service.update(
+        {
+          ...mockCreateApplicationData(
+            addressFactory() as AddressCreate,
+            new Date(),
+          ),
+          id: randomUUID(),
+          applicationSelections: [],
+        },
+        { id: 'requestingUser id', userRoles: { isAdmin: true } } as User,
+      );
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(2);
+    });
+
     it('should add new applicationSelection to an application with MSQV2 enabled', async () => {
       const applicationId = randomUUID();
       const multiselectQuestionId = randomUUID();
