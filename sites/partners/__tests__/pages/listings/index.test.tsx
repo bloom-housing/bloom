@@ -131,7 +131,7 @@ describe("listings", () => {
 
     const queryClient = new QueryClient()
 
-    const { findByText, queryByText } = render(
+    const { queryByText } = render(
       <QueryClientProvider client={queryClient}>
         <ListingsList />
       </QueryClientProvider>

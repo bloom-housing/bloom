@@ -763,6 +763,7 @@
   "faq.linkText": "Basahin ang mga madalas itanong",
   "faq.stillHaveQuestions": "May mga tanong pa rin?",
   "faq.stillHaveQuestionsContent": "Kung hindi mo mahanap ang sagot na iyong hinahanap, mangyaring makipag-ugnayan sa aming support team sa <a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a> o tingnan ang aming pahina ng Mapagkukunan.",
+  "faq.tableOfContents.header": "Sa pahinang ito",
   "faq.viewResourcePage": "Tingnan ang pahina ng Mga Mapagkukunan",
   "faq.whatHappensNext": "Ano ang susunod na mangyayari?",
   "finder.accessibility.question": "Kailangan mo ba o sinuman sa iyong sambahayan ang alinman sa mga sumusunod na feature ng accessibility?",

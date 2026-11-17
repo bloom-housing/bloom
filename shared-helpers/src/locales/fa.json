@@ -760,6 +760,7 @@
   "faq.linkText": "سوالات متداول را بخوانید",
   "faq.stillHaveQuestions": "هنوز سوالی دارید؟",
   "faq.stillHaveQuestionsContent": "اگر نتوانستید پاسخ مورد نظر خود را پیدا کنید، لطفاً با تیم پشتیبانی ما از طریق <a className='lined' href='mailto:%{contactEmail}'>%{contactEmail}</a> تماس بگیرید یا به صفحه منابع ما مراجعه کنید.",
+  "faq.tableOfContents.header": "در این صفحه",
   "faq.viewResourcePage": "مشاهده صفحه منابع",
   "faq.whatHappensNext": "بعدش چی میشه؟",
   "finder.accessibility.question": "آیا شما یا هر یک از اعضای خانواده‌تان به یکی از ویژگی‌های دسترسی زیر نیاز دارید؟",
