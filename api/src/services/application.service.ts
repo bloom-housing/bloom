@@ -479,12 +479,7 @@ export class ApplicationService {
         name: FeatureFlagEnum.enablePublicLotteryExpiration,
       },
     });
-    if (!rawJurisdictionIds) {
-      throw new NotFoundException(
-        `Feature flag ${FeatureFlagEnum.enablePublicLotteryExpiration} was requested but not found`,
-      );
-    }
-    const expirationJurisdictionIds = rawJurisdictionIds.jurisdictions;
+    const expirationJurisdictionIds = rawJurisdictionIds?.jurisdictions;
 
     const buildCountWhereClause = (
       filterType: ApplicationsFilterEnum,
