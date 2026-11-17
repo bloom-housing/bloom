@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "compute" {
       "application-autoscaling:ListTagsForResource",
       "application-autoscaling:DeregisterScalableTarget",
       "application-autoscaling:PutScalingPolicy",
+      "application-autoscaling:DeleteScalingPolicy",
       "ecs:CreateCluster",
       "ecs:CreateService",
       "ecs:DeleteCluster",
