@@ -63,8 +63,7 @@ output "certificate_details" {
 
 # Deploy bloom into the account.
 module "bloom_deployment" {
-  # source = "git::https://github.com/bloom-housing/bloom.git//infra/tofu_importable_modules/bloom_deployment?ref=211a8c9a5b02ea2c7921ea693e402bc313bf4931"
-  source = "../../tofu_importable_modules/bloom_deployment"
+  source = "git::https://github.com/bloom-housing/bloom.git//infra/tofu_importable_modules/bloom_deployment?ref=3de29045580ba129a7cee4030085e64edaa539de"
 
   aws_profile        = local.sso_profile_id
   aws_account_number = local.bloom_aws_account_number
