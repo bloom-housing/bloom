@@ -210,7 +210,7 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         )
       }
     } else {
-      if (!listing.lotteryLastRunAt && enablePartnerLotteryRun) {
+      if (!listing.lotteryLastRunAt && enablePartnerLotteryRun && profile?.userRoles?.isPartner) {
         return (
           <CardSection>
             <Icon size="xl">

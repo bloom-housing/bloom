@@ -925,7 +925,7 @@ describe('Testing lottery service', () => {
       });
     });
 
-    it('should generate lottery when a jurisdictional admin runs it even without enablePartnerLotteryRun flag on', async () => {
+    it('should error if a jurisdictional admin runs it even when enablePartnerLotteryRun is on', async () => {
       const listingId = randomUUID();
       const requestingUser = {
         firstName: 'requesting fName',
@@ -940,7 +940,9 @@ describe('Testing lottery service', () => {
         name: 'example name',
         jurisdictionId: 'jurisId',
         jurisdictions: {
-          featureFlags: [],
+          featureFlags: [
+            { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+          ],
         },
         lotteryLastRunAt: null,
         lotteryStatus: null,
@@ -948,48 +950,27 @@ describe('Testing lottery service', () => {
         reviewOrderType: ReviewOrderTypeEnum.lottery,
         lotteryOptIn: true,
       });
-      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
-        featureFlags: [],
-      });
-      prisma.applications.findMany = jest
-        .fn()
-        .mockResolvedValue(mockApplicationSet(5, new Date()));
-      prisma.multiselectQuestions.findMany = jest.fn().mockResolvedValue([]);
+      prisma.applications.findMany = jest.fn();
       prisma.applicationLotteryPositions.deleteMany = jest.fn();
-      prisma.applicationLotteryPositions.createMany = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
+      prisma.applicationLotteryPositions.createMany = jest.fn();
       prisma.applicationLotteryTotal.deleteMany = jest.fn();
-      prisma.applicationLotteryTotal.create = jest
-        .fn()
-        .mockResolvedValue({ id: randomUUID() });
-      prisma.listings.update = jest.fn().mockResolvedValue({
-        id: listingId,
-        lotteryLastRunAt: new Date(),
-        lotteryStatus: LotteryStatusEnum.ran,
-      });
-      prisma.userAccounts.findMany = jest.fn().mockResolvedValue([]);
-      prisma.listingSnapshot.create = jest
-        .fn()
-        .mockResolvedValue({ id: 'example snapshot id' });
+      prisma.applicationLotteryTotal.create = jest.fn();
+      prisma.listings.update = jest.fn();
 
-      const result = await service.lotteryGenerate(
-        { user: requestingUser } as unknown as ExpressRequest,
-        {} as unknown as Response,
-        { id: listingId },
-      );
+      await expect(
+        async () =>
+          await service.lotteryGenerate(
+            { user: requestingUser } as unknown as ExpressRequest,
+            {} as unknown as Response,
+            { id: listingId },
+          ),
+      ).rejects.toThrowError(ForbiddenException);
 
-      expect(result).toEqual({ success: true });
-      expect(prisma.listings.update).toHaveBeenCalledWith({
-        data: {
-          lotteryLastRunAt: expect.anything(),
-          lotteryLastPublishedAt: null,
-          lotteryStatus: LotteryStatusEnum.ran,
-        },
-        where: {
-          id: listingId,
-        },
-      });
+      expect(prisma.applications.findMany).not.toHaveBeenCalled();
+      expect(
+        prisma.applicationLotteryPositions.createMany,
+      ).not.toHaveBeenCalled();
+      expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
     it('should error if a partner is not assigned to the listing even when enablePartnerLotteryRun is on', async () => {
@@ -1441,7 +1422,7 @@ describe('Testing lottery service', () => {
       });
     });
 
-    it('should update status to ran when a jurisdictional admin requests it even without enablePartnerLotteryRun on', async () => {
+    it('should not update status to ran when a jurisdictional admin requests it even when enablePartnerLotteryRun is on', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
@@ -1449,35 +1430,25 @@ describe('Testing lottery service', () => {
         lotteryStatus: null,
         jurisdictionId: 'jurisId',
       });
-      prisma.listings.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.ran,
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
       });
-      prisma.listingSnapshot.create = jest
-        .fn()
-        .mockResolvedValue({ id: 'example snapshot id' });
+      prisma.listings.update = jest.fn();
 
-      const result = await service.lotteryStatus(
-        {
-          id: randomUUID(),
-          lotteryStatus: LotteryStatusEnum.ran,
-        } as ListingLotteryStatus,
-        jurisdictionAdminUser,
-      );
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              id: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.ran,
+            } as ListingLotteryStatus,
+            jurisdictionAdminUser,
+          ),
+      ).rejects.toThrowError(ForbiddenException);
 
-      expect(result).toEqual({ success: true });
-      expect(prisma.listings.update).toHaveBeenCalledWith({
-        data: {
-          lotteryLastRunAt: expect.anything(),
-          lotteryLastPublishedAt: null,
-          lotteryStatus: LotteryStatusEnum.ran,
-        },
-        where: {
-          id: expect.anything(),
-        },
-      });
+      expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
     it('should not update status to ran when a partner is not assigned to the listing even if enablePartnerLotteryRun is on', async () => {
@@ -1714,7 +1685,7 @@ describe('Testing lottery service', () => {
       });
     });
 
-    it('should update status to releasedToPartners when a jurisdictional admin requests it even without enablePartnerLotteryRun on', async () => {
+    it('should not update status to releasedToPartners when a jurisdictional admin requests it even when enablePartnerLotteryRun is on', async () => {
       prisma.listings.findUnique = jest.fn().mockResolvedValue({
         id: 'example id',
         name: 'example name',
@@ -1722,41 +1693,25 @@ describe('Testing lottery service', () => {
         lotteryStatus: LotteryStatusEnum.ran,
         jurisdictionId: 'jurisId',
       });
-      prisma.listings.update = jest.fn().mockResolvedValue({
-        id: 'example id',
-        name: 'example name',
-        status: ListingsStatusEnum.closed,
-        lotteryStatus: LotteryStatusEnum.releasedToPartners,
-        jurisdictionId: 'jurisId',
+      prisma.jurisdictions.findUnique = jest.fn().mockResolvedValue({
+        featureFlags: [
+          { name: FeatureFlagEnum.enablePartnerLotteryRun, active: true },
+        ],
       });
+      prisma.listings.update = jest.fn();
 
-      jest.spyOn(listingService, 'getUserEmailInfo').mockResolvedValueOnce({
-        emails: ['admin@email.com', 'partner@email.com'],
-      });
-      jest.spyOn(service, 'getPublicUserEmailInfo').mockResolvedValueOnce({
-        en: ['applicant@email.com'],
-      });
-      prisma.listingSnapshot.create = jest
-        .fn()
-        .mockResolvedValue({ id: 'example snapshot id' });
+      await expect(
+        async () =>
+          await service.lotteryStatus(
+            {
+              id: randomUUID(),
+              lotteryStatus: LotteryStatusEnum.releasedToPartners,
+            } as ListingLotteryStatus,
+            jurisdictionAdminUser,
+          ),
+      ).rejects.toThrowError(ForbiddenException);
 
-      const result = await service.lotteryStatus(
-        {
-          id: randomUUID(),
-          lotteryStatus: LotteryStatusEnum.releasedToPartners,
-        } as ListingLotteryStatus,
-        jurisdictionAdminUser,
-      );
-
-      expect(result).toEqual({ success: true });
-      expect(prisma.listings.update).toHaveBeenCalledWith({
-        data: {
-          lotteryStatus: LotteryStatusEnum.releasedToPartners,
-        },
-        where: {
-          id: expect.anything(),
-        },
-      });
+      expect(prisma.listings.update).not.toHaveBeenCalled();
     });
 
     it('should not update status to releasedToPartners if user is not an admin', async () => {

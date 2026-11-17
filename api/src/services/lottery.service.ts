@@ -125,7 +125,6 @@ export class LotteryService {
     if (
       !(
         user?.userRoles?.isAdmin ||
-        user?.userRoles?.isJurisdictionalAdmin ||
         (enablePartnerLotteryRun &&
           user?.userRoles?.isPartner &&
           isUserAssignedToListing)
@@ -569,7 +568,6 @@ export class LotteryService {
         if (
           !(
             isAdmin ||
-            isJurisdictionalAdmin ||
             (enablePartnerLotteryRun && isUserAssignedToListing && isPartner)
           )
         ) {
@@ -586,7 +584,6 @@ export class LotteryService {
         if (
           !(
             isAdmin ||
-            isJurisdictionalAdmin ||
             (enablePartnerLotteryRun && isUserAssignedToListing && isPartner)
           )
         ) {
