@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "bloom_site_public" {
       secrets = [
         {
           name      = "MAPBOX_TOKEN",
-          valueFrom = aws_secretsmanager_secret.mapbox_api_key.arn
+          valueFrom = module.secretsmanager.api_key_secret_arns["mapbox_api_key"]
         }
       ]
       portMappings = [

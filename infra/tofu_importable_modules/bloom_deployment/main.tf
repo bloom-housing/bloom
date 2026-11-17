@@ -44,8 +44,8 @@ module "ecs_cluster" {
 
 
   secretsmanager_api_jwt_signing_key_arn      = module.secretsmanager.api_key_secret_arns["api_jwt_signing_key"]
-  secretsmanager_mapbox_api_key_arn           = aws_secretsmanager_secret.mapbox_api_key.arn
-  secretsmanager_google_translate_api_key_arn = aws_secretsmanager_secret.google_translate_api_key.arn
+  secretsmanager_mapbox_api_key_arn           = module.secretsmanager.api_key_secret_arns["mapbox_api_key"]
+  secretsmanager_google_translate_api_key_arn = module.secretsmanager.api_key_secret_arns["google_translate_api_key"]
 }
 
 module "rds" {

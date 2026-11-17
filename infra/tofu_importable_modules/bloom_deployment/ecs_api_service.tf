@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "bloom_api" {
         },
         {
           name      = "GOOGLE_API_KEY",
-          valueFrom = aws_secretsmanager_secret.google_translate_api_key.arn
+          valueFrom = module.secretsmanager.api_key_secret_arns["google_translate_api_key"]
         }
       ]
       portMappings = [
