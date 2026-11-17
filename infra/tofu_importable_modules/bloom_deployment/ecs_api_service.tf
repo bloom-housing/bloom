@@ -1,0 +1,208 @@
+locals {
+  api_default_env_vars = {
+    PORT                       = "3100"
+    NODE_ENV                   = "production"
+    DB_HOST                    = aws_db_instance.bloom.address
+    DB_PORT                    = "5432"
+    DB_USER                    = "bloom_api"
+    DB_DATABASE                = "bloom_prisma"
+    DB_USE_RDS_IAM_AUTH        = "1"
+    USE_AWS_SES                = "1"
+    GOOGLE_API_ID              = var.google_translate_settings == null ? "" : var.google_translate_settings.project_id
+    GOOGLE_API_EMAIL           = var.google_translate_settings == null ? "" : var.google_translate_settings.iam_user
+    S3_REGION                  = var.aws_region
+    S3_PRIVATE_BUCKET          = aws_s3_bucket.private.id
+    S3_PUBLIC_BUCKET           = aws_s3_bucket.public.id
+    SMS_PROVIDER               = var.bloom_api_sms_config == null ? "" : "aws"
+    AWS_SMS_REGION             = var.bloom_api_sms_config == null ? "" : var.aws_region
+    AWS_SMS_ORIGINATION_NUMBER = var.bloom_api_sms_config == null ? "" : aws_pinpointsmsvoicev2_phone_number.api_sms[0].phone_number
+  }
+}
+
+resource "aws_ecs_task_definition" "bloom_api" {
+  region                   = var.aws_region
+  family                   = "bloom-api"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  execution_role_arn = aws_iam_role.bloom_ecs["api"].arn
+  task_role_arn      = aws_iam_role.bloom_container["api"].arn
+
+  cpu    = var.bloom_api_resource_limits.vcpu
+  memory = var.bloom_api_resource_limits.memory_mib
+
+  container_definitions = jsonencode(concat([
+    {
+      Name        = "bloom-api"
+      essential   = true
+      image       = var.bloom_api_image
+      environment = [for k, v in merge(local.api_default_env_vars, local.otel_env_vars, var.bloom_api_env_vars) : { name = k, value = v }]
+      entryPoint  = ["bash"]
+      # TODO: Once https://github.com/prisma/prisma/issues/7869 is implemented, get rid of the bash
+      # hack for the prisma migrate command.
+      command = [
+        "-c",
+        "export DATABASE_URL=\"postgres://$${DB_USER}:$(node -e \"const S=require('@aws-sdk/rds-signer');(new S.Signer({hostname:'$${DB_HOST}',port:'$${DB_PORT}',username:'$${DB_USER}'})).getAuthToken().then(t=>console.log(encodeURIComponent(t)));\")@$${DB_HOST}:$${DB_PORT}/$${DB_DATABASE}\" && yarn db:migration:run && yarn start:prod",
+      ]
+      secrets = [
+        {
+          name      = "APP_SECRET",
+          valueFrom = aws_secretsmanager_secret.api_jwt_signing_key.arn
+        },
+        {
+          name      = "GOOGLE_API_KEY",
+          valueFrom = aws_secretsmanager_secret.google_translate_api_key.arn
+        }
+      ]
+      portMappings = [
+        {
+          name          = "http"
+          appProtocol   = "http"
+          containerPort = 3100
+        }
+      ]
+      restartPolicy = {
+        enabled = false
+      }
+      healthCheck = {
+        command = [
+          "curl",
+          "--fail",
+          "http://127.0.0.1:3100/"
+        ]
+        interval    = 5 # seconds
+        timeout     = 2 # seconds
+        retries     = 10
+        startPeriod = 10 # seconds
+      }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-region"        = var.aws_region
+          "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+          "awslogs-stream-prefix" = "bloom-api"
+        }
+      }
+    }
+    ],
+    local.otel_sidecar_container
+  ))
+}
+resource "aws_ecs_service" "bloom_api" {
+  depends_on = [
+    aws_db_instance.bloom,
+    aws_vpc_endpoint.aws_services["secretsmanager"],
+    aws_route_table_association.private_subnet,
+    null_resource.bloom_dbinit_run,
+  ]
+  wait_for_steady_state         = true # if tofu waits for the triggered deployment to complete.
+  region                        = var.aws_region
+  cluster                       = aws_ecs_cluster.bloom.arn
+  name                          = "bloom-api"
+  force_delete                  = true # allow deletion of the service without scaling down tasks to 0 first.
+  task_definition               = aws_ecs_task_definition.bloom_api.arn
+  launch_type                   = "FARGATE"
+  scheduling_strategy           = "REPLICA"
+  availability_zone_rebalancing = "ENABLED"
+  desired_count                 = var.service_task_autoscaling_config.api_service_min_tasks
+
+  lifecycle {
+    ignore_changes = [desired_count] # tells terraform to ignore changes to desired_count so it does not fight with the auto scaler
+  }
+
+  deployment_configuration {
+    strategy = "ROLLING"
+  }
+
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  network_configuration {
+    security_groups  = [aws_security_group.bloom["api"].id]
+    subnets          = [for s in aws_subnet.private : s.id]
+    assign_public_ip = false
+  }
+
+  service_connect_configuration {
+    enabled   = true
+    namespace = aws_service_discovery_http_namespace.bloom.arn
+    service {
+      port_name = "http"
+      client_alias {
+        dns_name = "bloom-api"
+        port     = 3100
+      }
+      discovery_name = "bloom-api"
+      timeout {
+        idle_timeout_seconds        = 0 # disable idleTimeout
+        per_request_timeout_seconds = 60
+      }
+    }
+
+    log_configuration {
+      log_driver = "awslogs"
+      options = {
+        "awslogs-region"        = var.aws_region
+        "awslogs-group"         = aws_cloudwatch_log_group.task_logs["bloom-api"].name
+        "awslogs-stream-prefix" = "service-connect-proxy"
+      }
+    }
+  }
+}
+
+resource "aws_appautoscaling_target" "bloom_api_autoscaling_target" {
+  max_capacity       = var.service_task_autoscaling_config.api_service_max_tasks
+  min_capacity       = var.service_task_autoscaling_config.api_service_min_tasks
+  resource_id        = "service/${aws_ecs_cluster.bloom.name}/${aws_ecs_service.bloom_api.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "bloom_api_appautoscaling_policy_request_cpu" {
+  name               = "${aws_ecs_service.bloom_api.name}-cpu-request-scaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.bloom_api_autoscaling_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.bloom_api_autoscaling_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.bloom_api_autoscaling_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    target_value = var.service_task_autoscaling_config.cpu_target
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+
+    scale_in_cooldown  = 300 # Wait 5 minutes before scaling in
+    scale_out_cooldown = 60  # Wait 1 minute before scaling out
+  }
+}
+
+# Scale based on memory utilization
+resource "aws_appautoscaling_policy" "mbloom_api_appautoscaling_policy_request_memory" {
+  name               = "${aws_ecs_service.bloom_api.name}-memory-request-scaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.bloom_api_autoscaling_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.bloom_api_autoscaling_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.bloom_api_autoscaling_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    target_value = var.service_task_autoscaling_config.memory_target
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+    }
+
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 60
+  }
+}
