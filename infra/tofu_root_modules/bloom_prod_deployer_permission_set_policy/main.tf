@@ -12,6 +12,10 @@ locals {
   bloom_deployment = "bloom-prod"
   sso_profile_id   = "${local.bloom_deployment}-iam-admin"
 
+  # Profile with IAM permissions in the bloom deployment account, used to create customer managed policies
+  # the permission set references.
+  deployer_sso_profile_id = "${local.bloom_deployment}-deployer-iam-admin"
+
   tofu_state_bucket_region = "us-east-1"
   tofu_state_bucket_name   = "bloom-core-tofu-state-files"
   tofu_state_key_prefix    = "${local.bloom_deployment}-deployer-permissionset-policy"
@@ -31,7 +35,18 @@ provider "aws" {
   region  = local.iam_identity_center_region
 }
 
+provider "aws" {
+  alias   = "deployment_account"
+  profile = local.deployer_sso_profile_id
+  region  = local.iam_identity_center_region
+}
+
 module "deployer_permission_set" {
+  providers = {
+    aws                    = aws
+    aws.deployment_account = aws.deployment_account
+  }
+
   source = "git::https://github.com/bloom-housing/bloom.git//infra/tofu_importable_modules/bloom_deployer_permission_set_policy?ref=main"
 
   iam_identity_center_instance_arn = local.iam_identity_center_instance_arn
