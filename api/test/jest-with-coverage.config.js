@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   testRegex: 'spec.ts$',
   workerIdleMemoryLimit: '500M',
+  setupFilesAfterEnv: ['jest-extended/all', './test/jest.setup.js'],
   transform: {
     '^.+\\.(t|j)s$': [
       'ts-jest',

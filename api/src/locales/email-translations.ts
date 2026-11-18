@@ -2466,6 +2466,7 @@ export const translations = (
           logoUrl:
             'https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/dev/bloom_logo_generic_zgb4sg.jpg',
           logoTitle: 'Bloom Housing Portal',
+          logoHeight: '137',
         },
         invite: {
           hello: 'Welcome to the Partners Portal',

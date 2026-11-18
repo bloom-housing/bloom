@@ -3,9 +3,19 @@ sso_session = sso
 sso_role_name = bloom-dev-deployer
 sso_account_id = UPDATE
 
+[profile bloom-dev-deployer-iam-admin]
+sso_session = sso
+sso_role_name = bloom-dev-iam-admin
+sso_account_id = UPDATE
+
 [profile bloom-prod-deployer]
 sso_session = sso
 sso_role_name = bloom-prod-deployer
+sso_account_id = UPDATE
+
+[profile bloom-prod-deployer-iam-admin]
+sso_session = sso
+sso_role_name = bloom-prod-iam-admin
 sso_account_id = UPDATE
 
 [profile bloom-dev-iam-admin]

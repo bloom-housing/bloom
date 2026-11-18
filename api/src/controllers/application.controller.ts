@@ -43,6 +43,7 @@ import {
 } from '../dtos/applications/application-multiselect-question-option.dto';
 import { ValidationsGroupsEnum } from '../enums/shared/validation-groups-enum';
 import { OptionalAuthGuard } from '../guards/optional.guard';
+import { StrictOptionalAuthGuard } from '../guards/strict-optional.guard';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
 import { ActivityLogInterceptor } from '../interceptors/activity-log.interceptor';
@@ -261,7 +262,7 @@ export class ApplicationController {
       groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
     }),
   )
-  @UseGuards(OptionalAuthGuard)
+  @UseGuards(StrictOptionalAuthGuard)
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
   async submit(
@@ -284,6 +285,7 @@ export class ApplicationController {
       groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
     }),
   )
+  @UseGuards(ApiKeyGuard, StrictOptionalAuthGuard)
   @PermissionAction(permissionActions.submit)
   @UseInterceptors(ActivityLogInterceptor)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
