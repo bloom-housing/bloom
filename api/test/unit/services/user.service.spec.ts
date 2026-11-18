@@ -249,34 +249,38 @@ describe('Testing user service', () => {
             {
               OR: [
                 {
-                  OR: [
+                  AND: [
                     {
-                      firstName: {
-                        contains: 'search',
-                        mode: 'insensitive',
-                      },
+                      OR: [
+                        {
+                          firstName: {
+                            contains: 'search',
+                            mode: 'insensitive',
+                          },
+                        },
+                        {
+                          lastName: {
+                            contains: 'search',
+                            mode: 'insensitive',
+                          },
+                        },
+                      ],
                     },
                     {
-                      lastName: {
-                        contains: 'search',
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                },
-                {
-                  OR: [
-                    {
-                      firstName: {
-                        contains: 'value',
-                        mode: 'insensitive',
-                      },
-                    },
-                    {
-                      lastName: {
-                        contains: 'value',
-                        mode: 'insensitive',
-                      },
+                      OR: [
+                        {
+                          firstName: {
+                            contains: 'value',
+                            mode: 'insensitive',
+                          },
+                        },
+                        {
+                          lastName: {
+                            contains: 'value',
+                            mode: 'insensitive',
+                          },
+                        },
+                      ],
                     },
                   ],
                 },
@@ -303,7 +307,7 @@ describe('Testing user service', () => {
       });
     });
 
-    it("shouldn't return users from list() when single characters are used", async () => {
+    it('should match single characters only at the start of names in list()', async () => {
       const date = new Date();
       const mockedValue = mockUserSet(0, date);
       prisma.userAccounts.findMany = jest.fn().mockResolvedValue(mockedValue);
@@ -355,6 +359,42 @@ describe('Testing user service', () => {
           AND: [
             {
               OR: [
+                {
+                  AND: [
+                    {
+                      OR: [
+                        {
+                          firstName: {
+                            startsWith: 'a',
+                            mode: 'insensitive',
+                          },
+                        },
+                        {
+                          lastName: {
+                            startsWith: 'a',
+                            mode: 'insensitive',
+                          },
+                        },
+                      ],
+                    },
+                    {
+                      OR: [
+                        {
+                          firstName: {
+                            startsWith: 'b',
+                            mode: 'insensitive',
+                          },
+                        },
+                        {
+                          lastName: {
+                            startsWith: 'b',
+                            mode: 'insensitive',
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                },
                 {
                   email: {
                     contains: 'a b',
