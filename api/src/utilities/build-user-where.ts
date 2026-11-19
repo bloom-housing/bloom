@@ -12,33 +12,28 @@ export const buildWhereClause = (
   const filters: Prisma.UserAccountsWhereInput[] = [];
 
   if (params.search) {
-    const namesClause = [];
-
     /*
-        We'll add a first/last name OR pair for each word, in order to support searching for
-        first name + last name in the query
+        Every word must match either the first or last name,
+        "first last" (in any order) narrows down to that user.
+        Single characters (e.g. an initial in "John D") only match the start of a name,
       */
-    params.search
-      .split(' ')
-      .filter((str) => str.length > 1)
-      .forEach((word) => {
-        namesClause.push({
-          OR: [
-            {
-              firstName: {
-                contains: word,
-                mode: Prisma.QueryMode.insensitive,
-              },
-            },
-            {
-              lastName: {
-                contains: word,
-                mode: Prisma.QueryMode.insensitive,
-              },
-            },
-          ],
-        });
-      });
+    const words = params.search.trim().split(/\s+/).filter(Boolean);
+
+    const namesClause: Prisma.UserAccountsWhereInput[] = words.length
+      ? [
+          {
+            AND: words.map((word) => {
+              const match: Prisma.StringFilter =
+                word.length > 1
+                  ? { contains: word, mode: Prisma.QueryMode.insensitive }
+                  : { startsWith: word, mode: Prisma.QueryMode.insensitive };
+              return {
+                OR: [{ firstName: match }, { lastName: match }],
+              };
+            }),
+          },
+        ]
+      : [];
 
     filters.push({
       OR: [

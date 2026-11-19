@@ -171,6 +171,61 @@ describe('User Controller Tests', () => {
       expect(ids).toContain(userB.id);
     });
 
+    it('should narrow users from list() when searching by first and last name', async () => {
+      const uniquePrefix = `test${randomUUID().replace(/-/g, '').slice(0, 8)}`;
+      const matchingUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          firstName: `${uniquePrefix}Jane`,
+          lastName: `Doe${uniquePrefix}`,
+        }),
+      });
+      const sameFirstName = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          firstName: `${uniquePrefix}Jane`,
+          lastName: `Smith${uniquePrefix}`,
+        }),
+      });
+      const sameLastName = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: { isPartner: true },
+          firstName: `${uniquePrefix}John`,
+          lastName: `Doe${uniquePrefix}`,
+        }),
+      });
+
+      const search = async (term: string) => {
+        const queryParams: UserQueryParams = {
+          limit: 'all',
+          filter: [{ isPortalUser: true }],
+          search: term,
+        };
+        const res = await request(app.getHttpServer())
+          .get(`/user/list?${stringify(queryParams as any)}`)
+          .set({ passkey: process.env.API_PASS_KEY || '' })
+          .set('Cookie', cookies)
+          .expect(200);
+        return res.body.items.map((item) => item.id);
+      };
+
+      const fullName = await search(`${uniquePrefix}Jane Doe${uniquePrefix}`);
+      expect(fullName).toContain(matchingUser.id);
+      expect(fullName).not.toContain(sameFirstName.id);
+      expect(fullName).not.toContain(sameLastName.id);
+
+      const reversed = await search(`Doe${uniquePrefix}  ${uniquePrefix}Jane`);
+      expect(reversed).toEqual([matchingUser.id]);
+
+      const lastNameInitial = await search(`${uniquePrefix}Jane d`);
+      expect(lastNameInitial).toEqual([matchingUser.id]);
+
+      const firstNameOnly = await search(`${uniquePrefix}Jane`);
+      expect(firstNameOnly).toContain(matchingUser.id);
+      expect(firstNameOnly).toContain(sameFirstName.id);
+      expect(firstNameOnly).not.toContain(sameLastName.id);
+    });
+
     it('should get advocate users from list() when filter params are sent', async () => {
       await prisma.userAccounts.create({
         data: await userFactory({}),
