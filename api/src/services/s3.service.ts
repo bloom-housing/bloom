@@ -74,6 +74,28 @@ export class S3Service {
     }
   }
 
+  async uploadToPublic(
+    key: string,
+    body: Buffer,
+    contentType: string,
+  ): Promise<void> {
+    try {
+      const upload = new Upload({
+        client: this.s3Client,
+        params: {
+          Bucket: this.publicBucket,
+          Key: key,
+          Body: body,
+          ContentType: contentType,
+        },
+      });
+
+      await upload.done();
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
+  }
+
   async urlForPrivate(key: string): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.privateBucket,

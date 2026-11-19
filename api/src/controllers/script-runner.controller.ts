@@ -20,6 +20,7 @@ import { AmiChartUpdateImportDTO } from '../dtos/script-runner/ami-chart-update-
 import { CommunityTypeDTO } from '../dtos/script-runner/community-type.dto';
 import { PaginationDTO } from '../dtos/script-runner/pagination.dto';
 import { TranslationOverrideMigrationDTO } from '../dtos/script-runner/translation-override-migration.dto';
+import { JurisdictionBrandingMigrationDTO } from '../dtos/script-runner/jurisdiction-branding-migration.dto';
 import { ApiKeyGuard } from '../guards/api-key.guard';
 import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionTypeDecorator } from '../decorators/permission-type.decorator';
@@ -149,6 +150,25 @@ export class ScriptRunnerController {
     @Request() req: ExpressRequest,
   ): Promise<SuccessDTO> {
     return await this.scriptRunnerService.migrateTranslationOverridesToKeyRows(
+      req,
+      body,
+    );
+  }
+
+  @Put('migrateJurisdictionBranding')
+  @UseGuards(PermissionGuard)
+  @PermissionTypeDecorator('jurisdiction')
+  @ApiOperation({
+    summary:
+      "A script that moves a fork's static branding into its jurisdiction row",
+    operationId: 'migrateJurisdictionBranding',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async migrateJurisdictionBranding(
+    @Body() body: JurisdictionBrandingMigrationDTO,
+    @Request() req: ExpressRequest,
+  ): Promise<SuccessDTO> {
+    return await this.scriptRunnerService.migrateJurisdictionBranding(
       req,
       body,
     );
