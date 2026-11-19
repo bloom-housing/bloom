@@ -172,7 +172,7 @@ describe('User Controller Tests', () => {
     });
 
     it('should narrow users from list() when searching by first and last name', async () => {
-      const uniquePrefix = randomUUID().replace(/-/g, '').slice(0, 8);
+      const uniquePrefix = `test${randomUUID().replace(/-/g, '').slice(0, 8)}`;
       const matchingUser = await prisma.userAccounts.create({
         data: await userFactory({
           roles: { isPartner: true },
