@@ -13,30 +13,34 @@ SET visible_spoken_languages = ARRAY ['chineseCantonese','chineseMandarin','engl
   visible_accessibility_priority_types = ARRAY ['mobility','hearing','vision','hearingAndVision','mobilityAndHearing','mobilityAndVision','mobilityHearingAndVision']::"unit_accessibility_priority_type_enum" [],
   updated_at = now();
 
-IF bayarea_jurisdiction_id IS NOT NULL THEN 
+IF bayarea_jurisdiction_id IS NOT NULL THEN
   -- Add San Francisco jurisdiction - this is new functionality separate from the corification migration.
-  INSERT INTO jurisdictions
-  SELECT (
-      jsonb_populate_record(NULL::jurisdictions, sf_jurisdiction)
-    ).*
-  FROM (
-      SELECT (
-          (
-            SELECT to_jsonb(jurisdictions)
-            FROM jurisdictions
-            WHERE id = bayarea_jurisdiction_id
-          ) - 'id' - 'name' - 'created_at' - 'updated_at'
-        ) || jsonb_build_object(
-          'id',
-          uuid_generate_v4(),
-          'name',
-          'San Francisco',
-          'created_at',
-          to_jsonb(now()),
-          'updated_at',
-          to_jsonb(now())
-        ) AS sf_jurisdiction
-    ) t;
+  IF NOT EXISTS (
+    SELECT 1 FROM jurisdictions WHERE name = 'San Francisco'
+  ) THEN
+    INSERT INTO jurisdictions
+    SELECT (
+        jsonb_populate_record(NULL::jurisdictions, sf_jurisdiction)
+      ).*
+    FROM (
+        SELECT (
+            (
+              SELECT to_jsonb(jurisdictions)
+              FROM jurisdictions
+              WHERE id = bayarea_jurisdiction_id
+            ) - 'id' - 'name' - 'created_at' - 'updated_at'
+          ) || jsonb_build_object(
+            'id',
+            uuid_generate_v4(),
+            'name',
+            'San Francisco',
+            'created_at',
+            to_jsonb(now()),
+            'updated_at',
+            to_jsonb(now())
+          ) AS sf_jurisdiction
+      ) t;
+  END IF;
   -- Make all jurisdictions that are not Bay Area a sub-jurisdiction of Bay Area
   INSERT INTO "_SubJurisdictions" ("A", "B")
   SELECT j.id,

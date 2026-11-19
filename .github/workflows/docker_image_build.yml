@@ -1,9 +1,10 @@
 name: Docker Image Build
 
 on:
-  push:
-    branches:
-      - main
+  ## This is the docker build workflow in core but should not be done in doorway
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 permissions:
