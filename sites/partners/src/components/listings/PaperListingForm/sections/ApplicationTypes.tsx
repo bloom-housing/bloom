@@ -75,6 +75,7 @@ export const phoneMask = (incomingNewValue: string): string => {
 type ApplicationTypesProps = {
   disableCommonApplication: boolean
   disableReferralOpportunity: boolean
+  enableAccessibleUnitWaitlistOnly?: boolean
   enableReferralQuestionUnits: boolean
   jurisdiction: string
   listing: FormListing
@@ -85,6 +86,7 @@ type ApplicationTypesProps = {
 const ApplicationTypes = ({
   disableCommonApplication,
   disableReferralOpportunity,
+  enableAccessibleUnitWaitlistOnly,
   enableReferralQuestionUnits,
   jurisdiction,
   listing,
@@ -136,6 +138,15 @@ const ApplicationTypes = ({
   const paperApplicationChoice = watch("paperApplicationChoice")
   const referralOpportunityChoice = watch("referralOpportunityChoice")
   const leasingAgentApplicationChoice = watch("leasingAgentApplicationChoice")
+  const openToAllHousingSeekersChoice = watch("openToAllHousingSeekersChoice")
+
+  const digitalApplicationError =
+    fieldHasError(errors?.digitalApplication) && !digitalApplicationChoice
+  const paperApplicationError = fieldHasError(errors?.paperApplication) && !paperApplicationChoice
+  const referralOpportunityError =
+    fieldHasError(errors?.referralOpportunity) && !referralOpportunityChoice
+  const accessibleUnitWaitlistOnlyError =
+    fieldHasError(errors?.accessibleUnitWaitlistOnly) && !openToAllHousingSeekersChoice
 
   /*
     Set state for methods, drawer, upload progress, and more
@@ -309,9 +320,7 @@ const ApplicationTypes = ({
         {leasingAgentApplicationChoice !== YesNoEnum.yes && (
           <>
             <Grid.Row columns={2}>
-              <Grid.Cell
-                className={fieldHasError(errors?.digitalApplication) ? styles["label-error"] : ""}
-              >
+              <Grid.Cell className={digitalApplicationError ? styles["label-error"] : ""}>
                 <FieldGroup
                   name="digitalApplicationChoice"
                   type="radio"
@@ -321,9 +330,7 @@ const ApplicationTypes = ({
                     requiredFields,
                     t("listings.isDigitalApplication")
                   )}
-                  error={
-                    fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null
-                  }
+                  error={digitalApplicationError}
                   errorMessage={fieldMessage(errors?.digitalApplication)}
                   fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
                   fields={[
@@ -444,9 +451,7 @@ const ApplicationTypes = ({
                 </Grid.Row>
               )}
             <Grid.Row columns={2}>
-              <Grid.Cell
-                className={fieldHasError(errors?.paperApplication) ? styles["label-error"] : ""}
-              >
+              <Grid.Cell className={paperApplicationError ? styles["label-error"] : ""}>
                 <FieldGroup
                   name="paperApplicationChoice"
                   type="radio"
@@ -455,7 +460,7 @@ const ApplicationTypes = ({
                     requiredFields,
                     t("listings.isPaperApplication")
                   )}
-                  error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
+                  error={paperApplicationError}
                   errorMessage={fieldMessage(errors?.paperApplication)}
                   register={register}
                   fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
@@ -553,9 +558,7 @@ const ApplicationTypes = ({
         {!disableReferralOpportunity && (
           <>
             <Grid.Row columns={1}>
-              <Grid.Cell
-                className={fieldHasError(errors?.referralOpportunity) ? styles["label-error"] : ""}
-              >
+              <Grid.Cell className={referralOpportunityError ? styles["label-error"] : ""}>
                 <FieldGroup
                   name="referralOpportunityChoice"
                   type="radio"
@@ -570,9 +573,7 @@ const ApplicationTypes = ({
                         : "listings.isReferralOpportunity"
                     )
                   )}
-                  error={
-                    fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
-                  }
+                  error={referralOpportunityError}
                   errorMessage={fieldMessage(errors?.referralOpportunity)}
                   fields={[
                     {
@@ -662,6 +663,41 @@ const ApplicationTypes = ({
               </Grid.Row>
             )}
           </>
+        )}
+        {enableAccessibleUnitWaitlistOnly && (
+          <Grid.Row columns={1}>
+            <Grid.Cell className={accessibleUnitWaitlistOnlyError ? styles["label-error"] : ""}>
+              <FieldGroup
+                name="openToAllHousingSeekersChoice"
+                type="radio"
+                register={register}
+                groupLabel={getLabel(
+                  "accessibleUnitWaitlistOnly",
+                  requiredFields,
+                  t("listings.openToAllHousingSeekers")
+                )}
+                error={accessibleUnitWaitlistOnlyError}
+                errorMessage={fieldMessage(errors?.accessibleUnitWaitlistOnly)}
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+                fieldLabelClassName={`${styles["label-option"]} seeds-m-bs-2`}
+                fields={[
+                  {
+                    label: t("listings.openToAllHousingSeekersYes"),
+                    value: YesNoEnum.yes,
+                    id: "openToAllHousingSeekersYes",
+                    defaultChecked: listing?.accessibleUnitWaitlistOnly === false,
+                  },
+                  {
+                    label: t("listings.openToAllHousingSeekersNo"),
+                    value: YesNoEnum.no,
+                    id: "openToAllHousingSeekersNo",
+                    defaultChecked: listing?.accessibleUnitWaitlistOnly === true,
+                  },
+                ]}
+              />
+            </Grid.Cell>
+          </Grid.Row>
         )}
       </SectionWithGrid>
 

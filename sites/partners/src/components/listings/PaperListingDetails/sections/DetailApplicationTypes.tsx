@@ -24,6 +24,11 @@ const DetailApplicationTypes = () => {
     listing?.jurisdictions?.id
   )
 
+  const enableAccessibleUnitWaitlistOnly = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enableAccessibleUnitWaitlistOnly,
+    listing?.jurisdictions?.id
+  )
+
   const enableReferralQuestionUnits = doJurisdictionsHaveFeatureFlagOn(
     FeatureFlagEnum.enableReferralQuestionUnits,
     listing?.jurisdictions?.id
@@ -141,6 +146,18 @@ const DetailApplicationTypes = () => {
               </Grid.Cell>
             </>
           )}
+        </Grid.Row>
+      )}
+      {enableAccessibleUnitWaitlistOnly && (
+        <Grid.Row>
+          <Grid.Cell>
+            <FieldValue
+              id="accessibleUnitWaitlistOnly"
+              label={t("listings.applicationType.accessibleUnitWaitlistOnly")}
+            >
+              {getDetailBoolean(listing.accessibleUnitWaitlistOnly)}
+            </FieldValue>
+          </Grid.Cell>
         </Grid.Row>
       )}
     </SectionWithGrid>

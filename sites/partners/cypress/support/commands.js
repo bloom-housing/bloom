@@ -576,6 +576,12 @@ Cypress.Commands.add(
       cy.getByID("commonDigitalApplicationChoiceYes").check()
       cy.getByID("paperApplicationNo").check()
       cy.getByID("referralOpportunityNo").check()
+      // Only rendered (and required) when enableAccessibleUnitWaitlistOnly is on
+      cy.get("body").then(($body) => {
+        if ($body.find("#openToAllHousingSeekersYes").length > 0) {
+          cy.getByID("openToAllHousingSeekersYes").check()
+        }
+      })
       cy.getByID("applicationDueDateField.month").type(listing["date.month"])
       cy.getByID("applicationDueDateField.day").type(listing["date.day"])
       cy.getByID("applicationDueDateField.year").type((new Date().getFullYear() + 1).toString())

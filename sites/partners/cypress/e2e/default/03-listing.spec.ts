@@ -684,6 +684,13 @@ describe("Listing Management Tests", () => {
       fillIfDataExists(cy, "referralSummary", referralMethod.externalReference, "type")
     }
 
+    // Only rendered (and required) when enableAccessibleUnitWaitlistOnly is on
+    cy.get("body").then(($body) => {
+      if ($body.find("#openToAllHousingSeekersYes").length > 0) {
+        cy.getByID("openToAllHousingSeekersYes").check()
+      }
+    })
+
     // ----------
     // Section - Application address
     if (listing.listingsApplicationMailingAddress) {
