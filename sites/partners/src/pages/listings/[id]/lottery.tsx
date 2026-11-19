@@ -68,6 +68,11 @@ const Lottery = (props: { listing: Listing | undefined }) => {
     jurisdictionData?.id
   )
 
+  const enablePartnerLotteryRun = doJurisdictionsHaveFeatureFlagOn(
+    FeatureFlagEnum.enablePartnerLotteryRun,
+    jurisdictionData?.id
+  )
+
   const includeDemographicsPartner =
     profile?.userRoles?.isPartner && jurisdictionData?.enablePartnerDemographics
 
@@ -205,6 +210,33 @@ const Lottery = (props: { listing: Listing | undefined }) => {
         )
       }
     } else {
+      if (!listing.lotteryLastRunAt && enablePartnerLotteryRun && profile?.userRoles?.isPartner) {
+        return (
+          <CardSection>
+            <Icon size="xl">
+              <Ticket />
+            </Icon>
+            <Heading priority={2} size={"2xl"}>
+              {t("listings.lottery.noData")}
+            </Heading>
+            <div className={styles["card-description"]}>
+              {t("listings.lottery.noDataDescription")}
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  setRunModal(true)
+                }}
+                disabled={loading || exportLoading}
+                id={"lottery-run-button"}
+              >
+                {t("listings.lottery.runLottery")}
+              </Button>
+            </div>
+          </CardSection>
+        )
+      }
+
       const lotteryDate = listing.listingEvents.find(
         (event) => event.type === ListingEventsTypeEnum.publicLottery
       )
@@ -226,13 +258,11 @@ const Lottery = (props: { listing: Listing | undefined }) => {
               <p>
                 {profile?.userRoles?.isPartner
                   ? t("listings.lottery.partnerPublishTimestamp", {
-                      adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
                       date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
                       time: dayjs(lotteryReleaseDate).format("h:mm a"),
                       portal: t("listings.lottery.partnerPublishTimestampPortal"),
                     })
                   : t("listings.lottery.shouldNotPublishRolesTimestamp", {
-                      adminName: t("listings.lottery.partnerPublishTimestampAdmin"),
                       date: dayjs(lotteryReleaseDate).format("MM/DD/YYYY"),
                       time: dayjs(lotteryReleaseDate).format("h:mm a"),
                     })}
