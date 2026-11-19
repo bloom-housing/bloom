@@ -38,7 +38,7 @@ const ApplicationTerms = () => {
   const { conductor, application, listing } = useFormConductor("terms")
   const { applicationsService, profile } = useContext(AuthContext)
   const toastyRef = useToastyRef()
-  const [apiError, setApiError] = useState(false)
+  const [apiError, setApiError] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
   let currentPageSection = 4
@@ -108,8 +108,13 @@ const ApplicationTerms = () => {
             return router.push("/applications/review/confirmation")
           })
           .catch((err) => {
+            const status = (err as { response?: { status?: number } })?.response?.status
             setSubmitting(false)
-            setApiError(true)
+            setApiError(
+              status === 401
+                ? t("errors.alert.applicationSubmissionSessionExpired")
+                : t("errors.alert.badRequest")
+            )
             window.scrollTo(0, 0)
             console.error(`Error creating application: ${err}`)
             throw err
@@ -186,8 +191,8 @@ const ApplicationTerms = () => {
           }}
         >
           {apiError && (
-            <AlertBox type="alert" inverted onClose={() => setApiError(false)}>
-              {t("errors.alert.badRequest")}
+            <AlertBox type="alert" inverted onClose={() => setApiError("")}>
+              {apiError}
             </AlertBox>
           )}
 

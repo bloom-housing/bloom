@@ -479,12 +479,7 @@ export class ApplicationService {
         name: FeatureFlagEnum.enablePublicLotteryExpiration,
       },
     });
-    if (!rawJurisdictionIds) {
-      throw new NotFoundException(
-        `Feature flag ${FeatureFlagEnum.enablePublicLotteryExpiration} was requested but not found`,
-      );
-    }
-    const expirationJurisdictionIds = rawJurisdictionIds.jurisdictions;
+    const expirationJurisdictionIds = rawJurisdictionIds?.jurisdictions;
 
     const buildCountWhereClause = (
       filterType: ApplicationsFilterEnum,
@@ -1629,16 +1624,26 @@ export class ApplicationService {
     });
 
     const results = [];
-    await this.prisma.$transaction(
-      async (transaction) =>
-        await new Promise(async (resolve) => {
+    const runTransaction = () =>
+      this.prisma.$transaction(
+        async (transaction) => {
           for (let i = 0; i < transactions.length; i++) {
             results[i] = await transactions[i](transaction);
           }
-          resolve(true);
-        }),
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    );
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      );
+    // Postgres aborts all but one of overlapping serializable transactions (Prisma P2034),
+    // so retry after a short random delay to let the competing updates finish
+    for (let attempt = 1; ; attempt++) {
+      try {
+        await runTransaction();
+        break;
+      } catch (e) {
+        if (e?.code !== 'P2034' || attempt >= 5) throw e;
+        await new Promise((r) => setTimeout(r, Math.random() * 100 * attempt));
+      }
+    }
 
     const rawApplication = results[transactions.length - 1];
     if (!rawApplication) {
