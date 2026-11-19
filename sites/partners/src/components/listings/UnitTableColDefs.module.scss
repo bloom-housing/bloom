@@ -1,6 +1,8 @@
 .unit-table {
   --data-table-header-padding-block: var(--seeds-s3);
+  --data-table-header-padding-inline: var(--seeds-s3);
   --data-table-cell-padding-block: var(--seeds-s3);
+  --data-table-cell-padding-inline: var(--seeds-s3);
   --data-table-header-vertical-align: middle;
   font-size: var(--seeds-font-size-xs);
 }
