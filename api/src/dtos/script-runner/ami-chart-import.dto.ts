@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsDefined, IsString } from 'class-validator';
+import { IsDefined, IsInt, IsOptional, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class AmiChartImportDTO {
@@ -21,4 +21,10 @@ export class AmiChartImportDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   jurisdictionId: string;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsInt({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  ordinal?: number;
 }

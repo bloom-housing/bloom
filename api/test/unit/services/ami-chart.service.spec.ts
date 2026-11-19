@@ -148,6 +148,11 @@ describe('Testing ami chart service', () => {
           },
         ],
       },
+      orderBy: [
+        { ordinal: { sort: 'asc', nulls: 'last' } },
+        { createdAt: 'desc' },
+        { name: 'asc' },
+      ],
     });
   });
 
@@ -299,6 +304,60 @@ describe('Testing ami chart service', () => {
         ],
       },
     });
+  });
+
+  it('testing create() passes ordinal through', async () => {
+    const date = new Date();
+    const jurisdictionData = {
+      id: 'example Id',
+      name: 'example name',
+    };
+    prisma.amiChart.create = jest
+      .fn()
+      .mockResolvedValue(mockAmiChart(1, date, jurisdictionData));
+
+    await service.create({
+      jurisdictions: jurisdictionData,
+      items: [],
+      name: 'ami with ordinal',
+      ordinal: 4,
+    });
+
+    expect(prisma.amiChart.create).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+      },
+      data: {
+        name: 'ami with ordinal',
+        ordinal: 4,
+        jurisdictions: {
+          connect: {
+            id: 'example Id',
+          },
+        },
+        items: [],
+      },
+    });
+  });
+
+  it('testing update() without ordinal does not overwrite it', async () => {
+    const date = new Date();
+    const jurisdictionData = {
+      id: 'example Id',
+      name: 'example name',
+    };
+    const mockedAmi = mockAmiChart(1, date, jurisdictionData);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(mockedAmi);
+    prisma.amiChart.update = jest.fn().mockResolvedValue(mockedAmi);
+
+    await service.update({
+      id: mockedAmi.id,
+      items: [],
+      name: 'renamed ami',
+    });
+
+    const updateArgs = (prisma.amiChart.update as jest.Mock).mock.calls[0][0];
+    expect(updateArgs.data.ordinal).toBeUndefined();
   });
 
   it('testing update() existing record found', async () => {

@@ -26,6 +26,7 @@ export const unitToRow = (unit: Unit & { tempId?: number }): TableDataRow => ({
   number: unit.number || undefined,
   unitType: unit.unitTypes ? [unit.unitTypes.name] : undefined,
   amiChart: unit.amiChart?.name || undefined,
+  amiChartOrdinal: unit.amiChart?.ordinal ?? undefined,
   amiPercentage: unit.amiPercentage || undefined,
   monthlyRent: unit.monthlyRent || undefined,
   sqFeet: unit.sqFeet || undefined,
@@ -134,6 +135,18 @@ const sortNumerically: SortingFn<TableDataRow> = (rowA, rowB, columnId) => {
   const b = parseNumber(rowB.getValue<string>(columnId))
   if (a === undefined || b === undefined) return sortNaturally(rowA, rowB, columnId)
   return a - b
+}
+
+const sortByAmiChartOrder: SortingFn<TableDataRow> = (rowA, rowB, columnId) => {
+  const a = rowA.original.amiChartOrdinal as number | undefined
+  const b = rowB.original.amiChartOrdinal as number | undefined
+
+  if (a !== b) {
+    if (a === undefined) return 1
+    if (b === undefined) return -1
+    return a - b
+  }
+  return sortNaturally(rowA, rowB, columnId)
 }
 
 const sortByAccessibilityText: SortingFn<TableDataRow> = (rowA, rowB, columnId) =>
@@ -245,7 +258,7 @@ export const getUnitColumns = ({
         unitTypeColumn(),
         unitColumn("amiChart", "listings.unit.amiChart", {
           sortable: true,
-          sortingFn: sortNaturally,
+          sortingFn: sortByAmiChartOrder,
         }),
         unitColumn("amiPercentage", "t.ami", {
           sortable: true,

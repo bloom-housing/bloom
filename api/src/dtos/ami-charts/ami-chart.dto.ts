@@ -1,10 +1,16 @@
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
+import {
+  IsDefined,
+  IsInt,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { AmiChartItem } from '../units/ami-chart-item.dto';
 import { IdDTO } from '../shared/id.dto';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class AmiChart extends AbstractDTO {
   @Expose()
@@ -29,4 +35,10 @@ export class AmiChart extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   jurisdictions: IdDTO;
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsInt({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  ordinal?: number;
 }
