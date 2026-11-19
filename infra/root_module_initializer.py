@@ -81,6 +81,23 @@ def main():
         required=True,
         choices=us_regions)
     p.add_argument(
+        "--disable_task_auto_scaling",
+        help="Disable production task autoscaling in ECS",
+        required=False,
+        action="store_false")
+    p.add_argument(
+        "--autoscaling_min_tasks",
+        type=int,
+        help="The minimum number of production tasks to run.",
+        required=False,
+        default=1)
+    p.add_argument(
+        "--autoscaling_max_tasks",
+        type=int,
+        help="The maximum number of production tasks that can be run",
+        required=False,
+        default=2)
+    p.add_argument(
         "--dev_aws_account_number",
         help="The AWS account number that the dev Bloom deployment will be deployed to.",
         required=True)
@@ -107,6 +124,10 @@ def main():
 
     args = p.parse_args()
     validate_inputs(args)
+
+    autoscaling_config = build_autoscaling_config(
+         args.autoscaling_min_tasks,
+         args.autoscaling_max_tasks if args.disable_task_auto_scaling else args.autoscaling_min_tasks)
 
     write_template(
         args.print_to_stdout, pathlib.Path("/bloom/infra/aws_sso_config"), AWS_SSO_TEMPLATE,
@@ -147,7 +168,8 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="dev",
-            HIGH_AVAILABILITY="false",
+            ECS_AUTOSCALING_CONFIG=build_autoscaling_config(1, 1),
+            DB_HIGH_AVAILABILITY="false",
             GRAFANA_EDITOR_GROUP_ID=args.dev_deployer_group_id,
             OBSERVABILITY_COLLECTION_ENABLED=false,
         ))
@@ -181,7 +203,8 @@ def main():
             GITHUB_ORG=args.github_org,
             GIT_COMMIT=args.git_commit_sha,
             BLOOM_ENV_TYPE="production",
-            HIGH_AVAILABILITY="true",
+            ECS_AUTOSCALING_CONFIG=autoscaling_config,
+            DB_HIGH_AVAILABILITY="true",
             GRAFANA_EDITOR_GROUP_ID=args.prod_deployer_group_id,
             OBSERVABILITY_COLLECTION_ENABLED=args.observability_collection_enabled,
         ))
@@ -289,6 +312,27 @@ def validate_inputs(args):
 
     if len(errors) > 0:
         sys.exit("FATAL: Input validation failed:\n  " + "\n  ".join(errors))
+
+def build_autoscaling_config(autoscaling_min_tasks, autoscaling_max_tasks):
+    config = string.Template(
+    """
+  service_task_autoscaling_config = {
+    cpu_target    = 50
+    memory_target = 50
+    
+    api_service_min_tasks = ${MIN_TASKS}
+    api_service_max_tasks = ${MAX_TASKS}
+
+    partners_service_min_tasks = ${MIN_TASKS}
+    partners_service_max_tasks = ${MAX_TASKS}
+
+    public_service_min_tasks = ${MIN_TASKS}
+    public_service_max_tasks = ${MAX_TASKS}
+  }
+    """
+    )
+
+    return config.substitute(MIN_TASKS=autoscaling_min_tasks, MAX_TASKS=autoscaling_max_tasks)
 
 
 def write_template(
@@ -456,7 +500,8 @@ class BloomDeploymentTemplateArgs:
     GITHUB_ORG: str
     GIT_COMMIT: str
     BLOOM_ENV_TYPE: str
-    HIGH_AVAILABILITY: str
+    ECS_AUTOSCALING_CONFIG: str
+    DB_HIGH_AVAILABILITY: str
     GRAFANA_EDITOR_GROUP_ID: str
 
 
@@ -536,7 +581,10 @@ module "bloom_deployment" {
   aws_certificate_arn = aws_acm_certificate.bloom.arn
 
   env_type          = "${BLOOM_ENV_TYPE}"
-  high_availability = ${HIGH_AVAILABILITY}
+
+  ${ECS_AUTOSCALING_CONFIG}
+
+  db_high_availability = ${DB_HIGH_AVAILABILITY}
 
   bloom_dbinit_image = "ghcr.io/${GITHUB_ORG}/bloom/dbinit:gitsha-${GIT_COMMIT}"
   bloom_dbseed_image = "ghcr.io/${GITHUB_ORG}/bloom/dbseed:gitsha-${GIT_COMMIT}"

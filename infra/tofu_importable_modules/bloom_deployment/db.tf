@@ -10,7 +10,7 @@ resource "aws_db_instance" "bloom" {
   engine                          = "postgres"
   engine_version                  = "17"
   instance_class                  = local.database_config.instance_class
-  multi_az                        = var.high_availability
+  multi_az                        = var.db_high_availability
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade", "iam-db-auth-error"]
   username                        = "master"
   manage_master_user_password     = true
