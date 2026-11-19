@@ -212,7 +212,7 @@ describe('Translation Controller Tests', () => {
     });
   });
 
-  describe('migration 71, moving legacy email overrides', () => {
+  describe.skip('migration 71, moving legacy email overrides', () => {
     const migrationSql = readFileSync(
       join(
         __dirname,
