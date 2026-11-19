@@ -517,8 +517,6 @@ export const getEligibilitySections = (
 ): EligibilitySection[] => {
   const eligibilityFeatures: EligibilitySection[] = []
 
-  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
-  const enableV2MSQ = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableV2MSQ)
   const disableBuildingSelectionCriteria = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.disableBuildingSelectionCriteria
@@ -527,6 +525,12 @@ export const getEligibilitySections = (
     jurisdiction,
     FeatureFlagEnum.disableListingPreferences
   )
+  const enableRentsOnClosedListings = isFeatureFlagOn(
+    jurisdiction,
+    FeatureFlagEnum.enableRentsOnClosedListings
+  )
+  const enableUnitGroups = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableUnitGroups)
+  const enableV2MSQ = isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableV2MSQ)
   const swapCommunityTypeWithPrograms = isFeatureFlagOn(
     jurisdiction,
     FeatureFlagEnum.swapCommunityTypeWithPrograms
@@ -555,7 +559,7 @@ export const getEligibilitySections = (
   const hideHMI =
     (enableUnitGroups && stackedUnitGroupsHmiData.length === 0) ||
     (!enableUnitGroups && stackedHmiData.length === 0) ||
-    listing.status === ListingsStatusEnum.closed
+    (listing.status === ListingsStatusEnum.closed && !enableRentsOnClosedListings)
   if (!hideHMI) {
     eligibilityFeatures.push({
       header: t("listings.householdMaximumIncome"),

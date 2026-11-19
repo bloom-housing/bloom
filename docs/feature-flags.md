@@ -106,6 +106,7 @@ The following are all of the feature flags currently available in the Bloom plat
 | [enableReceivedAtAndByFields](./feature-flags/enableReceivedAtAndByFields.md) | When true, partners can view/edit paper application received at/by fields and include them in application exports |
 | [enableReferralQuestionUnits](./feature-flags/enableReferralQuestionUnits.md) | When true, updates the the referral opportunity question to be specifically about units |
 | [enableRegions](./feature-flags/enableRegions.md) | When true, the region can be defined for the building address |
+| [enableRentsOnClosedListings](./feature-flags/enableRentsOnClosedListings.md) | When true, rents will appear on closed listings |
 | [enableResources](./feature-flags/enableResources.md) | When true, the public site displays links to resources on various pages |
 | [enableResourcesCard](./feature-flags/enableResourcesCard.md) | When true, a resource card will appear on the homepage to link to the additional resources page |
 | [enableSection8Question](./feature-flags/enableSection8Question.md) | When true, the Section 8 listing data will be visible |

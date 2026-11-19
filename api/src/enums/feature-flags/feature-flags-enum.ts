@@ -81,6 +81,7 @@ export enum FeatureFlagEnum {
   enableReceivedAtAndByFields = 'enableReceivedAtAndByFields',
   enableReferralQuestionUnits = 'enableReferralQuestionUnits',
   enableRegions = 'enableRegions',
+  enableRentsOnClosedListings = 'enableRentsOnClosedListings',
   enableResources = 'enableResources',
   enableResourcesCard = 'enableResourcesCard',
   enableSection8Question = 'enableSection8Question',
@@ -488,6 +489,10 @@ export const featureFlagMap: {
     name: FeatureFlagEnum.enableRegions,
     description:
       'When true, the region can be defined for the building address',
+  },
+  {
+    name: FeatureFlagEnum.enableRentsOnClosedListings,
+    description: 'When true, rents will appear on closed listings',
   },
   {
     name: FeatureFlagEnum.enableResources,

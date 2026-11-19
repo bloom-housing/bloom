@@ -2435,6 +2435,7 @@ const featureFlags = [
   FeatureFlagEnum.enableProfessionalPartnersPage,
   FeatureFlagEnum.enablePublicTermsOfUse,
   FeatureFlagEnum.enableReceivedAtAndByFields,
+  FeatureFlagEnum.enableRentsOnClosedListings,
   FeatureFlagEnum.enableResources,
   FeatureFlagEnum.enableSeeOurData,
   FeatureFlagEnum.enableSexualOrientationQuestion,
@@ -2666,7 +2667,7 @@ export const createBridgeBayJurisdictions = async (
       ),
     });
 
-    const listings = Object.values(realisticAddressesForActive)
+    const activeListings = Object.values(realisticAddressesForActive)
       .filter((address) => address.county === subJurisdiction)
       .map((addr, index) => {
         const reviewOrderType =
@@ -2698,13 +2699,13 @@ export const createBridgeBayJurisdictions = async (
     await seedListings(
       prismaClient,
       createdSubJurisdiction.id,
-      listings,
+      activeListings,
       amiChart,
     );
   }
 
   // Add some listings with pending and closed status to the top level jurisdiction
-  const listings = Object.values(realisticAddressesForOtherStatuses).map(
+  const otherListings = Object.values(realisticAddressesForOtherStatuses).map(
     (addr, index) => {
       return {
         numberOfUnits:
@@ -2720,7 +2721,20 @@ export const createBridgeBayJurisdictions = async (
       };
     },
   );
-  await seedListings(prismaClient, bridgeBayJurisdiction.id, listings);
+  const bridgeBayAMIChart = await prismaClient.amiChart.create({
+    data: amiChartFactory(
+      10,
+      bridgeBayJurisdiction.id,
+      null,
+      bridgeBayJurisdiction.name,
+    ),
+  });
+  await seedListings(
+    prismaClient,
+    bridgeBayJurisdiction.id,
+    otherListings,
+    bridgeBayAMIChart,
+  );
 
   await prismaClient.jurisdictions.update({
     where: { id: bridgeBayJurisdiction.id },

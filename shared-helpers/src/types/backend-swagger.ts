@@ -11987,6 +11987,7 @@ export enum FeatureFlagEnum {
   "enableReceivedAtAndByFields" = "enableReceivedAtAndByFields",
   "enableReferralQuestionUnits" = "enableReferralQuestionUnits",
   "enableRegions" = "enableRegions",
+  "enableRentsOnClosedListings" = "enableRentsOnClosedListings",
   "enableResources" = "enableResources",
   "enableResourcesCard" = "enableResourcesCard",
   "enableSection8Question" = "enableSection8Question",
