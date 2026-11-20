@@ -1,0 +1,4 @@
+__marimo__/
+.python-version
+.venv/
+uv.lock
