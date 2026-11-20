@@ -295,7 +295,7 @@ const SelectAndOrder = ({
             }}
           >
             <span className={"text-blue-500 underline"}>
-              {previewShown ? t("t.hide") : t("t.previewLowercase")}
+              {previewShown ? t("t.hide") : t("t.preview")}
             </span>
           </button>
           {previewShown && (
