@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import { ImageCard, t } from "@bloom-housing/ui-components"
@@ -86,6 +86,7 @@ const ApplicationChooseLanguage = () => {
   const { conductor } = context
 
   const listingId = router.query.listingId
+  const loadingListingId = useRef<typeof listingId>(undefined)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -95,8 +96,14 @@ const ApplicationChooseLanguage = () => {
     })
   }, [profile])
 
+  // Separate from the effect below, which reruns on each _app render and would clear sessionStorage.
   useEffect(() => {
     conductor.reset()
+    context.syncApplication(conductor.application)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingId])
+
+  useEffect(() => {
     if (!router.isReady && !listingId) return
     if (router.isReady) {
       if (!listingId || (process.env.showMandatedAccounts && initialStateLoaded && !profile)) {
@@ -104,6 +111,8 @@ const ApplicationChooseLanguage = () => {
       }
     }
     if (!context.listing || context.listing.id !== listingId) {
+      if (loadingListingId.current === listingId) return
+      loadingListingId.current = listingId
       void loadListing(
         listingId,
         setListing,
@@ -165,6 +174,7 @@ const ApplicationChooseLanguage = () => {
         jurisdictionsService,
         profile?.isAdvocate ?? false
       ).then(() => {
+        conductor.sync()
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
