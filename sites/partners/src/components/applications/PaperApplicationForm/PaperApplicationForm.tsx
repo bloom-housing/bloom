@@ -32,6 +32,7 @@ import { FormMultiselectQuestions } from "./sections/FormMultiselectQuestions"
 
 import { Aside } from "../Aside"
 import { FormTypes } from "../../../lib/applications/FormTypes"
+import { shouldShowManualLotteryPosition } from "../../../lib/helpers"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { ApplicationStatusTag } from "../../listings/PaperListingDetails/sections/helpers"
 import { AppStatusConfirmSections, buildAppStatusConfirmSections } from "../helpers"
@@ -361,7 +362,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       disableApplicationStatusControls={
                         enableApplicationStatus && editMode && application?.markedAsDuplicate
                       }
-                      reviewOrderType={listingDto?.reviewOrderType}
+                      showManualLotteryPosition={shouldShowManualLotteryPosition(listingDto)}
                       availableJurisdictionLanguages={availableJurisdictionLanguages}
                     />
 

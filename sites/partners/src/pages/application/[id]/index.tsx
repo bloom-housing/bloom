@@ -26,6 +26,7 @@ import { DetailsTerms } from "../../../components/applications/PaperApplicationD
 import { Aside } from "../../../components/applications/Aside"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { ApplicationStatusTag } from "../../../components/listings/PaperListingDetails/sections/helpers"
+import { shouldShowManualLotteryPosition } from "../../../lib/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -150,7 +151,7 @@ const ApplicationsList = () => {
                 <DetailsApplicationData
                   enableApplicationStatus={enableApplicationStatus}
                   enableReceivedAtAndByFields={enableReceivedAtAndByFields}
-                  reviewOrderType={listingDto?.reviewOrderType}
+                  showManualLotteryPosition={shouldShowManualLotteryPosition(listingDto)}
                 />
 
                 <DetailsPrimaryApplicant

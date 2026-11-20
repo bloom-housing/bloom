@@ -22,6 +22,7 @@ import { PrismaService } from './prisma.service';
 import { CsvHeader } from '../types/CsvExportInterface';
 import { formatLocalDate } from '../utilities/format-local-date';
 import { Application } from '../dtos/applications/application.dto';
+import { isSystemLotteryListing } from '../utilities/is-system-lottery-listing';
 import { mapTo } from '../utilities/mapTo';
 import { zipExportSecure } from '../utilities/zip-export';
 import { User } from '../dtos/users/user.dto';
@@ -121,6 +122,9 @@ type OptionalFeatureFlags = {
 };
 
 const EXPECTED_HEADERS = Object.values(bulkUploadHeaderNames);
+const EXPECTED_HEADERS_WITHOUT_LOTTERY = EXPECTED_HEADERS.filter(
+  (h) => h !== bulkUploadHeaderNames.lotteryPositionNumber,
+);
 
 const WAITLIST_STATUSES = [
   APPLICATION_STATUS_MAP[ApplicationStatusEnum.waitlist],
@@ -232,6 +236,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
   getBulkUploadHeaders(
     activeFeatureFlags?: OptionalFeatureFlags,
     timeZone?: string,
+    hideManualLotteryPosition = false,
   ): CsvHeader[] {
     const headers: CsvHeader[] = [
       {
@@ -263,10 +268,14 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
             timeZone ?? process.env.TIME_ZONE,
           ),
       },
-      {
-        path: 'manualLotteryPositionNumber',
-        label: bulkUploadHeaderNames.lotteryPositionNumber,
-      },
+      ...(hideManualLotteryPosition
+        ? []
+        : [
+            {
+              path: 'manualLotteryPositionNumber',
+              label: bulkUploadHeaderNames.lotteryPositionNumber,
+            },
+          ]),
       {
         path: 'status',
         label: bulkUploadHeaderNames.applicationStatus,
@@ -383,12 +392,20 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       );
     }
 
+    const listing = await this.prisma.listings.findUnique({
+      select: { reviewOrderType: true, lotteryOptIn: true },
+      where: { id: listingId },
+    });
+
     const now = new Date();
     const dateString = dayjs(now).format('YYYY-MM-DD_HH-mm');
 
-    const readStream = await this.csvTemplateExport(listingId, applications, {
-      enableMultiselectVoucherQuestion,
-    });
+    const readStream = await this.csvTemplateExport(
+      listingId,
+      applications,
+      { enableMultiselectVoucherQuestion },
+      isSystemLotteryListing(listing),
+    );
 
     const zipFilename = `listing-${listingId}-applications-bulk-update-template`;
     const filename = `applications-${listingId}-${dateString}`;
@@ -409,6 +426,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     listingId: string,
     applications: Pick<Application, 'id'>[],
     activeFeatureFlags?: OptionalFeatureFlags,
+    hideManualLotteryPosition = false,
   ): Promise<ReadStream> {
     const filename = join(
       process.cwd(),
@@ -420,6 +438,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       listingId,
       applications,
       activeFeatureFlags,
+      hideManualLotteryPosition,
     );
     return createReadStream(filename);
   }
@@ -429,8 +448,13 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     listingId: string,
     applications: Pick<Application, 'id'>[],
     activeFeatureFlags?: OptionalFeatureFlags,
+    hideManualLotteryPosition = false,
   ): Promise<void> {
-    const csvHeaders = this.getBulkUploadHeaders(activeFeatureFlags);
+    const csvHeaders = this.getBulkUploadHeaders(
+      activeFeatureFlags,
+      undefined,
+      hideManualLotteryPosition,
+    );
 
     return new Promise(async (resolve, reject) => {
       // create stream
@@ -712,11 +736,19 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     }
   }
 
-  validateHeaders(actualHeaders: string[]): void {
-    const expected = new Set(EXPECTED_HEADERS);
+  validateHeaders(
+    actualHeaders: string[],
+    hideManualLotteryPosition = false,
+  ): void {
+    const expected = hideManualLotteryPosition
+      ? EXPECTED_HEADERS_WITHOUT_LOTTERY
+      : EXPECTED_HEADERS;
     const actual = new Set(actualHeaders);
-    const sameSize = expected.size === actual.size;
-    const allPresent = EXPECTED_HEADERS.every((h) => actual.has(h));
+    if (hideManualLotteryPosition) {
+      actual.delete(bulkUploadHeaderNames.lotteryPositionNumber);
+    }
+    const sameSize = expected.length === actual.size;
+    const allPresent = expected.every((h) => actual.has(h));
     if (!sameSize || !allPresent) {
       throw new BadRequestException(
         'Upload Failed: CSV has additional or missing columns',
@@ -967,7 +999,7 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
 
   validateNumericFields(row: CsvRow, index: number): void {
     for (const col of NUMERIC_COLUMNS) {
-      const raw = row[col].trim();
+      const raw = row[col]?.trim() ?? '';
       if (raw === '') continue;
 
       const num = Number(raw);
@@ -995,8 +1027,9 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     rows: CsvRow[],
     listingId: string,
     activeFeatureFlags?: OptionalFeatureFlags,
+    hideManualLotteryPosition = false,
   ): Promise<void> {
-    this.validateHeaders(headers);
+    this.validateHeaders(headers, hideManualLotteryPosition);
     this.validateHasDataRows(rows);
 
     for (let i = 0; i < rows.length; i += NUMBER_TO_PAGINATE_BY) {
@@ -1194,6 +1227,8 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
     const listingData = await this.prisma.listings.findUnique({
       select: {
         name: true,
+        reviewOrderType: true,
+        lotteryOptIn: true,
         jurisdictions: {
           select: {
             id: true,
@@ -1243,9 +1278,20 @@ export class ApplicationBulkUploadService implements OnModuleDestroy {
       Object.fromEntries(headers.map((h, i) => [h, cells[i] ?? ''])),
     );
 
-    await this.validateCSV(headerRow, rows, dto.listingId, {
-      enableMultiselectVoucherQuestion,
-    });
+    const hideManualLotteryPosition = isSystemLotteryListing(listingData);
+    if (hideManualLotteryPosition) {
+      rows.forEach(
+        (row) => delete row[bulkUploadHeaderNames.lotteryPositionNumber],
+      );
+    }
+
+    await this.validateCSV(
+      headerRow,
+      rows,
+      dto.listingId,
+      { enableMultiselectVoucherQuestion },
+      hideManualLotteryPosition,
+    );
 
     const backgroundJob = await this.backgroundJobsService.create(
       {

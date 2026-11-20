@@ -35,6 +35,7 @@ import {
   useSSE,
   useZipExport,
 } from "../../../../lib/hooks"
+import { shouldShowManualLotteryPosition } from "../../../../lib/helpers"
 
 interface BulkUploadJobNotification {
   jobId: string
@@ -216,13 +217,15 @@ const ApplicationsList = () => {
     return max < 6 ? max : 6
   }, [applications])
 
+  const showManualLotteryPosition = shouldShowManualLotteryPosition(listingDto)
+
   const columnDefs = useMemo(() => {
     return getColDefs(
       maxHouseholdSize,
       enableFullTimeStudentQuestion,
       disableWorkInRegion,
       enableApplicationStatus,
-      listingDto?.reviewOrderType,
+      showManualLotteryPosition,
       enableHousingAdvocate
     )
   }, [
@@ -230,7 +233,7 @@ const ApplicationsList = () => {
     enableFullTimeStudentQuestion,
     disableWorkInRegion,
     enableApplicationStatus,
-    listingDto?.reviewOrderType,
+    showManualLotteryPosition,
     enableHousingAdvocate,
   ])
 

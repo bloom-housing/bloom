@@ -7,19 +7,18 @@ import SectionWithGrid from "../../../shared/SectionWithGrid"
 import {
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
-  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsApplicationDataProps = {
   enableApplicationStatus?: boolean
   enableReceivedAtAndByFields?: boolean
-  reviewOrderType?: ReviewOrderTypeEnum
+  showManualLotteryPosition?: boolean
 }
 
 const DetailsApplicationData = ({
   enableApplicationStatus,
   enableReceivedAtAndByFields,
-  reviewOrderType,
+  showManualLotteryPosition = false,
 }: DetailsApplicationDataProps) => {
   const application = useContext(ApplicationContext)
 
@@ -149,7 +148,7 @@ const DetailsApplicationData = ({
               </FieldValue>
             </Grid.Cell>
             <Grid.Cell>
-              {reviewOrderType === ReviewOrderTypeEnum.lottery && (
+              {showManualLotteryPosition && (
                 <FieldValue label={t("application.details.manualLotteryPositionNumber")}>
                   {application.manualLotteryPositionNumber ?? t("t.n/a")}
                 </FieldValue>

@@ -14,7 +14,6 @@ import {
   ApplicationDeclineReasonEnum,
   ApplicationStatusEnum,
   ApplicationSubmissionTypeEnum,
-  ReviewOrderTypeEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { useFormContext } from "react-hook-form"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -25,7 +24,7 @@ type FormApplicationDataProps = {
   enableReceivedAtAndByFields: boolean
   appType: ApplicationSubmissionTypeEnum
   disableApplicationStatusControls?: boolean
-  reviewOrderType?: ReviewOrderTypeEnum
+  showManualLotteryPosition?: boolean
   availableJurisdictionLanguages?: LanguagesEnum[]
 }
 
@@ -34,7 +33,7 @@ const FormApplicationData = ({
   enableReceivedAtAndByFields,
   appType,
   disableApplicationStatusControls = false,
-  reviewOrderType,
+  showManualLotteryPosition = false,
   availableJurisdictionLanguages = [],
 }: FormApplicationDataProps) => {
   const formMethods = useFormContext()
@@ -314,7 +313,7 @@ const FormApplicationData = ({
                 />
               )}
             </Grid.Cell>
-            {reviewOrderType === ReviewOrderTypeEnum.lottery && (
+            {showManualLotteryPosition && (
               <Grid.Cell>
                 <Field
                   className={disableApplicationStatusControls ? "hidden" : ""}
