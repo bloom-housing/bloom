@@ -1129,6 +1129,47 @@ describe("<SettingsContent>", () => {
       expect(screen.getByRole("button", { name: "Save" })).toBeDisabled()
     })
 
+    // The upload writes into the draft of the scope it started in.
+    it("keeps the language and jurisdiction fixed during an upload", async () => {
+      const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+      uploader.mockImplementation(({ setProgressValue }) => {
+        setProgressValue(3)
+        return Promise.resolve()
+      })
+      respondWithRows([row(LanguagesEnum.en)])
+      renderPage()
+
+      await openFooter()
+      expect(screen.getByLabelText("Language")).toBeEnabled()
+      await userEvent.upload(
+        document.getElementById("footer.logo.logoFileId") as HTMLInputElement,
+        new File(["x"], "logo.png", { type: "image/png" })
+      )
+
+      expect(screen.getByLabelText("Language")).toBeDisabled()
+    })
+
+    it("re-enables saving when the upload url cannot be requested", async () => {
+      const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
+      uploader.mockImplementation(({ setProgressValue }) => {
+        setProgressValue(1)
+        return Promise.reject(new Error("presign failed"))
+      })
+      const errorLog = jest.spyOn(console, "error").mockImplementation(() => undefined)
+      respondWithRows([row(LanguagesEnum.en, { footer: { logo: { logoAltText: "Seal" } } })])
+      renderPage()
+
+      await openFooter()
+      await userEvent.upload(
+        document.getElementById("footer.logo.logoFileId") as HTMLInputElement,
+        new File(["x"], "logo.png", { type: "image/png" })
+      )
+      await userEvent.type(await screen.findByLabelText("test:logoAlt"), "!")
+
+      await waitFor(() => expect(screen.getByRole("button", { name: "Save" })).toBeEnabled())
+      errorLog.mockRestore()
+    })
+
     it("uploads a logo for one language only", async () => {
       const spanishLogoSrc = "https://example.test/footer-logo-es.png"
       const uploader = helpers.fileUploader as jest.MockedFunction<typeof helpers.fileUploader>
