@@ -116,7 +116,7 @@
   "applications.bulkUpdateDownloadTemplate": "Download template",
   "applications.bulkUpdateModalSubtitle": "Update multiple applications at once using a CSV file",
   "applications.bulkUpdateModalTitle": "Bulk update applications",
-  "applications.bulkUpdateStep1Body": "Download a pre-filled file containing all applications for this listing. The file includes read-only context columns to help you identify records, and editable columns for status, decline reason, decline reason additional details, waitlist positions, and lottery position.",
+  "applications.bulkUpdateStep1Body": "Download a pre-filled file containing all applications for this listing. The file includes read-only context columns to help you identify records (the application details such as household size, declared annual or monthly income, Request ADA, and Subsidy/Voucher), and editable columns for status, decline reason, decline reason additional details, waitlist positions, and lottery position.",
   "applications.bulkUpdateStep1Title": "Step 1: Download the template",
   "applications.bulkUpdateStep2Body": "Edit only the editable columns. Do not add, remove, or reorder columns, and do not modify application IDs or the context columns — any mismatches will cause the upload to fail and no records will be updated.",
   "applications.bulkUpdateStep2Title": "Step 2: Make your changes",
