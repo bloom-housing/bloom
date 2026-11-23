@@ -12,12 +12,14 @@ import {
 } from "../../../../src/lib/helpers"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 // These mocks enable us to just test the branching logic in MapListingCard without worrying about the internal implementation of the children, which are tested separately
 jest.mock("@bloom-housing/shared-helpers", () => {
   const React = require("react")
 
   return {
+    IMAGE_FALLBACK_URL: "/images/listing-fallback.png",
     imageUrlFromListing: jest.fn(() => ["/images/mock-listing.jpg"]),
     oneLineAddress: jest.fn(() => "123 Test Street"),
     ClickableCard: ({ children, className }) => (
@@ -79,6 +81,38 @@ describe("MapListingCard", () => {
     expect(screen.getByRole("img", { name: /picture of the building/i })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /close/i })).not.toBeInTheDocument()
     expect(getListingStackedTableData).toHaveBeenCalledWith(listing.unitsSummarized)
+  })
+
+  it("renders image urls containing spaces and parentheses", () => {
+    const imageUrl = "https://example-bucket.s3.amazonaws.com/listings/My Building (1).jpg"
+    ;(imageUrlFromListing as jest.Mock).mockReturnValueOnce([imageUrl])
+
+    renderWithContext(<MapListingCard listing={listing} index={0} />)
+
+    expect(screen.getByRole("img", { name: /picture of the building/i })).toHaveAttribute(
+      "src",
+      imageUrl
+    )
+  })
+
+  it("falls back to the placeholder image when the listing image fails to load", () => {
+    renderWithContext(<MapListingCard listing={listing} index={0} />)
+
+    const image = screen.getByRole("img", { name: /picture of the building/i })
+    fireEvent.error(image)
+
+    expect(image).toHaveAttribute("src", "/images/listing-fallback.png")
+  })
+
+  it("uses the placeholder image when the listing image url is empty", () => {
+    ;(imageUrlFromListing as jest.Mock).mockReturnValueOnce([""])
+
+    renderWithContext(<MapListingCard listing={listing} index={0} />)
+
+    expect(screen.getByRole("img", { name: /picture of the building/i })).toHaveAttribute(
+      "src",
+      "/images/listing-fallback.png"
+    )
   })
 
   it("renders close button in force mobile view and triggers onClose", () => {

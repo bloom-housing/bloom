@@ -1,6 +1,11 @@
 import React from "react"
 import { t } from "@bloom-housing/ui-components"
-import { ClickableCard, imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
+import {
+  ClickableCard,
+  IMAGE_FALLBACK_URL,
+  imageUrlFromListing,
+  oneLineAddress,
+} from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   Jurisdiction,
@@ -35,21 +40,25 @@ export const MinimalListingCard = ({ listing, jurisdiction }: MinimalListingCard
     ),
   })
 
+  const imageUrl =
+    imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || IMAGE_FALLBACK_URL
+
   return (
     <ClickableCard
       className={styles["minimal-listing-card"]}
       containerClassName={styles["full-height-card"]}
     >
       <div className={styles["image"]}>
-        <div
+        <img
           className={styles["image-background"]}
-          style={{
-            backgroundImage: `url(${
-              imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
-            })`,
+          src={imageUrl}
+          alt={listing.listingImages?.[0]?.description || t("listings.buildingImageAltText")}
+          loading="lazy"
+          onError={(e) => {
+            if (!e.currentTarget.src.endsWith(IMAGE_FALLBACK_URL)) {
+              e.currentTarget.src = IMAGE_FALLBACK_URL
+            }
           }}
-          role="img"
-          aria-label={t("listings.buildingImageAltText")}
         />
       </div>
       <div className={styles["card-content"]}>
