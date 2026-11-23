@@ -47,8 +47,10 @@
         height: 100%;
         min-height: var(--seeds-s44);
         max-height: var(--seeds-s48);
-        background-size: cover;
-        background-position: center;
+        display: block;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
         @media (--md-down) {
           min-height: var(--seeds-s60);
         }

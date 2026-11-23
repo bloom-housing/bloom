@@ -1,4 +1,9 @@
-import { ClickableCard, imageUrlFromListing, oneLineAddress } from "@bloom-housing/shared-helpers"
+import {
+  ClickableCard,
+  IMAGE_FALLBACK_URL,
+  imageUrlFromListing,
+  oneLineAddress,
+} from "@bloom-housing/shared-helpers"
 import {
   EnumListingListingType,
   FeatureFlagEnum,
@@ -32,7 +37,8 @@ export const MapListingCard = ({
   const enableUnitGroups = activeFeatureFlags?.includes(FeatureFlagEnum.enableUnitGroups)
   const enableFilterByCounty = activeFeatureFlags?.includes(FeatureFlagEnum.enableFilterByCounty)
 
-  const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
+  const imageUrl =
+    imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || IMAGE_FALLBACK_URL
   const listingTags = getListingTags(listing, {
     hideReviewTags: true,
     hideHomeTypeTag: !showHomeType,
@@ -144,13 +150,16 @@ export const MapListingCard = ({
                   ×
                 </button>
               )}
-              <div
+              <img
                 className={styles["image-background"]}
-                style={{ backgroundImage: `url(${imageUrl})` }}
-                role="img"
-                aria-label={
-                  listing.listingImages?.[0]?.description || t("listings.buildingImageAltText")
-                }
+                src={imageUrl}
+                alt={listing.listingImages?.[0]?.description || t("listings.buildingImageAltText")}
+                loading="lazy"
+                onError={(e) => {
+                  if (!e.currentTarget.src.endsWith(IMAGE_FALLBACK_URL)) {
+                    e.currentTarget.src = IMAGE_FALLBACK_URL
+                  }
+                }}
               />
             </div>
           </div>

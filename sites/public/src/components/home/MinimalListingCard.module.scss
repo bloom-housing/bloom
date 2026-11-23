@@ -5,9 +5,10 @@
     max-height: fit-content;
   }
   .image-background {
+    display: block;
     width: 100%;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
+    object-position: center;
     height: var(--seeds-s52);
   }
 }
