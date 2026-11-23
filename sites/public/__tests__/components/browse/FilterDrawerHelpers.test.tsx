@@ -27,6 +27,7 @@ import {
   getAvailabilityValues,
   getFilterQueryFromURL,
   isFiltered,
+  parseRentValue,
   removeUnselectedFilterData,
   RentSection,
   SearchSection,
@@ -321,6 +322,35 @@ describe("filter drawer helpers", () => {
       const backendFilters = encodeFilterDataToBackendFilters(filterData)
       expect(backendFilters).toStrictEqual([{ $comparison: "<=", monthlyRent: "1500.00" }])
     })
+    it("should strip every comma from rent values of a million or more", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.monthlyRent]: { minRent: "1,000,000.00", maxRent: "2,000,001.00" },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([
+        { $comparison: ">=", monthlyRent: "1000000.00" },
+        { $comparison: "<=", monthlyRent: "2000001.00" },
+      ])
+    })
+    it("should normalize rent values that were submitted before being formatted", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.monthlyRent]: { minRent: "0", maxRent: "1500." },
+      }
+
+      const backendFilters = encodeFilterDataToBackendFilters(filterData)
+      expect(backendFilters).toStrictEqual([
+        { $comparison: ">=", monthlyRent: "0.00" },
+        { $comparison: "<=", monthlyRent: "1500.00" },
+      ])
+    })
+    it("should not send rent filters that are not numbers", () => {
+      const filterData: FilterData = {
+        [ListingFilterKeys.monthlyRent]: { minRent: ".", maxRent: "abc" },
+      }
+
+      expect(encodeFilterDataToBackendFilters(filterData)).toStrictEqual([])
+    })
     it("should return correct BE filters for full rent information", () => {
       const filterData: FilterData = {
         [ListingFilterKeys.monthlyRent]: { minRent: "500.00", maxRent: "900.00" },
@@ -429,6 +459,22 @@ describe("filter drawer helpers", () => {
     })
   })
 
+  describe("parseRentValue", () => {
+    it("should parse formatted and unformatted rent values", () => {
+      expect(parseRentValue("2,000,001.00")).toBe(2000001)
+      expect(parseRentValue("1,500.50")).toBe(1500.5)
+      expect(parseRentValue("900")).toBe(900)
+      expect(parseRentValue("0")).toBe(0)
+      expect(parseRentValue(1200)).toBe(1200)
+    })
+    it("should return undefined for empty or non-numeric values", () => {
+      expect(parseRentValue(undefined)).toBeUndefined()
+      expect(parseRentValue("")).toBeUndefined()
+      expect(parseRentValue(".")).toBeUndefined()
+      expect(parseRentValue("abc")).toBeUndefined()
+    })
+  })
+
   describe("isFiltered", () => {
     it("should return true if filter params present in context.query", () => {
       expect(isFiltered({ page: "2", name: "a" })).toStrictEqual(true)
@@ -500,13 +546,32 @@ describe("filter drawer helpers", () => {
       const partialFormObject: FilterData = {
         [ListingFilterKeys.monthlyRent]: { minRent: "500.00" },
       }
-      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("monthlyRent=500.00")
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("monthlyRent=500.00-")
     })
     it("should return correct filter query with max rent filter", () => {
       const partialFormObject: FilterData = {
         [ListingFilterKeys.monthlyRent]: { maxRent: "900.00" },
       }
-      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("monthlyRent=900.00")
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("monthlyRent=-900.00")
+    })
+    it("should keep min rent first regardless of key order", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.monthlyRent]: { maxRent: "900.00", minRent: "500.00" },
+      }
+      expect(encodeFilterDataToQuery(partialFormObject)).toStrictEqual("monthlyRent=500.00-900.00")
+    })
+    it("should round trip a max rent of a million or more through the url", () => {
+      const partialFormObject: FilterData = {
+        [ListingFilterKeys.monthlyRent]: { minRent: "", maxRent: "2,000,001.00" },
+      }
+      const query = encodeFilterDataToQuery(partialFormObject)
+      expect(query).toStrictEqual("monthlyRent=-2,000,001.00")
+
+      const decodedFilterData = decodeQueryToFilterData({ monthlyRent: query.split("=")[1] })
+      expect(decodedFilterData).toStrictEqual(partialFormObject)
+      expect(encodeFilterDataToBackendFilters(decodedFilterData)).toStrictEqual([
+        { $comparison: "<=", monthlyRent: "2000001.00" },
+      ])
     })
     it("should return correct filter query with full rent range", () => {
       const partialFormObject: FilterData = {
@@ -1064,6 +1129,29 @@ describe("filter drawer helpers", () => {
       expect(
         screen.queryByText("Max rent must be greater than or equal to min rent")
       ).not.toBeInTheDocument()
+    })
+    it("should compare rent values of a million or more numerically", async () => {
+      render(<DefaultRentSection />)
+      await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "1500000")
+      await userEvent.type(screen.getByRole("textbox", { name: "Max rent" }), "2000001")
+      await userEvent.tab()
+
+      expect(screen.getByRole("textbox", { name: "Min rent" })).toHaveValue("1,500,000.00")
+      expect(screen.getByRole("textbox", { name: "Max rent" })).toHaveValue("2,000,001.00")
+      expect(
+        screen.queryByText("Min rent must be less than or equal to max rent")
+      ).not.toBeInTheDocument()
+
+      await userEvent.clear(screen.getByRole("textbox", { name: "Min rent" }))
+      await userEvent.type(screen.getByRole("textbox", { name: "Min rent" }), "3000000")
+      await userEvent.tab()
+
+      expect(
+        screen.getByText("Min rent must be less than or equal to max rent")
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText("Max rent must be greater than or equal to min rent")
+      ).toBeInTheDocument()
     })
   })
 

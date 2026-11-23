@@ -289,6 +289,18 @@ export const RadioGroup = (props: RadioGroupProps) => {
   )
 }
 
+/**
+ * Parses a rent value from the currency input or url, which may be formatted with thousands separators
+ *
+ * @param value rent value such as "2,000,001.00"
+ * @returns the numeric value, or undefined if the value is empty or not a number
+ */
+export const parseRentValue = (value?: string | number): number | undefined => {
+  if (value === undefined || value === null || value === "") return undefined
+  const parsedValue = parseFloat(String(value).replaceAll(",", ""))
+  return Number.isFinite(parsedValue) ? parsedValue : undefined
+}
+
 export const validateRentValues = (
   getValues: UseFormMethods["getValues"],
   clearErrors: UseFormMethods["clearErrors"],
@@ -297,15 +309,12 @@ export const validateRentValues = (
   const minField = `${ListingFilterKeys.monthlyRent}.minRent`
   const maxField = `${ListingFilterKeys.monthlyRent}.maxRent`
 
-  const minValue = getValues(minField)
-  const maxValue = getValues(maxField)
+  const numericMin = parseRentValue(getValues(minField))
+  const numericMax = parseRentValue(getValues(maxField))
 
   clearErrors([minField, maxField])
 
-  if (minValue && maxValue) {
-    const numericMin = parseFloat(minValue.replaceAll(",", ""))
-    const numericMax = parseFloat(maxValue.replaceAll(",", ""))
-
+  if (numericMin !== undefined && numericMax !== undefined) {
     if (numericMin > numericMax) {
       setError(minField, { message: t("errors.minGreaterThanMaxRentError") })
       setError(maxField, { message: t("errors.maxLessThanMinRentError") })
@@ -491,19 +500,20 @@ export const encodeFilterDataToBackendFilters = (data: FilterData): ListingFilte
       filter[filterType] = true
       filters.push(filter)
     } else if (filterType === ListingFilterKeys.monthlyRent) {
-      if (userSelections["minRent"]) {
+      const minRent = parseRentValue(userSelections["minRent"])
+      const maxRent = parseRentValue(userSelections["maxRent"])
+      if (minRent !== undefined) {
         const filter = {
           $comparison: EnumListingFilterParamsComparison[">="],
         }
-        filter[ListingFilterKeys.monthlyRent] = userSelections["minRent"]?.replace(",", "")
+        filter[ListingFilterKeys.monthlyRent] = minRent.toFixed(2)
         filters.push(filter)
       }
-      if (userSelections["maxRent"]) {
+      if (maxRent !== undefined) {
         const filter = {
           $comparison: EnumListingFilterParamsComparison["<="],
         }
-
-        filter[ListingFilterKeys.monthlyRent] = userSelections["maxRent"]?.replace(",", "")
+        filter[ListingFilterKeys.monthlyRent] = maxRent.toFixed(2)
         filters.push(filter)
       }
     } else if (filterType === ListingFilterKeys.bathrooms && userSelections) {
@@ -572,9 +582,10 @@ export const encodeFilterDataToQuery = (data: FilterData): string => {
       filterType === ListingFilterKeys.monthlyRent &&
       (userSelections["minRent"] || userSelections["maxRent"])
     ) {
-      const rentParam = `${ListingFilterKeys[filterType]}=${Object.values(userSelections).join(
-        "-"
-      )}`
+      // min is always first so a max-only value isn't decoded as a min
+      const rentParam = `${ListingFilterKeys[filterType]}=${userSelections["minRent"] ?? ""}-${
+        userSelections["maxRent"] ?? ""
+      }`
       queryArr.push(rentParam)
     } else if (filterType === ListingFilterKeys.bathrooms) {
       const bathroomsParam = `${ListingFilterKeys[filterType]}=${userSelections}`
