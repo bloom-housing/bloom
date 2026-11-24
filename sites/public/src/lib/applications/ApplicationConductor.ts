@@ -147,6 +147,7 @@ export default class ApplicationConductor {
     steps: [],
     featureFlags: [],
     isAdvocate: false,
+    isPreview: false,
     raceEthnicityConfiguration: null,
     visibleSpokenLanguages: [],
     visibleApplicationAccessibilityFeatures: [],

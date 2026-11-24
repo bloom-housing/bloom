@@ -36,6 +36,7 @@ import ApplicationFormLayout, {
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 export class Member implements HouseholdMemberUpdate {
   constructor(orderId: number) {
@@ -211,6 +212,7 @@ const ApplicationMember = () => {
       )} - ${listing?.name}`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.member.title")}

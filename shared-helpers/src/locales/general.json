@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "Please enter relationship type",
   "application.alternateContact.type.title": "Is there someone else you'd like to authorize us to contact if we can't reach you?",
   "application.alternateContact.type.validationErrorMessage": "Please select an alternate contact",
+  "application.applicationPreview": "This is a application preview. You will not be able to submit this application.",
   "application.autofill.prefillYourApplication": "We'll simply pre-fill your application with the following details, and you can make updates as you go.",
   "application.autofill.reset": "Reset and start fresh",
   "application.autofill.saveTime": "Save time by using the details from your last application",

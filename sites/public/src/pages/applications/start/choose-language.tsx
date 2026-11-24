@@ -17,7 +17,7 @@ import {
   JurisdictionsService,
   FeatureFlagEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { Heading, Button, LoadingState } from "@bloom-housing/ui-seeds"
+import { Heading, Button, LoadingState, Alert } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
@@ -31,6 +31,7 @@ import { getEnabledStopLightRuleKeys } from "../../../lib/applications/stopLight
 import { AccountTypeDialog } from "../../../components/account/AccountTypeDialog"
 import styles from "../../../layouts/application-form.module.scss"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const loadListing = async (
   listingId,
@@ -40,7 +41,8 @@ const loadListing = async (
   language,
   listingsService: ListingsService,
   jurisdictionsService: JurisdictionsService,
-  isAdvocate: boolean
+  isAdvocate: boolean,
+  isPreview: boolean
 ) => {
   const listingResponse = await listingsService.retrieve(
     { id: listingId },
@@ -55,7 +57,8 @@ const loadListing = async (
   conductor.listing = listingResponse
   const applicationConfig = retrieveApplicationConfig(
     conductor.listing,
-    jurisdictionResponse.featureFlags
+    jurisdictionResponse.featureFlags,
+    isPreview
   ) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
@@ -63,6 +66,7 @@ const loadListing = async (
     featureFlags: jurisdictionResponse.featureFlags,
     isAdvocate:
       isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
+    isPreview: isPreview,
     visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
     visibleApplicationAccessibilityFeatures:
       jurisdictionResponse.visibleApplicationAccessibilityFeatures,
@@ -86,6 +90,7 @@ const ApplicationChooseLanguage = () => {
   const { conductor } = context
 
   const listingId = router.query.listingId
+  const isPreview = router.query.preview === "true"
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -99,7 +104,10 @@ const ApplicationChooseLanguage = () => {
     conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady) {
-      if (!listingId || (process.env.showMandatedAccounts && initialStateLoaded && !profile)) {
+      if (
+        !listingId ||
+        (process.env.showMandatedAccounts && initialStateLoaded && !profile && !isPreview)
+      ) {
         void router.push("/")
       }
     }
@@ -112,21 +120,23 @@ const ApplicationChooseLanguage = () => {
         "en",
         listingsService,
         jurisdictionsService,
-        profile?.isAdvocate ?? false
+        profile?.isAdvocate ?? false,
+        isPreview
       )
     } else {
       conductor.listing = context.listing
       setListing(context.listing)
     }
   }, [
-    router,
     conductor,
     context,
-    listingId,
     initialStateLoaded,
-    profile,
-    listingsService,
+    isPreview,
     jurisdictionsService,
+    listingId,
+    listingsService,
+    router,
+    profile,
   ])
 
   useEffect(() => {
@@ -136,14 +146,14 @@ const ApplicationChooseLanguage = () => {
       const currentDate = dayjs()
       if (
         !(listing.digitalApplication && listing.commonDigitalApplication) ||
-        (router?.query?.preview !== "true" && listing?.status !== ListingsStatusEnum.active) ||
+        (!isPreview && listing?.status !== ListingsStatusEnum.active) ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
         addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
         void router.push(`/${router.locale}/listing/${listing?.id}/${listing?.urlSlug}`)
       }
     }
-  }, [listing, router, toastyRef])
+  }, [isPreview, listing, router, toastyRef])
 
   const imageUrl = listing?.listingImages
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
@@ -163,7 +173,8 @@ const ApplicationChooseLanguage = () => {
         language,
         listingsService,
         jurisdictionsService,
-        profile?.isAdvocate ?? false
+        profile?.isAdvocate ?? false,
+        isPreview
       ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
@@ -171,11 +182,12 @@ const ApplicationChooseLanguage = () => {
     [
       conductor,
       context,
+      isPreview,
       listingId,
       listingsService,
       jurisdictionsService,
       router,
-      profile?.isAdvocate,
+      profile,
     ]
   )
 
@@ -183,6 +195,7 @@ const ApplicationChooseLanguage = () => {
     <>
       <FormsLayout pageTitle={`${t("listings.apply.applyOnline")} - ${listing?.name}`}>
         <LoadingState loading={!listing || isLoading}>
+          {isPreview && <ApplicationPreviewBanner />}
           <ApplicationFormLayout
             listingName={listing?.name}
             heading={t("application.chooseLanguage.letsGetStarted")}

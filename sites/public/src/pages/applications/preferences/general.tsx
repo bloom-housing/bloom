@@ -15,6 +15,7 @@ import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
@@ -48,6 +49,7 @@ const ApplicationPreferencesGeneral = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.preferences.general.title")}

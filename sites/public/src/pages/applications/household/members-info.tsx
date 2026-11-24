@@ -17,6 +17,7 @@ import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationMembersInfo = () => {
   const { profile } = useContext(AuthContext)
@@ -50,6 +51,7 @@ const ApplicationMembersInfo = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.membersInfo.title")}

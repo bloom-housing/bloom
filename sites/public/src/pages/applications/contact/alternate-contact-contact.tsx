@@ -23,6 +23,7 @@ import ApplicationFormLayout, {
 import FormsLayout from "../../../layouts/forms"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
@@ -139,6 +140,7 @@ const ApplicationAlternateContactContact = () => {
         onSubmit={handleSubmit(onSubmit, onError)}
         onBlur={onFieldBlur}
       >
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.alternateContact.contact.title")}

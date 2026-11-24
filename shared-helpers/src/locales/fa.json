@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "لطفا نوع رابطه را وارد کنید",
   "application.alternateContact.type.title": "آیا شخص دیگری هست که اگر نتوانستیم با شما تماس بگیریم، مایل باشید به ما اجازه دهید با او تماس بگیریم؟",
   "application.alternateContact.type.validationErrorMessage": "لطفا یک مخاطب جایگزین انتخاب کنید",
+  "application.applicationPreview": "این یک پیش‌نمایش از برنامه است. شما قادر به ارسال این برنامه نخواهید بود.",
   "application.autofill.prefillYourApplication": "ما به سادگی درخواست شما را با جزئیات زیر از قبل پر می‌کنیم و شما می‌توانید در حین کار، اطلاعات را به‌روزرسانی کنید.",
   "application.autofill.reset": "تنظیم مجدد و شروع تازه",
   "application.autofill.saveTime": "با استفاده از جزئیات آخرین درخواست خود، در زمان صرفه‌جویی کنید",

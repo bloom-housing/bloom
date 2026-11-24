@@ -20,6 +20,7 @@ import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isUnitGroupAppBase, isUnitGroupAppWaitlist } from "../../../lib/helpers"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -83,6 +84,7 @@ const ApplicationWhatToExpect = () => {
         listing?.name
       }`}
     >
+      {conductor.config.isPreview && <ApplicationPreviewBanner />}
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={t("application.start.whatToExpect.title")}

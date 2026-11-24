@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "Խնդրում ենք մուտքագրել հարաբերության տեսակը",
   "application.alternateContact.type.title": "Կա՞ արդյոք որևէ մեկը, որի հետ դուք կցանկանայիք լիազորել մեզ կապվել, եթե չկարողանանք կապվել ձեզ հետ։",
   "application.alternateContact.type.validationErrorMessage": "Խնդրում ենք ընտրել այլընտրանքային կոնտակտ",
+  "application.applicationPreview": "Սա դիմումի նախադիտում է։ Դուք չեք կարողանա ներկայացնել այս դիմումը։",
   "application.autofill.prefillYourApplication": "Մենք պարզապես նախապես կլրացնենք ձեր դիմումը հետևյալ տվյալներով, և դուք կարող եք թարմացումներ կատարել ընթացքում։",
   "application.autofill.reset": "Վերագործարկեք և նորից սկսեք",
   "application.autofill.saveTime": "Խնայեք ժամանակ՝ օգտագործելով ձեր վերջին դիմումի մանրամասները",

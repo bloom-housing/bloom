@@ -9,9 +9,14 @@ import {
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { isFeatureFlagOn } from "../helpers"
 
-export const retrieveApplicationConfig = (listing: Listing, featureFlags: FeatureFlag[]) => {
+export const retrieveApplicationConfig = (
+  listing: Listing,
+  featureFlags: FeatureFlag[],
+  isPreview?: boolean
+) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   const config = {
+    isPreview,
     sections: ["you", "household"],
     steps: [
       {

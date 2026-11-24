@@ -17,6 +17,7 @@ import { UserStatus } from "../../../lib/constants"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationCommunityDisclaimer = () => {
   const { profile } = useContext(AuthContext)
@@ -42,6 +43,7 @@ const ApplicationCommunityDisclaimer = () => {
         listing?.name
       }`}
     >
+      {conductor.config.isPreview && <ApplicationPreviewBanner />}
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={listing?.communityDisclaimerTitle ?? ""}

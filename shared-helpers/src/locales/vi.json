@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "Vui lòng nhập kiểu quan hệ",
   "application.alternateContact.type.title": "Quý vị có muốn ủy quyền cho ai khác để chúng tôi liên lạc nếu chúng tôi không thể liên lạc với quý vị không?",
   "application.alternateContact.type.validationErrorMessage": "Vui lòng chọn một người liên lạc thay thế",
+  "application.applicationPreview": "Đây là bản xem trước đơn đăng ký. Bạn sẽ không thể nộp đơn đăng ký này.",
   "application.autofill.prefillYourApplication": "Chúng tôi sẽ điền trước đơn của quý vị với những thông tin chi tiết sau, và quý vị có thể cập nhật các thông tin đó trong quá trình làm đơn.",
   "application.autofill.reset": "Thiết lập lại và bắt đầu từ đầu",
   "application.autofill.saveTime": "Tiết kiệm thời gian bằng cách sử dụng các chi tiết từ đơn lần trước của quý vị",

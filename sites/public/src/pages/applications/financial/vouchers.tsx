@@ -26,6 +26,7 @@ import ApplicationFormLayout, {
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
@@ -110,6 +111,7 @@ const ApplicationVouchers = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={

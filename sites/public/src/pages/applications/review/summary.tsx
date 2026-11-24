@@ -29,6 +29,7 @@ import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import dayjs from "dayjs"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -64,7 +65,7 @@ const ApplicationSummary = () => {
       const currentDate = dayjs()
       if (
         !(listing.digitalApplication && listing.commonDigitalApplication) ||
-        listing?.status !== ListingsStatusEnum.active ||
+        (!conductor.config.isPreview && listing?.status !== ListingsStatusEnum.active) ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
         addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
@@ -126,6 +127,7 @@ const ApplicationSummary = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.review.takeAMomentToReview")}
@@ -194,7 +196,7 @@ const ApplicationSummary = () => {
             <Button
               variant={"primary"}
               id={"app-summary-confirm"}
-              disabled={!!validationError}
+              disabled={!!validationError || conductor.config.isPreview}
               type={"submit"}
               loadingMessage={loading ? t("t.loading") : undefined}
             >

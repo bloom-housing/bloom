@@ -23,6 +23,7 @@ export interface ApplicationFormConfig {
   steps: StepConfig[]
   featureFlags: FeatureFlag[]
   isAdvocate: boolean
+  isPreview: boolean
   raceEthnicityConfiguration?: RaceEthnicityConfiguration
   visibleSpokenLanguages?: string[]
   visibleApplicationAccessibilityFeatures?: ApplicationAccessibilityFeatureEnum[]

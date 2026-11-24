@@ -33,6 +33,7 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -200,6 +201,7 @@ const ApplicationAddress = () => {
         onSubmit={handleSubmit(onSubmit, onError)}
         onBlur={onFieldBlur}
       >
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={

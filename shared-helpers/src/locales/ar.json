@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "الرجاء إدخال نوع العلاقة",
   "application.alternateContact.type.title": "هل هناك شخص آخر ترغب في تفويضنا للاتصال به إذا لم نتمكن من الوصول إليك؟",
   "application.alternateContact.type.validationErrorMessage": "الرجاء تحديد جهة اتصال بديلة",
+  "application.applicationPreview": "هذه معاينة للطلب. لن تتمكن من إرسال هذا الطلب.",
   "application.autofill.prefillYourApplication": "سنقوم ببساطة بملء طلبك مسبقًا بالتفاصيل التالية ، ويمكنك إجراء التحديثات كما تذهب.",
   "application.autofill.reset": "أعد التعيين وابدأ من جديد",
   "application.autofill.saveTime": "وفر الوقت باستخدام التفاصيل من آخر تطبيق لك",

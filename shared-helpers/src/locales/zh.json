@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "請填寫關係類型",
   "application.alternateContact.type.title": "如果我們無法聯絡您，您是否還有想授權我們聯絡的人？",
   "application.alternateContact.type.validationErrorMessage": "請選擇一位其他聯絡人",
+  "application.applicationPreview": "这是申请预览版。您将无法提交此申请。",
   "application.autofill.prefillYourApplication": "我們只要將以下詳細資料預先填入您的申請，您就可隨時隨地進行更新。",
   "application.autofill.reset": "重設並開始重新整理",
   "application.autofill.saveTime": "使用上次申請中的詳細資料可節省時間",

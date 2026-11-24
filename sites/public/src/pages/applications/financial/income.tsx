@@ -27,6 +27,7 @@ import ApplicationFormLayout, {
 } from "../../../layouts/application-form"
 import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -149,6 +150,7 @@ const ApplicationIncome = () => {
       pageTitle={`${t("t.income")} - ${t("listings.apply.applyOnline")} - ${listing?.name}`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.income.title")}
