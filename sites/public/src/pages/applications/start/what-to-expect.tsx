@@ -102,7 +102,6 @@ const ApplicationWhatToExpect = () => {
           <div className="markdown">
             <Markdown
               options={{
-                disableParsingRawHTML: true,
                 overrides: {
                   ol: {
                     component: ({ children, ...props }) => (
@@ -119,7 +118,6 @@ const ApplicationWhatToExpect = () => {
 
             <Markdown
               options={{
-                disableParsingRawHTML: true,
                 overrides: {
                   li: {
                     component: ({ children, ...props }) => (
