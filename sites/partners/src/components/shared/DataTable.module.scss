@@ -1,7 +1,9 @@
 .data-table-wrapper {
   --data-table-border-color: var(--seeds-color-gray-500);
   --data-table-header-padding-block: var(--seeds-s5);
+  --data-table-header-padding-inline: var(--seeds-s5);
   --data-table-cell-padding-block: var(--seeds-s4);
+  --data-table-cell-padding-inline: var(--seeds-s5);
   scroll-margin: var(--seeds-s4);
 
   .search-field {
@@ -101,6 +103,7 @@
             text-transform: none;
             letter-spacing: normal;
             padding-block: var(--data-table-header-padding-block);
+            padding-inline: var(--data-table-header-padding-inline);
             background-color: var(--seeds-bg-color-canvas);
             color: var(--seeds-text-color-dark);
             vertical-align: var(--data-table-header-vertical-align, top);
@@ -130,7 +133,7 @@
       tbody {
         td {
           padding-block: var(--data-table-cell-padding-block);
-          padding-inline: var(--seeds-s5);
+          padding-inline: var(--data-table-cell-padding-inline);
           border-bottom: var(--seeds-border-1) solid var(--data-table-border-color);
         }
         tr:last-child > td {
