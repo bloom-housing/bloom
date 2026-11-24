@@ -200,7 +200,7 @@ const ApplicationTerms = () => {
             <div className="markdown">
               {listing?.applicationDueDate && (
                 <>
-                  <Markdown options={{ disableParsingRawHTML: true }}>
+                  <Markdown>
                     {t("application.review.terms.textSubmissionDate", {
                       applicationDueDate: applicationDueDate,
                     })}
@@ -212,7 +212,6 @@ const ApplicationTerms = () => {
 
               <Markdown
                 options={{
-                  disableParsingRawHTML: true,
                   overrides: {
                     li: {
                       component: ({ children, ...props }) => (

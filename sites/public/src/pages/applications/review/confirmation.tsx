@@ -122,13 +122,13 @@ const ApplicationConfirmation = () => {
               <div className="markdown markdown-informational">
                 <ApplicationTimeline />
 
-                <Markdown options={{ disableParsingRawHTML: true }}>{contentText}</Markdown>
+                <Markdown>{contentText}</Markdown>
               </div>
             </CardSection>
 
             <CardSection divider={"inset"}>
               <div className="markdown markdown-informational">
-                <Markdown options={{ disableParsingRawHTML: true }}>
+                <Markdown>
                   {t(
                     `application.review.confirmation.needToMakeUpdates${
                       isAdvocate ? ".advocate" : ""
@@ -147,9 +147,7 @@ const ApplicationConfirmation = () => {
             {initialStateLoaded && !profile && (
               <CardSection divider={"flush"} className={"border-none"}>
                 <div className="markdown markdown-informational">
-                  <Markdown options={{ disableParsingRawHTML: true }}>
-                    {t("application.review.confirmation.createAccount")}
-                  </Markdown>
+                  <Markdown>{t("application.review.confirmation.createAccount")}</Markdown>
                 </div>
               </CardSection>
             )}
