@@ -1,7 +1,20 @@
 import React, { useContext, useEffect } from "react"
-import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { useRouter } from "next/router"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  stateKeys,
+  AuthContext,
+} from "@bloom-housing/shared-helpers"
+import {
+  FeatureFlagEnum,
+  HouseholdMember,
+  HouseholdMemberRelationship,
+  HouseholdMemberUpdate,
+  YesNoEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   DOBField,
   Field,
@@ -11,32 +24,19 @@ import {
   Select,
   t,
 } from "@bloom-housing/ui-components"
+import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import {
-  FeatureFlagEnum,
-  HouseholdMember,
-  HouseholdMemberRelationship,
-  HouseholdMemberUpdate,
-  YesNoEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import {
-  OnClientSide,
-  PageView,
-  pushGtmEvent,
-  stateKeys,
-  AuthContext,
-} from "@bloom-housing/shared-helpers"
-import FormsLayout from "../../../layouts/forms"
-import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
-import { UserStatus } from "../../../lib/constants"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
+import FormsLayout from "../../../layouts/forms"
+import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
+import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 export class Member implements HouseholdMemberUpdate {
   constructor(orderId: number) {

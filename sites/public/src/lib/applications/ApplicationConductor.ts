@@ -4,18 +4,18 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { blankApplication } from "@bloom-housing/shared-helpers"
-import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
-import StepDefinition from "./StepDefinition"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import AlternateContactStep from "./AlternateContactStep"
 import AlternateContactTypeStep from "./AlternateContactTypeStep"
+import CommunityTypesStep from "./CommunityTypesStep"
+import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import HouseholdMemberStep from "./HouseholdMemberStep"
-import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
 import PreferredUnitSizeStep from "./PreferredUnitSizeStep"
 import ProgramsStep from "./ProgramsStep"
 import ReasonableAccommodationsStep from "./ReasonableAccommodationsStep"
-import CommunityTypesStep from "./CommunityTypesStep"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SelectedPreferencesStep from "./SelectedPreferencesStep"
+import StepDefinition from "./StepDefinition"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window !== "undefined") {

@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Field, t } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
   Form,
@@ -10,20 +8,22 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { Field, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import FormsLayout from "../../../layouts/forms"
-import { isFeatureFlagOn } from "../../../lib/helpers"
-import { useFormConductor } from "../../../lib/hooks"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
   LockIcon,
   onFormError,
 } from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import FormsLayout from "../../../layouts/forms"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { UserStatus } from "../../../lib/constants"
+import { isFeatureFlagOn } from "../../../lib/helpers"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationAlternateContactName = () => {
   const { profile } = useContext(AuthContext)

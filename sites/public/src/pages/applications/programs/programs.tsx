@@ -4,10 +4,10 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationPrograms = () => {
   const { conductor } = useFormConductor("programs")

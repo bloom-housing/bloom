@@ -4,10 +4,10 @@ import {
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationCommunityTypes = () => {
   const { conductor } = useFormConductor("preferences")

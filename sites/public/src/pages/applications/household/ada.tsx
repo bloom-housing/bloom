@@ -1,9 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
-import { Accessibility, Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   AuthContext,
   Form,
@@ -12,18 +9,21 @@ import {
   adaFeatureKeys,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { Accessibility, Application } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../lib/hooks"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import FormsLayout from "../../../layouts/forms"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { UserStatus } from "../../../lib/constants"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationAda = () => {
   const { profile } = useContext(AuthContext)

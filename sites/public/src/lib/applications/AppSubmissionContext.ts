@@ -1,5 +1,4 @@
 import { createContext } from "react"
-import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
@@ -7,6 +6,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   FeatureFlag,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import ApplicationConductor from "./ApplicationConductor"
 import { isFeatureFlagOn } from "../helpers"
 
 export const retrieveApplicationConfig = (

@@ -1,16 +1,16 @@
 import React from "react"
 import { rest } from "msw"
 import { setupServer } from "msw/lib/node"
+import { blankApplication } from "@bloom-housing/shared-helpers"
+import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import userEvent from "@testing-library/user-event"
 import { mockNextRouter, render, screen } from "../../../testUtils"
-import ApplicationSummary from "../../../../src/pages/applications/review/summary"
+import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
 import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../../src/lib/applications/AppSubmissionContext"
-import ApplicationConductor from "../../../../src/lib/applications/ApplicationConductor"
-import { blankApplication } from "@bloom-housing/shared-helpers"
-import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
+import ApplicationSummary from "../../../../src/pages/applications/review/summary"
 
 window.scrollTo = jest.fn()
 

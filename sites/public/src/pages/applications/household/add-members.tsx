@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Button } from "@bloom-housing/ui-seeds"
-import { t } from "@bloom-housing/ui-components"
 import {
   AuthContext,
   Form,
@@ -10,17 +8,19 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import FormsLayout from "../../../layouts/forms"
-import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
+import { t } from "@bloom-housing/ui-components"
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
+import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
+import { Button } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import FormsLayout from "../../../layouts/forms"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { UserStatus } from "../../../lib/constants"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
-import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)

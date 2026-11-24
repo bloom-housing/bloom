@@ -1,15 +1,15 @@
 import React from "react"
-import { t } from "@bloom-housing/ui-components"
+import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import {
   FeatureFlagEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { t } from "@bloom-housing/ui-components"
 import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import { isFeatureFlagOn } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationPreferencesAll = () => {
   const { conductor, listing } = useFormConductor("preferences")
