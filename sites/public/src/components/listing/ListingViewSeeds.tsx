@@ -286,7 +286,8 @@ export const ListingViewSeeds = ({ listing, jurisdiction, profile, preview }: Li
             setListingFavorited={saveFavorite}
             showHomeType={isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableHomeType)}
           />
-          {listing.status !== ListingsStatusEnum.closed && (
+          {(listing.status !== ListingsStatusEnum.closed ||
+            isFeatureFlagOn(jurisdiction, FeatureFlagEnum.enableRentsOnClosedListings)) && (
             <RentSummary
               amiValues={getAmiValues(listing)}
               reviewOrderType={listing.reviewOrderType}

@@ -17,33 +17,19 @@ describe("<ListingViewSeeds>", () => {
   })
 
   it("shows listing name if listing is defined", () => {
-    const view = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
-        }}
-      >
-        <ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />
-      </AuthContext.Provider>
-    )
+    const view = render(<ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />)
     expect(view.getByRole("heading", { level: 1 })).toHaveTextContent(listing.name)
   })
 
   it("renders markdown in what to expect", () => {
     const view = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          whatToExpect: `<div><div className="mb-3">If you are interested in applying for this property, please get in touch in one of these ways:</div><div><ul class="list-disc pl-6"><li>Phone</li><li>Email</li><li>In-person</li><li>In some instances, the property has a link directly to an application</li></ul></div><div className="mt-2">Once you contact a property, ask if they have any available units if you are looking to move in immediately.</div><div className="mt-2"><strong>Waitlists</strong>:<div>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</div>`,
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            whatToExpect: `<div><div className="mb-3">If you are interested in applying for this property, please get in touch in one of these ways:</div><div><ul class="list-disc pl-6"><li>Phone</li><li>Email</li><li>In-person</li><li>In some instances, the property has a link directly to an application</li></ul></div><div className="mt-2">Once you contact a property, ask if they have any available units if you are looking to move in immediately.</div><div className="mt-2"><strong>Waitlists</strong>:<div>If none are available, but you are still interested in eventually living at the property, ask how you can be placed on their waitlist.</div>`,
-          }}
-          jurisdiction={jurisdiction}
-        />
-      </AuthContext.Provider>
+        jurisdiction={jurisdiction}
+      />
     )
     expect(view.queryByText("<", { exact: false })).toBeNull()
     // There are two instances for Desktop vs Mobile
@@ -54,25 +40,19 @@ describe("<ListingViewSeeds>", () => {
 
   it("does not renders what to expect additional field when feature flag off", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "What to expect additional text",
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [],
+        }}
+      />
     )
     expect(screen.getAllByText("Normal What to expect")).toHaveLength(2)
     expect(screen.queryAllByText("What to expect additional text")).toHaveLength(0)
@@ -81,35 +61,29 @@ describe("<ListingViewSeeds>", () => {
 
   it("does not renders read more when whatToExpectAdditionalText does not exist", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "",
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "",
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
-                id: "id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                active: true,
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
     expect(screen.getAllByText("Normal What to expect")).toHaveLength(2)
     expect(screen.queryAllByRole("button", { name: "read more" })).toHaveLength(0)
@@ -117,36 +91,30 @@ describe("<ListingViewSeeds>", () => {
 
   it("renders what to expect additional field when feature flag on", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          // removing other fields that have "read more" button
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            // removing other fields that have "read more" button
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "What to expect additional text",
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
-                id: "id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                active: true,
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              name: FeatureFlagEnum.enableWhatToExpectAdditionalField,
+              id: "id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              active: true,
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
     // There are two instances, one for desktop and one for mobile
     expect(screen.getAllByText("Normal What to expect")).toHaveLength(2)
@@ -159,81 +127,61 @@ describe("<ListingViewSeeds>", () => {
   })
 
   it("doesn't show listing updated at for a default jurisdiction", () => {
-    const view = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
-        }}
-      >
-        <ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />
-      </AuthContext.Provider>
-    )
+    const view = render(<ListingViewSeeds listing={listing} jurisdiction={jurisdiction} />)
     expect(view.queryByText("Listing updated: Dec 31, 2019")).toBeNull()
   })
 
   it("shows listing updated at when the jurisdiction allows it", () => {
     const view = render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={listing}
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            ...jurisdiction.featureFlags,
+            {
+              id: "test_id",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              active: true,
+              jurisdictions: [],
+              name: FeatureFlagEnum.enableListingUpdatedAt,
+            },
+          ],
         }}
-      >
-        <ListingViewSeeds
-          listing={listing}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              ...jurisdiction.featureFlags,
-              {
-                id: "test_id",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                active: true,
-                jurisdictions: [],
-                name: FeatureFlagEnum.enableListingUpdatedAt,
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+      />
     )
     expect(view.getAllByText("Listing updated: Dec 31, 2019")).toHaveLength(2)
   })
 
   it("should render positive HUD EBLL clearance for non-regulated listing", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
+          listingType: EnumListingListingType.nonRegulated,
+          hasHudEbllClearance: true,
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "What to expect additional text",
-            listingType: EnumListingListingType.nonRegulated,
-            hasHudEbllClearance: true,
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableNonRegulatedListings,
-                active: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
 
     expect(screen.getByRole("heading", { level: 3, name: /^other$/i })).toBeInTheDocument()
@@ -245,37 +193,31 @@ describe("<ListingViewSeeds>", () => {
 
   it("should render negative HUD EBLL clearance for non-regulated listing", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
+          listingType: EnumListingListingType.nonRegulated,
+          hasHudEbllClearance: false,
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "What to expect additional text",
-            listingType: EnumListingListingType.nonRegulated,
-            hasHudEbllClearance: false,
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableNonRegulatedListings,
-                active: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
 
     expect(screen.getByRole("heading", { level: 3, name: /^other$/i })).toBeInTheDocument()
@@ -289,37 +231,31 @@ describe("<ListingViewSeeds>", () => {
 
   it("doesn't render HUD EBLL clearance when non regulated listings feature flag is turned off", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          listingType: EnumListingListingType.nonRegulated,
+          hasHudEbllClearance: true,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            listingType: EnumListingListingType.nonRegulated,
-            hasHudEbllClearance: true,
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "What to expect additional text",
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableNonRegulatedListings,
-                active: false,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: false,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
 
     expect(screen.queryByRole("heading", { level: 3, name: /^other$/i })).not.toBeInTheDocument()
@@ -333,37 +269,31 @@ describe("<ListingViewSeeds>", () => {
 
   it("doesn't render HUD EBLL clearance when listing is regulated", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          listingType: EnumListingListingType.regulated,
+          hasHudEbllClearance: true,
+          creditHistory: "",
+          rentalHistory: "",
+          whatToExpect: "Normal What to expect",
+          whatToExpectAdditionalText: "What to expect additional text",
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            listingType: EnumListingListingType.regulated,
-            hasHudEbllClearance: true,
-            creditHistory: "",
-            rentalHistory: "",
-            whatToExpect: "Normal What to expect",
-            whatToExpectAdditionalText: "What to expect additional text",
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableNonRegulatedListings,
-                active: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableNonRegulatedListings,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
 
     expect(screen.queryByRole("heading", { level: 3, name: /^other$/i })).not.toBeInTheDocument()
@@ -377,33 +307,27 @@ describe("<ListingViewSeeds>", () => {
 
   it("should render pet policy list when enabled", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          allowsDogs: true,
+          allowsCats: true,
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            allowsDogs: true,
-            allowsCats: true,
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enablePetPolicyCheckbox,
-                active: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enablePetPolicyCheckbox,
+              active: true,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              description: "",
+              jurisdictions: [],
+            },
+          ],
+        }}
+      />
     )
 
     expect(screen.getAllByRole("heading", { level: 3, name: /^pets policy$/i })).toHaveLength(1)
@@ -416,40 +340,34 @@ describe("<ListingViewSeeds>", () => {
 
   it("doesn't render the parking types in features section when feature flag is disabled", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          parkType: {
+            id: "parking_types_id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            offStreet: true,
+            onStreet: true,
+            garage: true,
+            carport: true,
+          },
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            parkType: {
-              id: "parking_types_id",
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableParkingType,
+              active: false,
               createdAt: new Date(),
               updatedAt: new Date(),
-              offStreet: true,
-              onStreet: true,
-              garage: true,
-              carport: true,
+              description: "",
+              jurisdictions: [],
             },
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableParkingType,
-                active: false,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+          ],
+        }}
+      />
     )
 
     expect(
@@ -459,40 +377,34 @@ describe("<ListingViewSeeds>", () => {
 
   it("doesn't render the parking types in features section when none are available", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          parkType: {
+            id: "parking_types_id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            offStreet: false,
+            onStreet: false,
+            garage: false,
+            carport: false,
+          },
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            parkType: {
-              id: "parking_types_id",
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableParkingType,
+              active: true,
               createdAt: new Date(),
               updatedAt: new Date(),
-              offStreet: false,
-              onStreet: false,
-              garage: false,
-              carport: false,
+              description: "",
+              jurisdictions: [],
             },
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableParkingType,
-                active: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+          ],
+        }}
+      />
     )
 
     expect(
@@ -502,40 +414,34 @@ describe("<ListingViewSeeds>", () => {
 
   it("renders the parking types in feature section when available", () => {
     render(
-      <AuthContext.Provider
-        value={{
-          doJurisdictionsHaveFeatureFlagOn: () => true,
+      <ListingViewSeeds
+        listing={{
+          ...listing,
+          parkType: {
+            id: "parking_types_id",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            onStreet: true,
+            offStreet: true,
+            garage: true,
+            carport: true,
+          },
         }}
-      >
-        <ListingViewSeeds
-          listing={{
-            ...listing,
-            parkType: {
-              id: "parking_types_id",
+        jurisdiction={{
+          ...jurisdiction,
+          featureFlags: [
+            {
+              id: "test_id",
+              name: FeatureFlagEnum.enableParkingType,
+              active: true,
               createdAt: new Date(),
               updatedAt: new Date(),
-              onStreet: true,
-              offStreet: true,
-              garage: true,
-              carport: true,
+              description: "",
+              jurisdictions: [],
             },
-          }}
-          jurisdiction={{
-            ...jurisdiction,
-            featureFlags: [
-              {
-                id: "test_id",
-                name: FeatureFlagEnum.enableParkingType,
-                active: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                description: "",
-                jurisdictions: [],
-              },
-            ],
-          }}
-        />
-      </AuthContext.Provider>
+          ],
+        }}
+      />
     )
 
     expect(
@@ -555,19 +461,13 @@ describe("<ListingViewSeeds>", () => {
   describe("Rent and HMI sections", () => {
     it("should render the rent and HMI sections on active listings", () => {
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            status: ListingsStatusEnum.active,
           }}
-        >
-          <ListingViewSeeds
-            listing={{
-              ...listing,
-              status: ListingsStatusEnum.active,
-            }}
-            jurisdiction={jurisdiction}
-          />
-        </AuthContext.Provider>
+          jurisdiction={jurisdiction}
+        />
       )
 
       expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
@@ -591,21 +491,60 @@ describe("<ListingViewSeeds>", () => {
       ).toBeInTheDocument()
     })
 
-    it("should not render the rent and HMI sections on closed listings", () => {
+    it("should render the rent and HMI sections on closed listings with enableRentsOnClosedListings true", () => {
       render(
-        <AuthContext.Provider
-          value={{
-            doJurisdictionsHaveFeatureFlagOn: () => true,
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            status: ListingsStatusEnum.closed,
           }}
-        >
-          <ListingViewSeeds
-            listing={{
-              ...listing,
-              status: ListingsStatusEnum.closed,
-            }}
-            jurisdiction={jurisdiction}
-          />
-        </AuthContext.Provider>
+          jurisdiction={{
+            ...jurisdiction,
+            featureFlags: [
+              {
+                name: FeatureFlagEnum.enableRentsOnClosedListings,
+                id: "id",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                active: true,
+                description: "",
+                jurisdictions: [],
+              },
+            ],
+          }}
+        />
+      )
+
+      expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
+
+      const rentSectionTitle = screen.getByRole("heading", { level: 2, name: /rent/i })
+      expect(rentSectionTitle).toBeInTheDocument()
+      expect(within(rentSectionTitle.parentElement).getByRole("table")).toBeInTheDocument()
+
+      const hmiSectionTitle = screen.getByRole("heading", {
+        level: 3,
+        name: /household maximum income/i,
+      })
+      expect(hmiSectionTitle).toBeInTheDocument()
+      expect(
+        within(hmiSectionTitle.parentElement).getByText(
+          /For income calculations, household size includes everyone \(all ages\) living in the unit\./i
+        )
+      ).toBeInTheDocument()
+      expect(
+        within(hmiSectionTitle.parentElement.parentElement).getByRole("table")
+      ).toBeInTheDocument()
+    })
+
+    it("should not render the rent and HMI sections on closed listings with enableRentsOnClosedListings false", () => {
+      render(
+        <ListingViewSeeds
+          listing={{
+            ...listing,
+            status: ListingsStatusEnum.closed,
+          }}
+          jurisdiction={jurisdiction}
+        />
       )
       expect(screen.getByRole("heading", { level: 1, name: /archer studios/i })).toBeInTheDocument()
       expect(screen.queryByRole("heading", { level: 2, name: /rent/i })).not.toBeInTheDocument()
