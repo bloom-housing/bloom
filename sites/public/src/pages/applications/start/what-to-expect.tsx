@@ -32,6 +32,10 @@ const ApplicationWhatToExpect = () => {
     conductor.routeToNextOrReturnUrl()
   }
 
+  const backLinkParams = conductor.config.isPreview
+    ? `?listingId=${listing?.id}&preview=true`
+    : `?listingId=${listing?.id}`
+
   const content = useMemo(() => {
     if (conductor.config.isAdvocate) {
       return {
@@ -97,7 +101,7 @@ const ApplicationWhatToExpect = () => {
         backLink={{
           url: listing?.includeCommunityDisclaimer
             ? conductor.determinePreviousUrl()
-            : `/applications/start/choose-language?listingId=${listing?.id}`,
+            : `/applications/start/choose-language${backLinkParams}`,
         }}
       >
         <CardSection>

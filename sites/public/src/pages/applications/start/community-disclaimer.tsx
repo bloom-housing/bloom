@@ -29,6 +29,10 @@ const ApplicationCommunityDisclaimer = () => {
     conductor.routeToNextOrReturnUrl()
   }
 
+  const backLinkParams = conductor.config.isPreview
+    ? `?listingId=${listing?.id}&preview=true`
+    : `?listingId=${listing?.id}`
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -54,7 +58,7 @@ const ApplicationCommunityDisclaimer = () => {
           mounted: OnClientSide(),
         }}
         backLink={{
-          url: `/applications/start/choose-language?listingId=${listing?.id}`,
+          url: `/applications/start/choose-language${backLinkParams}`,
         }}
       >
         <CardSection>

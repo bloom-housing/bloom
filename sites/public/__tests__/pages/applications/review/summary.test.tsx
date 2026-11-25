@@ -73,7 +73,7 @@ describe("applications pages", () => {
         getByText("This is a application preview. You will not be able to submit this application.")
       ).toBeInTheDocument()
 
-      screen.getByRole("button", { name: /confirm/i }).hasAttribute("disabled")
+      expect(screen.getByRole("button", { name: /confirm/i })).toBeDisabled()
     })
 
     it("shows a session expired error banner when submission fails with a 401", async () => {

@@ -62,17 +62,17 @@ const loadListing = async (
   ) // TODO: load from backend
   conductor.config = {
     ...applicationConfig,
-    languages: jurisdictionResponse.languages,
+    enabledStopLightRuleKeys: getEnabledStopLightRuleKeys(jurisdictionResponse),
     featureFlags: jurisdictionResponse.featureFlags,
     isAdvocate:
       isFeatureFlagOn(jurisdictionResponse, FeatureFlagEnum.enableHousingAdvocate) && isAdvocate,
     isPreview: isPreview,
+    languages: jurisdictionResponse.languages,
+    raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
     visibleSpokenLanguages: jurisdictionResponse.visibleSpokenLanguages,
     visibleApplicationAccessibilityFeatures:
       jurisdictionResponse.visibleApplicationAccessibilityFeatures,
     visibleHouseholdMemberRelationships: jurisdictionResponse.visibleHouseholdMemberRelationships,
-    raceEthnicityConfiguration: jurisdictionResponse.raceEthnicityConfiguration,
-    enabledStopLightRuleKeys: getEnabledStopLightRuleKeys(jurisdictionResponse),
   }
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -106,7 +106,7 @@ const ApplicationChooseLanguage = () => {
     if (router.isReady) {
       if (
         !listingId ||
-        (process.env.showMandatedAccounts && initialStateLoaded && !profile && !isPreview)
+        (!isPreview && process.env.showMandatedAccounts && initialStateLoaded && !profile)
       ) {
         void router.push("/")
       }
