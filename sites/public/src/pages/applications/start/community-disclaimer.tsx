@@ -17,6 +17,7 @@ import { UserStatus } from "../../../lib/constants"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const ApplicationCommunityDisclaimer = () => {
   const { profile } = useContext(AuthContext)
@@ -27,6 +28,10 @@ const ApplicationCommunityDisclaimer = () => {
   const onSubmit = () => {
     conductor.routeToNextOrReturnUrl()
   }
+
+  const backLinkParams = conductor.config.isPreview
+    ? `?listingId=${listing?.id}&preview=true`
+    : `?listingId=${listing?.id}`
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -42,6 +47,7 @@ const ApplicationCommunityDisclaimer = () => {
         listing?.name
       }`}
     >
+      {conductor.config.isPreview && <ApplicationPreviewBanner />}
       <ApplicationFormLayout
         listingName={listing?.name}
         heading={listing?.communityDisclaimerTitle ?? ""}
@@ -52,7 +58,7 @@ const ApplicationCommunityDisclaimer = () => {
           mounted: OnClientSide(),
         }}
         backLink={{
-          url: `/applications/start/choose-language?listingId=${listing?.id}`,
+          url: `/applications/start/choose-language${backLinkParams}`,
         }}
       >
         <CardSection>

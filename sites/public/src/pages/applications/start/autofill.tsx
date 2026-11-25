@@ -26,6 +26,7 @@ import {
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 
 const Autofill = () => {
   const router = useRouter()
@@ -116,6 +117,7 @@ const Autofill = () => {
       }`}
     >
       <LoadingState loading={!previousApplication}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.autofill.saveTime")}

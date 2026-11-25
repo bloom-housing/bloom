@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import dayjs from "dayjs"
 import { useRouter } from "next/router"
-import { Alert, Button } from "@bloom-housing/ui-seeds"
-import { t } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
   Form,
@@ -20,15 +18,18 @@ import {
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import FormsLayout from "../../../layouts/forms"
+import { t } from "@bloom-housing/ui-components"
+import { Alert, Button } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
-import { useFormConductor } from "../../../lib/hooks"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 import styles from "../../../layouts/application-form.module.scss"
-import dayjs from "dayjs"
+import FormsLayout from "../../../layouts/forms"
+import { UserStatus } from "../../../lib/constants"
 import { isFeatureFlagOn } from "../../../lib/helpers"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -64,7 +65,7 @@ const ApplicationSummary = () => {
       const currentDate = dayjs()
       if (
         !(listing.digitalApplication && listing.commonDigitalApplication) ||
-        listing?.status !== ListingsStatusEnum.active ||
+        (!conductor.config.isPreview && listing?.status !== ListingsStatusEnum.active) ||
         (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
       ) {
         addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
@@ -126,6 +127,7 @@ const ApplicationSummary = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.review.takeAMomentToReview")}
@@ -194,7 +196,7 @@ const ApplicationSummary = () => {
             <Button
               variant={"primary"}
               id={"app-summary-confirm"}
-              disabled={!!validationError}
+              disabled={!!validationError || conductor.config.isPreview}
               type={"submit"}
               loadingMessage={loading ? t("t.loading") : undefined}
             >

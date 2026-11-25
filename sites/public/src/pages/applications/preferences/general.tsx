@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { t } from "@bloom-housing/ui-components"
 import {
   AuthContext,
   Form,
@@ -9,12 +8,14 @@ import {
   listingSectionQuestions,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t } from "@bloom-housing/ui-components"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { UserStatus } from "../../../lib/constants"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
@@ -48,6 +49,7 @@ const ApplicationPreferencesGeneral = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.preferences.general.title")}

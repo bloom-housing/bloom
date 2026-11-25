@@ -283,7 +283,7 @@ export const getFeatures = (
   }
   const accessibilityFeatures = getAccessibilityFeatures(
     listing,
-    jurisdiction.listingFeaturesConfiguration
+    jurisdiction?.listingFeaturesConfiguration
   )
   const enableAccessibilityFeatures = jurisdiction?.featureFlags?.some(
     (flag) => flag.name === "enableAccessibilityFeatures" && flag.active

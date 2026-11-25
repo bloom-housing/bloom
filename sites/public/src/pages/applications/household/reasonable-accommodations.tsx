@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { t, Textarea } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
   Form,
@@ -10,13 +8,16 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import { Textarea, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
+import ApplicationFormLayout from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
+import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { UserStatus } from "../../../lib/constants"
 import { useFormConductor } from "../../../lib/hooks"
 import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
-import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
 
 const ApplicationReasonableAccommodations = () => {
   const { profile } = useContext(AuthContext)
@@ -70,6 +71,7 @@ const ApplicationReasonableAccommodations = () => {
       )} - ${listing?.name}`}
     >
       <Form onSubmit={handleSubmit(onSubmit)} onBlur={onFieldBlur}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.reasonableAccommodations.question")}

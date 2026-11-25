@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
+import dayjs from "dayjs"
 import Markdown from "markdown-to-jsx"
-import { t, FieldGroup, AlertBox } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { useRouter } from "next/router"
 import {
   AuthContext,
   Form,
@@ -13,25 +12,28 @@ import {
   pushGtmEvent,
   useToastyRef,
 } from "@bloom-housing/shared-helpers"
+import {
+  ApplicationReviewStatusEnum,
+  FeatureFlagEnum,
+  ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { t, FieldGroup, AlertBox } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../lib/hooks"
 import { guardFinalSubmit } from "../../../lib/applications/stopLights/guardFinalSubmit"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 import { UserStatus } from "../../../lib/constants"
 import {
   isFeatureFlagOn,
   isUnitGroupAppBase,
   untranslateMultiselectQuestion,
 } from "../../../lib/helpers"
-import {
-  ApplicationReviewStatusEnum,
-  FeatureFlagEnum,
-  MultiselectQuestionsApplicationSectionEnum,
-  ReviewOrderTypeEnum,
-} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
-import ApplicationFormLayout from "../../../layouts/application-form"
-import styles from "../../../layouts/application-form.module.scss"
-import { Button } from "@bloom-housing/ui-seeds"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -49,6 +51,22 @@ const ApplicationTerms = () => {
   )
     currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
+
+  useEffect(() => {
+    const { addToast } = toastyRef.current
+
+    if (listing && router.isReady) {
+      const currentDate = dayjs()
+      if (
+        !(listing.digitalApplication && listing.commonDigitalApplication) ||
+        listing?.status !== ListingsStatusEnum.active ||
+        (listing?.applicationDueDate && currentDate > dayjs(listing.applicationDueDate))
+      ) {
+        addToast(t("listings.applicationsClosedRedirect"), { variant: "alert" })
+        void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+      }
+    }
+  }, [listing, router, toastyRef])
 
   const disableWorkInRegion = isFeatureFlagOn(conductor.config, FeatureFlagEnum.disableWorkInRegion)
 

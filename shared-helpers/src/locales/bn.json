@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "দয়া করে সম্পর্কের ধরন লিখুন",
   "application.alternateContact.type.title": "আমরা যদি আপনার কাছে পৌঁছাতে না পারি তাহলে অন্য কেউ কি আপনি আমাদের সাথে যোগাযোগ করার অনুমতি দিতে চান?",
   "application.alternateContact.type.validationErrorMessage": "একটি বিকল্প পরিচিতি নির্বাচন করুন",
+  "application.applicationPreview": "এটি একটি অ্যাপ্লিকেশন প্রিভিউ। আপনি এই অ্যাপ্লিকেশনটি জমা দিতে পারবেন না।",
   "application.autofill.prefillYourApplication": "আমরা কেবল নিম্নলিখিত বিবরণ দিয়ে আপনার আবেদনটি পূর্বে পূরণ করব এবং আপনি যেতে যেতে আপডেট করতে পারবেন।",
   "application.autofill.reset": "পুনরায় সেট করুন এবং নতুন করে শুরু করুন",
   "application.autofill.saveTime": "আপনার শেষ আবেদন থেকে বিস্তারিত ব্যবহার করে সময় বাঁচান",

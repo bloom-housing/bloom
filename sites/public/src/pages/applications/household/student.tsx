@@ -1,9 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { FieldGroup, t } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import {
   AuthContext,
   Form,
@@ -11,17 +8,21 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
-import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../lib/hooks"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
-import { isFeatureFlagOn } from "../../../lib/helpers"
+import { FeatureFlagEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { FieldGroup, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import FormsLayout from "../../../layouts/forms"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { UserStatus } from "../../../lib/constants"
+import { isFeatureFlagOn } from "../../../lib/helpers"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationHouseholdStudent = () => {
   const { profile } = useContext(AuthContext)
@@ -102,6 +103,7 @@ const ApplicationHouseholdStudent = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)} onBlur={onFieldBlur}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={questionText}

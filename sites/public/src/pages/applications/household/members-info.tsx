@@ -9,14 +9,15 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
-import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../lib/hooks"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
   onFormError,
 } from "../../../layouts/application-form"
+import FormsLayout from "../../../layouts/forms"
+import { UserStatus } from "../../../lib/constants"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationMembersInfo = () => {
   const { profile } = useContext(AuthContext)
@@ -50,6 +51,7 @@ const ApplicationMembersInfo = () => {
       }`}
     >
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.household.membersInfo.title")}

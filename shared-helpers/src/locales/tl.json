@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "Pakilagay ang uri ng relasyon",
   "application.alternateContact.type.title": "May iba pa bang tao na gusto mong pahintulutan na kontakin namin kung hindi ka namin makontak?",
   "application.alternateContact.type.validationErrorMessage": "Piliin ang kahaliling contact",
+  "application.applicationPreview": "Ito ay isang preview ng aplikasyon. Hindi mo maisusumite ang aplikasyong ito.",
   "application.autofill.prefillYourApplication": "Sasagutan lamang muna namin ang iyong application kasama ang sumusunod na mga detalye, at maaari kang gumawa ng mga update.",
   "application.autofill.reset": "I-reset at magsimulang muli",
   "application.autofill.saveTime": "Makatipid ng oras gamit ang mga detalye mula sa iyong huling application",

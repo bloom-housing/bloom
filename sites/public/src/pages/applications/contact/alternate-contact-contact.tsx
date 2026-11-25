@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Field, PhoneField, Select, t } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   AuthContext,
   Form,
@@ -12,17 +10,20 @@ import {
   pushGtmEvent,
   stateKeys,
 } from "@bloom-housing/shared-helpers"
-import { useFormConductor } from "../../../lib/hooks"
-import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
-import { UserStatus } from "../../../lib/constants"
+import { Field, PhoneField, Select, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { ApplicationPreviewBanner } from "../../../components/applications/ApplicationPreviewBanner"
 import ApplicationFormLayout, {
   ApplicationAlertBox,
   LockIcon,
   onFormError,
 } from "../../../layouts/application-form"
 import FormsLayout from "../../../layouts/forms"
-import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
 import { useStopLightBanners } from "../../../lib/applications/stopLights/useStopLightBanners"
+import { useStopLightGate } from "../../../lib/applications/stopLights/useStopLightGate"
+import { UserStatus } from "../../../lib/constants"
+import { useFormConductor } from "../../../lib/hooks"
+import { sharedGetStaticProps } from "../../../lib/sharedPageProps"
 
 const ApplicationAlternateContactContact = () => {
   const { profile } = useContext(AuthContext)
@@ -139,6 +140,7 @@ const ApplicationAlternateContactContact = () => {
         onSubmit={handleSubmit(onSubmit, onError)}
         onBlur={onFieldBlur}
       >
+        {conductor.config.isPreview && <ApplicationPreviewBanner />}
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.alternateContact.contact.title")}

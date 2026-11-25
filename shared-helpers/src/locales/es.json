@@ -170,6 +170,7 @@
   "application.alternateContact.type.otherTypeValidationErrorMessage": "Por favor ingrese el tipo de parentesco o relación",
   "application.alternateContact.type.title": "¿Hay alguna otra persona que usted desee autorizar para que nos comuniquemos con él o ella si no podemos ponernos en contacto con usted?",
   "application.alternateContact.type.validationErrorMessage": "Por favor seleccione un contacto alternativo",
+  "application.applicationPreview": "Esta es una vista previa de la solicitud. No podrá enviarla.",
   "application.autofill.prefillYourApplication": "Simplemente rellenaremos automáticamente su solicitud con los siguientes detalles, y usted puede actualizarlos mientras los vaya completando.",
   "application.autofill.reset": "Empezar de cero",
   "application.autofill.saveTime": "Ahorre tiempo cargando los detalles de su última solicitud",

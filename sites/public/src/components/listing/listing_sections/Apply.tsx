@@ -45,7 +45,7 @@ export const Apply = ({ listing, preview, setShowDownloadModal }: ApplyProps) =>
     !profile &&
     onlineApplicationURLInfo.isCommonApp &&
     !listing.externalURL &&
-    //previewing applications should not require admin to login
+    // previewing applications should not require admin to login
     !preview
 
   const onlineApplicationUrl = redirectIfLogInRequired()
